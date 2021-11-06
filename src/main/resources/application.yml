@@ -1,0 +1,16 @@
+# 应用名称
+spring:
+  application:
+    name: scaffold
+  datasource:
+    url: jdbc:mysql://localhost:3306/${spring.application.name}
+    username: root
+    password: lqsxzq123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+# 应用服务 WEB 访问端口
+server:
+  port: 8080
+
+service:
+  ip2region:
+    store: /opt/store/ip2region.db
