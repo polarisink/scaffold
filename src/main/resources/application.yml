@@ -3,9 +3,9 @@ spring:
   application:
     name: scaffold
   datasource:
-    url: jdbc:mysql://localhost:3306/${spring.application.name}
-    username: root
-    password: lqsxzq123
+    url: jdbc:mysql://${MYSQL_IP}:${MYSQL_PORT}/${spring.application.name}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_SECRET}
     driver-class-name: com.mysql.cj.jdbc.Driver
 # 应用服务 WEB 访问端口
 server:

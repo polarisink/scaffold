@@ -31,12 +31,16 @@ import java.util.Scanner;
  */
 public class MybatisPlusGenerator {
 
-	//读取控制台内容
-	public static String scanner(String tip) {
+	/**
+	 * 读取控制台内容
+	 * @param tip
+	 * @return
+	 */
+	static String scanner(String tip) {
 		Scanner scanner = new Scanner(System.in);
 		StringBuilder help = new StringBuilder();
-		help.append("请输入" + tip + "：");
-		System.out.println(help.toString());
+		help.append("请输入" + tip + ":");
+		System.out.println(help);
 		if (scanner.hasNext()) {
 			String ipt = scanner.next();
 			if (StringUtils.isNotBlank(ipt)) {
@@ -52,7 +56,7 @@ public class MybatisPlusGenerator {
 
 		// 全局配置
 		GlobalConfig gc = new GlobalConfig();
-		String projectPath = System.getProperty("user.dir") + "/document";
+		String projectPath = System.getProperty("user.dir");
 		gc.setOutputDir(projectPath + "/src/main/java");
 		gc.setAuthor("polaris");
 		gc.setOpen(false);
@@ -69,10 +73,10 @@ public class MybatisPlusGenerator {
 		// 数据源配置
 		DataSourceConfig dsc = new DataSourceConfig();
 		dsc.setDbType(DbType.MYSQL);
-		dsc.setUrl("jdbc:mysql://localhost:3306/company_rbac?useUnicode=true&useSSL=false&characterEncoding=utf8");
+		dsc.setUrl("jdbc:mysql://polaris.ink:3306/scaffold?useUnicode=true&useSSL=false&characterEncoding=utf8");
 		dsc.setDriverName("com.mysql.cj.jdbc.Driver");
 		dsc.setUsername("root");
-		dsc.setPassword("lqsxzq123");
+		dsc.setPassword("xxxxxxx");
 		//使用自定义converter
 		dsc.setTypeConvert(new MySqlTypeConvertCustom());
 		mpg.setDataSource(dsc);
@@ -80,7 +84,7 @@ public class MybatisPlusGenerator {
 		// 包配置
 		PackageConfig pc = new PackageConfig();
 		pc.setModuleName(scanner("模块名"));
-		pc.setParent("jooz.yizhiliao");
+		pc.setParent("com.lqs");
 		pc.setController("controller");
 		pc.setService("service");
 		pc.setMapper("dao");
