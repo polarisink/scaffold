@@ -28,4 +28,6 @@ public interface BookService extends IService<Books> {
 	public Books updateBook(Books book);
 
 	public Integer deleteById(Long id);
+
+	public Integer testRabbitMq();
 }

@@ -1,11 +1,19 @@
 package com.lqs.scaffold.service.impl;
 
+import cn.hutool.core.date.DateTime;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lqs.scaffold.config.RabbitMqConfig;
+import com.lqs.scaffold.property.MqProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.lqs.scaffold.entity.Books;
 import com.lqs.scaffold.dao.BookDao;
 import com.lqs.scaffold.service.BookService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,9 +33,13 @@ import java.util.List;
 public class BookServiceImpl extends ServiceImpl<BookDao, Books> implements BookService {
 	private static final Logger log = LoggerFactory.getLogger(BookServiceImpl.class);
 	private final BookDao bookDao;
+	private final RabbitTemplate rabbitTemplate;
+	private final ObjectMapper objectMapper;
 
-	public BookServiceImpl(BookDao bookDao) {
+	public BookServiceImpl(BookDao bookDao, RabbitTemplate rabbitTemplate, ObjectMapper objectMapper) {
 		this.bookDao = bookDao;
+		this.rabbitTemplate = rabbitTemplate;
+		this.objectMapper = objectMapper;
 	}
 
 
@@ -73,6 +85,12 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Books> implements Book
 		return bookDao.deleteById(id);
 	}
 
+	@Override
+	public Integer testRabbitMq() {
+		new Thread(() -> producer()).start();
+		return 1;
+	}
+
 
 	@Override
 	public Integer addBook(Books book) {
@@ -87,4 +105,22 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Books> implements Book
 	}
 
 
+	private void producer()  {
+		for (int i = 0; i < 100; i++) {
+			String value = new DateTime().toString("yyyy-MM-dd HH:mm:ss");
+			Books books = new Books();
+			books.setId(System.currentTimeMillis());
+			books.setName("rabbitmq learn");
+			books.setCount(100);
+			byte[] valueAsString = null;
+			try {
+				valueAsString = objectMapper.writeValueAsBytes(value);
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+			Message message = MessageBuilder.withBody(valueAsString).build();
+			log.info("send message {}", valueAsString);
+			rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_NAME, RabbitMqConfig.ROUTING_KEY, message);
+		}
+	}
 }

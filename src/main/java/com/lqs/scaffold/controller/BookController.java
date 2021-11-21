@@ -37,4 +37,12 @@ public class BookController {
 	public ResultT getAllBooks() throws BadRequestException {
 		return ResultT.success(bookService.getAllBooks());
 	}
+
+	@Operation(summary = "测试消息队列")
+	@GetMapping("/mq")
+	public ResultT testRabbitMq() throws BadRequestException {
+		return ResultT.success(bookService.testRabbitMq());
+	}
+
+
 }
