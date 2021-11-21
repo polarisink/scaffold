@@ -18,7 +18,7 @@ public class LangUtil {
 	}
 
 	public static Locale getLocale(String lang) {
-		if (lang.indexOf("_") == -1) {
+		if (!lang.contains("_")) {
 			return new Locale(lang);
 		}
 		String[] parts = lang.split("_");

@@ -3,7 +3,7 @@
 <mapper namespace="com.lqs.scaffold.dao.BookDao">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.lqs.scaffold.entity.Book">
+    <resultMap id="BaseResultMap" type="com.lqs.scaffold.entity.Books">
         <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="count" property="count" />

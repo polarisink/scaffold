@@ -76,7 +76,7 @@ public class MybatisPlusGenerator {
 		dsc.setUrl("jdbc:mysql://polaris.ink:3306/scaffold?useUnicode=true&useSSL=false&characterEncoding=utf8");
 		dsc.setDriverName("com.mysql.cj.jdbc.Driver");
 		dsc.setUsername("root");
-		dsc.setPassword("xxxxxxx");
+		dsc.setPassword("123456");
 		//使用自定义converter
 		dsc.setTypeConvert(new MySqlTypeConvertCustom());
 		mpg.setDataSource(dsc);

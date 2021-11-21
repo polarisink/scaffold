@@ -7,6 +7,13 @@ spring:
     username: ${MYSQL_USER}
     password: ${MYSQL_SECRET}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
 # 应用服务 WEB 访问端口
 server:
   port: 8080
@@ -14,3 +21,11 @@ server:
 service:
   ip2region:
     store: /opt/store/ip2region.db
+
+scaffold:
+  cors:
+    allowed-origins:
+      - http://localhost:3000
+      - http://localhost:5000
+      - https://console.pepaya.vip
+      - http://console.pepaya.vip

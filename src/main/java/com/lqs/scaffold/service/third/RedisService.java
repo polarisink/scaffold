@@ -1,4 +1,4 @@
-package com.lqs.scaffold.service;
+package com.lqs.scaffold.service.third;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;

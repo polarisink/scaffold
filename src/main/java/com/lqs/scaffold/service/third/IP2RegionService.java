@@ -1,4 +1,4 @@
-package com.lqs.scaffold.service;
+package com.lqs.scaffold.service.third;
 
 import com.lqs.scaffold.exception.BadRequestException;
 import lombok.extern.slf4j.Slf4j;

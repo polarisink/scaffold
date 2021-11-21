@@ -1,6 +1,7 @@
 package com.lqs.scaffold.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.lqs.scaffold.constants.Constants;
 import com.lqs.scaffold.enums.HttpCode;
 import com.lqs.scaffold.exception.BadRequestException;
 
@@ -13,7 +14,7 @@ import java.io.IOException;
  * @version 1.0
  * @since 2020-08-31
  */
-public class ResultWrapper<T> {
+public class ResultT<T> {
 	private Integer result;
 	private T data;
 	private String message;
@@ -43,36 +44,41 @@ public class ResultWrapper<T> {
 		this.message = message;
 	}
 
-	public static <T> ResultWrapper<T> of(String lang, HttpCode code, T data)
+	public static <T> ResultT<T> of(String lang, HttpCode code, T data)
 		throws BadRequestException {
-		ResultWrapper<T> resultWrapper = new ResultWrapper<>();
-		resultWrapper.setResult(code.getCode());
-		resultWrapper.setData(data);
+		ResultT<T> resultT = new ResultT<>();
+		resultT.setResult(code.getCode());
+		resultT.setData(data);
 		String message;
 		try {
 			message = LangProvider.getInstance(lang).getMessage(code.getLabel());
 		} catch (IOException e) {
 			throw new BadRequestException(e);
 		}
-		resultWrapper.setMessage(message);
-		return resultWrapper;
+		resultT.setMessage(message);
+		return resultT;
 	}
 
-	public static <T> ResultWrapper<T> of(String lang, HttpCode code)
+	public static <T> ResultT<T> of(String lang, HttpCode code)
 		throws BadRequestException {
 		return of(lang, code, null);
 	}
 
-	public static <T> ResultWrapper<T> of(HttpCode code, String message) {
-		ResultWrapper<T> resultWrapper = new ResultWrapper<>();
-		resultWrapper.setResult(code.getCode());
-		resultWrapper.setMessage(message);
-		return resultWrapper;
+	public static <T> ResultT<T> of(HttpCode code, String message) {
+		ResultT<T> resultT = new ResultT<>();
+		resultT.setResult(code.getCode());
+		resultT.setMessage(message);
+		return resultT;
 	}
 
-	public static <T> ResultWrapper<T> success(String lang, T data)
+	public static <T> ResultT<T> success(String lang, T data)
 		throws BadRequestException {
 		return of(lang, HttpCode.OK, data);
+	}
+
+	public static <T> ResultT<T> success(T data)
+		throws BadRequestException {
+		return of(Constants.DEFAULT_LANG, HttpCode.OK, data);
 	}
 
 }

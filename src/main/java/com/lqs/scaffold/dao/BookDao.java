@@ -1,7 +1,8 @@
 package com.lqs.scaffold.dao;
 
-import com.lqs.scaffold.entity.Book;
+import com.lqs.scaffold.entity.Books;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author polaris
  * @since 2021-11-10
  */
-public interface BookDao extends BaseMapper<Book> {
+@Mapper
+public interface BookDao extends BaseMapper<Books> {
 
 }

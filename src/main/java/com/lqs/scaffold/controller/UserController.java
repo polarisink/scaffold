@@ -1,6 +1,7 @@
 package com.lqs.scaffold.controller;
 
 
+import com.lqs.scaffold.service.UserService;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.slf4j.Logger;

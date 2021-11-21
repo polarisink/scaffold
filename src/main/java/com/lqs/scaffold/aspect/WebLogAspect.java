@@ -35,7 +35,7 @@ public class WebLogAspect {
 	/**
 	 * 以 controller 包下定义的所有请求为切入点
 	 */
-	@Pointcut("execution(public * com.lqs.scaffold.handler..*.*(..))")
+	@Pointcut("execution(public * com.lqs.scaffold.controller..*.*(..))")
 	public void webLog() {
 	}
 
