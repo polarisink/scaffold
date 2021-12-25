@@ -21,6 +21,8 @@
     <ip2region.version>1.7.2</ip2region.version>
     <hutool-core.version>5.4.2</hutool-core.version>
     <junit.version>4.12</junit.version>
+    <auth0.version>3.6.0</auth0.version>
+    <redission.version>3.16.6</redission.version>
   </properties>
 
   <dependencies>
@@ -119,6 +121,16 @@
       <groupId>cn.hutool</groupId>
       <artifactId>hutool-core</artifactId>
       <version>${hutool-core.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.auth0</groupId>
+      <artifactId>java-jwt</artifactId>
+      <version>${auth0.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.redisson</groupId>
+      <artifactId>redisson-spring-boot-starter</artifactId>
+      <version>${redission.version}</version>
     </dependency>
     <dependency>
       <groupId>org.freemarker</groupId>

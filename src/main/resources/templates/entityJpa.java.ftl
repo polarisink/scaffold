@@ -14,15 +14,16 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
     </#if>
 </#if>
+import javax.persistence.*;
 
 /**
-* <p>
-* ${table.comment!}
-* </p>
-*
-* @author ${author}
-* @since ${date}
-*/
+ * <p>
+ * ${table.comment!}
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
 <#if entityLombokModel>
 @Data
     <#if superEntityClass??>
@@ -34,6 +35,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
     </#if>
 </#if>
+@Table(name = "${table.name}")
 <#if table.convert>
 @TableName("${table.name}")
 </#if>
@@ -61,38 +63,40 @@ public class ${entity} implements Serializable {
         <#if swagger2>
     @ApiModelProperty(value = "${field.comment}")
         <#else>
-            /**
-            * ${field.comment}
-            */
+    /**
+     * ${field.comment}
+     */
         </#if>
     </#if>
     <#if field.keyFlag>
-    <#-- 主键 -->
+        <#-- 主键 -->
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
         <#if field.keyIdentityFlag>
     @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
         <#elseif idType??>
     @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
         <#elseif field.convert>
-    @TableId("${field.annotationColumnName}")
+<#--    @TableId("${field.annotationColumnName}")-->
         </#if>
-    <#-- 普通字段 -->
+        <#-- 普通字段 -->
     <#elseif field.fill??>
     <#-- -----   存在字段填充设置   ----->
         <#if field.convert>
-    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
+    @Column(name = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
         <#else>
     @TableField(fill = FieldFill.${field.fill})
         </#if>
     <#elseif field.convert>
-    @TableField("${field.annotationColumnName}")
+    @Column(name = "${field.annotationColumnName}")
     </#if>
-<#-- 乐观锁注解 -->
+    <#-- 乐观锁注解 -->
     <#if (versionFieldName!"") == field.name>
-    @Version
+<#--    @Version-->
     </#if>
-<#-- 逻辑删除注解 -->
+    <#-- 逻辑删除注解 -->
     <#if (logicDeleteFieldName!"") == field.name>
-    @TableLogic
+<#--    @TableLogic-->
     </#if>
     private ${field.propertyType} ${field.propertyName};
 </#list>
@@ -105,26 +109,26 @@ public class ${entity} implements Serializable {
         <#else>
             <#assign getprefix="get"/>
         </#if>
-        public ${field.propertyType} ${getprefix}${field.capitalName}() {
+    public ${field.propertyType} ${getprefix}${field.capitalName}() {
         return ${field.propertyName};
-        }
+    }
 
-        <#if chainModel>
-            public ${entity} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
-        <#else>
-            public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
-        </#if>
+    <#if chainModel>
+    public ${entity} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    <#else>
+    public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    </#if>
         this.${field.propertyName} = ${field.propertyName};
         <#if chainModel>
-            return this;
+        return this;
         </#if>
-        }
+    }
     </#list>
 </#if>
 
 <#if entityColumnConstant>
     <#list table.fields as field>
-        public static final String ${field.name?upper_case} = "${field.name}";
+    public static final String ${field.name?upper_case} = "${field.name}";
 
     </#list>
 </#if>
@@ -142,7 +146,7 @@ public class ${entity} implements Serializable {
 <#if !entityLombokModel>
     @Override
     public String toString() {
-    return "${entity}{" +
+        return "${entity}{" +
     <#list table.fields as field>
         <#if field_index==0>
             "${field.propertyName}=" + ${field.propertyName} +
@@ -150,7 +154,7 @@ public class ${entity} implements Serializable {
             ", ${field.propertyName}=" + ${field.propertyName} +
         </#if>
     </#list>
-    "}";
+        "}";
     }
 </#if>
 }
