@@ -1,7 +1,6 @@
 package com.lqs.scaffold.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lqs.scaffold.core.AuthenticationAttributeResolver;
 import com.lqs.scaffold.property.CorsProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -62,7 +61,6 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-		argumentResolvers.add(new AuthenticationAttributeResolver());
 	}
 
 	/**
