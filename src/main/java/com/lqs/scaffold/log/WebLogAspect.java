@@ -1,4 +1,4 @@
-package com.lqs.scaffold.aspect;
+package com.lqs.scaffold.log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +29,8 @@ public class WebLogAspect {
 	private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 	private final ObjectMapper mapper;
 
+	private String locate="";
+
 	public WebLogAspect(ObjectMapper mapper) {
 		this.mapper = mapper;
 	}
@@ -47,7 +49,7 @@ public class WebLogAspect {
 	 * @throws Throwable
 	 */
 	@Before("webLog()")
-	public void doBefore(JoinPoint joinPoint) throws JsonProcessingException {
+	public void doBefore(JoinPoint joinPoint) {
 		// 开始打印请求日志
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		HttpServletRequest request = attributes.getRequest();
@@ -57,7 +59,11 @@ public class WebLogAspect {
 		logger.info("HTTP Method    : {}", request.getMethod());
 		logger.info("Class Method   : {}.{}", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
 		logger.info("IP Address     : {}", request.getRemoteAddr());
-		logger.info("Request Args   : {}", mapper.writeValueAsString(joinPoint.getArgs()));
+		try {
+			logger.info("Request Args   : {}", mapper.writeValueAsString(joinPoint.getArgs()));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -82,7 +88,11 @@ public class WebLogAspect {
 		long startTime = System.currentTimeMillis();
 		Object result = proceedingJoinPoint.proceed();
 		// 打印出参
-		logger.info("Response Args  : {}", mapper.writeValueAsString(result));
+		try {
+			logger.info("Response Args  : {}", mapper.writeValueAsString(result));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 		// 执行耗时
 		logger.info("Time-Consuming : {} ms", System.currentTimeMillis() - startTime);
 		return result;

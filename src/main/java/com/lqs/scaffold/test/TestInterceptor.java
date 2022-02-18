@@ -1,4 +1,4 @@
-package com.lqs.scaffold.config;
+package com.lqs.scaffold.test;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

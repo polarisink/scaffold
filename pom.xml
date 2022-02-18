@@ -23,6 +23,7 @@
     <junit.version>4.12</junit.version>
     <auth0.version>3.6.0</auth0.version>
     <redission.version>3.16.6</redission.version>
+    <minio.version>8.2.1</minio.version>
   </properties>
 
   <dependencies>
@@ -51,6 +52,11 @@
       <groupId>com.baomidou</groupId>
       <artifactId>mybatis-plus-generator</artifactId>
       <version>${mp-gen.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.minio</groupId>
+      <artifactId>minio</artifactId>
+      <version>${minio.version}</version>
     </dependency>
     <dependency>
       <groupId>mysql</groupId>
