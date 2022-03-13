@@ -1,84 +1,1 @@
-package com.lqs.scaffold.core;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.lqs.scaffold.constants.Constants;
-import com.lqs.scaffold.enums.HttpCode;
-import com.lqs.scaffold.exception.BadRequestException;
-
-import java.io.IOException;
-
-/**
- * Result Wrapper
- *
- * @author Bill
- * @version 1.0
- * @since 2020-08-31
- */
-public class ResultT<T> {
-	private Integer result;
-	private T data;
-	private String message;
-
-	public Integer getResult() {
-		return result;
-	}
-
-	public void setResult(Integer result) {
-		this.result = result;
-	}
-
-	@JsonInclude(JsonInclude.Include.NON_NULL)
-	public T getData() {
-		return data;
-	}
-
-	public void setData(T data) {
-		this.data = data;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public static <T> ResultT<T> of(String lang, HttpCode code, T data)
-		throws BadRequestException {
-		ResultT<T> resultT = new ResultT<>();
-		resultT.setResult(code.getCode());
-		resultT.setData(data);
-		String message;
-		try {
-			message = LangProvider.getInstance(lang).getMessage(code.getLabel());
-		} catch (IOException e) {
-			throw new BadRequestException(e);
-		}
-		resultT.setMessage(message);
-		return resultT;
-	}
-
-	public static <T> ResultT<T> of(String lang, HttpCode code)
-		throws BadRequestException {
-		return of(lang, code, null);
-	}
-
-	public static <T> ResultT<T> of(HttpCode code, String message) {
-		ResultT<T> resultT = new ResultT<>();
-		resultT.setResult(code.getCode());
-		resultT.setMessage(message);
-		return resultT;
-	}
-
-	public static <T> ResultT<T> success(String lang, T data)
-		throws BadRequestException {
-		return of(lang, HttpCode.OK, data);
-	}
-
-	public static <T> ResultT<T> success(T data)
-		throws BadRequestException {
-		return of(Constants.DEFAULT_LANG, HttpCode.OK, data);
-	}
-
-}
+package com.lqs.scaffold.core;import com.lqs.scaffold.enums.ResponseEnum;import io.swagger.v3.oas.annotations.media.Schema;import lombok.Data;import lombok.ToString;import java.io.Serializable;@Data@ToString@Schema(name = "返回结果集")public class ResultT implements Serializable {    @Schema(name = "是否成功")    private Boolean success;    @Schema(name = "消息")    private String message;    @Schema(name = "返回码")    private Integer code;    @Schema(name = "返回结果集")    private Object data;    public ResultT(Boolean success, String message, Integer code, Object data) {        this.success = success;        this.message = message;        this.code = code;        this.data = data;    }    public ResultT() {    }    public static ResultT success(Boolean success, String message, Integer code, Object data) {        return new ResultT(success, message, code, data);    }    public static ResultT success(String message, Object data) {        return success(true, message, ResponseEnum.CODE_200.getCode(), data);    }    public static ResultT success(Object data) {        return success(true, ResponseEnum.CODE_200.getMessage(), ResponseEnum.CODE_200.getCode(), data);    }    public static ResultT success() {        return success(true, ResponseEnum.CODE_200.getMessage(), ResponseEnum.CODE_200.getCode(), null);    }    public static ResultT fail(Boolean success, String message, Integer code) {        return new ResultT(success, message, code, null);    }    public static ResultT fail(String message) {        return success(false, message, ResponseEnum.CODE_9000.getCode(), null);    }    public static ResultT fail(ResponseEnum responseEnum) {        return success(false, responseEnum.getMessage(), responseEnum.getCode(), null);    }    public static ResultT fail(String message, Integer code) {        return success(false, message, code, null);    }    public static ResultT fail() {        return success(false, ResponseEnum.CODE_9000.getMessage(), ResponseEnum.CODE_9000.getCode(), null);    }}

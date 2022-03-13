@@ -1,21 +1,20 @@
 package com.lqs.scaffold.exception;
 
-import com.lqs.scaffold.enums.HttpCode;
-import com.lqs.scaffold.enums.LangTypes;
 
 /**
  * @author lqs
- * @describe
- * @date 2021/11/6
  */
 public class BusinessException extends BaseException {
 
-	protected BusinessException(HttpCode httpCode){
-		super(LangTypes.EN_US.name(),httpCode);
-	}
+    public BusinessException(int code, String msg) {
+        super(code, msg);
+    }
 
-	protected BusinessException(String lang, HttpCode httpCode) {
-		super(lang, httpCode);
-	}
-	
+    public BusinessException(String msg) {
+        super(msg);
+    }
+
+    public BusinessException(String format, Object... args) {
+        super(format, args);
+    }
 }

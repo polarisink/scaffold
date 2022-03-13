@@ -29,11 +29,9 @@ import java.util.List;
 public class MvcConfiguration implements WebMvcConfigurer {
 
 	private final CorsProperties corsProperties;
-	private final TestInterceptor testInterceptor;
 
-	public MvcConfiguration(CorsProperties corsProperties, TestInterceptor testInterceptor) {
+	public MvcConfiguration(CorsProperties corsProperties) {
 		this.corsProperties = corsProperties;
-		this.testInterceptor = testInterceptor;
 	}
 
 	@Bean
@@ -80,12 +78,6 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		log.info("TokenConfig addInterceptors tokenInterceptor");
-		registry.addInterceptor(testInterceptor)
-			//指定该类拦截的url
-			.addPathPatterns("/**")
-			//过滤静态资源
-			.excludePathPatterns("/static/**");
 	}
 
 }

@@ -1,28 +1,38 @@
 package com.lqs.scaffold.exception;
 
-import com.lqs.scaffold.enums.HttpCode;
+import com.lqs.scaffold.enums.ResponseEnum;
+
+import java.util.Formatter;
 
 /**
  * @author lqs
- * @describe 基本异常, 继承RuntimeException可被aop拦截
- * @date 2021/11/6
  */
-public abstract class BaseException extends Exception {
+public class BaseException extends RuntimeException {
+	public final int code;
+	public final String msg;
 
-	private final String lang;
-	private final HttpCode httpCode;
-
-	protected BaseException(String lang, HttpCode httpCode) {
-		this.lang = lang;
-		this.httpCode = httpCode;
+	public BaseException(int code, String msg) {
+		this.code = code;
+		this.msg = msg;
 	}
 
-	public String getLang() {
-		return lang;
+	public BaseException(String msg) {
+		this.code = ResponseEnum.CODE_9000.getCode();
+		this.msg = msg;
 	}
 
-	public HttpCode getHttpCode() {
-		return httpCode;
+	public int getCode() {
+		return code;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public BaseException(String format, Object... args) {
+		String s = new Formatter().format(format, args).toString();
+		this.code = ResponseEnum.CODE_9000.getCode();
+		this.msg = s;
 	}
 
 }
