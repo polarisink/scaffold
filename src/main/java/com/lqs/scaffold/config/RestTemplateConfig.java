@@ -1,7 +1,7 @@
 package com.lqs.scaffold.config;
 
 import com.google.common.collect.Lists;
-import com.lqs.scaffold.exception.RemoteException;
+import com.lqs.scaffold.log.LogClientHttpRequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
@@ -48,11 +48,10 @@ public class RestTemplateConfig {
                 .forEachOrdered(converter -> ((StringHttpMessageConverter) converter).setDefaultCharset(StandardCharsets.UTF_8));
 
         //Interceptors 添加写的 Interceptors
-        restTemplate.setInterceptors(Lists.newArrayList(new RemoteException.LogClientHttpRequestInterceptor()));
+        restTemplate.setInterceptors(Lists.newArrayList(
+                new LogClientHttpRequestInterceptor()));
         //BufferingClientHttpRequestFactory  此处替换为BufferingClientHttpRequestFactory
         restTemplate.setRequestFactory(new BufferingClientHttpRequestFactory(httpRequestFactory));
         return restTemplate;
     }
-
-
 }

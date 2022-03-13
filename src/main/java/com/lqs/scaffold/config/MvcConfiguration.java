@@ -2,6 +2,7 @@ package com.lqs.scaffold.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lqs.scaffold.property.CorsProperties;
+import com.lqs.scaffold.test.TestInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
