@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.*;
+import static com.fasterxml.jackson.core.JsonGenerator.Feature.*;
 import static com.fasterxml.jackson.core.json.JsonReadFeature.*;
 import static com.fasterxml.jackson.databind.DeserializationFeature.*;
 import static com.fasterxml.jackson.databind.SerializationFeature.*;
@@ -50,13 +51,12 @@ import static com.fasterxml.jackson.databind.SerializationFeature.*;
  * jackson工具类
  *
  * @author lqs
- * @describe
  * @date 2022/3/19
  * @see <a href="https://github.com/duanxinyuan/json-utils">https://github.com/duanxinyuan/json-utils</a>
  */
 public class JacksonUtil {
 	private static final Logger log = LoggerFactory.getLogger(JacksonUtil.class);
-	private static ObjectMapper mapper;
+	private static final ObjectMapper mapper = initMapper();
 
 	private static final Set<JsonReadFeature> JSON_READ_FEATURES_ENABLED = Sets.newHashSet(
 		//允许在JSON中使用Java注释
@@ -76,15 +76,6 @@ public class JacksonUtil {
 		//允许数组json的结尾多逗号
 		ALLOW_TRAILING_COMMA
 	);
-
-	static {
-		try {
-			//初始化
-			mapper = initMapper();
-		} catch (Exception e) {
-			log.error("jackson config error", e);
-		}
-	}
 
 	public static ObjectMapper initMapper() {
 		JsonMapper.Builder builder = JsonMapper.builder().enable(JSON_READ_FEATURES_ENABLED.toArray(new JsonReadFeature[0]));
@@ -111,7 +102,7 @@ public class JacksonUtil {
 		//时间格式
 		objectMapper.disable(WRITE_DATES_AS_TIMESTAMPS);
 		//允许未知字段
-		objectMapper.enable(JsonGenerator.Feature.IGNORE_UNKNOWN);
+		objectMapper.enable(IGNORE_UNKNOWN);
 		//序列化BigDecimal时之间输出原始数字还是科学计数, 默认false, 即是否以toPlainString()科学计数方式来输出
 		objectMapper.enable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN);
 		//识别Java8时间
