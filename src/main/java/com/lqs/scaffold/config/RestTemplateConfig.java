@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * http 请求工具注入
+ * @author lqs
  */
 @Configuration
 public class RestTemplateConfig {
