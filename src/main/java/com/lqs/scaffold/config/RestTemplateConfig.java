@@ -44,7 +44,7 @@ public class RestTemplateConfig {
          */
         List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
         messageConverters.stream()
-                .filter(converter -> converter instanceof StringHttpMessageConverter)
+                .filter(StringHttpMessageConverter.class::isInstance)
                 .forEachOrdered(converter -> ((StringHttpMessageConverter) converter).setDefaultCharset(StandardCharsets.UTF_8));
 
         //Interceptors 添加写的 Interceptors
