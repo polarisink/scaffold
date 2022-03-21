@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
  * @author lqs
  * @date 2022/3/18
  */
-@Component
+//@Component
 public class MinioHelper {
     private final Logger log = LoggerFactory.getLogger(getClass());
 

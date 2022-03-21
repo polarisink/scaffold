@@ -5,11 +5,11 @@ spring:
 
   application:
     name: scaffold
-  datasource:
-    url: jdbc:mysql://${MYSQL_IP}:${MYSQL_PORT}/${spring.application.name}
-    username: ${MYSQL_USER}
-    password: ${MYSQL_SECRET}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#  datasource:
+#    url: jdbc:mysql://${MYSQL_IP}:${MYSQL_PORT}/${spring.application.name}
+#    username: ${MYSQL_USER}
+#    password: ${MYSQL_SECRET}
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
@@ -52,8 +52,8 @@ mq:
   queue: queue # 队列名
   route-key: queue_key # 路由key
 
-minio:
-  endpoint: http://172.16.3.28:10000
-  accessKey: admin
-  secretKey: 12345678
-  bucketName: aaa
+#minio:
+#  endpoint: http://172.16.3.28:10000
+#  accessKey: admin
+#  secretKey: 12345678
+#  bucketName: aaa

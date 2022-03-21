@@ -20,9 +20,9 @@ import java.security.NoSuchAlgorithmException;
  * @date 2022/3/18
  */
 @Service
-public class FileService implements IFileService {
+public class FileService/* implements IFileService*/ {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+   /* private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final MinioClient minioClient;
     private final MinioConfig minioConfig;
@@ -51,13 +51,13 @@ public class FileService implements IFileService {
         uploadObject(fileName, object, getDefaultBucketName());
     }
 
-    /**
+    *//**
      * 上传
      *
      * @param filename
      * @param object
      * @param bucket
-     */
+     *//*
     private void uploadObject(String filename, String object, String bucket) {
         if (StringUtils.isAnyBlank(filename, bucket))
             return;
@@ -79,11 +79,11 @@ public class FileService implements IFileService {
     }
 
 
-    /**
+    *//**
      * 存储桶构建
      *
      * @param bucketName
-     */
+     *//*
     private void bucketBuild(String bucketName) {
         try {
             boolean found =
@@ -98,5 +98,5 @@ public class FileService implements IFileService {
             log.error("bucketBuild error", exception);
         }
     }
-
+*/
 }

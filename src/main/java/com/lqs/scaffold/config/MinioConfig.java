@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Configuration;
  * @author lqs
  * @date 2022/3/18
  */
-@Getter
-@Configuration
-@ConfigurationProperties(prefix = "minio")
+//@Getter
+//@Configuration
+//@ConfigurationProperties(prefix = "minio")
 public class MinioConfig {
     private String endpoint;
     private Integer port;

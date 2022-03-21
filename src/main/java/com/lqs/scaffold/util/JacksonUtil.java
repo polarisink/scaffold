@@ -56,7 +56,7 @@ import static com.fasterxml.jackson.databind.SerializationFeature.*;
  */
 public class JacksonUtil {
 	private static final Logger log = LoggerFactory.getLogger(JacksonUtil.class);
-	private static final ObjectMapper mapper = initMapper();
+	private static  ObjectMapper mapper = initMapper();
 
 	private static final Set<JsonReadFeature> JSON_READ_FEATURES_ENABLED = Sets.newHashSet(
 		//允许在JSON中使用Java注释
@@ -76,6 +76,16 @@ public class JacksonUtil {
 		//允许数组json的结尾多逗号
 		ALLOW_TRAILING_COMMA
 	);
+
+
+	static {
+		try {
+			//初始化
+			mapper = initMapper();
+		} catch (Exception e) {
+			log.error("jackson config error", e);
+		}
+	}
 
 	public static ObjectMapper initMapper() {
 		JsonMapper.Builder builder = JsonMapper.builder().enable(JSON_READ_FEATURES_ENABLED.toArray(new JsonReadFeature[0]));
