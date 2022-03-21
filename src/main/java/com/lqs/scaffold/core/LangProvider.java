@@ -21,7 +21,7 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 @Slf4j
 public class LangProvider {
-	private volatile static LangProvider instance;
+	private static volatile LangProvider instance;
 
 	private static final String PATH_PARENT = "classpath:i18n/";
 	private static final String SUFFIX = ".properties";

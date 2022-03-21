@@ -13,15 +13,17 @@ import java.util.Locale;
 @Slf4j
 public class LangUtil {
 
+	private static final String separator = "_";
+
 	public static String preHandleLang(String language) {
-		return language.toLowerCase().replaceAll("-", "_");
+		return language.toLowerCase().replaceAll("-", separator);
 	}
 
 	public static Locale getLocale(String lang) {
-		if (!lang.contains("_")) {
+		if (!lang.contains(separator)) {
 			return new Locale(lang);
 		}
-		String[] parts = lang.split("_");
+		String[] parts = lang.split(separator);
 
 		Locale locale;
 		try {
