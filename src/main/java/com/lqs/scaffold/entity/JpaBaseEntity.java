@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseEntity {
+public class JpaBaseEntity {
     /**
      * 主键id
      */
