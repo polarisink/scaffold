@@ -1,0 +1,113 @@
+package github.polarisink.exception;
+
+/**
+ * Http Code
+ *
+ * @author Bill
+ * @version 1.0
+ * @since 2020-08-31
+ */
+public enum HttpCode {
+  OK(0),
+  INTERNAL_ERROR(1),
+  UNAUTHORIZED(2),
+  USER_NOT_FOUND(3),
+  PRODUCT_NOT_FOUND(4),
+  INVALID_PARAMETER(5),
+  LOGIN_INVALID_CODE(6),
+  TARGET_NOT_AVAILABLE(7),
+  BALANCE_INSUFFICIENT(8),
+  PEER_INACTIVE(9),
+  NO_VALID_CHARGE_SETTING(10),
+  CHANNEL_NOT_FOUND(11),
+  ALREADY_IN_SAME_CHANNEL(12),
+  CALL_NOT_FOUND(13),
+  AUTH_REQUIRED(14),
+  ORDER_NOT_FOUND(15),
+  ORDER_NOT_PENDING(16),
+  CHANNEL_STATE_INVALID(17),
+  MEDIA_NOT_FOUND(18),
+  LOGIN_INVALID_TYPE(19),
+  LOGIN_INVALID_CREDENTIAL(20),
+  SHARE_INVALID_CODE(21),
+  SHARE_ACTIVATED_BEFORE(22),
+  SHARE_ACTIVATE_SELF(23),
+  USER_DISABLED(24),
+  IAP_INVALID_RECEIPT(25),
+  GIFT_NOT_FOUND(26),
+  LOGIN_INVALID_ACCESS_TOKEN(27),
+  REPORT_CALL_ERROR(28),
+  SEND_MESSAGE_LIMIT(29),
+  SEND_MESSAGE_TOO_FEW_FOR_RECHARGE(30),
+  SEND_MESSAGE_TOO_FEW_FOR_GIFT(31),
+  SEND_MESSAGE_BLOCKED(32),
+  DO_NOT_DISTURB(33),
+  RECHARGES_MORE(34),
+  REVIEW_IMAGE(35),
+  MEDIA_LOCKED_FAIL(36),
+  USER_ISEXIST(37),
+  USER_PASSWORD_LENGHT(38),
+  INVALID_LOGIN_TYPE(39),
+  TRADE_NOT_FOUND(40),
+  VIDEO_LOCK(41),
+  SHELLS_INSUFFICIENT(42),
+  SHELLS_TO_DIMMOND_FAIL(43),
+  PHONENUMBER_EXIST(44),
+  ALISMS_SEND_FAIL(45),
+  CODE_VERIFY_FAIL(46),
+  PHONENUMBER_LOGIN_FAIL(47),
+  PHONENUMBER_NOT_FOUND(48),
+  VERIFICATION_CODE_EXPIRED(49),
+  DO_NOT_CREATECHATROOM(50), //创建房间失败
+  ROOM_ID_NOT_EXIST(51),     //房间Id不存在
+  UP_MIC_Repeat(52),        //重复上麦
+  UP_MIC_Fail(53),          //上麦请求失败
+  EMAIL_NOT_FOUND(54),       //找不到该Email
+  EMAIL_IS_USED(55),         //Email已经被使用
+  EMAIL_SEND_FAIL(56),         //Email发送失败
+  EMAIL_INVALID(57),         //Email地址无效
+  EMAIL_LOGIN_FAIL(58),       //email登录失败
+  YSEEK_MATCHED_LIMIT(59),       //yseek批量打招呼或者获取卡片用户今天达到上限
+  SUBS_FAIL(60), //订阅失败
+  IS_SAME_AUTH(61), //都是主播不能通电话
+  REGISTER_FAIL(62), //注册失败
+  Repeat_Operate(63), //重复操作
+  REVIEW_IMAGE_Fail(64),
+  REVIEW_IMAGE_Error(65),
+  NETWORK_TIMEOUT(66),
+  GIFT_Waring(67),
+  BIND_FAIL(68),
+  UserInfoLock(69),
+  NotCallTips(70),
+
+  //后端业务异常
+  MALICE_ORDER(71), // 恶意刷单
+  UPSERT_BALANCE_FAILED(72), //新增或更新结余失败
+  ADD_BALANCE_LOG_FAILED(73),//新增结余日志失败
+  ADD_ORDER_FAILED(74),//新增订单失败
+  SMS_FAILED(75),//短信发送失败
+  NO_USER(76),//该用户不存在
+  NEED_POSITIVE_NUMBER(77),//需要正数值
+  UPSERT_PENALTY_FAILED(78),//新增或更新封禁失败
+  REMOVE_TOKEN_FAILED(79),//移除令牌失败
+  ADD_PENALTY_RECORD_FAILED(80),//新增封禁记录失败
+  NO_MATCHED(81),//没有匹配的
+  UPDATE_USER_FAILED(82),
+  UPDATE_FAILED(83);    //更新失败
+
+
+  private final int code;
+
+  HttpCode(int code) {
+    this.code = code;
+  }
+
+  public int getCode() {
+    return code;
+  }
+
+  public String getLabel() {
+    return "code." + this.toString().toLowerCase().replaceAll("_", ".");
+  }
+
+}
