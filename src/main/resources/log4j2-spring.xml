@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF" packages="org.graylog2.log4j2">
+  <Properties>
+    <Property name="SERVER">10.1.20.115</Property>
+    <Property name="PORT">12201</Property>
+    <Property name="LOG_HOME">${sys:user.home}/logs</Property>
+    <property name="ERROR_LOG_FILE_NAME">${LOG_HOME}/error</property>
+    <property name="WARN_LOG_FILE_NAME">${LOG_HOME}/warn</property>
+    <property name="INFO_LOG_FILE_NAME">${LOG_HOME}/info</property>
+    <property name="DEBUG_LOG_FILE_NAME">${LOG_HOME}/debug</property>
+    <property name="PATTERN">[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p [%c] %L - %m%n
+    </property>
+  </Properties>
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <!--只接受程序中DEBUG级别的日志进行处理, 下同 -->
+      <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+      <PatternLayout pattern="${PATTERN}"/>
+    </Console>
+    <RollingFile fileName="${DEBUG_LOG_FILE_NAME}.log"
+                 filePattern="${LOG_HOME}/$${date:yyyy-MM}/debug-%d{yyyy-MM-dd}-%i.log.gz"
+                 name="RollingFileDebug">
+      <Filters>
+        <ThresholdFilter level="DEBUG"/>
+        <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+      </Filters>
+      <PatternLayout pattern="${PATTERN}"/>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="50 MB"/>
+        <TimeBasedTriggeringPolicy/>
+      </Policies>
+      <!-- max:同一文件夹下最多文件数 -->
+      <DefaultRolloverStrategy max="10">
+        <Delete basePath="${LOG_HOME}" maxDepth="2">
+          <IfFileName glob="*/debug*">
+            <!-- 保存天数 -->
+            <IfLastModified age="10d">
+              <IfAny>
+                <IfAccumulatedFileSize exceeds="100 MB"/>
+                <IfAccumulatedFileCount exceeds="10"/>
+              </IfAny>
+            </IfLastModified>
+          </IfFileName>
+        </Delete>
+      </DefaultRolloverStrategy>
+    </RollingFile>
+    <RollingFile fileName="${INFO_LOG_FILE_NAME}.log"
+                 filePattern="${LOG_HOME}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log.gz"
+                 name="RollingFileInfo">
+      <Filters>
+        <ThresholdFilter level="INFO"/>
+        <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+      </Filters>
+      <PatternLayout pattern="${PATTERN}"/>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="50 MB"/>
+        <TimeBasedTriggeringPolicy/>
+      </Policies>
+    </RollingFile>
+    <RollingFile fileName="${WARN_LOG_FILE_NAME}.log"
+                 filePattern="${LOG_HOME}/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log.gz"
+                 name="RollingFileWarn">
+      <Filters>
+        <ThresholdFilter level="WARN"/>
+        <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+      </Filters>
+      <PatternLayout pattern="${PATTERN}"/>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="50 MB"/>
+        <TimeBasedTriggeringPolicy/>
+      </Policies>
+    </RollingFile>
+    <RollingFile fileName="${ERROR_LOG_FILE_NAME}.log"
+                 filePattern="${LOG_HOME}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log.gz"
+                 name="RollingFileError">
+      <ThresholdFilter level="ERROR"/>
+      <PatternLayout pattern="${PATTERN}"/>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="50 MB"/>
+        <TimeBasedTriggeringPolicy/>
+      </Policies>
+    </RollingFile>
+    <GELF name="gelfAppender" server="${SERVER}" port="${PORT}">
+      <PatternLayout pattern="%logger{36} - %msg%n" charset="UTF-8"/>
+      <Filters>
+        <Filter type="MarkerFilter" marker="FLOW" onMatch="DENY"
+                onMismatch="NEUTRAL"/>
+        <Filter type="MarkerFilter" marker="EXCEPTION" onMatch="DENY"
+                onMismatch="ACCEPT"/>
+      </Filters>            <!-- Additional fields -->
+      <KeyValuePair key="foo" value="bar"/>
+      <KeyValuePair key="jvm" value="${java:vm}"/>
+    </GELF>
+  </Appenders>
+  <loggers>
+    <root level="debug" includeLocation="true">
+      <!--      <AppenderRef ref="gelfAppender"/>-->
+      <appender-ref ref="Console"/>
+      <appender-ref ref="RollingFileInfo"/>
+      <appender-ref ref="RollingFileWarn"/>
+      <appender-ref ref="RollingFileError"/>
+      <appender-ref ref="RollingFileDebug"/>
+    </root>
+  </loggers>
+</Configuration>
