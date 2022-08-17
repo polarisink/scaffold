@@ -17,7 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @EnableJpaAuditing
 @EnableScheduling
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, RedisAutoConfiguration.class})
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 public class ScaffoldApplication {
   public static void main(String[] args) {
     SpringApplication.run(ScaffoldApplication.class, args);

@@ -7,10 +7,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.CacheErrorHandler;
@@ -23,12 +26,16 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.serializer.*;
+import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static polarisink.github.scaffold.bean.consts.AuthConst.LONG_TIME;
 import static polarisink.github.scaffold.bean.consts.AuthConst.VERIFY_CODE_TIMEOUT;
@@ -45,13 +52,15 @@ import static polarisink.github.scaffold.bean.consts.AuthConst.VERIFY_CODE_TIMEO
 @RequiredArgsConstructor
 public class RedisConfig extends CachingConfigurerSupport {
   /**
-   * redis缓存分隔符,写的比较丑
+   * redis缓存分隔符
    */
   public static final String REDIS_SEP = StrUtil.COLON;
   public static final String DOLLAR = "$";
   public static final String SHARP = "#";
   private final ApplicationContext applicationContext;
   private final RedisConnectionFactory factory;
+  @Qualifier("redis")
+  private final  ObjectMapper mapper;
 
   @Bean
   public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
@@ -70,16 +79,7 @@ public class RedisConfig extends CachingConfigurerSupport {
   public RedisSerializer<Object> redisSerializer() {
     //创建JSON序列化器
     Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
-    ObjectMapper objectMapper = new ObjectMapper();
-    //set for localDateTime
-    objectMapper.disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);
-    objectMapper.registerModule(new JavaTimeModule());
-    objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-    objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
-    //必须设置，否则无法将JSON转化为对象，会转化成Map类型
-    // 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会跑出异常
-    //objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-    serializer.setObjectMapper(objectMapper);
+    serializer.setObjectMapper(mapper);
     return serializer;
   }
 
@@ -161,7 +161,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
   //TODO springCache动态过期时间,待测试
 
-  /*@Bean
+  @Bean
   @Primary
   RedisCacheManager redisCacheManager() {
     RedisCacheWriter writer = RedisCacheWriter.nonLockingRedisCacheWriter(factory);
@@ -171,23 +171,18 @@ public class RedisConfig extends CachingConfigurerSupport {
     Map<String, RedisCacheConfiguration> conf = getConf();
     System.out.println(conf);
     return new RedisCacheManager(writer, config, conf);
-  }*/
+  }
 
-  /**
-   *
-   * @return
-   */
-  /*private Map<String, RedisCacheConfiguration> getConf() {
+
+  private Map<String, RedisCacheConfiguration> getConf() {
     Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(Component.class);
     List<CacheMap> collect = beansWithAnnotation.entrySet().stream().flatMap(entry -> {
       try {
         Object value = entry.getValue();
         // 获得原本的class名字，spring代理的都是后面有$$直接截取即可
-        *//*@formatter:off*//*
         String className = value.getClass().getName().contains(DOLLAR)
             ? value.getClass().getName().substring(0, value.getClass().getName().indexOf(DOLLAR))
             : value.getClass().getName();
-        *//*@formatter:on*//*
         // 获得原始的字节码文件，如果被spring 代理之后，方法上会获取不到注解信息
         Method[] methods = Class.forName(className).getDeclaredMethods();
         return Arrays.stream(methods).flatMap(method -> {
@@ -239,5 +234,5 @@ public class RedisConfig extends CachingConfigurerSupport {
   static class CacheMap {
     private String name;
     private Duration ttl;
-  }*/
+  }
 }

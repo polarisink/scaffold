@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 public class TreeUtils {
 
-  private static final ObjectMapper MAPPER = new ObjectMapper();
+  private static final ObjectMapper MAPPER = JacksonUtil.mapper;
 
   /**
    * 通过jackson转为树形List<T>

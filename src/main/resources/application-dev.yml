@@ -1,5 +1,5 @@
 server:
-  port: 8065
+  port: 8066
   tomcat:
     uri-encoding: utf-8
   servlet:
@@ -13,17 +13,18 @@ spring:
   application:
     name: scaffold
   datasource:
+    name: druid
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       primary:
-        url: jdbc:mysql://127.0.0.1:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+        url: jdbc:mysql://aries.remote:3306/scaffold?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
         username: root
-        password: 123456
+        password: vgy87dgy16rhd61fAGHbcgA
       secondary:
-        url: jdbc:mysql://127.0.0.1:3306/iNC_HealthDataIndex?useUnicode=true?characterEncoding=utf-8&serverTimezone=GMT%2b8
+        url: jdbc:mysql://aries.remote:3306/polaris?useUnicode=true?characterEncoding=utf-8&serverTimezone=GMT%2b8
         username: root
-        password: 123456
+        password: vgy87dgy16rhd61fAGHbcgA
       initial-size: 2
       min-idle: 5
       max-active: 10
@@ -40,7 +41,7 @@ spring:
         login-username: root
         login-password: druid2021
   redis:
-    host: 127.0.0.1
+    host: aries.remote
     port: 6379
     password:
     jedis:
@@ -90,5 +91,12 @@ minio:
   accessKey: miniouser
   secretKey: 123456
   bucket: data
+
+swagger:
+  enable: true
+  title: 自定义脚手架
+  description: 自定义脚手架文档
+  service-url: 115.156.248.127
+  version: 0.1
 
 

@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -24,6 +25,7 @@ public class ArchivesAddRequest implements Serializable {
 
   private static final long serialVersionUID = 1784425732671451601L;
 
+  @NotEmpty(message = "机床标识不能为空")
   @ApiModelProperty("机床标识")
   private String handle;
 

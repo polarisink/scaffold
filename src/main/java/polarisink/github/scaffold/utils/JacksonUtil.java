@@ -58,7 +58,7 @@ public class JacksonUtil {
       JsonReadFeature.ALLOW_MISSING_VALUES,
       //允许数组json的结尾多逗号
       JsonReadFeature.ALLOW_TRAILING_COMMA);
-  private static ObjectMapper mapper;
+  public static ObjectMapper mapper;
 
   static {
     try {

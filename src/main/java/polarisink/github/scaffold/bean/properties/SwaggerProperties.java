@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "hzncc.web.swagger")
+@ConfigurationProperties(prefix = "swagger")
 public class SwaggerProperties {
   /**
    * 是否swagger3启用，默认不启用
@@ -24,40 +24,40 @@ public class SwaggerProperties {
   /**
    * 标题
    */
-  private String title = "四位一体接口";
+  private String title;
   /**
    * 应用描述
    */
-  private String description = "华中数控四位一体项目接口文档";
+  private String description;
   /**
    * 服务地址
    */
-  private String serviceUrl = "10.10.33.69";
+  private String serviceUrl;
   /**
    * 版本，默认V1.0.0
    */
-  private String version = "V1.0.0";
+  private String version;
   /**
    * license
    */
-  private String license = "";
+  private String license;
   /**
    * licenseUrl
    */
-  private String licenseUrl = "";
+  private String licenseUrl;
 
   /**
    * 作者
    */
-  private String author = "Aries";
+  private String author;
 
   /**
    * 作者邮箱
    */
-  private String email = "polarisink@163.com";
+  private String email;
 
   /**
    *
    */
-  private String url = "";
+  private String url;
 }
