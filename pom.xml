@@ -2,13 +2,12 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
-  <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.3.0.RELEASE</version>
-    <relativePath/> <!-- lookup parent from repository -->
-  </parent>
+  <modules>
+    <module>scaffold-common</module>
+    <module>scaffold-api</module>
+    <module>scaffold-dao</module>
+    <module>scaffold-cache</module>
+  </modules>
 
   <groupId>github.polarisink</groupId>
   <artifactId>scaffold</artifactId>
@@ -44,47 +43,38 @@
     <java-jwt.version>3.6.0</java-jwt.version>
     <bcprov-jdk15on.version>1.69</bcprov-jdk15on.version>
     <bcrypt.version>0.9.0</bcrypt.version>
+    <querydsl.version>4.3.1</querydsl.version>
+    <jakarta-validation.version>2.0.2</jakarta-validation.version>
+    <mysql.version>8.0.20</mysql.version>
     <!--打包对test只编译不运行-->
     <skipTests>true</skipTests>
   </properties>
+<dependencyManagement>
 
   <dependencies>
     <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-dependencies</artifactId>
+      <version>${spring-cloud.version}</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-      <!--排除掉，使用log4j2-->
-      <exclusions>
-        <exclusion>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-logging</artifactId>
-        </exclusion>
-      </exclusions>
+      <artifactId>spring-boot-dependencies</artifactId>
+      <version>${spring-boot.version}</version>
+      <type>pom</type>
+      <scope>import</scope>
     </dependency>
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>druid-spring-boot-starter</artifactId>
       <version>${druid.version}</version>
     </dependency>
-    <dependency> <!-- 引入log4j2依赖 -->
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-log4j2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-cache</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.ben-manes.caffeine</groupId>
-      <artifactId>caffeine</artifactId>
-      <version>${caffeine.version}</version>
-    </dependency>
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
+      <version>${mysql.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -95,6 +85,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -150,26 +141,7 @@
       <artifactId>mapstruct-spring-annotations</artifactId>
       <version>${mapstruct.spring.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-redis</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-configuration-processor</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.junit.vintage</groupId>
-          <artifactId>junit-vintage-engine</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+
     <dependency>
       <groupId>io.springfox</groupId>
       <artifactId>springfox-boot-starter</artifactId>
@@ -178,16 +150,19 @@
     <dependency>
       <groupId>com.querydsl</groupId>
       <artifactId>querydsl-apt</artifactId>
+      <version>${querydsl.version}</version>
       <scope>provided</scope>
     </dependency>
     <!--QueryDSL支持-->
     <dependency>
       <groupId>com.querydsl</groupId>
       <artifactId>querydsl-jpa</artifactId>
+      <version>${querydsl.version}</version>
     </dependency>
     <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <version>${jakarta-validation.version}</version>
     </dependency>
     <dependency>
       <groupId>org.graylog2.log4j2</groupId>
@@ -210,17 +185,7 @@
       <version>${bcrypt.version}</version>
     </dependency>
   </dependencies>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+</dependencyManagement>
   <build>
     <finalName>assembly</finalName>
     <plugins>
@@ -280,6 +245,7 @@
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
+          <encoding>utf8</encoding>
           <annotationProcessorPaths>
             <path>
               <groupId>org.projectlombok</groupId>
