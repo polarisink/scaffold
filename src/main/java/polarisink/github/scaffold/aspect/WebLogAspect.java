@@ -32,7 +32,7 @@ public class WebLogAspect {
   @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping) && @annotation(org.springframework.web.bind.annotation.PostMapping) " +
       "&& @annotation(org.springframework.web.bind.annotation.PutMapping) && @annotation(org.springframework.web.bind.annotation.DeleteMapping) " +
       "&& @annotation(org.springframework.web.bind.annotation.RequestMapping) && @annotation(org.springframework.web.bind.annotation.PatchMapping)")
-  public void webLog() {
+  public void webLOG() {
   }
 
   /**
@@ -41,7 +41,7 @@ public class WebLogAspect {
    * @param joinPoint
    * @throws Throwable
    */
-  @Before("webLog()")
+  @Before("webLOG()")
   public void doBefore(JoinPoint joinPoint) {
     // 开始打印请求日志
     ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -55,7 +55,7 @@ public class WebLogAspect {
     String argsStr;
     try {
       /* todo 怎么保护敏感信息
-       * 1、使用@NoLog注解避免打印日志，精确到接口级别
+       * 1、使用@NoLOG注解避免打印日志，精确到接口级别
        * 2、简单的维护敏感字段即可
        */
       argsStr = mapper.writeValueAsString(joinPoint.getArgs());
@@ -90,7 +90,7 @@ public class WebLogAspect {
   /**
    * 在切点之后织入
    */
-  @After("webLog()")
+  @After("webLOG()")
   public void doAfter() {
     LOG.info("=========================================== End ===========================================");
     // 每个请求之间空一行
@@ -104,7 +104,7 @@ public class WebLogAspect {
    * @return
    * @throws Throwable
    */
-  @Around("webLog()")
+  @Around("webLOG()")
   public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
