@@ -1,0 +1,7 @@
+README.md
+.git
+src
+*.txt
+.idea
+*.iml
+.gitignore
