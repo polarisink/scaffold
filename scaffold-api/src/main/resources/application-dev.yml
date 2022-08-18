@@ -3,7 +3,7 @@ server:
   tomcat:
     uri-encoding: utf-8
   servlet:
-    context-path: /assembly
+    context-path: /scaffold
 
 spring:
   mvc:
@@ -17,11 +17,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       primary:
-        url: jdbc:mysql://10.1.20.112:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
         username: root
         password: mysqlroot
       secondary:
-        url: jdbc:mysql://10.1.20.112:3306/iNC_HealthDataIndex?useUnicode=true?characterEncoding=utf-8&serverTimezone=GMT%2b8
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/iNC_HealthDataIndex?useUnicode=true?characterEncoding=utf-8&serverTimezone=GMT%2b8
         username: root
         password: mysqlroot
       initial-size: 2
@@ -40,7 +40,7 @@ spring:
         login-username: root
         login-password: druid2021
   redis:
-    host: 10.1.20.116
+    host: 127.0.0.1
     port: 6379
     password:
     jedis:
@@ -71,16 +71,6 @@ spring:
     multipart:
       max-file-size: 100MB #单个文件的最大上限
       max-request-size: 100MB #单个请求的文件总大小上限
-  data:
-    mongodb:
-      host: 10.1.20.115
-      port: 27017
-      database: assembly
-      username: wenqiang
-      password: "1438438"
-    redis:
-      repositories:
-        enabled: false
 
 logging:
   level:
