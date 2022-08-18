@@ -2,8 +2,10 @@ package github.polarisink.dao.utils;
 
 
 
+
+
+import github.polarisink.common.enums.BaseEnum;
 import github.polarisink.dao.dto.Kv;
-import github.polarisink.dao.enums.BaseEnum;
 
 import java.util.Arrays;
 import java.util.List;
