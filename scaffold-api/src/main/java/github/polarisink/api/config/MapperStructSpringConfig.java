@@ -10,6 +10,6 @@ import org.mapstruct.extensions.spring.SpringMapperConfig;
  * @date 2022/5/7
  */
 @MapperConfig(componentModel = "spring")
-@SpringMapperConfig(conversionServiceAdapterPackage = "polarisink.github.scaffold.config", conversionServiceAdapterClassName = "MapStructConversionServiceAdapter")
+@SpringMapperConfig(conversionServiceAdapterPackage = "polarisink.github.config", conversionServiceAdapterClassName = "MapStructConversionServiceAdapter")
 public class MapperStructSpringConfig {
 }

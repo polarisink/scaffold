@@ -1,6 +1,5 @@
-package github.polarisink.common.enums;
+package github.polarisink.common.asserts;
 
-import github.polarisink.common.assertion.ArgumentExceptionAssert;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

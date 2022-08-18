@@ -1,8 +1,8 @@
 package github.polarisink.api.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import github.polarisink.common.enums.ArgumentE;
-import github.polarisink.common.enums.ServletE;
+import github.polarisink.common.asserts.ArgumentE;
+import github.polarisink.common.asserts.ServletE;
 import github.polarisink.common.exception.ArgumentException;
 import github.polarisink.common.exception.AuthException;
 import github.polarisink.common.exception.BaseException;
@@ -43,8 +43,8 @@ import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.UiConfiguration;
 
-import static github.polarisink.common.enums.BaseE.BASE;
-import static github.polarisink.common.enums.BaseE.SERVER_ERROR;
+import static github.polarisink.common.asserts.BaseE.BASE;
+import static github.polarisink.common.asserts.BaseE.SERVER_ERROR;
 
 
 /**

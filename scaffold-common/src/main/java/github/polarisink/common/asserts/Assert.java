@@ -1,4 +1,4 @@
-package github.polarisink.common.assertion;
+package github.polarisink.common.asserts;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;

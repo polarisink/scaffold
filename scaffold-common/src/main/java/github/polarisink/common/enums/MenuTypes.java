@@ -1,4 +1,4 @@
-package github.polarisink.common.constant.enums;
+package github.polarisink.common.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

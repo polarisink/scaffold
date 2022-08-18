@@ -1,4 +1,4 @@
-package github.polarisink.common.constant.enums;
+package github.polarisink.common.enums;
 
 public enum CacheType {
     FULL,   //存取

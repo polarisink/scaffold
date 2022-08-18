@@ -2,7 +2,7 @@ package github.polarisink.dao.wrapper;
 
 import lombok.Data;
 
-import static github.polarisink.common.enums.BaseE.SUCCESS;
+import static github.polarisink.common.asserts.BaseE.SUCCESS;
 
 /**
  * <p>通用返回结果</p>

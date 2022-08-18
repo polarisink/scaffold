@@ -1,22 +1,18 @@
-package github.polarisink.common.assertion;
-
+package github.polarisink.common.asserts;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import github.polarisink.common.exception.ArgumentException;
 import github.polarisink.common.exception.BaseException;
+import github.polarisink.common.exception.BusinessException;
 import github.polarisink.common.IResponseEnum;
 
-
 /**
- * <pre>
- *
- * </pre>
+ * <p>业务异常断言</p>
  *
  * @author aries
  * @date 2022/5/2
  */
-public interface ArgumentExceptionAssert extends IResponseEnum, Assert {
+public interface BusinessExceptionAssert extends IResponseEnum, Assert {
 
   /**
    * @param args
@@ -28,7 +24,7 @@ public interface ArgumentExceptionAssert extends IResponseEnum, Assert {
     if (ArrayUtil.isNotEmpty(args)) {
       msg = StrUtil.format(this.getMessage(), args);
     }
-    return new ArgumentException(this, args, msg);
+    return new BusinessException(this, args, msg);
   }
 
   /**
@@ -42,7 +38,7 @@ public interface ArgumentExceptionAssert extends IResponseEnum, Assert {
     if (ArrayUtil.isNotEmpty(args)) {
       msg = StrUtil.format(this.getMessage(), args);
     }
-    return new ArgumentException(this, args, msg, t);
+    return new BusinessException(this, args, msg, t);
   }
 
 }

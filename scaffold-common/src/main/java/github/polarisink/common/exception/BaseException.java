@@ -2,7 +2,7 @@ package github.polarisink.common.exception;
 
 import cn.hutool.core.util.StrUtil;
 import github.polarisink.common.IResponseEnum;
-import github.polarisink.common.enums.BaseE;
+import github.polarisink.common.asserts.BaseE;
 import lombok.Getter;
 
 import java.io.Serializable;
