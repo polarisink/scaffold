@@ -39,3 +39,7 @@ regression/venv
 regression/.idea
 regression/*.pyc
 regression/cases/__pycache__
+
+
+### others
+scaffold-*/target

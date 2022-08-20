@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TestHandler {
   private final TestService testService;
+
   @GetMapping("/get/{id}")
-  public Archives getById(@PathVariable Long id){
+  public Archives getById(@PathVariable Long id) {
     return testService.getById(id);
   }
 }

@@ -11,7 +11,8 @@ import cn.hutool.core.util.StrUtil;
  */
 public class RedisConst {
 
-  public static  final String REDIS_SEP= StrUtil.COLON;
+  public static final String REDIS_SEP = StrUtil.COLON;
+
   /**
    * 项目的KEY,作为基
    */

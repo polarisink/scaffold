@@ -1,8 +1,8 @@
-package github.polarisink.dao.convert;
+package github.polarisink.dao.bean.convert;
 
-import github.polarisink.dao.request.ArchivesAddRequest;
-import org.mapstruct.Mapper;
+import github.polarisink.dao.bean.request.ArchivesAddRequest;
 import github.polarisink.dao.entity.primary.Archives;
+import org.mapstruct.Mapper;
 import org.springframework.core.convert.converter.Converter;
 
 /**

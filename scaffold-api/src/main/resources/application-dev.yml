@@ -1,5 +1,7 @@
+ip: 10.1.20.112
+
 server:
-  port: 8066
+  port: 8067
   tomcat:
     uri-encoding: utf-8
   servlet:
@@ -17,11 +19,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       primary:
-        jdbc-url: jdbc:mysql://127.0.0.1:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+        jdbc-url: jdbc:mysql://${ip}:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
         username: root
         password: mysqlroot
       secondary:
-        jdbc-url: jdbc:mysql://127.0.0.1:3306/iNC_HealthDataIndex?useUnicode=true?characterEncoding=utf-8&serverTimezone=GMT%2b8
+        jdbc-url: jdbc:mysql://${ip}:3306/iNC_HealthDataIndex?useUnicode=true?characterEncoding=utf-8&serverTimezone=GMT%2b8
         username: root
         password: mysqlroot
       initial-size: 2
@@ -40,7 +42,7 @@ spring:
         login-username: root
         login-password: druid2021
   redis:
-    host: 127.0.0.1
+    host: ${ip}
     port: 6379
     password:
     jedis:

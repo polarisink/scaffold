@@ -1,7 +1,6 @@
-package github.polarisink.dao.auth;
+package github.polarisink.dao.bean.auth;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Objects;

@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class JacksonConfig {
   @Bean("redis")
-  public ObjectMapper redis(){
+  public ObjectMapper redis() {
     ObjectMapper objectMapper = new ObjectMapper();
     //set for localDateTime
     objectMapper.disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);
@@ -34,7 +34,7 @@ public class JacksonConfig {
 
   @Bean
   @Primary
-  public ObjectMapper objectMapper(){
+  public ObjectMapper objectMapper() {
     return JacksonUtil.mapper;
   }
 

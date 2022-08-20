@@ -1,7 +1,7 @@
 package github.polarisink.dao.utils;
 
 import com.querydsl.core.QueryResults;
-import github.polarisink.dao.page.BasePage;
+import github.polarisink.dao.bean.page.BasePage;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

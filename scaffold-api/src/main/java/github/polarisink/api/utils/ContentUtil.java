@@ -2,11 +2,10 @@ package github.polarisink.api.utils;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import github.polarisink.common.asserts.ArgumentE;
-import github.polarisink.dao.auth.Authentication;
+import github.polarisink.dao.bean.auth.Authentication;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 
 import javax.servlet.http.HttpServletRequest;
 

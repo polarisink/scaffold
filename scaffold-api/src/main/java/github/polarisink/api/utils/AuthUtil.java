@@ -5,7 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import github.polarisink.common.exception.AuthException;
 import github.polarisink.common.utils.TimeUtils;
-import github.polarisink.dao.auth.Authentication;
+import github.polarisink.dao.bean.auth.Authentication;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;

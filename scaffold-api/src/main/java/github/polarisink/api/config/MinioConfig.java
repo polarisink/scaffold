@@ -1,6 +1,6 @@
 package github.polarisink.api.config;
 
-import github.polarisink.dao.properties.MinioProperties;
+import github.polarisink.dao.bean.properties.MinioProperties;
 import io.minio.MinioClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ public class MinioConfig {
   private final MinioProperties prop;
 
   @Bean
-  public MinioClient minioClient(){
-    return  MinioClient.builder().endpoint(prop.getEndpoint()).credentials(prop.getAccessKey(), prop.getSecretKey()).build();
+  public MinioClient minioClient() {
+    return MinioClient.builder().endpoint(prop.getEndpoint()).credentials(prop.getAccessKey(), prop.getSecretKey()).build();
   }
 }

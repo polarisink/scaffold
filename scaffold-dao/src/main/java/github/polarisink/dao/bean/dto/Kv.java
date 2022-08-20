@@ -1,4 +1,4 @@
-package github.polarisink.dao.dto;
+package github.polarisink.dao.bean.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

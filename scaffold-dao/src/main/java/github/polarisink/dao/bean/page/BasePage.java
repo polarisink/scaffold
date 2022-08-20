@@ -1,4 +1,4 @@
-package github.polarisink.dao.page;
+package github.polarisink.dao.bean.page;
 
 import lombok.Data;
 

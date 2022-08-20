@@ -1,6 +1,6 @@
 package github.polarisink.api.config;
 
-import github.polarisink.dao.properties.SwaggerProperties;
+import github.polarisink.dao.bean.properties.SwaggerProperties;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

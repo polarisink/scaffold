@@ -1,4 +1,4 @@
-package github.polarisink.dao.properties;
+package github.polarisink.dao.bean.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

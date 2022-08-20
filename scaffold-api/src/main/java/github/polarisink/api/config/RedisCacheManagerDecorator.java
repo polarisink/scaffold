@@ -27,10 +27,9 @@ import static github.polarisink.common.constant.RedisConst.REDIS_SEP;
  * *. evict方法支持删除以'*'结尾的通配符表示的所有的key(若key的字符串结尾为'*',则删除这个通配符匹配下的所有的key);
  */
 public class RedisCacheManagerDecorator {
+  public static final String REDIS_CLEAR_ALL = "*";
   private static final ConcurrentMap<Cache, Cache> CACHE_MAP = new ConcurrentHashMap<>();
   private static final List<MethodHandler> METHOD_HANDLERS = new ArrayList<>();
-
-  public static final String REDIS_CLEAR_ALL = "*";
 
   static {
     loadMethodHandlers();

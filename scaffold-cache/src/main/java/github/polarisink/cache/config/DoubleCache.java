@@ -2,10 +2,10 @@ package github.polarisink.cache.config;
 
 
 import com.github.benmanes.caffeine.cache.Cache;
-import github.polarisink.cache.msg.CacheMsgType;
 import github.polarisink.cache.msg.CacheMassage;
+import github.polarisink.cache.msg.CacheMsgType;
 import github.polarisink.cache.msg.MessageSourceUtil;
-import github.polarisink.dao.properties.DoubleCacheProperties;
+import github.polarisink.dao.bean.properties.DoubleCacheProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.support.AbstractValueAdaptingCache;
 import org.springframework.data.redis.core.RedisTemplate;

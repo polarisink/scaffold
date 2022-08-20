@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- *
  * @author aries
  * @date 2022/5/23
  */
@@ -29,12 +28,11 @@ public interface BaseJpaRepo<T> extends JpaRepository<T, Long>, JpaSpecification
    * @return
    */
   default T findByIdSafe(Long id) {
-    return findById(id).orElseThrow(() -> new BusinessException("数据库不存在id为{}的实体",id));
+    return findById(id).orElseThrow(() -> new BusinessException("数据库不存在id为{}的实体", id));
   }
 
 
   /**
-   *
    * @param id
    * @param format
    * @param args
