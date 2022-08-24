@@ -1,3 +1,4 @@
+host: 10.1.20.112
 server:
   port: 8066
   tomcat:
@@ -8,8 +9,6 @@ server:
 spring:
   mvc:
     throw-exception-if-no-handler-found: true
-  resources:
-    add-mappings: false
   application:
     name: scaffold
   datasource:
@@ -18,7 +17,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       primary:
-        url: jdbc:mysql://aries.remote:3306/scaffold?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+        url: jdbc:mysql://${host}:3306/scaffold?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
         username: root
         password: vgy87dgy16rhd61fAGHbcgA
       secondary:

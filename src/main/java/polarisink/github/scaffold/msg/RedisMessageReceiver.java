@@ -21,7 +21,9 @@ public class RedisMessageReceiver {
     private final RedisTemplate redisTemplate;
     private final DoubleCacheManager manager;
 
-    //接收通知，进行处理
+    /**
+     * 接收通知，进行处理
+     */
     public void receive(String message) throws UnknownHostException {
         CacheMassage msg = (CacheMassage) redisTemplate
                 .getValueSerializer().deserialize(message.getBytes());
