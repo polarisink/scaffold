@@ -19,16 +19,12 @@
   <packaging>pom</packaging>
 
   <properties>
-    <scaffold.version>0.0.1-SNAPSHOT</scaffold.version>
-    <scaffold-common.version>0.0.1-SNAPSHOT</scaffold-common.version>
-    <scaffold-dao.version>0.0.1-SNAPSHOT</scaffold-dao.version>
-    <scaffold-cache.version>0.0.1-SNAPSHOT</scaffold-cache.version>
-    <scaffold-cache.version>0.0.1-SNAPSHOT</scaffold-cache.version>
-    <scaffold-third.version>0.0.1-SNAPSHOT</scaffold-third.version>
     <!--docker地址和各个插件的信息-->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>11</java.version>
+    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
     <docker-maven.version>0.4.14</docker-maven.version>
     <querydsl-maven.version>1.1.3</querydsl-maven.version>
     <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
