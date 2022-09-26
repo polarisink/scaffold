@@ -1,7 +1,5 @@
 package github.polarisink.common.constant;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class ExcelConst {
 
   public static final String radio = "radio";
 
-  public static final List<String> positive = ImmutableList.of("通过");
+  public static final List<String> positive = List.of("通过");
 
 
   /**

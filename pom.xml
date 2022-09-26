@@ -50,6 +50,8 @@
     <querydsl.version>4.3.1</querydsl.version>
     <jakarta-validation.version>2.0.2</jakarta-validation.version>
     <mysql.version>8.0.20</mysql.version>
+    <easy-es.version>0.9.60</easy-es.version>
+    <rocketmq.version>2.2.2</rocketmq.version>
     <!--打包对test只编译不运行-->
     <skipTests>true</skipTests>
   </properties>
@@ -80,11 +82,6 @@
         <artifactId>mysql-connector-java</artifactId>
         <version>${mysql.version}</version>
         <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-        <version>${guava.version}</version>
       </dependency>
       <dependency>
         <groupId>org.projectlombok</groupId>
@@ -123,6 +120,16 @@
         <groupId>org.mapstruct</groupId>
         <artifactId>mapstruct</artifactId>
         <version>${org.mapstruct.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.easy-es</groupId>
+        <artifactId>easy-es-boot-starter</artifactId>
+        <version>${easy-es.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.rocketmq</groupId>
+        <artifactId>rocketmq-spring-boot-starter</artifactId>
+        <version>${rocketmq.version}</version>
       </dependency>
       <!-- mapStruct 根据接口生成实现类 -->
       <dependency>

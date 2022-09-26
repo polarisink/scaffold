@@ -54,6 +54,10 @@
       <artifactId>mapstruct-processor</artifactId>
       <scope>provided</scope>
     </dependency>
+    <!--<dependency>
+      <groupId>cn.easy-es</groupId>
+      <artifactId>easy-es-boot-starter</artifactId>
+    </dependency>-->
     <!-- mapStruct 支持 lombok -->
     <dependency>
       <groupId>org.projectlombok</groupId>

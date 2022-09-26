@@ -17,4 +17,8 @@ public class TestService {
   public Archives getById(Long id) {
     return archivesRepo.findByIdSafe(id);
   }
+
+  public void addArchive(Archives archives) {
+    archivesRepo.save(archives);
+  }
 }

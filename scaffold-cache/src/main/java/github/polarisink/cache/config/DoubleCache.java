@@ -44,7 +44,9 @@ public class DoubleCache extends AbstractValueAdaptingCache {
     this.doubleCacheProperties = doubleCacheProperties;
   }
 
-  //使用注解时不走这个方法，实际走父类的get方法
+  /**
+   * 使用注解时不走这个方法，实际走父类的get方法
+   */
   @Override
   public <T> T get(Object key, Callable<T> valueLoader) {
     lock.lock();//加锁
@@ -73,7 +75,8 @@ public class DoubleCache extends AbstractValueAdaptingCache {
     Object obj = caffeineCache.getIfPresent(key);
     if (Objects.nonNull(obj)) {
       LOG.info("get data from caffeine");
-      return obj; //不用fromStoreValue，否则返回的是null，会再查数据库
+      //不用fromStoreValue，否则返回的是null，会再查数据库
+      return obj;
     }
 
     //再从redis中查找

@@ -19,13 +19,17 @@
   <dependencies>
     <dependency>
       <groupId>github.polarisink</groupId>
-      <artifactId>scaffold-common</artifactId>
+      <artifactId>scaffold-dao</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>github.polarisink</groupId>
       <artifactId>scaffold-dao</artifactId>
       <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.rocketmq</groupId>
+      <artifactId>rocketmq-spring-boot-starter</artifactId>
     </dependency>
   </dependencies>
 

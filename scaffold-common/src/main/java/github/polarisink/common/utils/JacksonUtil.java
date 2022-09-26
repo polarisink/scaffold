@@ -17,7 +17,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import com.google.common.collect.Sets;
 import github.polarisink.common.exception.JacksonException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +39,7 @@ import java.util.*;
  */
 @Slf4j
 public class JacksonUtil {
-  private static final Set<JsonReadFeature> JSON_READ_FEATURES_ENABLED = Sets.newHashSet(
+  private static final Set<JsonReadFeature> JSON_READ_FEATURES_ENABLED = Set.of(
       //允许在JSON中使用Java注释
       JsonReadFeature.ALLOW_JAVA_COMMENTS,
       //允许 json 存在没用双引号括起来的 field

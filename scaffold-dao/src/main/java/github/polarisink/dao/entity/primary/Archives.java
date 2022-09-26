@@ -80,7 +80,7 @@ public class Archives extends BaseJpaEntity {
   @Column(columnDefinition = "bigint comment 'bomID'")
   private Long bomId;
 
-  @Column(columnDefinition = "bit comment '注册状态' not null default false")
+  @Column(columnDefinition = "bit comment '注册状态'")
   private Boolean register;
 
   private Boolean online;

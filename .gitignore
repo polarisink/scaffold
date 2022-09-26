@@ -43,3 +43,4 @@ regression/cases/__pycache__
 
 ### others
 scaffold-*/target
+.env

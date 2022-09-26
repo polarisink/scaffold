@@ -22,4 +22,9 @@ public class TestHandler {
   public Archives getById(@PathVariable Long id) {
     return testService.getById(id);
   }
+
+  @GetMapping("/add")
+  public void addArchive() {
+    testService.addArchive(new Archives().setMachNum("oiujns").setHandle("csujdasjna"));
+  }
 }
