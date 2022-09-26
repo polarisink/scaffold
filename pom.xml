@@ -9,6 +9,7 @@
     <module>scaffold-dao</module>
     <module>scaffold-cache</module>
     <module>scaffold-third</module>
+    <module>scaffold-mbpgen</module>
   </modules>
 
   <groupId>github.polarisink</groupId>
@@ -52,6 +53,10 @@
     <mysql.version>8.0.20</mysql.version>
     <easy-es.version>0.9.60</easy-es.version>
     <rocketmq.version>2.2.2</rocketmq.version>
+    <mybatis-plus.version>3.5.2</mybatis-plus.version>
+    <mybatisplus-gen.version>3.5.2</mybatisplus-gen.version>
+    <freemarker.version>2.3.30</freemarker.version>
+
     <!--打包对test只编译不运行-->
     <skipTests>true</skipTests>
   </properties>
@@ -76,6 +81,16 @@
         <groupId>com.alibaba</groupId>
         <artifactId>druid-spring-boot-starter</artifactId>
         <version>${druid.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus-boot-starter</artifactId>
+        <version>${mybatis-plus.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus-generator</artifactId>
+        <version>${mybatisplus-gen.version}</version>
       </dependency>
       <dependency>
         <groupId>mysql</groupId>
@@ -192,6 +207,11 @@
         <groupId>at.favre.lib</groupId>
         <artifactId>bcrypt</artifactId>
         <version>${bcrypt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.freemarker</groupId>
+        <artifactId>freemarker</artifactId>
+        <version>${freemarker.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
