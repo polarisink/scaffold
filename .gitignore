@@ -22,7 +22,7 @@ target/
 
 ### NetBeans ###
 /nbproject/private/
-/nbbuild//
+/nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
@@ -39,3 +39,8 @@ regression/venv
 regression/.idea
 regression/*.pyc
 regression/cases/__pycache__
+
+
+### others
+scaffold-*/target
+.env

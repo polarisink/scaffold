@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -9,6 +10,13 @@
     <version>2.7.2</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
+  <modules>
+    <module>scaffold-common</module>
+    <module>scaffold-api</module>
+    <module>scaffold-dao</module>
+    <module>scaffold-cache</module>
+    <module>scaffold-third</module>
+  </modules>
 
   <groupId>github.polarisink</groupId>
   <artifactId>scaffold</artifactId>
@@ -19,13 +27,18 @@
 
   <properties>
     <!--docker地址和各个插件的信息-->
-    <docker-host>http://127.0.0.1:32157</docker-host>
-    <docker.image.prefix>${name}</docker.image.prefix>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>11</java.version>
+    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
     <docker-maven.version>0.4.14</docker-maven.version>
     <querydsl-maven.version>1.1.3</querydsl-maven.version>
     <maven.version>3.8.1</maven.version>
     <spring-cloud.version>2021.0.3</spring-cloud.version>
+    <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
+    <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
+    <maven.version>3.8.1</maven.version>
     <!--常用依赖-->
     <swagger.version>3.0.0</swagger.version>
     <guava.version>31.1-jre</guava.version>
@@ -43,173 +56,16 @@
     <java-jwt.version>3.6.0</java-jwt.version>
     <bcprov-jdk15on.version>1.69</bcprov-jdk15on.version>
     <bcrypt.version>0.9.0</bcrypt.version>
+    <querydsl.version>4.3.1</querydsl.version>
+    <jakarta-validation.version>2.0.2</jakarta-validation.version>
+    <mysql.version>8.0.20</mysql.version>
+    <easy-es.version>0.9.60</easy-es.version>
+    <rocketmq.version>2.2.2</rocketmq.version>
     <!--打包对test只编译不运行-->
     <skipTests>true</skipTests>
   </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-      <!--排除掉，使用log4j2-->
-      <exclusions>
-        <exclusion>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-logging</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>druid-spring-boot-starter</artifactId>
-      <version>${druid.version}</version>
-    </dependency>
-    <dependency> <!-- 引入log4j2依赖 -->
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-log4j2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-cache</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.ben-manes.caffeine</groupId>
-      <artifactId>caffeine</artifactId>
-      <version>${caffeine.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>${guava.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>io.minio</groupId>
-      <artifactId>minio</artifactId>
-      <version>${minio.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>okhttp</artifactId>
-          <groupId>com.squareup.okhttp3</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>${okhttp.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-all</artifactId>
-      <version>${hutool-all.version}</version>
-    </dependency>
-    <!-- mapStruct 核心注解 -->
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-      <version>${org.mapstruct.version}</version>
-    </dependency>
-    <!-- mapStruct 根据接口生成实现类 -->
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct-processor</artifactId>
-      <version>${org.mapstruct.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- mapStruct 支持 lombok -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok-mapstruct-binding</artifactId>
-      <version>${lombok-mapstruct-binding.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!--spring mapstruct插件-->
-    <dependency>
-      <groupId>org.mapstruct.extensions.spring</groupId>
-      <artifactId>mapstruct-spring-annotations</artifactId>
-      <version>${mapstruct.spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-redis</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-configuration-processor</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.junit.vintage</groupId>
-          <artifactId>junit-vintage-engine</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-boot-starter</artifactId>
-      <version>${swagger.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.querydsl</groupId>
-      <artifactId>querydsl-apt</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!--QueryDSL支持-->
-    <dependency>
-      <groupId>com.querydsl</groupId>
-      <artifactId>querydsl-jpa</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.graylog2.log4j2</groupId>
-      <artifactId>log4j2-gelf</artifactId>
-      <version>${gelf.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.auth0</groupId>
-      <artifactId>java-jwt</artifactId>
-      <version>${java-jwt.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-jdk15on</artifactId>
-      <version>${bcprov-jdk15on.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>at.favre.lib</groupId>
-      <artifactId>bcrypt</artifactId>
-      <version>${bcrypt.version}</version>
-    </dependency>
-  </dependencies>
   <dependencyManagement>
+
     <dependencies>
       <dependency>
         <groupId>org.springframework.cloud</groupId>
@@ -218,41 +74,138 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>druid-spring-boot-starter</artifactId>
+        <version>${druid.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>${mysql.version}</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.minio</groupId>
+        <artifactId>minio</artifactId>
+        <version>${minio.version}</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>okhttp</artifactId>
+            <groupId>com.squareup.okhttp3</groupId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp</artifactId>
+        <version>${okhttp.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-all</artifactId>
+        <version>${hutool-all.version}</version>
+      </dependency>
+      <!-- mapStruct 核心注解 -->
+      <dependency>
+        <groupId>org.mapstruct</groupId>
+        <artifactId>mapstruct</artifactId>
+        <version>${org.mapstruct.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.easy-es</groupId>
+        <artifactId>easy-es-boot-starter</artifactId>
+        <version>${easy-es.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.rocketmq</groupId>
+        <artifactId>rocketmq-spring-boot-starter</artifactId>
+        <version>${rocketmq.version}</version>
+      </dependency>
+      <!-- mapStruct 根据接口生成实现类 -->
+      <dependency>
+        <groupId>org.mapstruct</groupId>
+        <artifactId>mapstruct-processor</artifactId>
+        <version>${org.mapstruct.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <!-- mapStruct 支持 lombok -->
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok-mapstruct-binding</artifactId>
+        <version>${lombok-mapstruct-binding.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <!--spring mapstruct插件-->
+      <dependency>
+        <groupId>org.mapstruct.extensions.spring</groupId>
+        <artifactId>mapstruct-spring-annotations</artifactId>
+        <version>${mapstruct.spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-boot-starter</artifactId>
+        <version>${swagger.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.querydsl</groupId>
+        <artifactId>querydsl-apt</artifactId>
+        <version>${querydsl.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <!--QueryDSL支持-->
+      <dependency>
+        <groupId>com.querydsl</groupId>
+        <artifactId>querydsl-jpa</artifactId>
+        <version>${querydsl.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>jakarta.validation</groupId>
+        <artifactId>jakarta.validation-api</artifactId>
+        <version>${jakarta-validation.version}</version>
+      </dependency>
+      <!--<dependency>
+        <groupId>org.graylog2.log4j2</groupId>
+        <artifactId>log4j2-gelf</artifactId>
+        <version>${gelf.version}</version>
+      </dependency>-->
+      <dependency>
+        <groupId>com.auth0</groupId>
+        <artifactId>java-jwt</artifactId>
+        <version>${java-jwt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcprov-jdk15on</artifactId>
+        <version>${bcprov-jdk15on.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>at.favre.lib</groupId>
+        <artifactId>bcrypt</artifactId>
+        <version>${bcrypt.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <build>
-    <finalName>assembly</finalName>
     <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-            </exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.spotify</groupId>
-        <artifactId>docker-maven-plugin</artifactId>
-        <version>${docker-maven.version}</version>
-        <configuration>
-          <imageName>${docker.image.prefix}/${project.artifactId}
-          </imageName>
-          <dockerDirectory>src/main/docker</dockerDirectory>
-          <dockerHost>${docker-host}</dockerHost>
-          <resources>
-            <resource>
-              <targetPath>/</targetPath>
-              <directory>${project.build.directory}</directory>
-              <include>${project.build.finalName}.jar</include>
-            </resource>
-          </resources>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>com.mysema.maven</groupId>
         <artifactId>apt-maven-plugin</artifactId>
@@ -279,6 +232,7 @@
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
+          <encoding>utf8</encoding>
           <annotationProcessorPaths>
             <path>
               <groupId>org.projectlombok</groupId>
@@ -301,14 +255,5 @@
         </configuration>
       </plugin>
     </plugins>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <includes>
-          <include>**/*.*</include>
-        </includes>
-        <filtering>false</filtering>
-      </resource>
-    </resources>
   </build>
 </project>
