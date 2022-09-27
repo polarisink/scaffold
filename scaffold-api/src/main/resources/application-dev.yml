@@ -108,9 +108,13 @@ double-cache:
 rocketmq:
   name-server: ${ROCKETMQ_URL}
   producer:
-    group: Pro_Group
+    group: GID_Pro_Group
     send-message-timeout: 3000
     retry-times-when-send-async-failed: 3
+  consumer:
+    access-key: ${ROCKET_USER}
+    secret-key: ${ROCKET_SECRET}
+
 
 #easy-es:
 #  enable: true #默认为true,若为false则认为不启用本框架

@@ -29,7 +29,6 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_OCTET_STREAM_VA
 @RequestMapping("/download")
 public class DownloadHandler {
 
-  String forceDownload = "application/force-download";
   String filePath = "C:\\Users\\hzsk\\Desktop\\apache-maven-3.8.6-bin.zip";
 
   @Operation(summary = "nio测试下载")
@@ -39,7 +38,7 @@ public class DownloadHandler {
     stopWatch.start();
     //下面是源文件的路径，也可以自己定义，例如："E:\BaiduNetdiskDownload\1-5 网站前台 活动与招聘.zip
     File file = new File(filePath);
-    LOG.info("导入模板路径" + filePath);
+    LOG.info("导入模板路径:{}", filePath);
     try (FileInputStream fin = new FileInputStream(file); FileChannel channel = fin.getChannel()) {
       request.setCharacterEncoding(StandardCharsets.UTF_8.name());
       long fileLength = file.length();
@@ -49,7 +48,6 @@ public class DownloadHandler {
       response.setHeader(CONTENT_DISPOSITION, buildName(file.getName()));
       response.setHeader(CONTENT_LENGTH, String.valueOf(fileLength));
       response.setContentType(APPLICATION_OCTET_STREAM_VALUE);
-      response.setContentType(forceDownload);
       int buffSize = 1 << 10;
       ByteBuffer buffer = ByteBuffer.allocate(1 << 12);
       byte[] byteArr = new byte[buffSize];
@@ -84,7 +82,6 @@ public class DownloadHandler {
       return -1;
     }
     response.reset();
-    response.setContentType(forceDownload);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setContentLength((int) file.length());
     response.setHeader(CONTENT_DISPOSITION, buildName(file.getName()));

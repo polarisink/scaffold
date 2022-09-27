@@ -9,6 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
+  <description>MybatisPlus及生成器</description>
   <artifactId>scaffold-mbpgen</artifactId>
 
   <properties>
