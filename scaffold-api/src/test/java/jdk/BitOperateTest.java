@@ -7,7 +7,7 @@ package jdk;
  * @date 2022/9/26
  */
 
-public class BitOperate {
+public class BitOperateTest {
   public static void main(String[] args) {
     System.out.println(5<<1);
   }

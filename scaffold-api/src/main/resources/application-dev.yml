@@ -111,6 +111,7 @@ rocketmq:
     group: GID_Pro_Group
     send-message-timeout: 3000
     retry-times-when-send-async-failed: 3
+    enable-msg-trace: true
   consumer:
     access-key: ${ROCKET_USER}
     secret-key: ${ROCKET_SECRET}
