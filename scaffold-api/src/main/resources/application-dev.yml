@@ -8,8 +8,8 @@ server:
 spring:
   mvc:
     throw-exception-if-no-handler-found: true
-  resources:
-    add-mappings: false
+    pathmatch:
+      matching-strategy: ant_path_matcher
   application:
     name: hnc-machineassembly-api-service-dev-local
   datasource:
@@ -40,9 +40,9 @@ spring:
         login-username: root
         login-password: druid2021
   redis:
-    host: ${REDIS_IP}
+    host: 10.1.20.126
     port: 6379
-    password: fyihq87vna
+#    password: ${REDIS_PASSWD}
     jedis:
       pool:
         max-active: 20
@@ -50,6 +50,7 @@ spring:
         max-idle: 5
         min-idle: 0
     timeout: 10000
+    database: 4
   cache:
     redis:
       time-to-live: 3d
@@ -71,6 +72,9 @@ spring:
     multipart:
       max-file-size: 100MB #单个文件的最大上限
       max-request-size: 100MB #单个请求的文件总大小上限
+  web:
+    resources:
+      add-mappings: false
 
 
 logging:
@@ -122,5 +126,11 @@ rocketmq:
 #  address : 127.0.0.1:9200 # es的连接地址,必须含端口 若为集群,则可以用逗号隔开 例如:127.0.0.1:9200,127.0.0.2:9200
 #  username: elastic #若无 则可省略此行配置
 #  password: WG7WVmuNMtM4GwNYkyWH #若无 则可省略此行配置
-#
+
+okhttp:
+  connect-timeout: 1
+  read-timeout: 3
+  write-timeout: 3
+  max-idle-connections: 200
+  keep-alive-duration: 300
 

@@ -17,6 +17,11 @@ import org.springframework.context.annotation.Primary;
  */
 @Configuration
 public class JacksonConfig {
+  /**
+   * redis缓存使用的mapper,需要存储实体类的全限定类名
+   *
+   * @return
+   */
   @Bean("redis")
   public ObjectMapper redis() {
     ObjectMapper objectMapper = new ObjectMapper();
@@ -32,6 +37,11 @@ public class JacksonConfig {
   }
 
 
+  /**
+   * 普通的objectMapper
+   *
+   * @return
+   */
   @Bean
   @Primary
   public ObjectMapper objectMapper() {

@@ -1,10 +1,14 @@
 package github.polarisink.api.config;
 
 import github.polarisink.api.core.RestClientHttpInterceptor;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -13,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -23,18 +28,26 @@ import java.util.List;
 @Configuration
 public class RestTemplateConfig {
 
-  @Bean
-  public ClientHttpRequestFactory simpleClientHttpRequestFactory() {
-    SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-    factory.setConnectTimeout(10000);
-    factory.setReadTimeout(10000);
-    return factory;
-  }
+  @Value("${okhttp.connect-timeout}")
+  private Integer connectTimeout;
+
+  @Value("${okhttp.read-timeout}")
+  private Integer readTimeout;
+
+  @Value("${okhttp.write-timeout}")
+  private Integer writeTimeout;
+
+  @Value("${okhttp.max-idle-connections}")
+  private Integer maxIdleConnections;
+
+  @Value("${okhttp.keep-alive-duration}")
+  private Long keepAliveDuration;
 
 
   @Bean
   public RestTemplate restTemplate(ClientHttpRequestFactory httpRequestFactory) {
-    RestTemplate restTemplate = new RestTemplate();
+    ClientHttpRequestFactory factory = httpRequestFactory();
+    RestTemplate restTemplate = new RestTemplate(factory);
     /**
      * StringHttpMessageConverter 默认使用ISO-8859-1编码，此处修改为UTF-8
      */
@@ -47,5 +60,26 @@ public class RestTemplateConfig {
     return restTemplate;
   }
 
+  @Bean
+  public ClientHttpRequestFactory httpRequestFactory() {
+    return new OkHttp3ClientHttpRequestFactory(okHttpConfigClient());
+  }
+
+  /*@formatter:off*/
+  public OkHttpClient okHttpConfigClient() {
+    return new OkHttpClient().newBuilder()
+        .connectionPool(pool())
+        .connectTimeout(connectTimeout, TimeUnit.SECONDS)
+        .readTimeout(readTimeout, TimeUnit.SECONDS)
+        .writeTimeout(writeTimeout, TimeUnit.SECONDS)
+        .hostnameVerifier((hostname, session) -> true)
+        /*.proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 8888)))
+        .addInterceptor()*/.build();
+        /*@formatter:on*/
+  }
+
+  public ConnectionPool pool() {
+    return new ConnectionPool(maxIdleConnections, keepAliveDuration, TimeUnit.SECONDS);
+  }
 
 }
