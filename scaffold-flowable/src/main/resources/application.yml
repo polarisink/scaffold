@@ -1,0 +1,21 @@
+###################  项目启动端口  ###################
+server:
+  port: 8080
+  servlet:
+    context-path: /flow
+
+###################  spring配置  ###################
+spring:
+  application:
+    name: flow
+  datasource:
+    url: jdbc:mysql://${MYSQL_IP}:3306/flow?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: ${MYSQL_PASSWD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  config:
+    activate:
+      on-profile:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher

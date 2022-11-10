@@ -60,7 +60,7 @@
     <mybatisplus-gen.version>3.5.2</mybatisplus-gen.version>
     <freemarker.version>2.3.31</freemarker.version>
     <ons.version>2.0.3.Final</ons.version>
-    <flowable.version>6.7.2</flowable.version>
+    <flowable.version>6.3.0</flowable.version>
     <!--打包对test只编译不运行-->
     <skipTests>true</skipTests>
   </properties>
