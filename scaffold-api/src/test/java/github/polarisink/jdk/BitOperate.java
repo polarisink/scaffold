@@ -1,4 +1,4 @@
-package jdk;
+package github.polarisink.jdk;
 
 /**
  * 位运算

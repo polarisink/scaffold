@@ -18,15 +18,22 @@ import javax.sql.DataSource;
 public class DataSourceConfig {
   @Primary
   @Bean("primaryDataSource")
-  @ConfigurationProperties(prefix = "spring.datasource.druid.primary")
+  @ConfigurationProperties(prefix = "spring.datasource.primary")
   public DataSource primaryDataSource() {
     LOG.info("Build Primary DataSource...");
     return DataSourceBuilder.create().build();
   }
 
   @Bean("secondaryDataSource")
-  @ConfigurationProperties(prefix = "spring.datasource.druid.secondary")
+  @ConfigurationProperties(prefix = "spring.datasource.secondary")
   public DataSource secondaryDataSource() {
+    LOG.info("Build Secondary DataSource...");
+    return DataSourceBuilder.create().build();
+  }
+
+  @Bean("tdDataSource")
+  @ConfigurationProperties(prefix = "spring.datasource.td")
+  public DataSource tdDataSource() {
     LOG.info("Build Secondary DataSource...");
     return DataSourceBuilder.create().build();
   }

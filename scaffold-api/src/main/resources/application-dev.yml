@@ -12,36 +12,24 @@ spring:
   application:
     name: hnc-machineassembly-api-service-dev-local
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    druid:
-      primary:
-        jdbc-url: jdbc:mysql://${MYSQL_IP}:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
-        username: root
-        password: ${MYSQL_PASSWD}
-      secondary:
-        jdbc-url: jdbc:mysql://${MYSQL_IP}:3306/iNC_HealthDataIndex?useUnicode=true?characterEncoding=utf-8&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
-        username: root
-        password: ${MYSQL_PASSWD}
-      initial-size: 2
-      min-idle: 5
-      max-active: 10
-      max-wait: 5000
-      validation-query: SELECT 1
-      test-on-borrow: false
-      test-while-idle: true
-      time-between-eviction-runs-millis: 18800
-      web-stat-filter:
-        enabled: true
-        exclusions: js,gif,jpg,png,css,ico,/druid/*
-      stat-view-servlet:
-        enabled: true
-        login-username: root
-        login-password: druid2021
+    primary:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://${MYSQL_IP}:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: ${MYSQL_PASSWD}
+    secondary:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://${MYSQL_IP}:3306/iNC_HealthDataIndex?useUnicode=true?characterEncoding=utf-8&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+      username: root
+      password: ${MYSQL_PASSWD}
+    td:
+      driver-class-name: com.taosdata.jdbc.rs.RestfulDriver
+      jdbc-url: jdbc:TAOS-RS://${TAOS_IP}:6041/scaffold?useUnicode=true?characterEncoding=utf-8&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+      username: root
+      password: taosdata
   redis:
     host: ${REDIS_IP}
     port: 6379
-    password: fyihq87vna
     jedis:
       pool:
         max-active: 20

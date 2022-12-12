@@ -1,4 +1,4 @@
-package rocketmq;
+package github.polarisink.rocketmq;
 
 import github.polarisink.ScaffoldApplication;
 import org.apache.rocketmq.client.exception.MQClientException;

@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
+  <!--<parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.7.2</version>
-    <relativePath/> <!-- lookup parent from repository -->
-  </parent>
+    <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;
+  </parent>-->
   <modules>
     <module>scaffold-common</module>
     <module>scaffold-api</module>
@@ -61,6 +61,8 @@
     <mysql.version>8.0.20</mysql.version>
     <easy-es.version>0.9.60</easy-es.version>
     <rocketmq.version>2.2.2</rocketmq.version>
+    <taos.version>3.0.2</taos.version>
+    <x7.version>2.17.0.RELEASE</x7.version>
     <!--打包对test只编译不运行-->
     <skipTests>true</skipTests>
   </properties>
@@ -82,15 +84,15 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>druid-spring-boot-starter</artifactId>
-        <version>${druid.version}</version>
-      </dependency>
-      <dependency>
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
         <version>${mysql.version}</version>
         <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.taosdata.jdbc</groupId>
+        <artifactId>taos-jdbcdriver</artifactId>
+        <version>${taos.version}</version>
       </dependency>
       <dependency>
         <groupId>org.projectlombok</groupId>
@@ -139,6 +141,11 @@
         <groupId>org.apache.rocketmq</groupId>
         <artifactId>rocketmq-spring-boot-starter</artifactId>
         <version>${rocketmq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.xream.x7</groupId>
+        <artifactId>x7-spring-boot-starter</artifactId>
+        <version>${x7.version}</version>
       </dependency>
       <!-- mapStruct 根据接口生成实现类 -->
       <dependency>
