@@ -10,7 +10,6 @@
     <module>scaffold-cache</module>
     <module>scaffold-third</module>
     <module>scaffold-mbpgen</module>
-    <module>scaffold-flowable</module>
   </modules>
 
   <groupId>github.polarisink</groupId>
