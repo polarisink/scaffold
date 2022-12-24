@@ -127,12 +127,6 @@
         <groupId>org.apache.rocketmq</groupId>
         <version>${rocketmq.version}</version>
       </dependency>
-      <!--  阿里云RocketMQ  -->
-      <dependency>
-        <artifactId>ons-client</artifactId>
-        <groupId>com.aliyun.openservices</groupId>
-        <version>${ons.version}</version>
-      </dependency>
       <!-- mapStruct 根据接口生成实现类 -->
       <dependency>
         <artifactId>mapstruct-processor</artifactId>

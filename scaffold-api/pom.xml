@@ -6,6 +6,10 @@
   <build>
     <plugins>
       <plugin>
+				<groupId>org.graalvm.buildtools</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+			</plugin>
+      <plugin>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <!-- 你的主类全路径 -->
@@ -16,7 +20,7 @@
             </exclude>
           </excludes>
           <includeSystemScope>true</includeSystemScope>
-          <mainClass>cn.hzncc.MachineAssemblyApplication</mainClass>
+          <mainClass>github.polarisink.ScaffoldApplication</mainClass>
         </configuration>
         <executions>
           <execution>
@@ -28,15 +32,7 @@
         <groupId>org.springframework.boot</groupId>
         <version>${spring-boot.version}</version>
       </plugin>
-      <!-- 跳过单元测试 -->
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skipTests>true</skipTests>
-        </configuration>
-        <groupId>org.apache.maven.plugins</groupId>
-        <version>2.22.2</version>
-      </plugin>
+    
       <!--maven插件-->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

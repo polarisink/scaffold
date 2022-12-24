@@ -10,16 +10,24 @@
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <artifactId>scaffold-dao</artifactId>
-      <groupId>github.polarisink</groupId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
       <artifactId>rocketmq-spring-boot-starter</artifactId>
       <groupId>org.apache.rocketmq</groupId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-webmvc</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
-
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -32,5 +40,31 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
   </properties>
+
+  <!-- repository -->
+  <repositories>
+    <repository>
+      <id>spring-snapshots</id>
+      <url>https://repo.spring.io/snapshot</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>spring-milestones</id>
+      <url>https://repo.spring.io/milestone</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>spring-snapshots</id>
+      <url>https://repo.spring.io/snapshot</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>spring-milestones</id>
+      <url>https://repo.spring.io/milestone</url>
+    </pluginRepository>
+  </pluginRepositories>
+
 
 </project>

@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration packages="org.graylog2.log4j2" status="OFF">
+  <Properties>
+    <Property name="SERVER">10.1.20.115</Property>
+    <Property name="PORT">12201</Property>
+    <Property name="LOG_HOME">${sys:user.home}/logs</Property>
+    <property name="ERROR_LOG_FILE_NAME">${LOG_HOME}/error</property>
+    <property name="WARN_LOG_FILE_NAME">${LOG_HOME}/warn</property>
+    <property name="INFO_LOG_FILE_NAME">${LOG_HOME}/info</property>
+    <property name="DEBUG_LOG_FILE_NAME">${LOG_HOME}/debug</property>
+    <property name="PATTERN">[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p [%c] %L - %m%n
+    </property>
+  </Properties>
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
       <!--只接受程序中DEBUG级别的日志进行处理, 下同 -->
@@ -81,17 +92,6 @@
       </Policies>
     </RollingFile>
   </Appenders>
-  <Properties>
-    <Property name="SERVER">10.1.20.115</Property>
-    <Property name="PORT">12201</Property>
-    <Property name="LOG_HOME">${sys:user.home}/logs</Property>
-    <property name="ERROR_LOG_FILE_NAME">${LOG_HOME}/error</property>
-    <property name="WARN_LOG_FILE_NAME">${LOG_HOME}/warn</property>
-    <property name="INFO_LOG_FILE_NAME">${LOG_HOME}/info</property>
-    <property name="DEBUG_LOG_FILE_NAME">${LOG_HOME}/debug</property>
-    <property name="PATTERN">[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p [%c] %L - %m%n
-    </property>
-  </Properties>
   <loggers>
     <root includeLocation="true" level="debug">
       <!--      <AppenderRef ref="gelfAppender"/>-->
