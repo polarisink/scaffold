@@ -1,8 +1,8 @@
 package github.polarisink.dao.wrapper;
 
-import lombok.Data;
-
 import static github.polarisink.common.asserts.BaseE.SUCCESS;
+
+import lombok.Data;
 
 /**
  * <p>通用返回结果</p>

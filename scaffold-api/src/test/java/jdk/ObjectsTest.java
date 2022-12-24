@@ -1,8 +1,7 @@
 package jdk;
 
-import org.junit.Test;
-
 import java.util.Objects;
+import org.junit.Test;
 
 /**
  * @author aries
@@ -10,6 +9,7 @@ import java.util.Objects;
  */
 
 public class ObjectsTest {
+
   @Test
   public void context() {
     String a = null;

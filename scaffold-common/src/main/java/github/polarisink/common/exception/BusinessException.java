@@ -11,6 +11,7 @@ import github.polarisink.common.IResponseEnum;
  * @date 2022/5/2
  */
 public class BusinessException extends BaseException {
+
   private static final long serialVersionUID = -1400868899661202155L;
 
   public BusinessException(IResponseEnum responseEnum, Object[] args, String message) {

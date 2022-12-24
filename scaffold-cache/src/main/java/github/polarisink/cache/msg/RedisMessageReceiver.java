@@ -2,12 +2,11 @@ package github.polarisink.cache.msg;
 
 import github.polarisink.cache.config.DoubleCache;
 import github.polarisink.cache.config.DoubleCacheManager;
+import java.net.UnknownHostException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-
-import java.net.UnknownHostException;
 
 /**
  * @program: double-cache
@@ -18,6 +17,7 @@ import java.net.UnknownHostException;
 @Component
 @AllArgsConstructor
 public class RedisMessageReceiver {
+
   private final RedisTemplate redisTemplate;
   private final DoubleCacheManager manager;
 

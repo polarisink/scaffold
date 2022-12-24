@@ -1,5 +1,7 @@
 package github.polarisink.api.config;
 
+import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -8,12 +10,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.List;
-import java.util.Objects;
-
 /**
- * @author lqs
- * mvc配置
+ * @author lqs mvc配置
  */
 @Slf4j
 @Configuration
@@ -35,8 +33,7 @@ public class MvcConfig implements WebMvcConfigurer {
   }
 
   /**
-   * 跨域设置
-   * 使用gateway代理的时候不需要配置跨域
+   * 跨域设置 使用gateway代理的时候不需要配置跨域
    */
   @Override
   public void addCorsMappings(CorsRegistry corsRegistry) {
@@ -55,8 +52,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
 
   /**
-   * ResponseBodyAdvice中遇到String会报错.
-   * 因为在所有的HttpMessageConverter实例集合中,StringHttpMessageConverter要比其它的Converter排得靠前一些.
+   * ResponseBodyAdvice中遇到String会报错. 因为在所有的HttpMessageConverter实例集合中,StringHttpMessageConverter要比其它的Converter排得靠前一些.
    * 我们需要将处理Object类型的HttpMessageConverter放得靠前一些
    *
    * @param converters

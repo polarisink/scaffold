@@ -1,11 +1,9 @@
 package github.polarisink.dao.bean.auth;
 
-import io.swagger.annotations.ApiModel;
-import lombok.Data;
+import static github.polarisink.common.constant.AuthConst.SUPER_ADMIN_ROLE_ID;
 
 import java.util.Objects;
-
-import static github.polarisink.common.constant.AuthConst.SUPER_ADMIN_ROLE_ID;
+import lombok.Data;
 
 /**
  * Authentication
@@ -14,8 +12,8 @@ import static github.polarisink.common.constant.AuthConst.SUPER_ADMIN_ROLE_ID;
  * @since 2022-06-21
  */
 @Data
-@ApiModel("身份")
 public class Authentication {
+
   private Long uid;
   private Long roleId;
 

@@ -1,19 +1,18 @@
 package github.polarisink.api.utils;
 
+import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+import static github.polarisink.common.constant.AuthConst.SECRET;
+import static github.polarisink.common.constant.AuthConst.TOKEN_PREFIX;
+
 import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import github.polarisink.common.exception.AuthException;
 import github.polarisink.common.utils.TimeUtils;
 import github.polarisink.dao.bean.auth.Authentication;
-import lombok.extern.slf4j.Slf4j;
-
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static github.polarisink.common.constant.AuthConst.SECRET;
-import static github.polarisink.common.constant.AuthConst.TOKEN_PREFIX;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -28,7 +27,8 @@ public class AuthUtil {
 
   public static String generateToken(String uid, Long role, LocalDateTime expiration) {
     String credentials = getCredentials(uid, role);
-    return JWT.create().withSubject(credentials).withExpiresAt(TimeUtils.localDateTime2date(expiration)).sign(HMAC512(SECRET.getBytes()));
+    return JWT.create().withSubject(credentials).withExpiresAt(TimeUtils.localDateTime2date(expiration))
+        .sign(HMAC512(SECRET.getBytes()));
   }
 
   private static String getCredentials(String uid, Long role) {

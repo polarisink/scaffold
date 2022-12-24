@@ -1,8 +1,17 @@
 package github.polarisink.api.config;
 
+import static github.polarisink.common.constant.AuthConst.LONG_TIME;
+import static github.polarisink.common.constant.AuthConst.VERIFY_CODE_TIMEOUT;
+
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import github.polarisink.common.utils.SpringContextUtil;
+import java.lang.reflect.Method;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,19 +31,12 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.*;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
-
-import java.lang.reflect.Method;
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import static github.polarisink.common.constant.AuthConst.LONG_TIME;
-import static github.polarisink.common.constant.AuthConst.VERIFY_CODE_TIMEOUT;
 
 
 /**
@@ -47,6 +49,7 @@ import static github.polarisink.common.constant.AuthConst.VERIFY_CODE_TIMEOUT;
 @EnableCaching
 @RequiredArgsConstructor
 public class RedisConfig extends CachingConfigurerSupport {
+
   /**
    * redis缓存分隔符
    */
@@ -57,6 +60,28 @@ public class RedisConfig extends CachingConfigurerSupport {
   private final RedisConnectionFactory factory;
   @Qualifier("redis")
   private final ObjectMapper mapper;
+
+  /**
+   * 处理时间间隔字符串
+   *
+   * @param s
+   * @return
+   */
+  private static Duration parseDuration(String s) {
+    int time = Integer.parseInt(s.substring(0, s.length() - 1));
+    char c = s.charAt(s.length() - 1);
+    switch (c) {
+      case 's':
+        return Duration.ofSeconds(time);
+      case 'm':
+        return Duration.ofMinutes(time);
+      case 'd':
+        return Duration.ofDays(time);
+      default:
+        //默认存储3天
+        return Duration.ofDays(3);
+    }
+  }
 
   @Bean
   public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
@@ -92,19 +117,19 @@ public class RedisConfig extends CachingConfigurerSupport {
     return serializer;
   }
 
-
   @Bean
   @Primary
   public CacheManager redisCacheManager() {
     RedisCacheWriter writer = RedisCacheWriter.nonLockingRedisCacheWriter(factory);
     GenericJackson2JsonRedisSerializer jackson = new GenericJackson2JsonRedisSerializer();
-    RedisSerializationContext.SerializationPair<Object> pair = RedisSerializationContext.SerializationPair.fromSerializer(jackson);
-    RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(pair).entryTtl(Duration.ofSeconds(30));
+    RedisSerializationContext.SerializationPair<Object> pair = RedisSerializationContext.SerializationPair.fromSerializer(
+        jackson);
+    RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(pair)
+        .entryTtl(Duration.ofSeconds(30));
     Map<String, RedisCacheConfiguration> conf = getConf();
     LOG.info("dynamicTimeoutConf: {}", conf);
     return new RedisCacheManager(writer, config, conf);
   }
-
 
   /**
    * 验证码缓存管理器
@@ -116,7 +141,10 @@ public class RedisConfig extends CachingConfigurerSupport {
   public CacheManager verifyCodeCacheManager(RedisConnectionFactory redisConnectionFactory) {
     RedisCacheWriter writer = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
     //设置验证码时间为30分钟
-    RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(VERIFY_CODE_TIMEOUT)).serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer())).computePrefixWith(name -> name + ":");
+    RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+        .entryTtl(Duration.ofMinutes(VERIFY_CODE_TIMEOUT))
+        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer()))
+        .computePrefixWith(name -> name + ":");
     RedisCacheManager cacheManager = new RedisCacheManager(writer, config);
     return RedisCacheManagerDecorator.decorate(cacheManager);
   }
@@ -132,7 +160,9 @@ public class RedisConfig extends CachingConfigurerSupport {
     RedisCacheWriter writer = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
     //设置Redis缓存有效期为1天
     //短信验证码两套之内过期
-    RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(LONG_TIME)).serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer())).computePrefixWith(name -> name + ":");
+    RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(LONG_TIME))
+        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer()))
+        .computePrefixWith(name -> name + ":");
     RedisCacheManager cacheManager = new RedisCacheManager(writer, config);
     return RedisCacheManagerDecorator.decorate(cacheManager);
   }
@@ -207,37 +237,17 @@ public class RedisConfig extends CachingConfigurerSupport {
     }).collect(Collectors.toList());
     return collect.stream().collect(Collectors.toMap(CacheMap::getName, p -> {
       GenericJackson2JsonRedisSerializer jackson = new GenericJackson2JsonRedisSerializer();
-      RedisSerializationContext.SerializationPair<Object> pair = RedisSerializationContext.SerializationPair.fromSerializer(jackson);
+      RedisSerializationContext.SerializationPair<Object> pair = RedisSerializationContext.SerializationPair.fromSerializer(
+          jackson);
       return RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(pair).entryTtl(p.getTtl());
     }, (key1, key2) -> key2));
   }
 
   @Data
   static class CacheMap {
+
     private String name;
     private Duration ttl;
-  }
-
-  /**
-   * 处理时间间隔字符串
-   *
-   * @param s
-   * @return
-   */
-  private static Duration parseDuration(String s) {
-    int time = Integer.parseInt(s.substring(0, s.length() - 1));
-    char c = s.charAt(s.length() - 1);
-    switch (c) {
-      case 's':
-        return Duration.ofSeconds(time);
-      case 'm':
-        return Duration.ofMinutes(time);
-      case 'd':
-        return Duration.ofDays(time);
-      default:
-        //默认存储3天
-        return Duration.ofDays(3);
-    }
   }
 }
 

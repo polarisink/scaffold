@@ -7,12 +7,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 线程池的工具类
- * 用于进行线程的管理，防止重复创建、杀死线程。
+ * 线程池的工具类 用于进行线程的管理，防止重复创建、杀死线程。
  * <p>
- * 多线程运行期间，如果系统不断的创建、杀死新线程，
- * 会产生过度消耗系统资源，以及过度切换线程的问题，甚至可能导致系统资源的崩溃。
- * 因此需要线程池，对线程进行管理。
+ * 多线程运行期间，如果系统不断的创建、杀死新线程， 会产生过度消耗系统资源，以及过度切换线程的问题，甚至可能导致系统资源的崩溃。 因此需要线程池，对线程进行管理。
  *
  * @author hzsk
  */
@@ -47,7 +44,8 @@ public class ThreadPoolUtil {
         //表示的是maximumPoolSize当中等待任务的存活时间
         keepAliveTime, unit,
         //缓冲队列，用于存放等待任务，Linked的先进先出
-        new LinkedBlockingQueue<>(), new DefaultThreadFactory(Thread.NORM_PRIORITY, "thread-pool-"), new ThreadPoolExecutor.AbortPolicy());
+        new LinkedBlockingQueue<>(), new DefaultThreadFactory(Thread.NORM_PRIORITY, "thread-pool-"),
+        new ThreadPoolExecutor.AbortPolicy());
   }
 
   public static ThreadPoolUtil getInstance() {
@@ -68,7 +66,9 @@ public class ThreadPoolUtil {
    */
   public void execute(Runnable runnable) {
     if (executor == null) {
-      executor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), new DefaultThreadFactory(Thread.NORM_PRIORITY, "thread-pool-"), new ThreadPoolExecutor.AbortPolicy());
+      executor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime, TimeUnit.SECONDS,
+          new LinkedBlockingQueue<>(), new DefaultThreadFactory(Thread.NORM_PRIORITY, "thread-pool-"),
+          new ThreadPoolExecutor.AbortPolicy());
     }
     if (runnable != null) {
       executor.execute(runnable);

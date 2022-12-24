@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "swagger")
 public class SwaggerProperties {
+
   /**
    * 是否swagger3启用，默认不启用
    */

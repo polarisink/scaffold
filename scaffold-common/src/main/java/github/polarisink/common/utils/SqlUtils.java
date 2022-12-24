@@ -7,6 +7,7 @@ package github.polarisink.common.utils;
  * @date 2022/5/11
  */
 public class SqlUtils {
+
   /**
    * 获取模糊查询字符串
    *

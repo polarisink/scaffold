@@ -1,18 +1,18 @@
 package jdk;
 
 import cn.hutool.core.util.RandomUtil;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.junit.Test;
 
 /**
  * @author aries
  * @date 2022/11/1
  */
 public class RefTest {
+
   Map<Integer, Integer> map = new HashMap<>();
   Map<Integer, Integer> map1 = new HashMap<>();
 

@@ -9,6 +9,7 @@ package github.polarisink.common;
  * @date 2022/5/2
  */
 public interface IResponseEnum {
+
   /**
    * 获取返回码
    *

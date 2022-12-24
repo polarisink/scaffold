@@ -11,46 +11,12 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   application:
-    name: hnc-machineassembly-api-service-dev-local
+    name: scaffold-dev
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3307/scaffold?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 654321
     driver-class-name: com.mysql.cj.jdbc.Driver
-    druid:
-      primary:
-        jdbc-url: jdbc:mysql://${MYSQL_IP}:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
-        username: root
-        password: ${MYSQL_PASSWD}
-      secondary:
-        jdbc-url: jdbc:mysql://${MYSQL_IP}:3306/iNC_HealthDataIndex?useUnicode=true?characterEncoding=utf-8&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
-        username: root
-        password: ${MYSQL_PASSWD}
-      initial-size: 2
-      min-idle: 5
-      max-active: 10
-      max-wait: 5000
-      validation-query: SELECT 1
-      test-on-borrow: false
-      test-while-idle: true
-      time-between-eviction-runs-millis: 18800
-      web-stat-filter:
-        enabled: true
-        exclusions: js,gif,jpg,png,css,ico,/druid/*
-      stat-view-servlet:
-        enabled: true
-        login-username: root
-        login-password: druid2021
-  redis:
-    host: 10.1.20.126
-    port: 6379
-#    password: ${REDIS_PASSWD}
-    jedis:
-      pool:
-        max-active: 20
-        max-wait: 1ms
-        max-idle: 5
-        min-idle: 0
-    timeout: 10000
-    database: 4
   cache:
     redis:
       time-to-live: 3d
@@ -67,7 +33,6 @@ spring:
         dialect: org.hibernate.dialect.MySQL5Dialect
         format_sql: true
         session_factory:
-        #statement_inspector: cn.hzncc.machineassembly.config.interceptor.JpaInspector
   servlet:
     multipart:
       max-file-size: 100MB #单个文件的最大上限
@@ -75,7 +40,10 @@ spring:
   web:
     resources:
       add-mappings: false
-
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
 
 logging:
   level:
@@ -90,14 +58,14 @@ swagger:
   enable: true
   title: 四位一体文档
   description: 四位一体各接口Swagger文档
-  service-url: 10.10.33.69
+  service-url: 127.0.0.1
   version: 1.3.0
 
 
 minio:
-  endpoint: http://10.1.20.115:8071
+  endpoint: http://127.0.0.1:8071
   accessKey: miniouser
-  secretKey: miniosciDAVC
+  secretKey: miniouser
   bucket: data
 
 double-cache:
@@ -110,15 +78,15 @@ double-cache:
   redis-expire: 1000
 
 rocketmq:
-  name-server: ${ROCKETMQ_URL}
+  name-server: 127.0.0.1:9876
   producer:
     group: GID_Pro_Group
     send-message-timeout: 3000
     retry-times-when-send-async-failed: 3
     enable-msg-trace: true
-  consumer:
-    access-key: ${ROCKET_USER}
-    secret-key: ${ROCKET_SECRET}
+#  consumer:
+#    access-key: ${ROCKET_USER}
+#    secret-key: ${ROCKET_SECRET}
 
 
 #easy-es:

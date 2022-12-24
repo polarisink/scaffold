@@ -1,11 +1,10 @@
 package github.polarisink.common.enums;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author lqs

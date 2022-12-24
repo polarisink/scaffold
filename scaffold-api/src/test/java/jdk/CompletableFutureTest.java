@@ -1,20 +1,20 @@
 package jdk;
 
 import cn.hutool.core.util.IdUtil;
-import org.junit.Test;
-import org.springframework.util.StopWatch;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import org.junit.Test;
+import org.springframework.util.StopWatch;
 
 /**
  * @author aries
  * @date 2022/9/21
  */
 public class CompletableFutureTest {
+
   @Test
   public void test() throws ExecutionException, InterruptedException {
     List<Long> list = new ArrayList<>();

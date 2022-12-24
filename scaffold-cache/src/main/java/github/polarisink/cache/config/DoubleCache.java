@@ -6,10 +6,6 @@ import github.polarisink.cache.msg.CacheMassage;
 import github.polarisink.cache.msg.CacheMsgType;
 import github.polarisink.cache.msg.MessageSourceUtil;
 import github.polarisink.dao.bean.properties.DoubleCacheProperties;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.support.AbstractValueAdaptingCache;
-import org.springframework.data.redis.core.RedisTemplate;
-
 import java.net.UnknownHostException;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,6 +13,9 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.support.AbstractValueAdaptingCache;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * @program: double-cache
@@ -25,6 +24,7 @@ import java.util.concurrent.locks.ReentrantLock;
  **/
 @Slf4j
 public class DoubleCache extends AbstractValueAdaptingCache {
+
   private String cacheName;
   private RedisTemplate<Object, Object> redisTemplate;
   private Cache<Object, Object> caffeineCache;
@@ -36,7 +36,8 @@ public class DoubleCache extends AbstractValueAdaptingCache {
     super(allowNullValues);
   }
 
-  public DoubleCache(String cacheName, RedisTemplate<Object, Object> redisTemplate, Cache<Object, Object> caffeineCache, DoubleCacheProperties doubleCacheProperties) {
+  public DoubleCache(String cacheName, RedisTemplate<Object, Object> redisTemplate, Cache<Object, Object> caffeineCache,
+      DoubleCacheProperties doubleCacheProperties) {
     super(doubleCacheProperties.getAllowNull());
     this.cacheName = cacheName;
     this.redisTemplate = redisTemplate;
@@ -116,7 +117,8 @@ public class DoubleCache extends AbstractValueAdaptingCache {
     //发送信息通知其他节点更新一级缓存
     //同样，空对象不会给其他节点发送信息
     try {
-      CacheMassage cacheMassage = new CacheMassage(this.cacheName, CacheMsgType.UPDATE, key, value, MessageSourceUtil.getMsgSource());
+      CacheMassage cacheMassage = new CacheMassage(this.cacheName, CacheMsgType.UPDATE, key, value,
+          MessageSourceUtil.getMsgSource());
       redisTemplate.convertAndSend(MessageConfig.TOPIC, cacheMassage);
     } catch (UnknownHostException e) {
       LOG.error(e.getMessage());
@@ -130,7 +132,8 @@ public class DoubleCache extends AbstractValueAdaptingCache {
 
     //发送信息通知其他节点删除一级缓存
     try {
-      CacheMassage cacheMassage = new CacheMassage(this.cacheName, CacheMsgType.DELETE, key, null, MessageSourceUtil.getMsgSource());
+      CacheMassage cacheMassage = new CacheMassage(this.cacheName, CacheMsgType.DELETE, key, null,
+          MessageSourceUtil.getMsgSource());
       redisTemplate.convertAndSend(MessageConfig.TOPIC, cacheMassage);
     } catch (UnknownHostException e) {
       LOG.error(e.getMessage());

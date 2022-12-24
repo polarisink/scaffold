@@ -1,13 +1,14 @@
 package rocketmq;
 
+import static rocketmq.Common.ROCKETMQ_URL;
+
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQClientException;
 
-import static rocketmq.Common.ROCKETMQ_URL;
-
 public class Consumer {
+
   public static void main(String[] args) throws MQClientException {
     // 初始化consumer，并设置consumer group name
     DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("please_rename_unique_group_name");

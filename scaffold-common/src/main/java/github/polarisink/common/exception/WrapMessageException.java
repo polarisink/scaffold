@@ -1,8 +1,7 @@
 package github.polarisink.common.exception;
 
 /**
- * 只包装了 错误信息 的 {@link RuntimeException}.
- * 用于 Assert 中用于包装自定义异常信息
+ * 只包装了 错误信息 的 {@link RuntimeException}. 用于 Assert 中用于包装自定义异常信息
  *
  * @author aries
  * @date 2020/6/20

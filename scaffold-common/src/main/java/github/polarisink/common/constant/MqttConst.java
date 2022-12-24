@@ -7,6 +7,7 @@ package github.polarisink.common.constant;
  * @date 2022/7/1
  */
 public class MqttConst {
+
   public static final String SAMPLE_START = "Sample/";
   public static final String SAMPLE_END = "/sample_channel0";
   public static final String SET_HEALTH = "Set/Health/";

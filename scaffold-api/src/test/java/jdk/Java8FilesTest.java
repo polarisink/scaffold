@@ -1,8 +1,12 @@
 package jdk;
 
-import org.junit.Test;
+import static cn.hutool.core.date.DatePattern.PURE_DATETIME_FORMATTER;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,8 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static cn.hutool.core.date.DatePattern.PURE_DATETIME_FORMATTER;
+import org.junit.Test;
 
 public class Java8FilesTest {
 
@@ -77,7 +80,8 @@ public class Java8FilesTest {
   }
 
   private boolean compare(String path, String path2) {
-    try (DataInputStream in = new DataInputStream(new FileInputStream(path)); DataInputStream in2 = new DataInputStream(new FileInputStream(path2))) {
+    try (DataInputStream in = new DataInputStream(new FileInputStream(path)); DataInputStream in2 = new DataInputStream(
+        new FileInputStream(path2))) {
       boolean flag = in.available() == in2.available();
       if (!flag) {
         return false;

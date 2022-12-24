@@ -8,10 +8,9 @@ import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-
 import java.lang.reflect.Field;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 稍微封装一下hutool的TreeUtil
@@ -42,8 +41,7 @@ public class TreeUtils {
   }
 
   /**
-   * 通过hutool转list<T>
-   * hutool#toJsonStr默认会忽略空值,<a href="https://gitee.com/dromara/hutool/issues/I48H5L">在这里解决</a>
+   * 通过hutool转list<T> hutool#toJsonStr默认会忽略空值,<a href="https://gitee.com/dromara/hutool/issues/I48H5L">在这里解决</a>
    *
    * @param list
    * @param rootId
@@ -56,8 +54,9 @@ public class TreeUtils {
     //不忽略空值
     JSONConfig jsonConfig = new JSONConfig();
     jsonConfig.setIgnoreNullValue(false);
-    return JSONUtil.toBean(JSONUtil.toJsonStr(tree(list, rootId, config), jsonConfig), new cn.hutool.core.lang.TypeReference<>() {
-    }, true);
+    return JSONUtil.toBean(JSONUtil.toJsonStr(tree(list, rootId, config), jsonConfig),
+        new cn.hutool.core.lang.TypeReference<>() {
+        }, true);
   }
 
 

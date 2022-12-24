@@ -1,10 +1,9 @@
 package github.polarisink.cache.msg;
 
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 /**
  * @program: double-cache
@@ -15,6 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CacheMassage implements Serializable {
+
   private static final long serialVersionUID = -3574997636829868400L;
 
   private String cacheName;

@@ -8,6 +8,7 @@ import org.junit.Test;
  * @date 2022/9/22
  */
 public class MapTest {
+
   @Test
   public void test() throws JsonProcessingException {
     //System.out.println(new ObjectMapper().writeValueAsString(Map.of("a", "b")));

@@ -1,11 +1,12 @@
 package rocketmq;
 
+import static rocketmq.Common.ROCKETMQ_URL;
+
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
 
-import static rocketmq.Common.ROCKETMQ_URL;
-
 public class ScheduledMessageProducer {
+
   public static void main(String[] args) throws Exception {
     // Instantiate a producer to send scheduled messages
     DefaultMQProducer producer = new DefaultMQProducer("ExampleProducerGroup");

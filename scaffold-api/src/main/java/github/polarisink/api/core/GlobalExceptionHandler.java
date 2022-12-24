@@ -1,5 +1,8 @@
 package github.polarisink.api.core;
 
+import static github.polarisink.common.asserts.BaseE.BASE;
+import static github.polarisink.common.asserts.BaseE.SERVER_ERROR;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import github.polarisink.common.asserts.ArgumentE;
 import github.polarisink.common.asserts.ServletE;
@@ -38,12 +41,6 @@ import org.springframework.web.context.request.async.AsyncRequestTimeoutExceptio
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
-import springfox.documentation.spring.web.json.Json;
-import springfox.documentation.swagger.web.SwaggerResource;
-import springfox.documentation.swagger.web.UiConfiguration;
-
-import static github.polarisink.common.asserts.BaseE.BASE;
-import static github.polarisink.common.asserts.BaseE.SERVER_ERROR;
 
 
 /**
@@ -57,6 +54,7 @@ import static github.polarisink.common.asserts.BaseE.SERVER_ERROR;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
+
   /**
    * 生产环境
    */
@@ -76,7 +74,9 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
   }
 
   @Override
-  public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
+  public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType,
+      Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest,
+      ServerHttpResponse serverHttpResponse) {
     if (o == null) {
       return Response.of(null);
     }
@@ -90,10 +90,10 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
      * {domain}/v2/api-docs
      */
 
-    boolean swagger = o instanceof Json || o instanceof UiConfiguration || o instanceof SwaggerResource;
+    /*boolean swagger = o instanceof Json || o instanceof UiConfiguration || o instanceof SwaggerResource;
     if (swagger) {
       return o;
-    }
+    }*/
     return Response.of(o);
   }
 
@@ -167,20 +167,20 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
    */
   /*@formatter:off*/
   @ExceptionHandler({
-      NoHandlerFoundException.class, 
-      HttpRequestMethodNotSupportedException.class, 
-      HttpMediaTypeNotSupportedException.class, 
-      HttpMediaTypeNotAcceptableException.class, 
-      MissingPathVariableException.class, 
-      MissingServletRequestParameterException.class, 
-      TypeMismatchException.class, 
-      HttpMessageNotReadableException.class, 
+      NoHandlerFoundException.class,
+      HttpRequestMethodNotSupportedException.class,
+      HttpMediaTypeNotSupportedException.class,
+      HttpMediaTypeNotAcceptableException.class,
+      MissingPathVariableException.class,
+      MissingServletRequestParameterException.class,
+      TypeMismatchException.class,
+      HttpMessageNotReadableException.class,
       HttpMessageNotWritableException.class,
       // BindException.class,
       // MethodArgumentNotValidException.class
-      ServletRequestBindingException.class, 
-      ConversionNotSupportedException.class, 
-      MissingServletRequestPartException.class, 
+      ServletRequestBindingException.class,
+      ConversionNotSupportedException.class,
+      MissingServletRequestPartException.class,
       AsyncRequestTimeoutException.class})
   public Response<Void> handleServletException(Exception e) {
     /*@formatter:on*/

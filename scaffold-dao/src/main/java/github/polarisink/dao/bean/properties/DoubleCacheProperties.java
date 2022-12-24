@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "double-cache")
 public class DoubleCacheProperties {
+
   private Boolean allowNull = true;
   private Integer init = 100;
   private Integer max = 1000;

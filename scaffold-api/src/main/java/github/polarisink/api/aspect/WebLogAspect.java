@@ -3,22 +3,24 @@ package github.polarisink.api.aspect;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
-
 /**
- * @author lqs
- * http请求日志打印
+ * @author lqs http请求日志打印
  * @date 2021/11/6
  */
 @Slf4j
@@ -26,10 +28,14 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 public class WebLogAspect {
+
   private static final long LENGTH = 10000;
   private final ObjectMapper mapper;
 
-  @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping) && @annotation(org.springframework.web.bind.annotation.PostMapping) " + "&& @annotation(org.springframework.web.bind.annotation.PutMapping) && @annotation(org.springframework.web.bind.annotation.DeleteMapping) " + "&& @annotation(org.springframework.web.bind.annotation.RequestMapping) && @annotation(org.springframework.web.bind.annotation.PatchMapping)")
+  @Pointcut(
+      "@annotation(org.springframework.web.bind.annotation.GetMapping) && @annotation(org.springframework.web.bind.annotation.PostMapping) "
+          + "&& @annotation(org.springframework.web.bind.annotation.PutMapping) && @annotation(org.springframework.web.bind.annotation.DeleteMapping) "
+          + "&& @annotation(org.springframework.web.bind.annotation.RequestMapping) && @annotation(org.springframework.web.bind.annotation.PatchMapping)")
   public void webLog() {
   }
 
@@ -47,7 +53,8 @@ public class WebLogAspect {
     LOG.info("========================================== Start ==========================================");
     LOG.info("Request URL    : {}", request.getRequestURL().toString());
     LOG.info("HTTP Method    : {}", request.getMethod());
-    LOG.info("Class Method   : {}.{}", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
+    LOG.info("Class Method   : {}.{}", joinPoint.getSignature().getDeclaringTypeName(),
+        joinPoint.getSignature().getName());
     LOG.info("IP Address     : {}", request.getRemoteAddr());
 
     String argsStr;

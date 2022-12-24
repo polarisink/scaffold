@@ -1,11 +1,10 @@
 package jdk;
 
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 
 /**
  * @author aries
@@ -13,6 +12,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class CollectorsTest {
+
   List<Integer> list = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
 
   @Test

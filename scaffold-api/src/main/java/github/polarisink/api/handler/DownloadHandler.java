@@ -1,22 +1,26 @@
 package github.polarisink.api.handler;
 
-import io.swagger.v3.oas.annotations.Operation;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS;
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
+import static org.springframework.http.HttpHeaders.CONTENT_LENGTH;
+import static org.springframework.util.MimeTypeUtils.APPLICATION_OCTET_STREAM_VALUE;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.net.URLEncoder;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
-
-import static org.springframework.http.HttpHeaders.*;
-import static org.springframework.util.MimeTypeUtils.APPLICATION_OCTET_STREAM_VALUE;
 
 /**
  * 使用nio和bio下载文件,经过测试nio更快
@@ -31,7 +35,10 @@ public class DownloadHandler {
 
   String filePath = "C:\\Users\\hzsk\\Desktop\\apache-maven-3.8.6-bin.zip";
 
-  @Operation(summary = "nio测试下载")
+  private static String buildName(String name) {
+    return "attachment;filename*=" + URLEncoder.encode(name, StandardCharsets.UTF_8);
+  }
+
   @GetMapping("/nio")
   public long downloadExcelTemplate(HttpServletRequest request, HttpServletResponse response) {
     StopWatch stopWatch = new StopWatch();
@@ -72,7 +79,6 @@ public class DownloadHandler {
     return lastTaskTimeMillis;
   }
 
-  @Operation(summary = "bio测试下载")
   @RequestMapping("/bio")
   public long fileDownLoad(HttpServletResponse response) {
     StopWatch stopWatch = new StopWatch();
@@ -99,9 +105,5 @@ public class DownloadHandler {
     stopWatch.stop();
     long lastTaskTimeMillis = stopWatch.getLastTaskTimeMillis();
     return lastTaskTimeMillis;
-  }
-
-  private static String buildName(String name) {
-    return "attachment;filename*=" + URLEncoder.encode(name, StandardCharsets.UTF_8);
   }
 }

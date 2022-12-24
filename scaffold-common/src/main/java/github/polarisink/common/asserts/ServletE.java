@@ -1,9 +1,8 @@
 package github.polarisink.common.asserts;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>异常类与http status对照关系</p>

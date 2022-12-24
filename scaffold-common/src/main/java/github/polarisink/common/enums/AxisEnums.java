@@ -1,15 +1,17 @@
 package github.polarisink.common.enums;
 
 import cn.hutool.core.util.StrUtil;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import java.util.*;
-
 /**
- * 轴的方向,现在最多的7轴,因此直接写在枚举类中
- * 0代表整机
+ * 轴的方向,现在最多的7轴,因此直接写在枚举类中 0代表整机
  *
  * @author lqs
  * @date 2022/2/23

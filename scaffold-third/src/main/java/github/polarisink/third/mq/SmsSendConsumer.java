@@ -1,12 +1,12 @@
 package github.polarisink.third.mq;
 
+import static github.polarisink.third.consts.RockerMqConst.TOPIC_SMS_SEND;
+
 import github.polarisink.third.bean.SmsTask;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;
-
-import static github.polarisink.third.consts.RockerMqConst.TOPIC_SMS_SEND;
 
 /**
  * @author aries
@@ -16,6 +16,7 @@ import static github.polarisink.third.consts.RockerMqConst.TOPIC_SMS_SEND;
 @Component
 @RocketMQMessageListener(topic = TOPIC_SMS_SEND, consumerGroup = "sms-group")
 public class SmsSendConsumer implements RocketMQListener<SmsTask> {
+
   @Override
   public void onMessage(SmsTask smsTask) {
     LOG.info("[短信发送消费者]received message:{}", smsTask);

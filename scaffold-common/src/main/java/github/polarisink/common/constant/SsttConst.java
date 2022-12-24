@@ -7,6 +7,7 @@ package github.polarisink.common.constant;
  * @date 2022/7/6
  */
 public class SsttConst {
+
   public static final String AXIS_INFO = "AxisInfo";
   public static final String SMPL_INFO = "SmplInfo";
   public static final String LINE_INFO = "LineInfo";

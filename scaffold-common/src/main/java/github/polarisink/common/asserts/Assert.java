@@ -4,7 +4,6 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import github.polarisink.common.exception.BaseException;
 import github.polarisink.common.exception.WrapMessageException;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -17,6 +16,7 @@ import java.util.function.Supplier;
  * @date 2022/5/2
  */
 public interface Assert {
+
   /**
    * 创建异常
    *
@@ -35,9 +35,8 @@ public interface Assert {
   BaseException newException(Throwable t, Object... args);
 
   /**
-   * 创建异常.
-   * 先使用 {@code errMsg} 创建一个 {@link WrapMessageException} 异常,
-   * 再以入参的形式传给 {{{@link #newException(Throwable, Object...)}}}, 作为最后创建的异常的 cause 属性.
+   * 创建异常. 先使用 {@code errMsg} 创建一个 {@link WrapMessageException} 异常, 再以入参的形式传给
+   * {{{@link #newException(Throwable, Object...)}}}, 作为最后创建的异常的 cause 属性.
    *
    * @param errMsg 自定义的错误信息
    * @param args
@@ -52,9 +51,8 @@ public interface Assert {
   }
 
   /**
-   * 创建异常.
-   * 先使用 {@code errMsg} 和 {@code t} 创建一个 {@link WrapMessageException} 异常,
-   * 再以入参的形式传给 {{{@link #newException(Throwable, Object...)}}}, 作为最后创建的异常的 cause 属性.
+   * 创建异常. 先使用 {@code errMsg} 和 {@code t} 创建一个 {@link WrapMessageException} 异常, 再以入参的形式传给
+   * {{{@link #newException(Throwable, Object...)}}}, 作为最后创建的异常的 cause 属性.
    *
    * @param errMsg 自定义的错误信息
    * @param args
@@ -67,7 +65,6 @@ public interface Assert {
     WrapMessageException e = new WrapMessageException(errMsg, t);
     throw newException(e, args);
   }
-
 
   //======================以上为抛异常方法,以下为断言方法=======================
 

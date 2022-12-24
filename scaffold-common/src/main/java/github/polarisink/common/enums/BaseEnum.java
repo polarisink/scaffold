@@ -5,6 +5,7 @@ package github.polarisink.common.enums;
  * @date 2022/8/9
  */
 public interface BaseEnum {
+
   /**
    * 获取类型
    *

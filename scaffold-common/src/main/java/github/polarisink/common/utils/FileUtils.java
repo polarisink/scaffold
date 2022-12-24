@@ -7,17 +7,23 @@ import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import github.polarisink.common.constant.FileConst;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ResourceUtils;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 
 /**
@@ -28,6 +34,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class FileUtils {
+
   private static Charset charset = StandardCharsets.UTF_8;
 
   /**
@@ -46,7 +53,8 @@ public class FileUtils {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
-    BufferedReader bufferedReader = ResourceUtil.getReader(Objects.requireNonNull(file).getAbsolutePath(), CharsetUtil.CHARSET_GBK);
+    BufferedReader bufferedReader = ResourceUtil.getReader(Objects.requireNonNull(file).getAbsolutePath(),
+        CharsetUtil.CHARSET_GBK);
     return CsvUtil.getReader().read(bufferedReader, tClass);
   }
 
@@ -70,7 +78,7 @@ public class FileUtils {
     List<String> strList = new ArrayList<>();
     /*@formatter:off*/
     try (InputStreamReader read = new InputStreamReader(new FileInputStream(file), charset);
-         BufferedReader reader = new BufferedReader(read)) {
+        BufferedReader reader = new BufferedReader(read)) {
       /*@formatter:on*/
       strList = reader.lines().filter(StrUtil::isNotBlank).collect(Collectors.toList());
     } catch (Exception e) {
@@ -85,7 +93,7 @@ public class FileUtils {
     /*@formatter:off*/
     try (
         InputStreamReader read = new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8);
-         BufferedReader reader = new BufferedReader(read)) {
+        BufferedReader reader = new BufferedReader(read)) {
       /*@formatter:on*/
       strList = reader.lines().filter(StrUtil::isNotBlank).collect(Collectors.toList());
     } catch (Exception e) {

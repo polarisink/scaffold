@@ -12,4 +12,5 @@ import org.mapstruct.extensions.spring.SpringMapperConfig;
 @MapperConfig(componentModel = "spring")
 @SpringMapperConfig(conversionServiceAdapterPackage = "polarisink.github.config", conversionServiceAdapterClassName = "MapStructConversionServiceAdapter")
 public class MapperStructSpringConfig {
+
 }

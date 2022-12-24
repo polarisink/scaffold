@@ -1,13 +1,12 @@
 package github.polarisink.dao.bean.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
+import static github.polarisink.common.utils.TimeUtils.sFStr;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import static github.polarisink.common.utils.TimeUtils.sFStr;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 /**

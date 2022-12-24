@@ -1,6 +1,7 @@
 package jdk;
 
 abstract class Animal {
+
   Animal() {
     System.out.println("抽象类Animal无参构造器"); //此处执行前会默认执行super()
   }
@@ -14,6 +15,7 @@ abstract class Animal {
  * 虽然不能直接实例化抽象类，但子类init时自身的cinit会被调用
  */
 public class AbstractConstructorTest extends Animal {
+
   AbstractConstructorTest() {
     System.out.println("子类horse无参构造器"); //此处执行前会默认执行super()
   }

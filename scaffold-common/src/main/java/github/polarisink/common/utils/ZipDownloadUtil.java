@@ -1,23 +1,29 @@
 package github.polarisink.common.utils;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author hzsk
  */
 @Slf4j
 public class ZipDownloadUtil {
+
   /**
    * 获取当前系统的临时目录
    */
@@ -76,9 +82,12 @@ public class ZipDownloadUtil {
       String path = FILE_PATH + zipFileName;
       File file = new File(path);
       if (file.exists()) {
-        try (InputStream ins = new FileInputStream(path); BufferedInputStream bins = new BufferedInputStream(ins); OutputStream outs = response.getOutputStream(); BufferedOutputStream bouts = new BufferedOutputStream(outs)) {
+        try (InputStream ins = new FileInputStream(path); BufferedInputStream bins = new BufferedInputStream(
+            ins); OutputStream outs = response.getOutputStream(); BufferedOutputStream bouts = new BufferedOutputStream(
+            outs)) {
           response.setContentType("application/x-download");
-          response.setHeader(CONTENT_DISPOSITION, "attachment;filename=" + URLEncoder.encode(zipFileName, StandardCharsets.UTF_8));
+          response.setHeader(CONTENT_DISPOSITION,
+              "attachment;filename=" + URLEncoder.encode(zipFileName, StandardCharsets.UTF_8));
           int bytesRead;
           byte[] buffer = new byte[ZIP_BUFFER_SIZE];
           while ((bytesRead = bins.read(buffer, 0, ZIP_BUFFER_SIZE)) != -1) {

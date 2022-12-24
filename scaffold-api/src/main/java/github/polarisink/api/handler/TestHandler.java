@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 @RequiredArgsConstructor
 public class TestHandler {
+
   private final TestService testService;
   private final SmsService smsService;
 

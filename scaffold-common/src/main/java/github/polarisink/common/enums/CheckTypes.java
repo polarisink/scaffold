@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author lqs
- * 表单中数据的区分，如自检专检等
+ * @author lqs 表单中数据的区分，如自检专检等
  * @date 2021/11/24
  */
 public enum CheckTypes {

@@ -15,10 +15,12 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
  **/
 @Configuration
 public class MessageConfig {
+
   public static final String TOPIC = "cache.msg";
 
   @Bean
-  RedisMessageListenerContainer container(MessageListenerAdapter listenerAdapter, RedisConnectionFactory redisConnectionFactory) {
+  RedisMessageListenerContainer container(MessageListenerAdapter listenerAdapter,
+      RedisConnectionFactory redisConnectionFactory) {
     RedisMessageListenerContainer container = new RedisMessageListenerContainer();
     container.setConnectionFactory(redisConnectionFactory);
     container.addMessageListener(listenerAdapter, new PatternTopic(TOPIC));

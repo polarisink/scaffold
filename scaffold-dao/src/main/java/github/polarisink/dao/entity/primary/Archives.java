@@ -1,7 +1,14 @@
 package github.polarisink.dao.entity.primary;
 
+import static github.polarisink.common.utils.TimeUtils.sFStr;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import github.polarisink.dao.entity.BaseJpaEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -9,18 +16,9 @@ import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import java.time.LocalDateTime;
-
-import static github.polarisink.common.utils.TimeUtils.sFStr;
-
 
 /**
- * 机床档案<br/>
- * mach:machine缩写
+ * 机床档案<br/> mach:machine缩写
  *
  * @author aries
  * @date 2022/4/28
@@ -32,6 +30,7 @@ import static github.polarisink.common.utils.TimeUtils.sFStr;
 @Table(name = "archives")
 @Entity(name = "archives")
 public class Archives extends BaseJpaEntity {
+
   private static final long serialVersionUID = -2970421873172590326L;
 
   /**
@@ -100,7 +99,6 @@ public class Archives extends BaseJpaEntity {
   @JsonFormat(pattern = sFStr, timezone = "GMT+8")
   @CreatedDate
   private LocalDateTime mqttTime;
-
 
   //-----数据库不存在字段
 

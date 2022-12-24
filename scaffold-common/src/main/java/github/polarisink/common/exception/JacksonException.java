@@ -10,6 +10,7 @@ import github.polarisink.common.IResponseEnum;
  * @date 2022/3/21
  */
 public class JacksonException extends BaseException {
+
   private static final long serialVersionUID = 140582950805588413L;
 
   public JacksonException(IResponseEnum responseEnum, Object[] args, String message) {

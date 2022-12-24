@@ -9,8 +9,9 @@ import java.util.Properties;
  * @date 2022/9/28
  */
 public class Common {
-  private static String s = "E:\\ideaProjects\\scaffold\\.env";
+
   public static final String ROCKETMQ_URL;
+  private static String s = "E:\\ideaProjects\\scaffold\\.env";
 
   static {
     //Resource resource = new FileUrlResource(s);

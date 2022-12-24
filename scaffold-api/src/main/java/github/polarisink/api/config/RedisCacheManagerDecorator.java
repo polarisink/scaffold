@@ -1,11 +1,6 @@
 package github.polarisink.api.config;
 
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.support.AbstractCacheManager;
-import org.springframework.data.redis.cache.RedisCache;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheWriter;
+import static github.polarisink.common.constant.RedisConst.REDIS_SEP;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -14,19 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
-import static github.polarisink.common.constant.RedisConst.REDIS_SEP;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.support.AbstractCacheManager;
+import org.springframework.data.redis.cache.RedisCache;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 
 
 /**
  * @author aries
- * @date 2022/5/5
- * 这是一个CacheManager装饰器,本质上包装了RedisCache
- * 使用装饰器模式扩展RedisCache的功能
- * 扩展的功能有：
- * *. evict方法支持删除以'*'结尾的通配符表示的所有的key(若key的字符串结尾为'*',则删除这个通配符匹配下的所有的key);
+ * @date 2022/5/5 这是一个CacheManager装饰器,本质上包装了RedisCache 使用装饰器模式扩展RedisCache的功能 扩展的功能有： *.
+ * evict方法支持删除以'*'结尾的通配符表示的所有的key(若key的字符串结尾为'*',则删除这个通配符匹配下的所有的key);
  */
 public class RedisCacheManagerDecorator {
+
   public static final String REDIS_CLEAR_ALL = "*";
   private static final ConcurrentMap<Cache, Cache> CACHE_MAP = new ConcurrentHashMap<>();
   private static final List<MethodHandler> METHOD_HANDLERS = new ArrayList<>();
@@ -49,7 +46,8 @@ public class RedisCacheManagerDecorator {
    */
   public static CacheManager decorate(CacheManager manager) {
     RedisCacheManagerDecorator decorator = new RedisCacheManagerDecorator(manager);
-    return (CacheManager) Proxy.newProxyInstance(manager.getClass().getClassLoader(), AbstractCacheManager.class.getInterfaces(), cacheManagerInvocationHandler(decorator));
+    return (CacheManager) Proxy.newProxyInstance(manager.getClass().getClassLoader(),
+        AbstractCacheManager.class.getInterfaces(), cacheManagerInvocationHandler(decorator));
   }
 
   private static InvocationHandler cacheManagerInvocationHandler(RedisCacheManagerDecorator decorator) {
@@ -80,7 +78,8 @@ public class RedisCacheManagerDecorator {
    */
   private static Cache buildRedisCacheProxy(Cache cache) {
     InvocationHandler handler = (proxy, method, args) -> {
-      MethodHandler methodHandler = METHOD_HANDLERS.stream().filter(h -> h.canHandle(cache, method, args)).findFirst().orElse(null);
+      MethodHandler methodHandler = METHOD_HANDLERS.stream().filter(h -> h.canHandle(cache, method, args)).findFirst()
+          .orElse(null);
       if (methodHandler != null) {
         return methodHandler.handle(cache, method, args);
       }
@@ -101,10 +100,10 @@ public class RedisCacheManagerDecorator {
   }
 
   /**
-   * 代理evict方法
-   * 若key以'*'结尾,删除满足这个key的pattern的所有key
+   * 代理evict方法 若key以'*'结尾,删除满足这个key的pattern的所有key
    */
   static class EvictMethodHandler implements MethodHandler {
+
     private static Method targetMethod;
 
     static {

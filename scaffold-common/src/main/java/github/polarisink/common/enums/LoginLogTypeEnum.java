@@ -25,7 +25,6 @@ public enum LoginLogTypeEnum implements BaseEnum {
    */
   LOGIN_MOBILE(103, "手机验证码登陆"),
 
-
   /**
    * 自己主动登出
    */

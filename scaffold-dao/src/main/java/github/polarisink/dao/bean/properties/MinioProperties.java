@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties("minio")
 public class MinioProperties {
+
   /**
    * 连接地址
    */

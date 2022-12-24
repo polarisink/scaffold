@@ -1,69 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>scaffold</artifactId>
-    <groupId>github.polarisink</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
-
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>scaffold-api</artifactId>
-
-  <properties>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-    <imgName>assembly</imgName>
-    <imageTag>2022-08-20</imageTag>
-    <docker.host>http://10.1.20.115:32157</docker.host>
-    <baseImage>adoptopenjdk/openjdk11:ubi</baseImage>
-    <maintainer>1952482944@qq.com</maintainer>
-  </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>github.polarisink</groupId>
-      <artifactId>scaffold-cache</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>github.polarisink</groupId>
-      <artifactId>scaffold-third</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>io.minio</groupId>
-      <artifactId>minio</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>okhttp</artifactId>
-          <groupId>com.squareup.okhttp3</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-    </dependency>
-  </dependencies>
-
   <build>
     <plugins>
       <plugin>
-        <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring-boot.version}</version>
         <configuration>
           <!-- 你的主类全路径 -->
-          <mainClass>cn.hzncc.MachineAssemblyApplication</mainClass>
-          <includeSystemScope>true</includeSystemScope>
           <excludes>
             <exclude>
-              <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
+              <groupId>org.projectlombok</groupId>
             </exclude>
           </excludes>
+          <includeSystemScope>true</includeSystemScope>
+          <mainClass>cn.hzncc.MachineAssemblyApplication</mainClass>
         </configuration>
         <executions>
           <execution>
@@ -72,54 +25,54 @@
             </goals>
           </execution>
         </executions>
+        <groupId>org.springframework.boot</groupId>
+        <version>${spring-boot.version}</version>
       </plugin>
       <!-- 跳过单元测试 -->
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.2</version>
         <configuration>
           <skipTests>true</skipTests>
         </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>2.22.2</version>
       </plugin>
       <!--maven插件-->
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven.version}</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-          <encoding>${project.build.sourceEncoding}</encoding>
           <annotationProcessorPaths>
             <path>
-              <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
+              <groupId>org.projectlombok</groupId>
               <version>${lombok.version}</version>
             </path>
             <path>
-              <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct-processor</artifactId>
+              <groupId>org.mapstruct</groupId>
               <version>${org.mapstruct.version}</version>
             </path>
             <path>
-              <groupId>org.mapstruct.extensions.spring</groupId>
               <artifactId>mapstruct-spring-extensions</artifactId>
+              <groupId>org.mapstruct.extensions.spring</groupId>
               <version>${mapstruct.spring.version}</version>
             </path>
           </annotationProcessorPaths>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
         </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>${maven.version}</version>
       </plugin>
       <!--docker-maven-plugin插件打包
       TODO 学习直接使用docker插件打包,现在配置的不太合适
       -->
       <plugin>
-        <groupId>com.spotify</groupId>
         <artifactId>docker-maven-plugin</artifactId>
-        <version>${docker-maven.version}</version>
         <configuration>
           <!--镜像名称-->
-          <imageName>${imgName}:${imageTag}</imageName>
+          <dockerDirectory>${project.basedir}</dockerDirectory>
           <!--指定标签-->
           <!--<imageTags>
             <imageTag>${imageTag}</imageTag>
@@ -134,22 +87,69 @@
           <entryPoint>["java", "-jar", "${project.build.finalName}.jar"]
           </entryPoint>-->
           <!--指定DockerFile路径-->
-          <dockerDirectory>${project.basedir}</dockerDirectory>
-          <!--指定远程docker api地址-->
           <dockerHost>${docker.host}</dockerHost>
+          <!--指定远程docker api地址-->
+          <imageName>${imgName}:${imageTag}</imageName>
           <!-- 这里是复制 jar 包到 docker 容器指定目录配置 -->
           <resources>
             <resource>
-              <targetPath>/</targetPath>
-              <!--用于指定需要复制的根目录-->
               <directory>${project.build.directory}</directory>
-              <!--用于指定需要复制的jar文件-->
+              <!--用于指定需要复制的根目录-->
               <include>${project.build.finalName}.jar</include>
+              <!--用于指定需要复制的jar文件-->
+              <targetPath>/</targetPath>
             </resource>
           </resources>
         </configuration>
+        <groupId>com.spotify</groupId>
+        <version>${docker-maven.version}</version>
       </plugin>
     </plugins>
   </build>
+
+  <dependencies>
+    <dependency>
+      <artifactId>scaffold-cache</artifactId>
+      <groupId>github.polarisink</groupId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <artifactId>scaffold-third</artifactId>
+      <groupId>github.polarisink</groupId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <artifactId>minio</artifactId>
+      <exclusions>
+        <exclusion>
+          <artifactId>okhttp</artifactId>
+          <groupId>com.squareup.okhttp3</groupId>
+        </exclusion>
+      </exclusions>
+      <groupId>io.minio</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>okhttp</artifactId>
+      <groupId>com.squareup.okhttp3</groupId>
+    </dependency>
+  </dependencies>
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>scaffold</artifactId>
+    <groupId>github.polarisink</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <baseImage>adoptopenjdk/openjdk11:ubi</baseImage>
+    <docker.host>http://10.1.20.115:32157</docker.host>
+    <imageTag>2022-08-20</imageTag>
+    <imgName>assembly</imgName>
+    <maintainer>1952482944@qq.com</maintainer>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
 
 </project>

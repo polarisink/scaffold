@@ -1,6 +1,10 @@
 package github.polarisink.api.config;
 
 import github.polarisink.api.core.RestClientHttpInterceptor;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,15 +13,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -52,7 +50,8 @@ public class RestTemplateConfig {
      * StringHttpMessageConverter 默认使用ISO-8859-1编码，此处修改为UTF-8
      */
     List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
-    messageConverters.stream().filter(converter -> converter instanceof StringHttpMessageConverter).forEachOrdered(converter -> ((StringHttpMessageConverter) converter).setDefaultCharset(StandardCharsets.UTF_8));
+    messageConverters.stream().filter(converter -> converter instanceof StringHttpMessageConverter).forEachOrdered(
+        converter -> ((StringHttpMessageConverter) converter).setDefaultCharset(StandardCharsets.UTF_8));
     //Interceptors 添加写的 Interceptors
     restTemplate.setInterceptors(Collections.singletonList(new RestClientHttpInterceptor()));
     //BufferingClientHttpRequestFactory  此处替换为BufferingClientHttpRequestFactory
@@ -75,7 +74,7 @@ public class RestTemplateConfig {
         .hostnameVerifier((hostname, session) -> true)
         /*.proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 8888)))
         .addInterceptor()*/.build();
-        /*@formatter:on*/
+    /*@formatter:on*/
   }
 
   public ConnectionPool pool() {

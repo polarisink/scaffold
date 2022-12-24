@@ -1,18 +1,16 @@
 package github.polarisink.dao.utils;
 
-import com.querydsl.core.QueryResults;
 import github.polarisink.dao.bean.page.BasePage;
-import lombok.Data;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import lombok.Data;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 /**
  * SpringData page简化版,方便使用
@@ -22,6 +20,7 @@ import java.util.Objects;
  */
 @Data
 public class PageUtil<T> implements Serializable {
+
   private static final long serialVersionUID = -1560448335342382268L;
   private Long total;
   private List<T> rows;
@@ -53,17 +52,6 @@ public class PageUtil<T> implements Serializable {
     util.setTotal(total);
     util.setRows(content);
     return util;
-  }
-
-  /**
-   * QueryDSL分页查询结果包装
-   *
-   * @param results
-   * @param <T>
-   * @return
-   */
-  public static <T> PageUtil<T> of(QueryResults<T> results) {
-    return of(results.getTotal(), results.getResults());
   }
 
   /**

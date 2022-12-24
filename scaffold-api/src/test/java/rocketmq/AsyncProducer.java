@@ -1,21 +1,18 @@
 package rocketmq;
 
+import static rocketmq.Common.ROCKETMQ_URL;
+
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
-import org.hibernate.Transaction;
-import org.springframework.transaction.TransactionManager;
-import org.springframework.transaction.annotation.Transactional;
-
-import static rocketmq.Common.ROCKETMQ_URL;
 
 public class AsyncProducer {
 
   public static void main(String[] args) throws Exception {
     // 初始化一个producer并设置Producer group name
-    DefaultMQProducer producer = new DefaultMQProducer("please_rename_unique_group_name",false);
+    DefaultMQProducer producer = new DefaultMQProducer("please_rename_unique_group_name", false);
     // 设置NameServer地址
     producer.setNamesrvAddr(ROCKETMQ_URL);
     // 启动producer
