@@ -6,9 +6,34 @@
   <build>
     <plugins>
       <plugin>
-				<groupId>org.graalvm.buildtools</groupId>
-				<artifactId>native-maven-plugin</artifactId>
-			</plugin>
+        <groupId>org.graalvm.buildtools</groupId>
+        <artifactId>native-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <executions>
+            <execution>
+                <id>build-native</id>
+                <goals>
+                    <goal>compile-no-fork</goal>
+                </goals>
+                <phase>package</phase>
+            </execution>
+        </executions>
+        <configuration>
+            <skip>false</skip>
+            <useArgFile>false</useArgFile>
+            <fallback>false</fallback>
+            <mainClass>github.polarisink.ScaffoldApplication</mainClass>
+            <imageName>native-app</imageName>
+            <buildArgs>
+                --verbose
+                --trace-object-instantiation=org.apache.logging.slf4j.Log4jLogger
+                --initialize-at-build-time=org.apache.logging.slf4j.Log4jLogger
+                --exclude-config target/bin/*.jar /META-INF/native-image/io.netty/netty-handler/generated/handlers/reflect-config.json
+                --exclude-config target/bin/*.jar /META-INF/native-image/io.netty/netty-handler-proxy/generated/handlers/reflect-config.json
+                --exclude-config target/bin/*.jar /META-INF/native-image/io.netty/netty-codec/generated/handlers/reflect-config.json
+            </buildArgs>
+        </configuration>
+    </plugin>
       <plugin>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>

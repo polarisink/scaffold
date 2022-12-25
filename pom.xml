@@ -238,6 +238,7 @@
     <skipTests>true</skipTests>
     <spring-boot.version>3.0.0</spring-boot.version>
     <spring-cloud.version>2022.0.0</spring-cloud.version>
+    <netty.version>4.1.86.Final</netty.version>
     <!--打包对test只编译不运行-->
   </properties>
   <version>0.0.1-SNAPSHOT</version>
