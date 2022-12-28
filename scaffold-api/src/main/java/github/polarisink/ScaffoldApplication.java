@@ -1,8 +1,5 @@
 package github.polarisink;
 
-import io.xream.x7.EnableX7L2Caching;
-import io.xream.x7.EnableX7Repository;
-import io.xream.x7.repository.id.autoconfigure.IdGeneratorAutoConfiguration;
 import org.apache.rocketmq.spring.autoconfigure.RocketMQAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,9 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @EnableJpaAuditing
 @EnableScheduling
-@EnableX7L2Caching
-@EnableX7Repository(mappingPrefix = "t_",mappingSpec = "_")
-@SpringBootApplication(exclude = {RocketMQAutoConfiguration.class, IdGeneratorAutoConfiguration.class})
+@SpringBootApplication(exclude = {RocketMQAutoConfiguration.class})
 public class ScaffoldApplication {
 
   public static void main(String[] args) {
