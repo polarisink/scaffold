@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SmsTask {
 
-  private String phone;
-  private String content;
+    private String phone;
+    private String content;
 }
 

@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>scaffold-mbpgen</artifactId>
-  <dependencies>
-    <dependency>
-      <artifactId>scaffold-common</artifactId>
-      <groupId>github.polarisink</groupId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <artifactId>mybatis-plus-boot-starter</artifactId>
-      <groupId>com.baomidou</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>mybatis-plus-generator</artifactId>
-      <groupId>com.baomidou</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>freemarker</artifactId>
-      <groupId>org.freemarker</groupId>
-    </dependency>
-  </dependencies>
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <artifactId>scaffold-mbpgen</artifactId>
+    <dependencies>
+        <dependency>
+            <artifactId>scaffold-common</artifactId>
+            <groupId>github.polarisink</groupId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <groupId>com.baomidou</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <groupId>com.baomidou</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>freemarker</artifactId>
+            <groupId>org.freemarker</groupId>
+        </dependency>
+    </dependencies>
 
-  <description>MybatisPlus及生成器</description>
-  <modelVersion>4.0.0</modelVersion>
+    <description>MybatisPlus及生成器</description>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <artifactId>scaffold</artifactId>
-    <groupId>github.polarisink</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <artifactId>scaffold</artifactId>
+        <groupId>github.polarisink</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
 
-  <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-  </properties>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 </project>

@@ -3,6 +3,7 @@ package github.polarisink.dao.utils;
 
 import github.polarisink.common.enums.BaseEnum;
 import github.polarisink.dao.bean.dto.Kv;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,16 +17,16 @@ import java.util.stream.Collectors;
  */
 public class EnumUtils {
 
-  public static <T extends BaseEnum> List<Kv> list(Class<T> tClass) {
-    return Arrays.stream(tClass.getEnumConstants()).map(EnumUtils::apply).collect(Collectors.toList());
-  }
+    public static <T extends BaseEnum> List<Kv> list(Class<T> tClass) {
+        return Arrays.stream(tClass.getEnumConstants()).map(EnumUtils::apply).collect(Collectors.toList());
+    }
 
-  @SafeVarargs
-  public static <T extends BaseEnum> List<Kv> list(T... l) {
-    return Arrays.stream(l).map(EnumUtils::apply).collect(Collectors.toList());
-  }
+    @SafeVarargs
+    public static <T extends BaseEnum> List<Kv> list(T... l) {
+        return Arrays.stream(l).map(EnumUtils::apply).collect(Collectors.toList());
+    }
 
-  private static <T extends BaseEnum> Kv apply(T e) {
-    return new Kv(e.getType(), e.getName());
-  }
+    private static <T extends BaseEnum> Kv apply(T e) {
+        return new Kv(e.getType(), e.getName());
+    }
 }

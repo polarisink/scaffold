@@ -1,7 +1,8 @@
 package jdk;
 
-import java.util.Objects;
 import org.junit.Test;
+
+import java.util.Objects;
 
 /**
  * @author aries
@@ -10,11 +11,11 @@ import org.junit.Test;
 
 public class ObjectsTest {
 
-  @Test
-  public void context() {
-    String a = null;
-    String b = null;
-    System.out.println(Objects.equals(a, b));
-  }
+    @Test
+    public void context() {
+        String a = null;
+        String b = null;
+        System.out.println(Objects.equals(a, b));
+    }
 
 }

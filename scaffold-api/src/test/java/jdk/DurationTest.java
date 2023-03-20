@@ -1,8 +1,9 @@
 package jdk;
 
+import org.junit.Test;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
-import org.junit.Test;
 
 /**
  * @author aries
@@ -10,14 +11,14 @@ import org.junit.Test;
  */
 public class DurationTest {
 
-  @Test
-  public void parse() {
-    System.out.println(Duration.parse("P3D"));
-  }
+    @Test
+    public void parse() {
+        System.out.println(Duration.parse("P3D"));
+    }
 
-  @Test
-  public void test() {
-    //npe
-    System.out.println(Duration.between(null, LocalDateTime.now()));
-  }
+    @Test
+    public void test() {
+        //npe
+        System.out.println(Duration.between(null, LocalDateTime.now()));
+    }
 }

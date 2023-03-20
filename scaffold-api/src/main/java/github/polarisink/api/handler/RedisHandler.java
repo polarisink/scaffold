@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/redis")
 public class RedisHandler {
 
-  @GetMapping("/cacheput/{id}")
-  //@CachePut(cacheNames = "PUT#30s")
-  public void cachePut(@PathVariable Long id) {
-    LOG.info("缓存了id: {}", id);
-  }
+    @GetMapping("/cacheput/{id}")
+    //@CachePut(cacheNames = "PUT#30s")
+    public void cachePut(@PathVariable Long id) {
+        LOG.info("缓存了id: {}", id);
+    }
 
 }

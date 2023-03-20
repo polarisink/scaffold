@@ -12,25 +12,25 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ArgumentE implements ArgumentExceptionAssert {
-  /**
-   * 绑定参数校验异常
-   */
-  BASE(9000, "参数校验基本异常"),
+    /**
+     * 绑定参数校验异常
+     */
+    BASE(9000, "参数校验基本异常"),
 
-  /**
-   * 参数校验异常
-   */
-  VALID_ERROR(9000, "参数校验异常"),
+    /**
+     * 参数校验异常
+     */
+    VALID_ERROR(9000, "参数校验异常"),
 
-  ;
+    ;
 
-  /**
-   * 返回码
-   */
-  private final int code;
-  /**
-   * 返回消息
-   */
-  private final String message;
+    /**
+     * 返回码
+     */
+    private final int code;
+    /**
+     * 返回消息
+     */
+    private final String message;
 
 }

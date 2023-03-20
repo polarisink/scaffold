@@ -1,12 +1,10 @@
 package github.polarisink.dao.bean.request;
 
-import static github.polarisink.common.utils.TimeUtils.sFStr;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 
 /**
@@ -18,32 +16,30 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Data
 public class ArchivesAddRequest implements Serializable {
 
-  private static final long serialVersionUID = 1784425732671451601L;
+    private static final long serialVersionUID = 1784425732671451601L;
 
-  private String handle;
+    private String handle;
 
-  private String opticalMachNum;
+    private String opticalMachNum;
 
-  @DateTimeFormat(pattern = sFStr)
-  @JsonFormat(pattern = sFStr, timezone = "GMT+8")
-  private LocalDateTime opticalMachLoadTime;
 
-  private String machNum;
+    private LocalDateTime opticalMachLoadTime;
 
-  private Long machModelId;
+    private String machNum;
 
-  @DateTimeFormat(pattern = sFStr)
-  @JsonFormat(pattern = sFStr, timezone = "GMT+8")
-  private LocalDateTime factoryTime;
+    private Long machModelId;
 
-  private String machSn;
 
-  private String prodName;
+    private LocalDateTime factoryTime;
 
-  private String prodStandard;
+    private String machSn;
 
-  private String serialNum;
+    private String prodName;
 
-  private Long bomId;
+    private String prodStandard;
+
+    private String serialNum;
+
+    private Long bomId;
 
 }

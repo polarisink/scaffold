@@ -6,9 +6,9 @@ package jdk.interfaceAbstract;
  */
 public interface Inter {
 
-  default void sing() {
-    System.out.println("inter sing...");
-  }
+    default void sing() {
+        System.out.println("inter sing...");
+    }
 
-  void jump();
+    void jump();
 }

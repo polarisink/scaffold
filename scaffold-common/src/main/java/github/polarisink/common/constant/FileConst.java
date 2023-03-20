@@ -8,10 +8,10 @@ package github.polarisink.common.constant;
  */
 public class FileConst {
 
-  public static final String MQTT_FILE_PATH = System.getProperty("user.home") + "/mqtt";
+    public static final String MQTT_FILE_PATH = System.getProperty("user.home") + "/mqtt";
 
-  public static final String FILE_PATH = System.getProperty("user.home") + "/files";
+    public static final String FILE_PATH = System.getProperty("user.home") + "/files";
 
-  private FileConst() {
-  }
+    private FileConst() {
+    }
 }

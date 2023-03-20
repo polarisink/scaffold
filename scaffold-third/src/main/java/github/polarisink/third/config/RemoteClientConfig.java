@@ -13,10 +13,10 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
  */
 @Configuration
 public class RemoteClientConfig {
-  @Bean
-  public TestClient demoApi() {
-    WebClient client = WebClient.builder().baseUrl("http://localhost:8065/assembly").build();
-    HttpServiceProxyFactory factory = HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client)).build();
-    return factory.createClient(TestClient.class);
-  }
+    @Bean
+    public TestClient demoApi() {
+        WebClient client = WebClient.builder().baseUrl("http://localhost:8065/assembly").build();
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client)).build();
+        return factory.createClient(TestClient.class);
+    }
 }

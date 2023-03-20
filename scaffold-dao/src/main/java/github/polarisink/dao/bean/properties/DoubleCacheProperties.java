@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "double-cache")
 public class DoubleCacheProperties {
 
-  private Boolean allowNull = true;
-  private Integer init = 100;
-  private Integer max = 1000;
-  private Long expireAfterWrite;
-  private Long expireAfterAccess;
-  private Long refreshAfterWrite;
-  private Long redisExpire;
+    private Boolean allowNull = true;
+    private Integer init = 100;
+    private Integer max = 1000;
+    private Long expireAfterWrite;
+    private Long expireAfterAccess;
+    private Long refreshAfterWrite;
+    private Long redisExpire;
 }

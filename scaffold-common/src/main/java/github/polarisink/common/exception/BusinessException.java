@@ -12,22 +12,22 @@ import github.polarisink.common.IResponseEnum;
  */
 public class BusinessException extends BaseException {
 
-  private static final long serialVersionUID = -1400868899661202155L;
+    private static final long serialVersionUID = -1400868899661202155L;
 
-  public BusinessException(IResponseEnum responseEnum, Object[] args, String message) {
-    super(responseEnum, args, message);
-  }
+    public BusinessException(IResponseEnum responseEnum, Object[] args, String message) {
+        super(responseEnum, args, message);
+    }
 
-  public BusinessException(IResponseEnum responseEnum, Object[] args, String message, Throwable cause) {
-    super(responseEnum, args, message, cause);
-  }
+    public BusinessException(IResponseEnum responseEnum, Object[] args, String message, Throwable cause) {
+        super(responseEnum, args, message, cause);
+    }
 
-  public BusinessException(String msg) {
-    super(msg);
-  }
+    public BusinessException(String msg) {
+        super(msg);
+    }
 
-  public BusinessException(String format, Object... args) {
-    super(format, args);
-  }
+    public BusinessException(String format, Object... args) {
+        super(format, args);
+    }
 
 }

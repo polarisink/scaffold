@@ -9,29 +9,29 @@ import java.util.Arrays;
  * @date 2022/7/15
  */
 public enum EnvEnum {
-  /**
-   * 开发环境
-   */
-  DEV("dev"),
-  /**
-   * 测试环境
-   */
-  TEST("test"),
-  /**
-   * 生产环境
-   */
-  PROD("prod");
-  private String env;
+    /**
+     * 开发环境
+     */
+    DEV("dev"),
+    /**
+     * 测试环境
+     */
+    TEST("test"),
+    /**
+     * 生产环境
+     */
+    PROD("prod");
+    private String env;
 
-  EnvEnum(String name) {
-    this.env = name;
-  }
+    EnvEnum(String name) {
+        this.env = name;
+    }
 
-  public static EnvEnum getInstance(String envName) {
-    return Arrays.stream(values()).filter(enums -> enums.getEnv().equals(envName)).findFirst().orElse(DEV);
-  }
+    public static EnvEnum getInstance(String envName) {
+        return Arrays.stream(values()).filter(enums -> enums.getEnv().equals(envName)).findFirst().orElse(DEV);
+    }
 
-  public String getEnv() {
-    return env;
-  }
+    public String getEnv() {
+        return env;
+    }
 }

@@ -8,13 +8,13 @@ package github.polarisink.common.exception;
  */
 public class WrapMessageException extends RuntimeException {
 
-  private static final long serialVersionUID = 8675747258629665980L;
+    private static final long serialVersionUID = 8675747258629665980L;
 
-  public WrapMessageException(String message) {
-    super(message);
-  }
+    public WrapMessageException(String message) {
+        super(message);
+    }
 
-  public WrapMessageException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public WrapMessageException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

@@ -12,22 +12,22 @@ import github.polarisink.common.IResponseEnum;
  */
 public class AuthException extends BaseException {
 
-  private static final long serialVersionUID = 443287115214800317L;
+    private static final long serialVersionUID = 443287115214800317L;
 
-  public AuthException(IResponseEnum responseEnum, Object[] args, String message) {
-    super(responseEnum, args, message);
-  }
+    public AuthException(IResponseEnum responseEnum, Object[] args, String message) {
+        super(responseEnum, args, message);
+    }
 
-  public AuthException(IResponseEnum responseEnum, Object[] args, String message, Throwable cause) {
-    super(responseEnum, args, message, cause);
-  }
+    public AuthException(IResponseEnum responseEnum, Object[] args, String message, Throwable cause) {
+        super(responseEnum, args, message, cause);
+    }
 
-  public AuthException(String msg) {
-    super(msg);
-  }
+    public AuthException(String msg) {
+        super(msg);
+    }
 
-  public AuthException(String format, Object... args) {
-    super(format, args);
-  }
+    public AuthException(String format, Object... args) {
+        super(format, args);
+    }
 
 }

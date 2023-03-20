@@ -12,21 +12,21 @@ import github.polarisink.common.IResponseEnum;
  */
 public class RemoteException extends BaseException {
 
-  private static final long serialVersionUID = 6425747977279905355L;
+    private static final long serialVersionUID = 6425747977279905355L;
 
-  public RemoteException(IResponseEnum responseEnum, Object[] args, String message) {
-    super(responseEnum, args, message);
-  }
+    public RemoteException(IResponseEnum responseEnum, Object[] args, String message) {
+        super(responseEnum, args, message);
+    }
 
-  public RemoteException(IResponseEnum responseEnum, Object[] args, String message, Throwable cause) {
-    super(responseEnum, args, message, cause);
-  }
+    public RemoteException(IResponseEnum responseEnum, Object[] args, String message, Throwable cause) {
+        super(responseEnum, args, message, cause);
+    }
 
-  public RemoteException(String msg) {
-    super(msg);
-  }
+    public RemoteException(String msg) {
+        super(msg);
+    }
 
-  public RemoteException(String format, Object... args) {
-    super(format, args);
-  }
+    public RemoteException(String format, Object... args) {
+        super(format, args);
+    }
 }

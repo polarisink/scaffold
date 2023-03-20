@@ -2,8 +2,9 @@ package github.polarisink.dao.repo.primary;
 
 import github.polarisink.dao.entity.primary.Archives;
 import github.polarisink.dao.repo.BaseJpaRepo;
-import java.util.List;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 /**
  * @author aries
@@ -11,10 +12,10 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface ArchivesRepo extends BaseJpaRepo<Archives> {
 
-  @Query("""
-      select a.id
-      from archives a
-      order by a.id desc
-      """)
-  List<Long> findAllIds();
+    @Query("""
+            select a.id
+            from archives a
+            order by a.id desc
+            """)
+    List<Long> findAllIds();
 }

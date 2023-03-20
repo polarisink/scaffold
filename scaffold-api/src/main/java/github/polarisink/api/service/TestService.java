@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TestService {
 
-  private final ArchivesRepo archivesRepo;
+    private final ArchivesRepo archivesRepo;
 
-  public Archives getById(Long id) {
-    return archivesRepo.findByIdSafe(id);
-  }
+    public Archives getById(Long id) {
+        return archivesRepo.findByIdSafe(id);
+    }
 
-  public void addArchive(Archives archives) {
-    archivesRepo.save(archives);
-  }
+    public void addArchive(Archives archives) {
+        archivesRepo.save(archives);
+    }
 }

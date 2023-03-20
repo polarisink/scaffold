@@ -6,5 +6,5 @@ package github.polarisink.cache.msg;
  * @create: 2022-03-30 13:33
  **/
 public enum CacheMsgType {
-  UPDATE, DELETE;
+    UPDATE, DELETE;
 }

@@ -14,21 +14,21 @@ import github.polarisink.common.IResponseEnum;
 public class ArgumentException extends BaseException {
 
 
-  private static final long serialVersionUID = -8677051725950543398L;
+    private static final long serialVersionUID = -8677051725950543398L;
 
-  public ArgumentException(IResponseEnum responseEnum, Object[] args, String message) {
-    super(responseEnum, args, message);
-  }
+    public ArgumentException(IResponseEnum responseEnum, Object[] args, String message) {
+        super(responseEnum, args, message);
+    }
 
-  public ArgumentException(IResponseEnum responseEnum, Object[] args, String message, Throwable cause) {
-    super(responseEnum, args, message, cause);
-  }
+    public ArgumentException(IResponseEnum responseEnum, Object[] args, String message, Throwable cause) {
+        super(responseEnum, args, message, cause);
+    }
 
-  public ArgumentException(String msg) {
-    super(msg);
-  }
+    public ArgumentException(String msg) {
+        super(msg);
+    }
 
-  public ArgumentException(String format, Object... args) {
-    super(format, args);
-  }
+    public ArgumentException(String format, Object... args) {
+        super(format, args);
+    }
 }

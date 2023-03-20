@@ -14,31 +14,31 @@ import github.polarisink.common.exception.BusinessException;
  */
 public interface BusinessExceptionAssert extends IResponseEnum, Assert {
 
-  /**
-   * @param args
-   * @return
-   */
-  @Override
-  default BaseException newException(Object... args) {
-    String msg = this.getMessage();
-    if (ArrayUtil.isNotEmpty(args)) {
-      msg = StrUtil.format(this.getMessage(), args);
+    /**
+     * @param args
+     * @return
+     */
+    @Override
+    default BaseException newException(Object... args) {
+        String msg = this.getMessage();
+        if (ArrayUtil.isNotEmpty(args)) {
+            msg = StrUtil.format(this.getMessage(), args);
+        }
+        return new BusinessException(this, args, msg);
     }
-    return new BusinessException(this, args, msg);
-  }
 
-  /**
-   * @param t
-   * @param args
-   * @return
-   */
-  @Override
-  default BaseException newException(Throwable t, Object... args) {
-    String msg = this.getMessage();
-    if (ArrayUtil.isNotEmpty(args)) {
-      msg = StrUtil.format(this.getMessage(), args);
+    /**
+     * @param t
+     * @param args
+     * @return
+     */
+    @Override
+    default BaseException newException(Throwable t, Object... args) {
+        String msg = this.getMessage();
+        if (ArrayUtil.isNotEmpty(args)) {
+            msg = StrUtil.format(this.getMessage(), args);
+        }
+        return new BusinessException(this, args, msg, t);
     }
-    return new BusinessException(this, args, msg, t);
-  }
 
 }

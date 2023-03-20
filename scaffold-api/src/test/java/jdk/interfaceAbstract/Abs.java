@@ -6,9 +6,9 @@ package jdk.interfaceAbstract;
  */
 public abstract class Abs {
 
-  void sing() {
-    System.out.println("abs sing...");
-  }
+    void sing() {
+        System.out.println("abs sing...");
+    }
 
-  abstract void jump();
+    abstract void jump();
 }

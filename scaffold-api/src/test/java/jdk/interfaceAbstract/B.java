@@ -6,8 +6,8 @@ package jdk.interfaceAbstract;
  */
 public class B implements Inter {
 
-  @Override
-  public void jump() {
-    System.out.println("override inter jump");
-  }
+    @Override
+    public void jump() {
+        System.out.println("override inter jump");
+    }
 }

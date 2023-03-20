@@ -10,11 +10,12 @@ import org.springframework.web.service.annotation.HttpExchange;
 @HttpExchange("/test")
 public interface TestClient {
 
-  /**
-   * 远程ping接口
-   * @return
-   */
-  @GetExchange("/ping")
-  String ping();
+    /**
+     * 远程ping接口
+     *
+     * @return
+     */
+    @GetExchange("/ping")
+    String ping();
 
 }

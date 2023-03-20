@@ -11,6 +11,6 @@ import lombok.Data;
 @Data
 public class BasePage {
 
-  protected int page = 1;
-  protected int size = 10;
+    protected int page = 1;
+    protected int size = 10;
 }

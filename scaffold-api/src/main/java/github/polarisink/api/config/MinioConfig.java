@@ -14,11 +14,11 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class MinioConfig {
 
-  private final MinioProperties prop;
+    private final MinioProperties prop;
 
-  @Bean
-  public MinioClient minioClient() {
-    return MinioClient.builder().endpoint(prop.getEndpoint()).credentials(prop.getAccessKey(), prop.getSecretKey())
-        .build();
-  }
+    @Bean
+    public MinioClient minioClient() {
+        return MinioClient.builder().endpoint(prop.getEndpoint()).credentials(prop.getAccessKey(), prop.getSecretKey())
+                .build();
+    }
 }

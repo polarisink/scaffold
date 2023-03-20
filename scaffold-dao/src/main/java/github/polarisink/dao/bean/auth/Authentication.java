@@ -1,9 +1,10 @@
 package github.polarisink.dao.bean.auth;
 
-import static github.polarisink.common.constant.AuthConst.SUPER_ADMIN_ROLE_ID;
+import lombok.Data;
 
 import java.util.Objects;
-import lombok.Data;
+
+import static github.polarisink.common.constant.AuthConst.SUPER_ADMIN_ROLE_ID;
 
 /**
  * Authentication
@@ -14,15 +15,15 @@ import lombok.Data;
 @Data
 public class Authentication {
 
-  private Long uid;
-  private Long roleId;
+    private Long uid;
+    private Long roleId;
 
-  /**
-   * 是不是超级管理员
-   *
-   * @return
-   */
-  public boolean isSuperAdmin() {
-    return Objects.equals(this.roleId, SUPER_ADMIN_ROLE_ID);
-  }
+    /**
+     * 是不是超级管理员
+     *
+     * @return
+     */
+    public boolean isSuperAdmin() {
+        return Objects.equals(this.roleId, SUPER_ADMIN_ROLE_ID);
+    }
 }

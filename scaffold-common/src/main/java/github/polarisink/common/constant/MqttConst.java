@@ -8,14 +8,14 @@ package github.polarisink.common.constant;
  */
 public class MqttConst {
 
-  public static final String SAMPLE_START = "Sample/";
-  public static final String SAMPLE_END = "/sample_channel0";
-  public static final String SET_HEALTH = "Set/Health/";
+    public static final String SAMPLE_START = "Sample/";
+    public static final String SAMPLE_END = "/sample_channel0";
+    public static final String SET_HEALTH = "Set/Health/";
 
-  public static final String Register = "Register";
-  public static final String Remove = "Remove";
+    public static final String Register = "Register";
+    public static final String Remove = "Remove";
 
-  private MqttConst() {
-  }
+    private MqttConst() {
+    }
 
 }

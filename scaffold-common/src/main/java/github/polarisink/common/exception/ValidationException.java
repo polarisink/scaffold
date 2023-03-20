@@ -13,21 +13,21 @@ import github.polarisink.common.IResponseEnum;
 public class ValidationException extends BaseException {
 
 
-  private static final long serialVersionUID = 7908303374834207999L;
+    private static final long serialVersionUID = 7908303374834207999L;
 
-  public ValidationException(IResponseEnum responseEnum, Object[] args, String message) {
-    super(responseEnum, args, message);
-  }
+    public ValidationException(IResponseEnum responseEnum, Object[] args, String message) {
+        super(responseEnum, args, message);
+    }
 
-  public ValidationException(IResponseEnum responseEnum, Object[] args, String message, Throwable cause) {
-    super(responseEnum, args, message, cause);
-  }
+    public ValidationException(IResponseEnum responseEnum, Object[] args, String message, Throwable cause) {
+        super(responseEnum, args, message, cause);
+    }
 
-  public ValidationException(String msg) {
-    super(msg);
-  }
+    public ValidationException(String msg) {
+        super(msg);
+    }
 
-  public ValidationException(String format, Object... args) {
-    super(format, args);
-  }
+    public ValidationException(String format, Object... args) {
+        super(format, args);
+    }
 }

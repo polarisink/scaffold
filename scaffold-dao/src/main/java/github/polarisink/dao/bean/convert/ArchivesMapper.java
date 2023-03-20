@@ -12,5 +12,5 @@ import org.springframework.core.convert.converter.Converter;
 @Mapper(componentModel = "spring")
 public interface ArchivesMapper extends Converter<ArchivesAddRequest, Archives> {
 
-  Archives convert(ArchivesAddRequest request);
+    Archives convert(ArchivesAddRequest request);
 }

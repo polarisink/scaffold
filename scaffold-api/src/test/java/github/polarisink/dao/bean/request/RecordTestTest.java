@@ -9,9 +9,9 @@ import org.junit.Test;
  */
 public class RecordTestTest {
 
-  @Test
-  public void testRecord() {
-    RecordTest record = new RecordTest("lqs",23,false);
-    System.out.println(record);
-  }
+    @Test
+    public void testRecord() {
+        RecordTest record = new RecordTest("lqs", 23, false);
+        System.out.println(record);
+    }
 }

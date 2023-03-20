@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class TestClientTest extends BaseJunit4 {
 
-  @Autowired
-  TestClient testClient;
+    @Autowired
+    TestClient testClient;
 
-  @Test
-  public void ping() {
-    System.out.println(testClient.ping());
-  }
+    @Test
+    public void ping() {
+        System.out.println(testClient.ping());
+    }
 }

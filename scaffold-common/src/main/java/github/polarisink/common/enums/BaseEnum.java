@@ -6,17 +6,17 @@ package github.polarisink.common.enums;
  */
 public interface BaseEnum {
 
-  /**
-   * 获取类型
-   *
-   * @return
-   */
-  Integer getType();
+    /**
+     * 获取类型
+     *
+     * @return
+     */
+    Integer getType();
 
-  /**
-   * 获取类型描述
-   *
-   * @return
-   */
-  String getName();
+    /**
+     * 获取类型描述
+     *
+     * @return
+     */
+    String getName();
 }

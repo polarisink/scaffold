@@ -15,6 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Kv {
 
-  private Integer key;
-  private String value;
+    private Integer key;
+    private String value;
 }

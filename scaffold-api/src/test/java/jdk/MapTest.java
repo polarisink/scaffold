@@ -9,11 +9,11 @@ import org.junit.Test;
  */
 public class MapTest {
 
-  @Test
-  public void test() throws JsonProcessingException {
-    //System.out.println(new ObjectMapper().writeValueAsString(Map.of("a", "b")));
-    String s = "xidjosjciovvss";
-    System.out.println(s);
-    System.out.println(s.substring(1, s.length() - 1));
-  }
+    @Test
+    public void test() throws JsonProcessingException {
+        //System.out.println(new ObjectMapper().writeValueAsString(Map.of("a", "b")));
+        String s = "xidjosjciovvss";
+        System.out.println(s);
+        System.out.println(s.substring(1, s.length() - 1));
+    }
 }
