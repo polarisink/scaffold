@@ -1,14 +1,14 @@
 package github.polarisink.dao.entity.primary;
 
-import static github.polarisink.common.utils.TimeUtils.sFStr;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import github.polarisink.dao.entity.BaseJpaEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+
 import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -46,8 +46,6 @@ public class Archives extends BaseJpaEntity {
 
 
   @Column(columnDefinition = "datetime comment '光机落位时间'")
-  @DateTimeFormat(pattern = sFStr)
-  @JsonFormat(pattern = sFStr, timezone = "GMT+8")
   private LocalDateTime opticalMachLoadTime;
 
   @Column(columnDefinition = "varchar(255) comment '机床编号'")
@@ -60,8 +58,6 @@ public class Archives extends BaseJpaEntity {
   private Integer process;
 
   @Column(columnDefinition = "datetime comment '出厂时间'")
-  @DateTimeFormat(pattern = sFStr)
-  @JsonFormat(pattern = sFStr, timezone = "GMT+8")
   private LocalDateTime factoryTime;
 
   @Column(columnDefinition = "varchar(255) comment '出厂编号'")
@@ -87,16 +83,12 @@ public class Archives extends BaseJpaEntity {
   /**
    * 数据修改的时间
    */
-  @DateTimeFormat(pattern = sFStr)
-  @JsonFormat(pattern = sFStr, timezone = "GMT+8")
   @CreatedDate
   private LocalDateTime dataTime;
 
   /**
    * mqtt时间
    */
-  @DateTimeFormat(pattern = sFStr)
-  @JsonFormat(pattern = sFStr, timezone = "GMT+8")
   @CreatedDate
   private LocalDateTime mqttTime;
 

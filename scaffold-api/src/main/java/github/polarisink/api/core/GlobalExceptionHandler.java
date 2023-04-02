@@ -83,17 +83,6 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
     if (o instanceof Response) {
       return o;
     }
-    /**
-     * 不包装swagger对应的资源
-     * {domain}/swagger-resources/configuration/ui
-     * {domain}/swagger-resources
-     * {domain}/v2/api-docs
-     */
-
-    /*boolean swagger = o instanceof Json || o instanceof UiConfiguration || o instanceof SwaggerResource;
-    if (swagger) {
-      return o;
-    }*/
     return Response.of(o);
   }
 

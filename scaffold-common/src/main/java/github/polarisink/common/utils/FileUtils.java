@@ -6,7 +6,6 @@ import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
-import github.polarisink.common.constant.FileConst;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +34,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class FileUtils {
 
+  public static final String FILE_PATH = System.getProperty("user.home") + "/files";
+
+
   private static Charset charset = StandardCharsets.UTF_8;
 
   /**
@@ -46,10 +48,10 @@ public class FileUtils {
    * @return /*
    */
   public static <T> List<T> getListFromLocalCsv(String path, Class<T> tClass) {
-    LOG.info("home path, {}", FileConst.FILE_PATH);
+    LOG.info("home path, {}", FILE_PATH);
     File file = null;
     try {
-      file = ResourceUtils.getFile(FileConst.FILE_PATH + path);
+      file = ResourceUtils.getFile(FILE_PATH + path);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }

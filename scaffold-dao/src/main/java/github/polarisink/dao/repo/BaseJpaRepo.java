@@ -14,33 +14,32 @@ public interface BaseJpaRepo<T> extends JpaRepository<T, Long>, JpaSpecification
 
   /**
    * 带有msg的
-   *
    * @param id
-   * @param msg
+   * @param t
    * @return
    */
-  default T findByIdSafe(Long id, String msg) {
-    return findById(id).orElseThrow(() -> new BusinessException(msg));
+  default T findByIdSafe(Long id, T t) {
+    return findById(id).orElse(t);
   }
 
   /**
    * 带有msg的
-   *
    * @param id
    * @return
    */
   default T findByIdSafe(Long id) {
-    return findById(id).orElseThrow(() -> new BusinessException("数据库不存在id为{}的实体", id));
+    return findByIdSafe(id, null);
   }
 
 
   /**
+   * 查询失败就抛异常
    * @param id
    * @param format
    * @param args
    * @return
    */
-  default T findByIdSafe(Long id, String format, Object... args) {
+  default T findById(Long id, String format, Object... args) {
     return findById(id).orElseThrow(() -> new BusinessException(format, args));
   }
 

@@ -3,7 +3,7 @@ package github.polarisink.api.aspect;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +32,7 @@ public class WebLogAspect {
   private static final long LENGTH = 10000;
   private final ObjectMapper mapper;
 
-  @Pointcut(
-      "@annotation(org.springframework.web.bind.annotation.GetMapping) && @annotation(org.springframework.web.bind.annotation.PostMapping) "
-          + "&& @annotation(org.springframework.web.bind.annotation.PutMapping) && @annotation(org.springframework.web.bind.annotation.DeleteMapping) "
-          + "&& @annotation(org.springframework.web.bind.annotation.RequestMapping) && @annotation(org.springframework.web.bind.annotation.PatchMapping)")
+  @Pointcut("execution(public * github.polarisink.api.handler..*.*(..))")
   public void webLog() {
   }
 

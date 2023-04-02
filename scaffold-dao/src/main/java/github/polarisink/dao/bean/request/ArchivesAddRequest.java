@@ -1,6 +1,5 @@
 package github.polarisink.dao.bean.request;
 
-import static github.polarisink.common.utils.TimeUtils.sFStr;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
@@ -24,16 +23,12 @@ public class ArchivesAddRequest implements Serializable {
 
   private String opticalMachNum;
 
-  @DateTimeFormat(pattern = sFStr)
-  @JsonFormat(pattern = sFStr, timezone = "GMT+8")
   private LocalDateTime opticalMachLoadTime;
 
   private String machNum;
 
   private Long machModelId;
 
-  @DateTimeFormat(pattern = sFStr)
-  @JsonFormat(pattern = sFStr, timezone = "GMT+8")
   private LocalDateTime factoryTime;
 
   private String machSn;

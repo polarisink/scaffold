@@ -2,7 +2,7 @@ package github.polarisink.common.utils;
 
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;

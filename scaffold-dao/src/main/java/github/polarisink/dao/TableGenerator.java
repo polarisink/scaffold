@@ -1,4 +1,4 @@
-package github.polarisink.mbpgen.utils;
+package github.polarisink.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
@@ -43,7 +43,6 @@ public class TableGenerator {
     FastAutoGenerator.create(url, userName, password).globalConfig(builder -> {
           builder.author("Aries")
               .outputDir(System.getProperty("user.dir") + "\\src\\main\\java")    //输出路径(写到java目录)
-              .enableSwagger()
               .commentDate("yyyy-MM-dd").fileOverride();                  //开启覆盖之前生成的文件
         }).packageConfig(builder ->
             builder.parent("github.polarisink")

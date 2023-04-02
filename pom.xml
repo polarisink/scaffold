@@ -163,11 +163,6 @@
         <version>${java-jwt.version}</version>
       </dependency>
       <dependency>
-        <artifactId>bcprov-jdk15on</artifactId>
-        <groupId>org.bouncycastle</groupId>
-        <version>${bcprov-jdk15on.version}</version>
-      </dependency>
-      <dependency>
         <artifactId>bcrypt</artifactId>
         <groupId>at.favre.lib</groupId>
         <version>${bcrypt.version}</version>
@@ -178,9 +173,14 @@
         <version>${freemarker.version}</version>
       </dependency>
       <dependency>
-        <artifactId>flowable-spring-boot-starter</artifactId>
-        <groupId>org.flowable</groupId>
-        <version>${flowable.version}</version>
+        <groupId>jakarta.servlet</groupId>
+        <artifactId>jakarta.servlet-api</artifactId>
+        <version>6.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.paho</groupId>
+        <artifactId>org.eclipse.paho.mqttv5.client</artifactId>
+        <version>${mqtt.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -193,12 +193,18 @@
     <module>scaffold-dao</module>
     <module>scaffold-cache</module>
     <module>scaffold-third</module>
-    <module>scaffold-mbpgen</module>
+    <module>scaffold-mqtt</module>
   </modules>
   <name>scaffold</name>
 
   <packaging>pom</packaging>
   <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <java.version>17</java.version>
+    <spring-boot.version>2.7.10</spring-boot.version>
+    <spring-cloud.version>2021.0.6</spring-cloud.version>
+    <skipTests>true</skipTests>
     <!--docker地址和各个插件的信息-->
     <bcprov-jdk15on.version>1.69</bcprov-jdk15on.version>
     <bcrypt.version>0.9.0</bcrypt.version>
@@ -206,9 +212,6 @@
     <docker-maven.version>0.4.14</docker-maven.version>
     <druid.version>1.2.11</druid.version>
     <easy-es.version>0.9.60</easy-es.version>
-    <!--<spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
-    <spring-boot.version>2.3.0.RELEASE</spring-boot.version>-->
-    <flowable.version>6.3.0</flowable.version>
     <freemarker.version>2.3.31</freemarker.version>
     <gelf.version>1.3.1</gelf.version>
     <!--常用依赖-->
@@ -216,14 +219,12 @@
     <hutool-all.version>5.8.10</hutool-all.version>
     <jakarta-validation.version>2.0.2</jakarta-validation.version>
     <java-jwt.version>3.6.0</java-jwt.version>
-    <java.version>17</java.version>
     <junit.version>4.13.2</junit.version>
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     <lombok.version>1.18.24</lombok.version>
     <mapstruct.spring.version>0.1.2</mapstruct.spring.version>
     <mariadb.version>3.1.0</mariadb.version>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <mqtt.version>1.2.5</mqtt.version>
     <maven.version>3.8.1</maven.version>
     <minio.version>8.3.7</minio.version>
     <mybatis-plus.version>3.5.2</mybatis-plus.version>
@@ -235,9 +236,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <rocketmq.version>2.2.2</rocketmq.version>
-    <skipTests>true</skipTests>
-    <spring-boot.version>3.0.0</spring-boot.version>
-    <spring-cloud.version>2022.0.0</spring-cloud.version>
+
     <netty.version>4.1.86.Final</netty.version>
     <!--打包对test只编译不运行-->
   </properties>

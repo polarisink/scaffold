@@ -45,20 +45,29 @@
       <groupId>org.springframework.boot</groupId>
     </dependency>
     <dependency>
-      <artifactId>junit</artifactId>
-      <groupId>junit</groupId>
+      <artifactId>mapstruct</artifactId>
+      <groupId>org.mapstruct</groupId>
+    </dependency>
+    <!-- mapStruct 根据接口生成实现类 -->
+    <dependency>
+      <artifactId>mapstruct-processor</artifactId>
+      <groupId>org.mapstruct</groupId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- mapStruct 支持 lombok -->
+    <dependency>
+      <artifactId>lombok-mapstruct-binding</artifactId>
+      <groupId>org.projectlombok</groupId>
+      <scope>provided</scope>
+    </dependency>
+    <!--spring mapstruct插件-->
+    <dependency>
+      <artifactId>mapstruct-spring-annotations</artifactId>
+      <groupId>org.mapstruct.extensions.spring</groupId>
     </dependency>
     <dependency>
-      <artifactId>java-jwt</artifactId>
-      <groupId>com.auth0</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>bcprov-jdk15on</artifactId>
-      <groupId>org.bouncycastle</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>bcrypt</artifactId>
-      <groupId>at.favre.lib</groupId>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
     </dependency>
   </dependencies>
 

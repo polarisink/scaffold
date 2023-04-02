@@ -11,7 +11,7 @@ public interface BaseEnum {
    *
    * @return
    */
-  Integer getType();
+  int getType();
 
   /**
    * 获取类型描述

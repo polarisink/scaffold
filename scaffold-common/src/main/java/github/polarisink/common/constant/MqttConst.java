@@ -6,16 +6,8 @@ package github.polarisink.common.constant;
  * @author aries
  * @date 2022/7/1
  */
-public class MqttConst {
+public interface MqttConst {
 
-  public static final String SAMPLE_START = "Sample/";
-  public static final String SAMPLE_END = "/sample_channel0";
-  public static final String SET_HEALTH = "Set/Health/";
-
-  public static final String Register = "Register";
-  public static final String Remove = "Remove";
-
-  private MqttConst() {
-  }
+  String MQTT_TOPIC_SUFFIX = "scaffold_mqtt";
 
 }

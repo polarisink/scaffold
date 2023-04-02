@@ -3,10 +3,7 @@ package ${package.Entity};
 <#list table.importPackages as pkg>
   import ${pkg};
 </#list>
-<#if swagger>
-  import io.swagger.annotations.ApiModel;
-  import io.swagger.annotations.ApiModelProperty;
-</#if>
+
 <#if entityLombokModel>
   import lombok.Data;
     <#if chainModel>
@@ -31,9 +28,7 @@ package ${package.Entity};
 <#if table.convert>
   @TableName("${schemaName}${table.name}")
 </#if>
-<#if swagger>
-  @ApiModel(value = "${entity}对象", description = "${table.comment!}")
-</#if>
+
 <#if superEntityClass??>
   public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {
 <#elseif activeRecord>
@@ -54,14 +49,11 @@ package ${package.Entity};
     </#if>
 
     <#if field.comment!?length gt 0>
-        <#if swagger>
-          @ApiModelProperty("${field.comment}")
-        <#else>
           /**
           * ${field.comment}
           */
-        </#if>
     </#if>
+
     <#if field.keyFlag>
     <#-- 主键 -->
         <#if field.keyIdentityFlag>

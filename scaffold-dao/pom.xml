@@ -22,35 +22,24 @@
       <groupId>mysql</groupId>
       <scope>runtime</scope>
     </dependency>
-    <!--  <dependency>
-        <groupId>org.mariadb.jdbc</groupId>
-        <artifactId>mariadb-java-client</artifactId>
-      </dependency>-->
     <dependency>
-      <artifactId>mapstruct</artifactId>
-      <groupId>org.mapstruct</groupId>
+      <artifactId>scaffold-common</artifactId>
+      <groupId>github.polarisink</groupId>
+      <version>0.0.1-SNAPSHOT</version>
     </dependency>
-    <!-- mapStruct 根据接口生成实现类 -->
     <dependency>
-      <artifactId>mapstruct-processor</artifactId>
-      <groupId>org.mapstruct</groupId>
-      <scope>provided</scope>
+      <artifactId>mybatis-plus-boot-starter</artifactId>
+      <groupId>com.baomidou</groupId>
     </dependency>
-    <!--<dependency>
-      <groupId>cn.easy-es</groupId>
-      <artifactId>easy-es-boot-starter</artifactId>
-    </dependency>-->
-    <!-- mapStruct 支持 lombok -->
     <dependency>
-      <artifactId>lombok-mapstruct-binding</artifactId>
-      <groupId>org.projectlombok</groupId>
-      <scope>provided</scope>
+      <artifactId>mybatis-plus-generator</artifactId>
+      <groupId>com.baomidou</groupId>
     </dependency>
-    <!--spring mapstruct插件-->
     <dependency>
-      <artifactId>mapstruct-spring-annotations</artifactId>
-      <groupId>org.mapstruct.extensions.spring</groupId>
+      <artifactId>freemarker</artifactId>
+      <groupId>org.freemarker</groupId>
     </dependency>
+
   </dependencies>
 
   <modelVersion>4.0.0</modelVersion>
