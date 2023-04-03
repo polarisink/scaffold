@@ -1,0 +1,1 @@
+docker restart rmqnamesrv rmqbroker rmqadmin redis  minio emqx

@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
-import org.springframework.integration.core.MessageProducer;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
@@ -28,12 +27,7 @@ import org.springframework.messaging.MessageHandler;
 @IntegrationComponentScan
 public class MqttSenderAndReceiveConfig {
 
-  private static final byte[] WILL_DATA;
-
-  static {
-    WILL_DATA = "offline".getBytes();
-  }
-
+  private static final byte[] WILL_DATA = "offline".getBytes();
   private final MqttReceiveHandle mqttReceiveHandle;
   private final MqttProperties mqttProperties;
 
@@ -41,7 +35,7 @@ public class MqttSenderAndReceiveConfig {
    * MQTT连接器选项
    **/
   @Bean(value = "getMqttConnectOptions")
-  public MqttConnectOptions getMqttConnectOptions1() {
+  public MqttConnectOptions getMqttConnectOptions() {
     MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
     // 设置是否清空session,这里如果设置为false表示服务器会保留客户端的连接记录，这里设置为true表示每次连接到服务器都以新的身份连接
     mqttConnectOptions.setCleanSession(true);
@@ -64,11 +58,13 @@ public class MqttSenderAndReceiveConfig {
   @Bean
   public MqttPahoClientFactory mqttClientFactory() {
     DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
-    factory.setConnectionOptions(getMqttConnectOptions1());
+    factory.setConnectionOptions(getMqttConnectOptions());
     return factory;
   }
 
+
   /**
+   * ======================================================生产者======================================================
    * MQTT信息通道（生产者）
    **/
   @Bean
@@ -89,16 +85,19 @@ public class MqttSenderAndReceiveConfig {
   }
 
   /**
+   * ======================================================消费者======================================================
    * 配置client,监听的topic
    * MQTT消息订阅绑定（消费者）
+   * 本来注入MessageProducer接口就好,但是为了动态订阅，注入了MessageProducer的子类MqttPahoMessageDrivenChannelAdapter
    **/
   @Bean
-  public MessageProducer inbound() {
+  public MqttPahoMessageDrivenChannelAdapter mqttSubscriber() {
     MqttPahoMessageDrivenChannelAdapter adapter =
-        new MqttPahoMessageDrivenChannelAdapter(mqttProperties.getConsumeClientId() + "_inbound1", mqttClientFactory(), "");
+        new MqttPahoMessageDrivenChannelAdapter(mqttProperties.getConsumeClientId() + "__consumer", mqttClientFactory(),
+            mqttProperties.getTopics());
     adapter.setCompletionTimeout(mqttProperties.getCompletionTimeout());
     adapter.setConverter(new DefaultPahoMessageConverter());
-    adapter.setQos(2);
+    adapter.setQos(0);
     adapter.setOutputChannel(mqttInputChannel());
     return adapter;
   }
@@ -119,18 +118,6 @@ public class MqttSenderAndReceiveConfig {
   public MessageHandler handler() {
     //处理接收消息
     return mqttReceiveHandle::handle;
-  }
-
-  @Bean
-  public MqttPahoMessageDrivenChannelAdapter mqttSubscriber() {
-    MqttPahoMessageDrivenChannelAdapter adapter =
-        new MqttPahoMessageDrivenChannelAdapter(mqttProperties.getConsumeClientId() + "__consumer", mqttClientFactory(),
-            "topic1", "topic2");
-    adapter.setCompletionTimeout(mqttProperties.getCompletionTimeout());
-    adapter.setConverter(new DefaultPahoMessageConverter());
-    adapter.setQos(0);
-    adapter.setOutputChannel(mqttInputChannel());
-    return adapter;
   }
 
 }
