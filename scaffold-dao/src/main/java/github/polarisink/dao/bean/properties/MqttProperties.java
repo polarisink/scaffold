@@ -19,5 +19,6 @@ public class MqttProperties {
   private String consumeClientId;
   private Integer completionTimeout=3000;
   private String defaultTopic;
+  private String[] topics;
 
 }
