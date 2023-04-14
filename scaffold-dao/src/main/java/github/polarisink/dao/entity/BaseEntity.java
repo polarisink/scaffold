@@ -1,12 +1,12 @@
 package github.polarisink.dao.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -23,7 +23,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseJpaEntity implements Serializable {
+public class BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 733899366518016549L;
   /**
@@ -31,12 +31,17 @@ public class BaseJpaEntity implements Serializable {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @TableId(type = IdType.AUTO)
   protected Long id;
 
   @CreatedDate
+  @TableField(fill = FieldFill.INSERT)
+  @Column(name = "create_time")
   protected LocalDateTime createTime;
 
+  @Column(name = "update_time")
   @LastModifiedDate
+  @TableField(fill = FieldFill.INSERT_UPDATE)
   protected LocalDateTime updateTime;
 
 }

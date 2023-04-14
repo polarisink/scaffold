@@ -1,7 +1,5 @@
 package github.polarisink.api.service;
 
-import github.polarisink.dao.entity.primary.Archives;
-import github.polarisink.dao.repo.primary.ArchivesRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +11,4 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TestService {
 
-  private final ArchivesRepo archivesRepo;
-
-  public Archives getById(Long id) {
-    return archivesRepo.findByIdSafe(id);
-  }
-
-  public void addArchive(Archives archives) {
-    archivesRepo.save(archives);
-  }
 }

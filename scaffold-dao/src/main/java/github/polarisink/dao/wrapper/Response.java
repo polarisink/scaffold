@@ -35,15 +35,19 @@ public class Response<T> {
     this.data = data;
   }
 
-  public static <T> Response<T> of(T data) {
+  public static <T> Response<T> success(T data) {
     return new Response<>(data);
   }
 
-  public static <T> Response<T> of(int code, String message, T data) {
+  public static <T> Response<T> success(String message) {
+    return new Response<>(SUCCESS.getCode(), message,null);
+  }
+
+  public static <T> Response<T> success(int code, String message, T data) {
     return new Response<>(code, message, data);
   }
 
   public static <T> Response<T> fail(int code, String message) {
-    return of(code, message, null);
+    return success(code, message, null);
   }
 }

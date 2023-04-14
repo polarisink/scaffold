@@ -9,10 +9,10 @@
       <groupId>github.polarisink</groupId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <artifactId>druid-spring-boot-starter</artifactId>
       <groupId>com.alibaba</groupId>
-    </dependency>
+    </dependency>-->
     <dependency>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
       <groupId>org.springframework.boot</groupId>
@@ -39,7 +39,10 @@
       <artifactId>freemarker</artifactId>
       <groupId>org.freemarker</groupId>
     </dependency>
-
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
   </dependencies>
 
   <modelVersion>4.0.0</modelVersion>
