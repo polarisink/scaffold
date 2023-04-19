@@ -1,7 +1,7 @@
-package jdk;
+package jdks;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author aries

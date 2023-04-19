@@ -44,7 +44,7 @@
     <mqtt.version>1.2.5</mqtt.version>
     <maven.version>3.8.1</maven.version>
     <minio.version>8.3.7</minio.version>
-    <mybatis-plus.version>3.5.2</mybatis-plus.version>
+    <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
     <mybatisplus-gen.version>3.5.2</mybatisplus-gen.version>
     <mysql.version>8.0.30</mysql.version>
     <okhttp.version>4.10.0</okhttp.version>

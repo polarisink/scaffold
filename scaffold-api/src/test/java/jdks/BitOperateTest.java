@@ -1,4 +1,4 @@
-package jdk;
+package jdks;
 
 /**
  * 位运算

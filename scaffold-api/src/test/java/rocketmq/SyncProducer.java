@@ -6,7 +6,7 @@ import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /*@SpringBootTest(classes = ScaffoldApplication.class)
 @RunWith(SpringRunner.class)*/

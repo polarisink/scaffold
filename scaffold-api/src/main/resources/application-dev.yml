@@ -32,9 +32,9 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
+        dialect:
+          storage_engine: innodb
         format_sql: true
-        session_factory:
   servlet:
     multipart:
       max-file-size: 100MB #单个文件的最大上限
@@ -42,14 +42,16 @@ spring:
   web:
     resources:
       add-mappings: false
-mybatis-plus:
-  type-aliases-package: cn.kgc.springboot04.entity
-  mapper-locations: classpath:mapper/*.xml
-  global-config:
-    db-config:
-      id-type: auto
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#mybatis-plus:
+#  global-config:
+#    db-config:
+#      id-type: auto
+#      table-underline: false
+#  #    sql-injector: github.polarisink.dao.extend.EasySqlInjector
+#
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    map-underscore-to-camel-case: false
 
 logging:
   level:
@@ -58,6 +60,7 @@ logging:
     org.hibernate.engine.QueryParameters: debug
     org.hibernate.engine.query.HQLQueryPlan: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
+    github.polarisink.dao.mapper: debug
   config: classpath:log4j2-spring.xml
 
 mqtt:

@@ -1,11 +1,11 @@
-package jdk;
+package jdks;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DataInputStreamTest {
 

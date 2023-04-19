@@ -1,9 +1,9 @@
-package jdk;
+package jdks;
 
 import cn.hutool.core.util.StrUtil;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author aries

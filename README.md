@@ -10,7 +10,7 @@
 - 多数据源配置
 - 全局日志处理
 - 全局结果包装集
-- JPA
+- JPA和Mybatis-Plus结合使用(单数据源)
 - Spring整合MapStruct做bean转换
 - lombok的使用及lombok.config全局配置
 - 自定义异常及枚举断言
@@ -19,5 +19,5 @@
 
 - Minio静态资源服务器整合
 - Caffeine && Redis二级缓存
-- MybatisPlus引入
-- 代码生成器的支持
+- Mybatis-Plus代码生成器的支持
+- JPA和Mybatis-Plus结合使用(多数据源)

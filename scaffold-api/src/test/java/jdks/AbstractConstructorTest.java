@@ -1,4 +1,4 @@
-package jdk;
+package jdks;
 
 abstract class Animal {
 

@@ -1,4 +1,4 @@
-package github.polarisink.dao.repo;
+package github.polarisink.dao.extend;
 
 import github.polarisink.common.exception.BusinessException;
 import org.springframework.data.jpa.repository.JpaRepository;

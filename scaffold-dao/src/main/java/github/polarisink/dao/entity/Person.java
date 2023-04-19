@@ -10,12 +10,12 @@ import javax.persistence.Table;
 @Table(name = "person")
 @Entity(name = "person")
 @Data
-@TableName
+@TableName("person")
 public class Person extends BaseEntity {
     private String name;
     private Integer age;
     private String address;
 
-    @Column(name = "good_at")
     private String goodAt;
+
 }

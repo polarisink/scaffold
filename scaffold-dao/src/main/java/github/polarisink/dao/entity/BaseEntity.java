@@ -35,13 +35,14 @@ public class BaseEntity implements Serializable {
   protected Long id;
 
   @CreatedDate
+  @Column(columnDefinition = "datetime")
   @TableField(fill = FieldFill.INSERT)
-  @Column(name = "create_time")
-  protected LocalDateTime createTime;
+  public LocalDateTime createTime;
 
-  @Column(name = "update_time")
+  //TODO mybatis-plus自动填充不生效
   @LastModifiedDate
+  @Column(columnDefinition = "datetime")
   @TableField(fill = FieldFill.INSERT_UPDATE)
-  protected LocalDateTime updateTime;
+  public LocalDateTime updateTime;
 
 }

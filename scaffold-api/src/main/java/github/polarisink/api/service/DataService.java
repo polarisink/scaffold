@@ -2,7 +2,7 @@ package github.polarisink.api.service;
 
 import github.polarisink.dao.entity.Person;
 import github.polarisink.dao.mapper.PersonMapper;
-import github.polarisink.dao.repo.PersonRepo;
+import github.polarisink.dao.mapper.PersonRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

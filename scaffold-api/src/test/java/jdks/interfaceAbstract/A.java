@@ -1,4 +1,4 @@
-package jdk.interfaceAbstract;
+package jdks.interfaceAbstract;
 
 /**
  * @author aries
