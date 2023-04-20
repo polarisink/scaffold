@@ -3,5 +3,5 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="github.polarisink.dao.mapper.PersonMapper">
+<mapper namespace="github.polarisink.dao.data.slave1.Person2Mapper">
 </mapper>

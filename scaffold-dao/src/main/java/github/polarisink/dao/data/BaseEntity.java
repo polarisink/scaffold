@@ -1,4 +1,4 @@
-package github.polarisink.dao.entity;
+package github.polarisink.dao.data;
 
 
 import com.baomidou.mybatisplus.annotation.FieldFill;

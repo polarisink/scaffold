@@ -1,6 +1,5 @@
-package github.polarisink.dao.mapper;
+package github.polarisink.dao.data.master;
 
-import github.polarisink.dao.entity.Person;
 import github.polarisink.dao.extend.ExtendMapper;
 import org.springframework.stereotype.Repository;
 

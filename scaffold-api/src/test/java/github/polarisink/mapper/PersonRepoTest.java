@@ -1,9 +1,9 @@
 package github.polarisink.mapper;
 
 import cn.hutool.core.lang.id.NanoId;
-import github.polarisink.dao.entity.Person;
-import github.polarisink.dao.mapper.PersonMapper;
-import github.polarisink.dao.mapper.PersonRepo;
+import github.polarisink.dao.data.master.Person;
+import github.polarisink.dao.data.master.PersonMapper;
+import github.polarisink.dao.data.master.PersonRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest

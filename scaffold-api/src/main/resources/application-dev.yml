@@ -15,10 +15,20 @@ spring:
   redis:
     host: 10.1.20.116
   datasource:
-    url: jdbc:mysql://10.1.20.112:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: mysqlroot
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    dynamic:
+      primary: master
+      strict: false
+      datasource:
+        master:
+          jdbc-url: jdbc:mysql://10.1.20.112:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+          username: root
+          password: mysqlroot
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        slave_1:
+          jdbc-url: jdbc:mysql://10.1.20.112:3306/hzsk_dev_slave?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+          username: root
+          password: mysqlroot
+          driver-class-name: com.mysql.cj.jdbc.Driver
   cache:
     redis:
       time-to-live: 3d

@@ -55,6 +55,7 @@
     <rocketmq.version>2.2.2</rocketmq.version>
     <junit.version>4.13.2</junit.version>
     <netty.version>4.1.86.Final</netty.version>
+    <dynamic.version>3.6.1</dynamic.version>
     <!--打包对test只编译不运行-->
   </properties>
   <version>0.0.1-SNAPSHOT</version>
@@ -75,11 +76,12 @@
         <type>pom</type>
         <version>${spring-boot.version}</version>
       </dependency>
-      <!--<dependency>
-        <artifactId>druid-spring-boot-starter</artifactId>
-        <groupId>com.alibaba</groupId>
-        <version>${druid.version}</version>
-      </dependency>-->
+      <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+        <version>${dynamic.version}</version>
+      </dependency>
+
       <dependency>
         <artifactId>mybatis-plus-boot-starter</artifactId>
         <groupId>com.baomidou</groupId>
