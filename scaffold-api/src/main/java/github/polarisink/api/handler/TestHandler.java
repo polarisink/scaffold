@@ -1,7 +1,6 @@
 package github.polarisink.api.handler;
 
 import github.polarisink.api.service.TestService;
-import github.polarisink.dao.entity.primary.Archives;
 import github.polarisink.third.service.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +21,6 @@ public class TestHandler {
 
   private final TestService testService;
   private final SmsService smsService;
-
-  @GetMapping("/get/{id}")
-  public Archives getById(@PathVariable Long id) {
-    return testService.getById(id);
-  }
-
-  @GetMapping("/add")
-  public void addArchive() {
-    testService.addArchive(new Archives().setMachNum("oiujns").setHandle("csujdasjna"));
-  }
 
 
   @GetMapping("/pay/{money}")

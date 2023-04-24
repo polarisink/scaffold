@@ -1,7 +1,5 @@
 package github.polarisink.api.service;
 
-import github.polarisink.dao.entity.primary.Archives;
-import github.polarisink.dao.repo.primary.ArchivesRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +12,4 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TestService {
 
-  private final ArchivesRepo archivesRepo;
-  @Transactional(rollbackFor = Exception.class)
-
-  public Archives getById(Long id) {
-    return archivesRepo.findByIdSafe(id);
-  }
-
-  public void addArchive(Archives archives) {
-    archivesRepo.save(archives);
-  }
 }

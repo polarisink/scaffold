@@ -12,10 +12,12 @@ spring:
       matching-strategy: ant_path_matcher
   application:
     name: scaffold-dev
+  redis:
+    host: 10.1.20.116
   datasource:
-    url: jdbc:mysql://localhost:3307/scaffold?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://10.1.20.112:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: 654321
+    password: mysqlroot
     driver-class-name: com.mysql.cj.jdbc.Driver
   cache:
     redis:
@@ -30,9 +32,9 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
+        dialect:
+          storage_engine: innodb
         format_sql: true
-        session_factory:
   servlet:
     multipart:
       max-file-size: 100MB #单个文件的最大上限
@@ -40,10 +42,16 @@ spring:
   web:
     resources:
       add-mappings: false
-  data:
-    redis:
-      host: 10.1.20.116
-      port: 6379
+#mybatis-plus:
+#  global-config:
+#    db-config:
+#      id-type: auto
+#      table-underline: false
+#  #    sql-injector: github.polarisink.dao.extend.EasySqlInjector
+#
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    map-underscore-to-camel-case: false
 
 logging:
   level:
@@ -52,12 +60,14 @@ logging:
     org.hibernate.engine.QueryParameters: debug
     org.hibernate.engine.query.HQLQueryPlan: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
+    github.polarisink.dao.mapper: debug
   config: classpath:log4j2-spring.xml
 
 mqtt:
-  url: tcp://127.0.0.1:18084
-  username: admin
-  password: public
+#  url: tcp://127.0.0.1:18084
+  url: tcp://10.1.20.93:1883
+  username: mqttadmin
+  password: mqttadminpw
   produce-client-id: produce_${random.value}
   consume-client-id: consume_${random.value}
   default-topic: scaffold

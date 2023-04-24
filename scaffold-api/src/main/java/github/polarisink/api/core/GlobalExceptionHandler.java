@@ -3,7 +3,6 @@ package github.polarisink.api.core;
 import static github.polarisink.common.asserts.BaseE.BASE;
 import static github.polarisink.common.asserts.BaseE.SERVER_ERROR;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import github.polarisink.common.asserts.ArgumentE;
 import github.polarisink.common.asserts.ServletE;
 import github.polarisink.common.exception.ArgumentException;
@@ -59,7 +58,6 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
    * 生产环境
    */
   private final static String ENV_PROD = "prod";
-  private final ObjectMapper mapper;
 
   /**
    * 当前环境
@@ -78,12 +76,12 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
       Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest,
       ServerHttpResponse serverHttpResponse) {
     if (o == null) {
-      return Response.of(null);
+      return Response.success(null);
     }
     if (o instanceof Response) {
       return o;
     }
-    return Response.of(o);
+    return Response.success(o);
   }
 
   //==============================全局异常处理部分=============================
@@ -186,7 +184,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
       code = SERVER_ERROR.getCode();
       BaseException baseException = new BaseException(SERVER_ERROR);
       String message = baseException.getMessage();
-      return Response.of(code, message, null);
+      return Response.fail(code, message);
     }
     return Response.fail(code, e.getMessage());
   }
@@ -230,7 +228,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
       int code = SERVER_ERROR.getCode();
       BaseException baseException = new BaseException(SERVER_ERROR);
       String message = baseException.getMessage();
-      return Response.of(code, message, null);
+      return Response.success(code, message, null);
     }
     return Response.fail(SERVER_ERROR.getCode(), e.getMessage());
   }
