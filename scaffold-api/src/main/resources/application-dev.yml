@@ -15,7 +15,7 @@ spring:
   redis:
     host: 10.1.20.116
   datasource:
-    url: jdbc:mysql://10.1.20.112:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://10.1.20.112:3306/hzsk_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
     username: root
     password: mysqlroot
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -60,7 +60,7 @@ logging:
     org.hibernate.engine.QueryParameters: debug
     org.hibernate.engine.query.HQLQueryPlan: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
-    github.polarisink.dao.mapper: debug
+    org.springframework.jdbc.core.JdbcTemplate: debug
   config: classpath:log4j2-spring.xml
 
 mqtt:
