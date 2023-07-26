@@ -3,6 +3,7 @@ package github.polarisink.scaffold.domain;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import javax.persistence.EntityNotFoundException;
@@ -15,6 +16,7 @@ import javax.persistence.EntityNotFoundException;
  */
 @NoRepositoryBean
 public interface BaseJpaRepo<T> extends JpaRepository<T, Long>, JpaSpecificationExecutor<T> {
+
 
     /**
      * 带有msg的
@@ -48,5 +50,8 @@ public interface BaseJpaRepo<T> extends JpaRepository<T, Long>, JpaSpecification
     default T findByIdSafe(Long id, String format, Object... args) {
         return findById(id).orElseThrow(() -> new EntityNotFoundException(StrUtil.format(format, args)));
     }
+
+    @Query("select")
+    T findLast();
 
 }

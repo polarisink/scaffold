@@ -3,15 +3,13 @@ package github.polarisink.scaffold.domain.step;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import github.polarisink.scaffold.domain.BaseJpaEntity;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -29,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 })
 @Entity(name = "step")
 @TableName("step")
-public class Step extends BaseJpaEntity implements Comparable<Step> {
+public class Step extends BaseJpaEntity implements Comparable<Step>, Serializable {
 
     private Long archivesId;
 

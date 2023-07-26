@@ -23,4 +23,5 @@ public interface BaseEnum {
      * @return 返回信息
      */
     String getMessage();
+
 }

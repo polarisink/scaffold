@@ -1,12 +1,6 @@
 package github.polarisink.scaffold.infrastructure.config;
 
 
-import static github.polarisink.scaffold.infrastructure.util.TimeUtil.DAY_F;
-import static github.polarisink.scaffold.infrastructure.util.TimeUtil.SF;
-import static github.polarisink.scaffold.infrastructure.util.TimeUtil.S_F_STR;
-import static github.polarisink.scaffold.infrastructure.util.TimeUtil.TIME_F;
-import static github.polarisink.scaffold.infrastructure.util.TimeUtil.TIME_ZONE;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,12 +12,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.TimeZone;
+import github.polarisink.scaffold.infrastructure.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +21,15 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.TimeZone;
+
+import static github.polarisink.scaffold.infrastructure.util.TimeUtil.*;
 
 /**
  * @author lqs mvc配置
@@ -84,15 +82,15 @@ public class MvcConfig implements WebMvcConfigurer {
         // 指定时区
         objectMapper.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
         // 日期类型字符串处理
-        objectMapper.setDateFormat(new SimpleDateFormat(S_F_STR));
+        objectMapper.setDateFormat(new SimpleDateFormat(TimeUtil.DATETIME_PATTERN));
         // java8日期日期处理
         JavaTimeModule javaTimeModule = new JavaTimeModule();
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(SF));
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DAY_F));
-        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(TIME_F));
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(SF));
-        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DAY_F));
-        javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(TIME_F));
+        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DATETIME_FORMATTER));
+        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DAY_FORMATTER));
+        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(TIME_FORMATTER));
+        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DATETIME_FORMATTER));
+        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DAY_FORMATTER));
+        javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(TIME_FORMATTER));
         objectMapper.registerModule(javaTimeModule);
         converter.setObjectMapper(objectMapper);
         converters.add(0, converter);

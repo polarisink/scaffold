@@ -1,6 +1,7 @@
 package github.polarisink.scaffold.infrastructure.asserts;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 通用业务异常尽可能通用，如空异常
@@ -9,6 +10,7 @@ import lombok.Getter;
  * @date 2022/5/20
  */
 @Getter
+@ToString
 public enum BusinessE implements BaseEnum {
     //模板相关
 

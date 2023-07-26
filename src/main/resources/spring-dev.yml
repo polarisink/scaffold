@@ -1,0 +1,99 @@
+server:
+  port: 8066
+  tomcat:
+    uri-encoding: utf-8
+  servlet:
+    context-path: /scaffold
+
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: hnc-machineassembly-api-service
+  datasource:
+    jdbc-url: jdbc:mysql://10.1.20.112:3306/jaster_assembly_dev?autoRec&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&rewriteBatchedStatements=true
+    password: mysqlroot
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      initial-size: 2
+      min-idle: 5
+      max-active: 10
+      max-wait: 5000
+      validation-query: SELECT 1
+      test-on-borrow: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 18800
+      web-stat-filter:
+        enabled: true
+        exclusions: js,gif,jpg,png,css,ico,/druid/*
+      stat-view-servlet:
+        enabled: true
+        login-username: root
+        login-password: druid2021
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 20
+        max-wait: 100ms
+        max-idle: 5
+        min-idle: 0
+    timeout: 4000
+    database: 1
+  cache:
+    redis:
+      time-to-live: 3d
+      use-key-prefix: true
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect:
+          storage_engine: innodb
+        format_sql: true
+        jdbc:
+          batch_size: 30
+  servlet:
+    multipart:
+      max-file-size: 100MB #单个文件的最大上限
+      max-request-size: 100MB #单个请求的文件总大小上限
+  data:
+    elasticsearch:
+      repositories:
+        enabled: false
+    redis:
+      repositories:
+        enabled: false
+  messages:
+    basename: i18n/messages
+logging:
+  level:
+    org.springframework.web: error
+    org.hibernate.SQL: debug
+    org.hibernate.engine.QueryParameters: debug
+    org.hibernate.engine.query.HQLQueryPlan: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: debug
+  config: classpath:log4j2-spring.xml
+
+minio:
+  endpoint: https://minio.hzncc.cn/
+  expose: https://minio.hzncc.cn/
+  accessKey: rdms
+  secretKey: rdms@hzncc.cn
+  bucket: jaster-assembly
+
+okhttp:
+  connect-timeout: 100
+  read-timeout: 10000
+  write-timeout: 10000
+  max-idle-connections: 200
+  keep-alive-duration: 300
