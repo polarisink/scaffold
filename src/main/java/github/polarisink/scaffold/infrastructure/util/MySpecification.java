@@ -44,22 +44,22 @@ public class MySpecification<T> implements Specification<T> {
         return restrictions;
     }
 
-    public MySpecification and(Cnd... conditions) {
+    public MySpecification<T> and(Cnd... conditions) {
         Collections.addAll(andConditions, conditions);
         return this;
     }
 
-    public MySpecification or(Collection<Cnd> conditions) {
+    public MySpecification<T> or(Collection<Cnd> conditions) {
         orConditions.addAll(conditions);
         return this;
     }
 
-    public MySpecification desc(String property) {
+    public MySpecification<T> desc(String property) {
         this.orders.add(Order.desc(property));
         return this;
     }
 
-    public MySpecification asc(String property) {
+    public MySpecification<T> asc(String property) {
         this.orders.add(Order.asc(property));
         return this;
     }
@@ -203,7 +203,7 @@ public class MySpecification<T> implements Specification<T> {
     @Setter
     public static class Order {
         private String property;
-        private Sort.Direction direction = Sort.Direction.ASC;
+        private Sort.Direction direction;
 
         /**
          * 构造方法
@@ -258,6 +258,10 @@ public class MySpecification<T> implements Specification<T> {
          * 小于
          */
         lt(" < "),
+        /**
+         * 小于等于
+         */
+        le(" < "),
         /**
          * 大于等于
          */

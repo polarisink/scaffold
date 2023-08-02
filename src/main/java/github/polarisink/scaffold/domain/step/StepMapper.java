@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 /**
- * stepMapper
+ * mybatis-plus更适合做动态条件查询，如果是下面的简单查询，则是jpa更方便
  * @author lqs
  */
 @Mapper
@@ -35,7 +35,7 @@ public interface StepMapper extends BaseMapper<Step> {
 
   /**
    * 可以方便的做单表动态条件分页查询
-   * 但是只适合但表操作，连接其他表直接编写mapper
+   * 但是只适合单表操作，连接其他表直接编写mapper
    * @param step
    * @return
    */

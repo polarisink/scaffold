@@ -29,13 +29,13 @@ public class AssertUtil {
      *
      * @param object
      */
-    public static void assertNotNull(Object object, BaseEnum errorEnum, Object... args) {
+    public static void notNull(Object object, BaseEnum errorEnum, Object... args) {
         if (object == null) {
             throw newException(errorEnum, args);
         }
     }
 
-    public static void assertNull(Object object, BaseEnum errorEnum, Object... args) {
+    public static void isNull(Object object, BaseEnum errorEnum, Object... args) {
         if (object != null) {
             throw newException(errorEnum, args);
         }
@@ -48,25 +48,25 @@ public class AssertUtil {
      * @param str object
      */
 
-    public static void assertNotEmpty(String str, BaseEnum errorEnum, Object... args) {
+    public static void notEmpty(String str, BaseEnum errorEnum, Object... args) {
         if (isEmpty(str)) {
             throw newException(errorEnum, args);
         }
     }
 
-    public static void assertEmpty(String str, BaseEnum errorEnum, Object... args) {
+    public static void empty(String str, BaseEnum errorEnum, Object... args) {
         if (!isEmpty(str)) {
             throw newException(errorEnum, args);
         }
     }
 
-    public static void assertNotBlank(String str, BaseEnum errorEnum, Object... args) {
+    public static void notBlank(String str, BaseEnum errorEnum, Object... args) {
         if (StrUtil.isBlank(str)) {
             throw newException(errorEnum, args);
         }
     }
 
-    public static void assertBlank(String str, BaseEnum errorEnum, Object... args) {
+    public static void blank(String str, BaseEnum errorEnum, Object... args) {
         if (StrUtil.isNotBlank(str)) {
             throw newException(errorEnum, args);
         }
@@ -81,13 +81,13 @@ public class AssertUtil {
      *
      * @param collection list
      */
-    public static void assertNotEmpty(Collection<?> collection, BaseEnum errorEnum, Object... args) {
+    public static void notEmpty(Collection<?> collection, BaseEnum errorEnum, Object... args) {
         if (collection == null || collection.isEmpty()) {
             throw newException(errorEnum, args);
         }
     }
 
-    public static void assertEmpty(Collection<?> collection, BaseEnum errorEnum, Object... args) {
+    public static void empty(Collection<?> collection, BaseEnum errorEnum, Object... args) {
         if (collection != null && !collection.isEmpty()) {
             throw newException(errorEnum, args);
         }
@@ -96,13 +96,13 @@ public class AssertUtil {
     /**
      * 判断数组相关方法================================================================================================
      */
-    public static void assertNotEmpty(Object[] list, BaseEnum errorEnum, Object... args) {
+    public static void notEmpty(Object[] list, BaseEnum errorEnum, Object... args) {
         if (list == null || list.length == 0) {
             throw newException(errorEnum, args);
         }
     }
 
-    public static void assertEmpty(Object[] list, BaseEnum errorEnum, Object... args) {
+    public static void empty(Object[] list, BaseEnum errorEnum, Object... args) {
         if (list != null && list.length > 0) {
             throw newException(errorEnum, args);
         }
@@ -113,13 +113,13 @@ public class AssertUtil {
      *
      * @param map map
      */
-    public static void assertNotEmpty(Map<?, ?> map, BaseEnum errorEnum, Object... args) {
+    public static void notEmpty(Map<?, ?> map, BaseEnum errorEnum, Object... args) {
         if (map == null || map.isEmpty()) {
             throw newException(errorEnum, args);
         }
     }
 
-    public static void assertEmpty(Map<?, ?> map, BaseEnum errorEnum, Object... args) {
+    public static void empty(Map<?, ?> map, BaseEnum errorEnum, Object... args) {
         if (map != null && !map.isEmpty()) {
             throw newException(errorEnum, args);
         }
@@ -132,13 +132,13 @@ public class AssertUtil {
      * @param errorEnum
      * @param args
      */
-    public static void assertFalse(boolean expression, BaseEnum errorEnum, Object... args) {
+    public static void isFalse(boolean expression, BaseEnum errorEnum, Object... args) {
         if (expression) {
             throw newException(errorEnum, args);
         }
     }
 
-    public static void assertTrue(boolean expression, BaseEnum errorEnum, Object... args) {
+    public static void isTrue(boolean expression, BaseEnum errorEnum, Object... args) {
         if (!expression) {
             throw newException(errorEnum, args);
         }

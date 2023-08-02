@@ -216,6 +216,9 @@
           <encoding>${project.build.sourceEncoding}</encoding>
           <source>${java.version}</source>
           <target>${java.version}</target>
+          <compilerArgs>
+            <compilerArg>-parameters</compilerArg>
+          </compilerArgs>
         </configuration>
         <groupId>org.apache.maven.plugins</groupId>
         <version>${maven.version}</version>
