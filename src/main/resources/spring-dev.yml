@@ -75,6 +75,10 @@ spring:
         enabled: false
   messages:
     basename: i18n/messages
+  rabbitmq:
+    username: admin
+    password: 12345678Aa
+    addresses: 127.0.0.1:5672
 logging:
   level:
     org.springframework.web: error
