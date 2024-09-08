@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>scaffold-starters</artifactId>
+        <groupId>github.polarisink</groupId>
+        <version>${rversion}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>scaffold-starter-web</artifactId>
+    <packaging>jar</packaging>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>github.polarisink</groupId>
+            <artifactId>scaffold-core-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>github.polarisink</groupId>
+            <artifactId>scaffold-core-log</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>github.polarisink</groupId>
+            <artifactId>scaffold-core-file</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>github.polarisink</groupId>
+            <artifactId>scaffold-core-swagger</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>github.polarisink</groupId>
+            <artifactId>scaffold-core-orm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>github.polarisink</groupId>
+            <artifactId>scaffold-core-jwt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>github.polarisink</groupId>
+            <artifactId>scaffold-core-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>github.polarisink</groupId>
+            <artifactId>scaffold-core-redis</artifactId>
+        </dependency>
+        <!--   单元测试     -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <!--参数校验-->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+    </dependencies>
+</project>

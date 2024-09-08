@@ -1,0 +1,43 @@
+server:
+  port: 8082
+  shutdown: graceful
+spring:
+  main:
+    lazy-initialization: true
+  application:
+    name: @project.artifactId@
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  threads:
+    virtual:
+      # 启用虚拟线程
+      enabled: true
+
+knife4j:
+  # 开启
+  enable: true
+  # 关闭生产环境
+  production: false
+  setting:
+    enable-version: true
+springdoc:
+  # 暂时只能关闭文档的安全功能，解释来源：https://github.com/springdoc/springdoc-openapi/issues/2139
+  enable-spring-security: false
+  swagger-ui:
+    path: /swagger-ui.html
+    # 禁止默认ui，防止转发到petstore
+    disable-swagger-default-url: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'rbac'
+      paths-to-match:
+        - '/**'
+      packages-to-scan: com.scaffold.biz.rbac
+  default-flat-param-object: true
