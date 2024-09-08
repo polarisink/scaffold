@@ -5,7 +5,7 @@
     <parent>
         <artifactId>scaffold-starters</artifactId>
         <groupId>github.polarisink</groupId>
-        <version>${rversion}</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

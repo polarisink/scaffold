@@ -7,10 +7,9 @@
     <groupId>github.polarisink</groupId>
     <artifactId>scaffold</artifactId>
     <packaging>pom</packaging>
-    <version>${rversion}</version>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <rversion>1.0-SNAPSHOT</rversion>
         <!--    编译相关    -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -55,47 +54,47 @@
             <dependency>
                 <groupId>github.polarisink</groupId>
                 <artifactId>scaffold-core-base</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>github.polarisink</groupId>
                 <artifactId>scaffold-core-file</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>github.polarisink</groupId>
                 <artifactId>scaffold-core-jwt</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>github.polarisink</groupId>
                 <artifactId>scaffold-core-log</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>github.polarisink</groupId>
                 <artifactId>scaffold-core-orm</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>github.polarisink</groupId>
                 <artifactId>scaffold-core-redis</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>github.polarisink</groupId>
                 <artifactId>scaffold-core-security</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>github.polarisink</groupId>
                 <artifactId>scaffold-core-swagger</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>github.polarisink</groupId>
                 <artifactId>scaffold-starter-web</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <!--工具类版本-->
             <dependency>
