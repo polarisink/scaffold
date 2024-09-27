@@ -11,7 +11,6 @@ public interface GlobalConstant {
      * 树根节点的父id
      */
     Long ROOT_PARENT_ID = 0L;
-    String ROOT_PARENT_ID_STR = "0";
    String SECRET = "abcdefghijklmnopqrstuvwxyz";
 
     /**

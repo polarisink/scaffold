@@ -4,18 +4,46 @@ package com.scaffold.core.base.util;
 import jakarta.annotation.Nullable;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * tree工具类，通用将list拼装成树的方法
  *
- * @author lqsgo
  * @param <T> 实体类型
  * @param <K> id和parentId的类型
+ * @author lqsgo
  */
 public interface ITree<T, K> {
+
+    /**
+     * 获取id
+     *
+     * @return id
+     */
+    K getId();
+
+    /**
+     * 获取父id
+     *
+     * @return 父id
+     */
+    K getParentId();
+
+    /**
+     * 获取children
+     *
+     * @return children
+     */
+    List<T> getChildren();
+
+    /**
+     * 设置下级children
+     *
+     * @param children children
+     */
+    void setChildren(List<T> children);
+
     /**
      * 将实现ITree的实体列表转为树结构
      *
@@ -40,6 +68,7 @@ public interface ITree<T, K> {
         }
         //迭代生成树
         while (!tmp.isEmpty()) {
+            tmp.sort(comparator);
             List<T> childrenList = new ArrayList<>();
             for (T forces : tmp) {
                 List<T> child = map.getOrDefault(Optional.ofNullable(forces.getId()), new ArrayList<>());
@@ -51,72 +80,6 @@ public interface ITree<T, K> {
             tmp = childrenList;
         }
         return map.get(Optional.ofNullable(parentId));
-    }
-
-    /**
-     * 通过大树更新某id下面的子树
-     * <p>
-     * 适合广度不大深度很大的总树
-     *
-     * @param totalTree 大树
-     * @param subTree   子树
-     * @param id        id
-     * @param <K>       id泛型
-     * @param <T>       实体泛型
-     */
-    static <K, T extends ITree<T, K>> void updateSubTree(List<T> totalTree, List<T> subTree, K id) {
-        List<T> tmp = totalTree;
-        while (!tmp.isEmpty()) {
-            List<T> tmpChildren = new ArrayList<>();
-            //广度遍历，找对应的id，找到之后设置
-            for (T f : totalTree) {
-                if (Objects.equals(f.getId(), id)) {
-                    f.setChildren(subTree);
-                    //设置完成后，工作完成，推出
-                    return;
-                }
-                //没找到就把children加入进去，继续找
-                tmpChildren.addAll(f.getChildren());
-            }
-            tmp = tmpChildren;
-        }
-    }
-
-    /**
-     * 根据需要更新数据id节点往上的祖先id列表更新
-     * <p>
-     * 通过idList快速定位，适合树的广度很大但深度不大的情况，节省性能
-     *
-     * @param totalTree         总树
-     * @param subTree           子树
-     * @param foreFathersIdList id集合,从最早祖先到自己的id集合，最后一个元素为需要更新子树对应节点的id
-     * @param <K>               id泛型
-     * @param <T>               实体泛型
-     */
-    static <K, T extends ITree<T, K>> void updateSubTree(List<T> totalTree, List<T> subTree, List<K> foreFathersIdList) {
-        if (totalTree == null || totalTree.isEmpty() || foreFathersIdList == null || foreFathersIdList.isEmpty()) {
-            return;
-        }
-        int depth = foreFathersIdList.size();
-        AtomicInteger index = new AtomicInteger();
-        List<T> total = totalTree;
-        T tmp;
-        //层数不越界且当层包含对应节点的，就可以继续找下一层
-        while (index.get() < depth && (tmp = total.stream().filter(t -> Objects.equals(t.getId(), foreFathersIdList.get(index.get()))).findFirst().orElse(null)) != null) {
-            //说明找到了最后一个节点对应的,设置，完成工作退出
-            if (index.get() == depth - 1) {
-                tmp.setChildren(subTree);
-                break;
-            }
-            //下级children为空，就找不到了，退出
-            List<T> children = tmp.getChildren();
-            if (children == null || children.isEmpty()) {
-                break;
-            }
-            //遍历下一层，id也取下一层的
-            total = children;
-            index.incrementAndGet();
-        }
     }
 
     /**
@@ -172,32 +135,4 @@ public interface ITree<T, K> {
     private static boolean isNotEmpty(Collection<?> coll) {
         return coll != null && !coll.isEmpty();
     }
-
-    /**
-     * 获取id
-     *
-     * @return id
-     */
-    K getId();
-
-    /**
-     * 获取父id
-     *
-     * @return 父id
-     */
-    K getParentId();
-
-    /**
-     * 获取children
-     *
-     * @return children
-     */
-    List<T> getChildren();
-
-    /**
-     * 设置下级children
-     *
-     * @param children children
-     */
-    void setChildren(List<T> children);
 }

@@ -13,8 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableWebSecurity
 @EnableSpringUtil
 @SpringBootApplication
-public class TrainApplication {
+public class ScaffoldApplication {
     public static void main(String[] args) {
-        SpringApplication.run(TrainApplication.class, args);
+        SpringApplication.run(ScaffoldApplication.class, args);
     }
 }

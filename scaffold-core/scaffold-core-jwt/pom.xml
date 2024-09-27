@@ -24,12 +24,6 @@
         <dependency>
             <groupId>github.polarisink</groupId>
             <artifactId>scaffold-core-base</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-web</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 </project>
