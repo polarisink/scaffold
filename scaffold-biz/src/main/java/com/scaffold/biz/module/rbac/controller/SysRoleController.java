@@ -1,11 +1,11 @@
 package com.scaffold.biz.module.rbac.controller;
 
 import com.scaffold.biz.module.rbac.entity.SysRole;
+import com.scaffold.biz.module.rbac.service.SysRoleService;
 import com.scaffold.biz.module.rbac.vo.menu.SysRoleWrapper;
 import com.scaffold.biz.module.rbac.vo.role.SysRoleCreateVO;
 import com.scaffold.biz.module.rbac.vo.role.SysRolePageVO;
 import com.scaffold.biz.module.rbac.vo.role.SysRoleUpdateVO;
-import com.scaffold.biz.module.rbac.service.SysRoleService;
 import com.scaffold.core.base.util.PageResponse;
 import com.scaffold.core.log.annotation.Log;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import static com.scaffold.biz.module.rbac.contant.RbacLogConst.ROLE;
+import static com.scaffold.core.log.vo.BusinessType.*;
 
 
 /**

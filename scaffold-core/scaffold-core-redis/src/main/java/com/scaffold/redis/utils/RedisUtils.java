@@ -262,7 +262,7 @@ public final class RedisUtils {
         // 是否命中缓存  空字符串 "" 也是false
         if (null != json && !json.isEmpty()) {
             log.info("命中缓存 缓存中存在数据");
-            return JsonUtil.redisRead(json,resultType);
+            return JsonUtil.redisRead(json, resultType);
         } else {
             return null;
         }

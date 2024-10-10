@@ -1,7 +1,6 @@
 package com.scaffold.biz.module.rbac.service;
 
 import com.scaffold.biz.module.rbac.entity.SysUser;
-import com.scaffold.biz.module.rbac.module.vo.user.*;
 import com.scaffold.biz.module.rbac.vo.user.*;
 import com.scaffold.core.base.util.PageResponse;
 

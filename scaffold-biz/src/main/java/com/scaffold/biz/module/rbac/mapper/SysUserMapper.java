@@ -1,10 +1,7 @@
 package com.scaffold.biz.module.rbac.mapper;
 
 
-import cn.hutool.extra.spring.SpringUtil;
-import com.easy.query.api.proxy.client.EasyEntityQuery;
 import com.scaffold.biz.module.rbac.entity.SysUser;
-import com.scaffold.biz.module.rbac.vo.user.SysUserPageVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -17,16 +14,6 @@ import java.util.List;
  */
 
 public interface SysUserMapper extends JpaRepository<SysUser, Long> {
-    /**
-     * 通过vo查询，用于分页
-     *
-     * @param vo vo
-     * @return list
-     */
-    default List<SysUser> list(SysUserPageVO vo) {
-        EasyEntityQuery query = SpringUtil.getBean(EasyEntityQuery.class);
-        return query.queryable(SysUser.class).toList();
-    }
 
 
     /**

@@ -3,7 +3,6 @@ package com.scaffold.core.jwt.vo;
 import cn.hutool.core.util.IdUtil;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -16,7 +15,6 @@ import java.util.List;
 public class PayloadDTO {
 
 
-    @Value("${spring.application.name}")
     private String sub;
 
     /**

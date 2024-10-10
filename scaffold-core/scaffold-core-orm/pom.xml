@@ -18,10 +18,6 @@
         </dependency>
         <dependency>
             <groupId>com.easy-query</groupId>
-            <artifactId>sql-springboot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.easy-query</groupId>
             <artifactId>sql-processor</artifactId>
         </dependency>
         <dependency>

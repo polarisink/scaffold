@@ -1,10 +1,6 @@
 package com.scaffold.biz.module.rbac.entity;
 
 
-import com.easy.query.core.annotation.EntityProxy;
-import com.easy.query.core.annotation.Table;
-import com.easy.query.core.proxy.ProxyEntityAvailable;
-import com.scaffold.biz.rbac.module.entity.proxy.SysRoleProxy;
 import com.scaffold.core.orm.vo.BaseAuditable;
 import jakarta.persistence.Entity;
 import lombok.Data;
@@ -20,11 +16,9 @@ import java.io.Serializable;
  */
 @Data
 @NoArgsConstructor
-@EntityProxy
 @Entity
-@Table
 @jakarta.persistence.Table(name = "sys_role")
-public class SysRole extends BaseAuditable implements Serializable, ProxyEntityAvailable<SysRole, SysRoleProxy> {
+public class SysRole extends BaseAuditable implements Serializable {
 
     /**
      * 角色名

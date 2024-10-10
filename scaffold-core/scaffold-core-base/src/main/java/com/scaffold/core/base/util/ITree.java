@@ -17,34 +17,6 @@ import java.util.stream.Collectors;
 public interface ITree<T, K> {
 
     /**
-     * 获取id
-     *
-     * @return id
-     */
-    K getId();
-
-    /**
-     * 获取父id
-     *
-     * @return 父id
-     */
-    K getParentId();
-
-    /**
-     * 获取children
-     *
-     * @return children
-     */
-    List<T> getChildren();
-
-    /**
-     * 设置下级children
-     *
-     * @param children children
-     */
-    void setChildren(List<T> children);
-
-    /**
      * 将实现ITree的实体列表转为树结构
      *
      * @param parentId   父节点id
@@ -60,11 +32,11 @@ public interface ITree<T, K> {
         }
         //收集为map，空间换时间
         //处理根节点的parentId可能为空的情况
-        Map<Optional<K>, List<T>> map = coll.stream().collect(Collectors.groupingBy(t -> Optional.ofNullable(t.getParentId())));
+        Map<Optional<K>, List<T>> map = coll.stream().collect(Collectors.groupingBy(t -> Optional.ofNullable(t.getParentId()), Collectors.toCollection(ArrayList::new)));
         List<T> tmp = map.get(Optional.ofNullable(parentId));
         if (tmp == null) {
             //不让返回空值，而是返回空集合
-            return List.of();
+            return new ArrayList<>();
         }
         //迭代生成树
         while (!tmp.isEmpty()) {
@@ -135,4 +107,32 @@ public interface ITree<T, K> {
     private static boolean isNotEmpty(Collection<?> coll) {
         return coll != null && !coll.isEmpty();
     }
+
+    /**
+     * 获取id
+     *
+     * @return id
+     */
+    K getId();
+
+    /**
+     * 获取父id
+     *
+     * @return 父id
+     */
+    K getParentId();
+
+    /**
+     * 获取children
+     *
+     * @return children
+     */
+    List<T> getChildren();
+
+    /**
+     * 设置下级children
+     *
+     * @param children children
+     */
+    void setChildren(List<T> children);
 }

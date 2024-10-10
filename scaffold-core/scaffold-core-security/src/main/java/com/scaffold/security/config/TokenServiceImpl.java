@@ -20,7 +20,7 @@ public class TokenServiceImpl implements TokenService {
      * @param token  token
      */
     public void set(Long userId, String token) {
-        log.info("{} set token",userId);
+        log.info("{} set token", userId);
     }
 
     /**
@@ -30,7 +30,7 @@ public class TokenServiceImpl implements TokenService {
      * @return token
      */
     public String get(Long userId) {
-        log.info("{} set token",userId);
+        log.info("{} set token", userId);
         return "";
     }
 
@@ -41,7 +41,7 @@ public class TokenServiceImpl implements TokenService {
      * @return token
      */
     public boolean has(Long userId) {
-        log.info("{} has token",userId);
+        log.info("{} has token", userId);
         return true;
     }
 
@@ -51,6 +51,6 @@ public class TokenServiceImpl implements TokenService {
      * @param userId 用户id
      */
     public void del(Long userId) {
-        log.info("{} del token",userId);
+        log.info("{} del token", userId);
     }
 }

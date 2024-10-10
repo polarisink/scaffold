@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Json工具类，使用的是Jackson
+ *
  * @author lqsgo
  */
 @Slf4j
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class JsonUtil {
     @Getter
     private static final ObjectMapper mapper = SpringUtil.getBean(ObjectMapper.class);
-    private static final ObjectMapper redisMapper = SpringUtil.getBean("redisObjectMapper",ObjectMapper.class);
+    private static final ObjectMapper redisMapper = SpringUtil.getBean("redisObjectMapper", ObjectMapper.class);
 
     /**
      * 将对象转为json字符串
@@ -30,6 +31,7 @@ public class JsonUtil {
     public static String toJson(Object obj) {
         return execute(() -> mapper.writeValueAsString(obj), "toJson error");
     }
+
     public static String toRedisJson(Object obj) {
         return execute(() -> redisMapper.writeValueAsString(obj), "toJson error");
     }
@@ -45,6 +47,7 @@ public class JsonUtil {
     public static <T> T read(String json, Class<T> clazz) {
         return execute(() -> mapper.readValue(json, clazz), "readValue error");
     }
+
     public static <T> T redisRead(String json, Class<T> clazz) {
         return execute(() -> redisMapper.readValue(json, clazz), "readValue error");
     }
@@ -115,6 +118,7 @@ public class JsonUtil {
     public static <T> T read(String json, TypeReference<T> typeReference) {
         return execute(() -> mapper.readValue(json, typeReference), "readValue error");
     }
+
     public static <T> T redisRead(String json, TypeReference<T> typeReference) {
         return execute(() -> redisMapper.readValue(json, typeReference), "readValue error");
     }

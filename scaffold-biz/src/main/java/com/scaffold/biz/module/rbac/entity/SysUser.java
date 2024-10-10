@@ -1,10 +1,6 @@
 package com.scaffold.biz.module.rbac.entity;
 
-import com.easy.query.core.annotation.EntityProxy;
-import com.easy.query.core.annotation.Table;
-import com.easy.query.core.proxy.ProxyEntityAvailable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.scaffold.biz.rbac.module.entity.proxy.SysUserProxy;
 import com.scaffold.core.orm.vo.BaseAuditable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
@@ -19,11 +15,9 @@ import java.io.Serializable;
  * @since 2024-07-22 20:40:07
  */
 @Data
-@EntityProxy
-@Table
 @Entity
 @jakarta.persistence.Table(name = "sys_user")
-public class SysUser extends BaseAuditable implements Serializable, ProxyEntityAvailable<SysUser, SysUserProxy> {
+public class SysUser extends BaseAuditable implements Serializable {
 
     @Schema(description = "名字")
     private String username;

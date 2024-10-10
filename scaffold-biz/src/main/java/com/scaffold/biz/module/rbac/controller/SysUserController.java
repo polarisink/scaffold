@@ -2,7 +2,6 @@ package com.scaffold.biz.module.rbac.controller;
 
 import com.scaffold.biz.module.rbac.entity.SysUser;
 import com.scaffold.biz.module.rbac.service.SysUserService;
-import com.scaffold.biz.module.rbac.module.vo.user.*;
 import com.scaffold.biz.module.rbac.vo.user.*;
 import com.scaffold.core.base.util.PageResponse;
 import com.scaffold.core.base.util.R;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.scaffold.biz.module.rbac.contant.RbacLogConst.ROLE;
 import static com.scaffold.biz.module.rbac.contant.RbacLogConst.USER;
+import static com.scaffold.core.log.vo.BusinessType.*;
 
 /**
  * (SysUser)表控制层

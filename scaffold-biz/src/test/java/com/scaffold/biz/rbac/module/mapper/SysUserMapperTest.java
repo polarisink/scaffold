@@ -1,7 +1,6 @@
 package com.scaffold.biz.rbac.module.mapper;
 
 import com.scaffold.biz.module.rbac.mapper.SysUserMapper;
-import com.scaffold.biz.module.rbac.vo.user.SysUserPageVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +13,5 @@ class SysUserMapperTest {
 
     @Test
     void list() {
-        userMapper.list(new SysUserPageVO());
     }
 }

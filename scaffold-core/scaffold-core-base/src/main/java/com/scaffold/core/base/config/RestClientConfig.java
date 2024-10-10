@@ -14,20 +14,6 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
  */
 @Configuration
 public class RestClientConfig {
-    @Bean
-    public RestClient.Builder builder(ObjectMapper objectMapper, ClientHttpRequestInterceptor interceptor) {
-        return RestClient.builder()
-                //消息转换器
-                .messageConverters(converters -> {
-                    converters.removeIf(c -> c.getClass().getName().equals(MappingJackson2HttpMessageConverter.class.getName()));
-                    MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-                    converter.setObjectMapper(objectMapper);
-                    converters.addFirst(converter);
-                })
-                //拦截器
-                .requestInterceptors(interceptors -> interceptors.add(interceptor));
-    }
-
     /**
      * 创建代理服务
      *
@@ -42,5 +28,19 @@ public class RestClientConfig {
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();
         return factory.createClient(tClass);
+    }
+
+    @Bean
+    public RestClient.Builder builder(ObjectMapper objectMapper, ClientHttpRequestInterceptor interceptor) {
+        return RestClient.builder()
+                //消息转换器
+                .messageConverters(converters -> {
+                    converters.removeIf(c -> c.getClass().getName().equals(MappingJackson2HttpMessageConverter.class.getName()));
+                    MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+                    converter.setObjectMapper(objectMapper);
+                    converters.addFirst(converter);
+                })
+                //拦截器
+                .requestInterceptors(interceptors -> interceptors.add(interceptor));
     }
 }

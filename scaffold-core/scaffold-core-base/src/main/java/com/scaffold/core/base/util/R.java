@@ -3,7 +3,6 @@ package com.scaffold.core.base.util;
 import cn.hutool.http.HttpStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 
@@ -14,7 +13,6 @@ import java.io.Serializable;
  * @date 2022/01/14
  */
 @Data
-@Slf4j
 @AllArgsConstructor
 public class R<T> implements Serializable {
     /**
