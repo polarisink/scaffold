@@ -3,8 +3,8 @@ package com.scaffold.security.config;
 import com.scaffold.core.base.constant.GlobalConstant;
 import com.scaffold.core.base.util.JsonUtil;
 import com.scaffold.core.base.util.ServletUtils;
-import com.scaffold.core.jwt.utils.JwtUtil;
-import com.scaffold.core.jwt.vo.PayloadDTO;
+import com.scaffold.security.util.JwtUtil;
+import com.scaffold.security.vo.PayloadDTO;
 import com.scaffold.security.util.ResponseUtil;
 import com.scaffold.security.vo.AuthCodeEnum;
 import jakarta.servlet.FilterChain;
@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import static com.scaffold.core.jwt.utils.JwtUtil.getRealToken;
+import static com.scaffold.security.util.JwtUtil.getRealToken;
 
 /**
  * token校验和日志打印filter， 每个请求都调用一次

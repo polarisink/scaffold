@@ -36,10 +36,6 @@
         </dependency>
         <dependency>
             <groupId>github.polarisink</groupId>
-            <artifactId>scaffold-core-jwt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>github.polarisink</groupId>
             <artifactId>scaffold-core-security</artifactId>
         </dependency>
         <dependency>

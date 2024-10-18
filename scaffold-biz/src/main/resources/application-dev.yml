@@ -30,7 +30,6 @@ logging:
   level:
     org.springframework.security: info
     root: info
-  config: classpath:log4j2.yml
 
 rbac:
   reset: username

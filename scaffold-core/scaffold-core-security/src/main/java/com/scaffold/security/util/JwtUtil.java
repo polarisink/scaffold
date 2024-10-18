@@ -1,4 +1,4 @@
-package com.scaffold.core.jwt.utils;
+package com.scaffold.security.util;
 
 import cn.hutool.crypto.SecureUtil;
 import com.nimbusds.jose.*;
@@ -8,7 +8,7 @@ import com.scaffold.core.base.constant.GlobalConstant;
 import com.scaffold.core.base.constant.ResultCodeEnum;
 import com.scaffold.core.base.exception.BaseException;
 import com.scaffold.core.base.util.JsonUtil;
-import com.scaffold.core.jwt.vo.PayloadDTO;
+import com.scaffold.security.vo.PayloadDTO;
 import lombok.extern.slf4j.Slf4j;
 
 /**

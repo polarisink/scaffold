@@ -1,4 +1,4 @@
-package com.scaffold.core.jwt.vo;
+package com.scaffold.security.vo;
 
 import cn.hutool.core.util.IdUtil;
 import lombok.Getter;

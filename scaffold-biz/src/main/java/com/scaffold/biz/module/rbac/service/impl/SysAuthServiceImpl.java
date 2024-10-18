@@ -4,8 +4,8 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.scaffold.biz.module.rbac.service.SysAuthService;
 import com.scaffold.biz.module.rbac.vo.auth.LoginVO;
 import com.scaffold.core.base.exception.BaseException;
-import com.scaffold.core.jwt.utils.JwtUtil;
-import com.scaffold.core.jwt.vo.PayloadDTO;
+import com.scaffold.security.util.JwtUtil;
+import com.scaffold.security.vo.PayloadDTO;
 import com.scaffold.core.log.event.LoginLogEvent;
 import com.scaffold.security.config.TokenService;
 import com.scaffold.security.vo.LoginUser;
@@ -28,8 +28,6 @@ public class SysAuthServiceImpl implements SysAuthService {
 
     @Override
     public String login(LoginVO vo) {
-        LoginLogEvent event = new LoginLogEvent();
-        event.setUsername(vo.username());
         UsernamePasswordAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(vo.username(), vo.password());
         Authentication a = getAuthentication(authenticationToken);
         LoginUser loginUser = (LoginUser) a.getPrincipal();
@@ -39,6 +37,8 @@ public class SysAuthServiceImpl implements SysAuthService {
         String username = dto.getUsername();
         String token = JwtUtil.generateToken(dto);
         tokenService.set(userId, token);
+        LoginLogEvent event = new LoginLogEvent();
+        event.setUsername(vo.username());
         event.setUserId(userId);
         event.setUsername(username);
         //只记录成功日志，失败的不能进入系统，也没必要记
