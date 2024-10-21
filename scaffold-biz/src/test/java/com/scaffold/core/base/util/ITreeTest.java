@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.junit.jupiter.api.Test;
 
+import java.com.scaffold.core.base.util.ITree;
 import java.util.ArrayList;
 import java.util.List;
 

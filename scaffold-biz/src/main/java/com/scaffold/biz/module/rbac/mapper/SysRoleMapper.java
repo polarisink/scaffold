@@ -23,7 +23,6 @@ public interface SysRoleMapper extends JpaRepository<SysRole, Long> {
      * @return 分页结果
      */
     default PageResponse<SysRole> page(SysRolePageVO vo) {
-
         return null;
     }
 
