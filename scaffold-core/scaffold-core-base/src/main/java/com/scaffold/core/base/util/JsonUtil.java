@@ -48,6 +48,14 @@ public class JsonUtil {
         return execute(() -> mapper.readValue(json, clazz), "readValue error");
     }
 
+    public static <T> T read(byte[] json, Class<T> clazz) {
+        return execute(() -> mapper.readValue(json, clazz), "readValue error");
+    }
+
+    public static <T> T read(byte[] json, TypeReference<T> typeReference) {
+        return execute(() -> mapper.readValue(json, typeReference), "readValue error");
+    }
+
     public static <T> T redisRead(String json, Class<T> clazz) {
         return execute(() -> redisMapper.readValue(json, clazz), "readValue error");
     }

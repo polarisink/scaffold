@@ -97,6 +97,10 @@ public final class RedisUtils {
         return redisTemplate.opsForStream().add(record);
     }
 
+    public static void convertAndSend(String topic, String message) {
+        redisTemplate.convertAndSend(topic, message);
+    }
+
     //===================================================stream=======================================
 
 

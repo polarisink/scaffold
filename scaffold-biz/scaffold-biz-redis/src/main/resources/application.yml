@@ -1,0 +1,8 @@
+
+spring:
+  data:
+    redis:
+      password: redis_ZdD4Ej
+      host: 127.0.0.1
+server:
+  port: 8081

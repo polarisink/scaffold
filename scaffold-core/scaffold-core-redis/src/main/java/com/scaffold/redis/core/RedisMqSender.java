@@ -29,7 +29,7 @@ public class RedisMqSender {
         }
         RedisMessage<T> redisMessage = new RedisMessage<>(streamKey, null, object, LocalDateTime.now());
         String json = JsonUtil.toJson(redisMessage);
-        RedisUtils.streamAdd(streamKey, json);
+        RedisUtils.convertAndSend(streamKey, json);
     }
 
 }
