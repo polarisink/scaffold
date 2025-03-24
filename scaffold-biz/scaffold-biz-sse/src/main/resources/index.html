@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SSE 基础测试</title>
+</head>
+<body>
+<h1>SSE 实时消息接收测试</h1>
+<div id="messages"></div>
+
+<script>
+    const messagesDiv = document.getElementById('messages');
+
+    // 检测浏览器是否支持 EventSource
+    if (typeof EventSource === 'undefined') {
+        messagesDiv.innerHTML = "当前浏览器不支持 SSE！";
+    } else {
+        // 建立 SSE 连接
+        const eventSource = new EventSource('http://localhost:8080/api/sse');
+
+        // 监听消息事件
+        eventSource.onmessage = (event) => {
+            const p = document.createElement('p');
+            p.textContent = event.data;
+            messagesDiv.appendChild(p);
+        };
+
+        // 错误处理
+        eventSource.onerror = (err) => {
+            console.error('SSE 连接错误:', err);
+            eventSource.close();
+        };
+    }
+</script>
+</body>
+</html>

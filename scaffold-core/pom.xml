@@ -19,6 +19,5 @@
         <module>scaffold-core-security</module>
         <module>scaffold-core-file</module>
         <module>scaffold-core-websocket</module>
-        <module>scaffold-core-docker</module>
     </modules>
 </project>

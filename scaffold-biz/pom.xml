@@ -14,6 +14,8 @@
     <modules>
         <module>scaffold-biz-rbac</module>
         <module>scaffold-biz-redis</module>
+        <module>scaffold-biz-sse</module>
+        <module>scaffold-biz-http-interface</module>
     </modules>
 
 </project>
