@@ -50,6 +50,8 @@
         <netty-socketio.version>2.0.11</netty-socketio.version>
         <docker-java.version>3.4.0</docker-java.version>
         <retrofit.version>2.11.0</retrofit.version>
+        <concept-download.version>2.1.0</concept-download.version>
+        <concept-coroutines.version>2.0.0</concept-coroutines.version>
     </properties>
 
     <dependencyManagement>
@@ -189,6 +191,16 @@
                 <groupId>com.squareup.retrofit2</groupId>
                 <artifactId>converter-scalars</artifactId>
                 <version>${retrofit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.linyuzai</groupId>
+                <artifactId>concept-download-spring-boot-starter</artifactId>
+                <version>${concept-download.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.linyuzai</groupId>
+                <artifactId>concept-download-coroutines</artifactId>
+                <version>${concept-coroutines.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>

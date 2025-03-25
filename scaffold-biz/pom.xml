@@ -16,6 +16,7 @@
         <module>scaffold-biz-websocket</module>
         <module>scaffold-biz-sse</module>
         <module>scaffold-biz-http-interface</module>
+        <module>scaffold-biz-download</module>
     </modules>
 
 </project>

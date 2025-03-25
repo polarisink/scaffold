@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>静态文件下载测试</title>
+    <style>
+        .download-section {
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            padding: 8px 15px;
+            margin: 5px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #status {
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Spring Boot 静态资源下载测试</h1>
+
+<!-- Classpath 文件下载 -->
+<div class="download-section">
+    <h3>1. 下载 Classpath 文件（application.yml）</h3>
+    <button onclick="downloadResource('/classpath')">触发下载</button>
+</div>
+
+<!-- 本地文件下载 -->
+<div class="download-section">
+    <h3>2. 下载本地文件（C:\Users\lqsgo\Desktop\dify.md）</h3>
+    <button onclick="downloadResource('/file')">触发下载</button>
+    <p style="color: #ff9800;">* 请确保该路径文件存在</p>
+</div>
+
+<!-- 网络资源下载 -->
+<div class="download-section">
+    <h3>3. 下载网络资源（Unsplash 图片）</h3>
+    <button onclick="downloadResource('/http')">触发下载</button>
+</div>
+
+<!-- 动态文件下载 -->
+<div class="download-section">
+    <h3>4. 动态文件下载</h3>
+    <button onclick="downloadResource('/file2')">触发下载</button>
+</div>
+
+<!-- 压缩包下载 -->
+<div class="download-section">
+    <h3>4. 压缩包下载</h3>
+    <button onclick="downloadResource('/list')">触发下载</button>
+</div>
+
+<div id="status"></div>
+
+<script>
+    function downloadResource(endpoint) {
+        const statusDiv = document.getElementById('status');
+        statusDiv.textContent = '下载中...';
+        statusDiv.style.color = '#2196F3';
+
+        fetch(`http://localhost:8083${endpoint}`)
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP错误 ${response.status}`);
+                return response.blob().then(blob => ({blob, response})); // 合并返回
+            })
+            .then(({blob, response}) => {
+                // 自动生成文件名（根据接口逻辑，后端应设置 Content-Disposition）
+                const filename = decodeURIComponent(
+                    response.headers.get('Content-Disposition')?.split('filename=')[1] || 'download'
+                );
+                // 创建临时链接触发下载
+                const url = URL.createObjectURL(blob);
+                console.log('url',response.url);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                statusDiv.textContent = '下载成功！文件名：' + filename;
+                statusDiv.style.color = '#4CAF50';
+            })
+            .catch(error => {
+                statusDiv.textContent = `失败：${error.message}`;
+                statusDiv.style.color = '#f44336';
+            });
+    }
+</script>
+</body>
+</html>
