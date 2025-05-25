@@ -3,10 +3,10 @@ package com.github.polarisink.sse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.service.annotation.PostExchange;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,7 +18,7 @@ public class ApiController {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @GetMapping("/hello")
-    public String hello(){
+    public String hello() {
         return "hello world";
     }
 

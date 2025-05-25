@@ -31,14 +31,16 @@ public class NettySocketUtil {
      *
      * @param message
      */
-    public static void sendNotice( Object message) {
+    public static void sendNotice(Object message) {
         sendNotice(MESSAGE, message);
-    }    /**
+    }
+
+    /**
      * 发送消息 全部客户端
      *
      * @param message
      */
-    public static void sendNotice( String event,Object message) {
+    public static void sendNotice(String event, Object message) {
         server.getBroadcastOperations().sendEvent(event, message);
     }
 

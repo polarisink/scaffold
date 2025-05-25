@@ -2,22 +2,56 @@ package com.github.polarisink.download;
 
 import com.github.linyuzai.download.core.annotation.Download;
 import com.github.linyuzai.download.core.options.DownloadOptions;
+import com.github.polarisink.download.scheduled.TrainEngineService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @CrossOrigin
 @RestController
+@RequiredArgsConstructor
 public class DownloadController {
 
     private static final String classPathFile = "application.yml";
     private static final String filePath = "C:\\Users\\lqsgo\\Desktop\\dify.md";
     private static final String remoteUrl = "https://img2.baidu.com/it/u=3305049985,1754771021&fm=253&fmt=auto&app=138&f=JPEG?w=701&h=500";
+    private final TrainEngineService trainEngineService;
+    String trainId = "123";
+
+    @GetMapping("/schedule")
+    public void add() {
+        trainEngineService.initScheduler(trainId, LocalDateTime.of(1999, 3, 24, 1, 1));
+        trainEngineService.schedule(trainId, () -> log.info("12345"), Duration.ofSeconds(3));
+    }
+
+    @GetMapping("/pause")
+    public void pause() {
+        trainEngineService.pause("123");
+    }
+
+    @GetMapping("/resume")
+    public void resume() {
+        trainEngineService.resume(trainId);
+    }
+
+    @GetMapping("/step/{step}")
+    public void step(@PathVariable int step) {
+        trainEngineService.step(trainId, step);
+    }
 
     /**
      * classpath下的文件。
@@ -72,6 +106,19 @@ public class DownloadController {
             options.setFilename("remote.jpg");
             options.setSource(remoteUrl);
             options.setSourceCacheEnabled(false);
+        };
+    }
+
+    @GetMapping("/download")
+    public StreamingResponseBody downloadFile() {
+        return outputStream -> {
+            try (InputStream is = new FileInputStream("C:\\Users\\lqsgo\\Downloads\\动态知识库工作流 DSL.yaml")) {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = is.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            }
         };
     }
 }

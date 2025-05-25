@@ -1,8 +1,8 @@
 package com.scaffold.biz.module.rbac.components;
 
 
-import com.scaffold.biz.module.rbac.entity.SysMenu;
 import com.scaffold.biz.module.rbac.contant.RbacCacheConst;
+import com.scaffold.biz.module.rbac.entity.SysMenu;
 import com.scaffold.biz.module.rbac.mapper.SysMenuMapper;
 import com.scaffold.biz.module.rbac.vo.menu.SysRoleWrapper;
 import com.scaffold.core.base.constant.GlobalConstant;

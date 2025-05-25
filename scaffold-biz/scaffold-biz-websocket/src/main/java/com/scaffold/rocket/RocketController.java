@@ -12,7 +12,7 @@ public class RocketController {
 
     @Operation(summary = "选择火箭进行发射")
     @GetMapping("/launch")
-    public String launchRocket(@RequestParam String  rocketId) {
+    public String launchRocket(@RequestParam String rocketId) {
         rocketService.launchRocket(rocketId);
         return "Rocket ID " + rocketId + " launched successfully.";
     }
@@ -26,6 +26,6 @@ public class RocketController {
     @Operation(summary = "暂停/启动训练")
     @PutMapping("/pause/{trainId}/{status}")
     public void pause(@PathVariable String trainId, @PathVariable boolean status) {
-        rocketService.runningStatus(trainId,status);
+        rocketService.runningStatus(trainId, status);
     }
 }

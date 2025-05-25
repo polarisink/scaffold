@@ -19,7 +19,6 @@
         <maven.compiler.target>21</maven.compiler.target>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
-        <docker-maven-plugin.version>1.2.2</docker-maven-plugin.version>
         <lombok.version>1.18.30</lombok.version>
         <!--   spring相关     -->
         <spring-boot-maven-plugin.version>3.2.4</spring-boot-maven-plugin.version>
@@ -33,24 +32,22 @@
         <pagehelper.version>2.1.0</pagehelper.version>
         <p6spy.version>1.9.1</p6spy.version>
         <mysql.version>8.0.23</mysql.version>
-        <mariadb.version>3.4.0</mariadb.version>
+        <mariadb.version>3.5.2</mariadb.version>
         <!--    工具    -->
         <hutool.version>5.8.25</hutool.version>
         <mapStruct.version>1.4.2.Final</mapStruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-        <guava.version>33.2.1-jre</guava.version>
+        <guava.version>33.0.0-jre</guava.version>
         <redisson-starter.version>3.16.1</redisson-starter.version>
         <knife4j-swagger.version>4.5.0</knife4j-swagger.version>
         <minio.version>8.5.10</minio.version>
         <easy-query.version>2.0.63</easy-query.version>
-        <native.version>0.10.2</native.version>
         <nimbus-jose-jwt.version>9.39.3</nimbus-jose-jwt.version>
-        <ai.version>0.7.1-SNAPSHOT</ai.version>
         <netty-all.version>4.1.107.Final</netty-all.version>
         <netty-socketio.version>2.0.11</netty-socketio.version>
-        <docker-java.version>3.4.0</docker-java.version>
         <retrofit.version>2.11.0</retrofit.version>
         <concept-download.version>2.1.0</concept-download.version>
+        <poi.version>5.4.1</poi.version>
         <concept-coroutines.version>2.0.0</concept-coroutines.version>
     </properties>
 
@@ -149,6 +146,11 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.mariadb.jdbc</groupId>
+                <artifactId>mariadb-java-client</artifactId>
+                <version>${mariadb.version}</version>
+            </dependency>
             <!--基于knife4j-openapi3的api接口文档生成-->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
@@ -165,11 +167,6 @@
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
                 <version>${nimbus-jose-jwt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-                <version>${netty-all.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.corundumstudio.socketio</groupId>
@@ -203,16 +200,19 @@
                 <version>${concept-coroutines.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -239,60 +239,6 @@
             <artifactId>mapstruct-processor</artifactId>
         </dependency>
     </dependencies>
-    <!--     仓库 -->
-    <repositories>
-        <repository>
-            <id>spring-snapshots</id>
-            <url>https://repo.spring.io/snapshot</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>spring-milestones</id>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>aliyun</id>
-            <name>aliyun maven</name>
-            <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <envFlag>dev</envFlag>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>test</id>
-            <properties>
-                <envFlag>test</envFlag>
-            </properties>
-        </profile>
-        <profile>
-            <id>uat</id>
-            <properties>
-                <envFlag>uat</envFlag>
-            </properties>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <properties>
-                <envFlag>prod</envFlag>
-            </properties>
-        </profile>
-    </profiles>
 
     <build>
         <finalName>${project.name}</finalName>
@@ -305,23 +251,9 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.*</include>
-                </includes>
-                <filtering>true</filtering>
-                <excludes>
-                    <exclude>application-dev.yml</exclude>
-                    <exclude>application-test.yml</exclude>
-                    <exclude>application-uat.yml</exclude>
-                    <exclude>application-prod.yml</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
-                    <include>application.yml</include>
-                    <include>application-${envFlag}.yml</include>
+                    <include>*</include>
                 </includes>
             </resource>
         </resources>
@@ -345,19 +277,13 @@
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.graalvm.buildtools</groupId>
-                <artifactId>native-maven-plugin</artifactId>
-                <version>${native.version}</version>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <!--        提供覆盖默认 Java 编译器版本的选项            -->
-                    <source>21</source>
-                    <target>21</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <encoding>UTF-8</encoding>
                     <parameters>true</parameters>
                     <annotationProcessorPaths>
@@ -386,16 +312,9 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <!-- docker 容器构建-->
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>${docker-maven-plugin.version}</version>
-            </plugin>
         </plugins>
-
     </build>
+
 
     <modules>
         <module>scaffold-starters</module>

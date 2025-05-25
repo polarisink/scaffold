@@ -57,7 +57,7 @@ public class RocketTrajectoryCalculator {
         double theta = Math.atan2(z * a, p * b);
 
         double lat = Math.atan2(z + eSquared * b * Math.pow(Math.sin(theta), 3),
-                                p - eSquared * a * Math.pow(Math.cos(theta), 3));
+                p - eSquared * a * Math.pow(Math.cos(theta), 3));
         double lon = Math.atan2(y, x);
         double N = a / Math.sqrt(1 - eSquared * Math.pow(Math.sin(lat), 2));
         double h = p / Math.cos(lat) - N;

@@ -11,8 +11,8 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -65,10 +65,7 @@ public class RedisListenerAnnotationScanPostProcessor implements BeanPostProcess
             String consumer = (String) annotationAttributes.get("consumer");
             RedisListenerMethod rlm = generateRedisListenerMethod(beanName, method);
             String key = queueName + "-" + group + "-" + consumer;
-            if (!candidates.containsKey(key)) {
-                candidates.put(key, new LinkedList<>());
-            }
-            candidates.get(key).add(rlm);
+            candidates.computeIfAbsent(key, k -> new ArrayList<>()).add(rlm);
         }
         return bean;
     }

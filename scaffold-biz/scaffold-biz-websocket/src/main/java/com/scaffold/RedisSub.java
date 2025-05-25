@@ -9,8 +9,6 @@ import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 
-import java.util.concurrent.ScheduledExecutorService;
-
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
@@ -27,14 +25,15 @@ public class RedisSub {
         return (message, pattern) -> {
             //rocket device
             String channel = new String(message.getChannel());
-            if (channel.startsWith("rocket")){
+            if (channel.startsWith("rocket")) {
 
             }
             NettySocketUtil.sendNotice(channel, new String(message.getBody()));
         };
     }
 
-    void xxx(){}
+    void xxx() {
+    }
 
     public MessageListener deviceListener() {
         return (message, pattern) -> {

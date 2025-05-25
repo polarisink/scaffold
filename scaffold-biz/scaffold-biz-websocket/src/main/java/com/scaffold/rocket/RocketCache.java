@@ -13,9 +13,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RocketCache {
 
-    private final RocketRepository rocketRepository;
-
     private static final String ROCKET_POSITION = "rocketPosition";
+    private final RocketRepository rocketRepository;
 
     /**
      * 获取当前高度

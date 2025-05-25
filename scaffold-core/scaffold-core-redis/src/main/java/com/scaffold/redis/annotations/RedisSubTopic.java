@@ -1,4 +1,4 @@
-package com.scaffold.redis;
+package com.scaffold.redis.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

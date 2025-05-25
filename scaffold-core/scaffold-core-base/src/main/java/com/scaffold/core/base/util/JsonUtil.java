@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaffold.core.base.exception.BaseException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@DependsOn("jacksonConfig")
 public class JsonUtil {
     @Getter
     private static final ObjectMapper mapper = SpringUtil.getBean(ObjectMapper.class);

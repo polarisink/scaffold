@@ -1,6 +1,5 @@
 package com.scaffold;
 
-import cn.hutool.cron.timingwheel.TimerTask;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.annotation.OnConnect;
@@ -8,8 +7,8 @@ import com.corundumstudio.socketio.annotation.OnDisconnect;
 import com.corundumstudio.socketio.annotation.OnEvent;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.scaffold.core.base.util.JsonUtil;
-import com.scaffold.redis.RedisSubTopic;
 import com.scaffold.redis.annotations.RedisStreamListener;
+import com.scaffold.redis.annotations.RedisSubTopic;
 import com.scaffold.redis.core.RedisMqSender;
 import com.scaffold.redis.domain.RedisMessage;
 import com.scaffold.socket.util.NettySocketUtil;
@@ -50,7 +49,7 @@ public class NettySocketHandler implements CommandLineRunner {
      */
     @OnConnect
     public void onConnect(SocketIOClient client) {
-        RedisMqSender.send("web","hello world");
+        RedisMqSender.send("web", "hello world");
     }
 
 
@@ -75,12 +74,12 @@ public class NettySocketHandler implements CommandLineRunner {
      */
     @OnEvent(value = "message")
     public void onMessage(SocketIOClient client, AckRequest request, Object data) {
-        RedisMqSender.send("web","hello world");
+        RedisMqSender.send("web", "hello world");
     }
 
     @RedisStreamListener(queueName = "web")
-    public void read(String s){
-        NettySocketUtil.sendNotice("hh","redis read");
+    public void read(String s) {
+        NettySocketUtil.sendNotice("hh", "redis read");
         System.out.println("redis read");
     }
 

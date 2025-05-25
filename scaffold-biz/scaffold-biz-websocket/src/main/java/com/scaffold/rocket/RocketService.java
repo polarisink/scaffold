@@ -1,4 +1,3 @@
-
 package com.scaffold.rocket;
 
 import com.scaffold.socket.util.NettySocketUtil;
@@ -37,6 +36,17 @@ public class RocketService {
     // 共享的线程池
     private final ScheduledExecutorService sharedScheduler;
     private final RocketCache rocketCache;
+
+    /**
+     * 计算时间片
+     *
+     * @param step 步进
+     * @return 时间片
+     */
+    private static int calculatePeriod(double step) {
+        BigDecimal period = BigDecimal.valueOf(1000).divide(BigDecimal.valueOf(step), RoundingMode.HALF_UP);
+        return period.intValue();
+    }
 
     /**
      * 火箭数据的业务代码
@@ -114,17 +124,5 @@ public class RocketService {
                 }
             }
         });
-    }
-
-
-    /**
-     * 计算时间片
-     *
-     * @param step 步进
-     * @return 时间片
-     */
-    private static int calculatePeriod(double step) {
-        BigDecimal period = BigDecimal.valueOf(1000).divide(BigDecimal.valueOf(step), RoundingMode.HALF_UP);
-        return period.intValue();
     }
 }

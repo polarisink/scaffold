@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 初始化rbac的缓存
+ *
  * @author lqsgo
  */
 @Slf4j

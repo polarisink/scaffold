@@ -18,9 +18,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.scaffold.core.base.constant.GlobalConstant;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -41,8 +38,6 @@ import java.time.format.DateTimeFormatter;
  * @date 2022/07/28
  */
 @Configuration
-@ConditionalOnClass({JacksonConfig.class, ObjectMapper.class})
-@AutoConfigureBefore(JacksonAutoConfiguration.class)
 public class JacksonConfig {
 
     /**

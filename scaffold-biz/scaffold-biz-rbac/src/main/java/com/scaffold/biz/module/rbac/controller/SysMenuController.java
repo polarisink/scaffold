@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.scaffold.biz.module.rbac.contant.RbacLogConst.MENU;
-import static com.scaffold.core.log.vo.BusinessType.*;
 
 /**
  * 菜单(SysMenu)表控制层

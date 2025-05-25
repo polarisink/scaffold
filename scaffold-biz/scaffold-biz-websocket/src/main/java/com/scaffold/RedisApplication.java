@@ -25,7 +25,7 @@ public class RedisApplication implements ApplicationRunner {
     }
 
     @Bean
-    public ScheduledExecutorService executorService(){
+    public ScheduledExecutorService executorService() {
         return Executors.newScheduledThreadPool(10);
     }
 

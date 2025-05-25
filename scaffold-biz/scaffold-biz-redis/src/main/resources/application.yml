@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: scaffold-biz-redis
+  data:
+    redis:
+      host: 127.0.0.1

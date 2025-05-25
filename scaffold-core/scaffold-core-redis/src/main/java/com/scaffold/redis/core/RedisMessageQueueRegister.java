@@ -2,6 +2,7 @@ package com.scaffold.redis.core;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.scaffold.core.base.util.JsonUtil;
 import com.scaffold.redis.domain.RedisListenerMethod;
 import com.scaffold.redis.domain.RedisMessage;
@@ -29,6 +30,7 @@ public class RedisMessageQueueRegister implements ApplicationRunner {
 
 
     private final StreamMessageListenerContainer<String, ObjectRecord<String, String>> streamMessageListenerContainer;
+    private final TypeFactory factory = JsonUtil.getMapper().getTypeFactory();
 
     @Override
     public void run(ApplicationArguments args) {
@@ -68,7 +70,7 @@ public class RedisMessageQueueRegister implements ApplicationRunner {
                                 if (messageFlag) {
                                     redisMessage = JsonUtil.read(messageJson, RedisMessage.class);
                                 } else {
-                                    JavaType javaType = JsonUtil.getMapper().getTypeFactory().constructParametricType(RedisMessage.class, rlm.getParameterClass());
+                                    JavaType javaType = factory.constructParametricType(RedisMessage.class, rlm.getParameterClass());
                                     redisMessage = JsonUtil.read(messageJson, javaType);
                                 }
                             } catch (Exception e) {
