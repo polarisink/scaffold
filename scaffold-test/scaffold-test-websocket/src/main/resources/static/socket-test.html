@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebSocket(Socke.IO) 测试 - 支持 SSL</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; margin: 24px; }
+    fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    legend { padding: 0 8px; color: #555; }
+    label { display: inline-block; min-width: 88px; color: #333; }
+    input, select, button { padding: 6px 10px; margin: 6px 8px 6px 0; }
+    .row { display: flex; flex-wrap: wrap; align-items: center; }
+    .row > * { margin-right: 12px; }
+    #log { height: 320px; overflow: auto; background: #0b1021; color: #c7d2fe; padding: 12px; border-radius: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 12px; }
+    .tag { display: inline-block; padding: 0 6px; border-radius: 4px; margin-right: 6px; color: #fff; }
+    .ok { background: #10b981; }
+    .err { background: #ef4444; }
+    .info { background: #6366f1; }
+  </style>
+  <!-- Socket.IO v4 客户端（CDN） -->
+  <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" integrity="sha384-3mXkQ1mAPeyshGqAcyFj+9p1T1YvU1JYyPesQjZf3HqQwHqyx3kq8Kbm5kBvUuYV" crossorigin="anonymous"></script>
+</head>
+<body>
+  <h2>Socket.IO WebSocket 测试（wss 支持）</h2>
+
+  <fieldset>
+    <legend>连接配置</legend>
+    <div class="row">
+      <label for="host">主机</label>
+      <input id="host" type="text" value="127.0.0.1" />
+
+      <label for="port">端口</label>
+      <input id="port" type="number" value="8080" />
+
+      <label for="secure">secure</label>
+      <select id="secure">
+        <option value="true">true (wss)</option>
+        <option value="false" selected>false (ws)</option>
+      </select>
+
+      <label for="path">path</label>
+      <input id="path" type="text" value="/socket.io/" placeholder="/socket.io/ 或自定义 context" />
+
+      <label for="clientId">clientId</label>
+      <input id="clientId" type="text" value="test-client-1" />
+
+      <button id="btnConnect">连接</button>
+      <button id="btnDisconnect" disabled>断开</button>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>发送事件</legend>
+    <div class="row">
+      <label for="event">事件名</label>
+      <input id="event" type="text" value="message" />
+
+      <label for="payload">消息体</label>
+      <input id="payload" type="text" value="Hello from client" style="min-width: 320px;" />
+
+      <button id="btnSend" disabled>发送</button>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>监听事件</legend>
+    <div class="row">
+      <label for="listen">事件名</label>
+      <input id="listen" type="text" value="hh" />
+      <button id="btnBind" disabled>绑定监听</button>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>日志</legend>
+    <div id="log"></div>
+  </fieldset>
+
+  <script>
+    let socket = null;
+
+    function log(kind, ...args) {
+      const el = document.getElementById('log');
+      const tag = kind === 'ok' ? 'ok' : kind === 'err' ? 'err' : 'info';
+      const time = new Date().toLocaleTimeString();
+      const line = document.createElement('div');
+      line.innerHTML = `<span class="tag ${tag}">${kind}</span><span>[${time}]</span> <span>${args.map(v => typeof v === 'string' ? v : JSON.stringify(v)).join(' ')}</span>`;
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function buildUrl() {
+      const host = document.getElementById('host').value.trim();
+      const port = document.getElementById('port').value.trim();
+      const secure = document.getElementById('secure').value === 'true';
+      const scheme = secure ? 'https' : 'http';
+      return `${scheme}://${host}:${port}`;
+    }
+
+    function currentOptions() {
+      const path = document.getElementById('path').value || '/socket.io/';
+      const clientId = document.getElementById('clientId').value.trim();
+      const secure = document.getElementById('secure').value === 'true';
+      return {
+        path,
+        transports: ['websocket'],
+        secure,
+        query: { clientId }
+      };
+    }
+
+    function setConnectedState(connected) {
+      document.getElementById('btnConnect').disabled = connected;
+      document.getElementById('btnDisconnect').disabled = !connected;
+      document.getElementById('btnSend').disabled = !connected;
+      document.getElementById('btnBind').disabled = !connected;
+    }
+
+    document.getElementById('btnConnect').addEventListener('click', () => {
+      const url = buildUrl();
+      const opts = currentOptions();
+      log('info', 'connecting...', { url, ...opts });
+      try {
+        socket = io(url, opts);
+
+        socket.on('connect', () => {
+          log('ok', 'connected', { id: socket.id });
+          setConnectedState(true);
+        });
+
+        socket.on('connect_error', (err) => {
+          log('err', 'connect_error', err.message || err);
+        });
+
+        socket.on('error', (err) => {
+          log('err', 'error', err && (err.message || err));
+        });
+
+        socket.on('disconnect', (reason) => {
+          log('info', 'disconnected', reason);
+          setConnectedState(false);
+        });
+      } catch (e) {
+        log('err', 'exception', e.message || e);
+      }
+    });
+
+    document.getElementById('btnDisconnect').addEventListener('click', () => {
+      if (socket) {
+        socket.disconnect();
+        socket = null;
+      }
+    });
+
+    document.getElementById('btnSend').addEventListener('click', () => {
+      if (!socket) return;
+      const evt = document.getElementById('event').value || 'message';
+      const payload = document.getElementById('payload').value;
+      log('info', 'emit', evt, payload);
+      socket.emit(evt, payload);
+    });
+
+    document.getElementById('btnBind').addEventListener('click', () => {
+      if (!socket) return;
+      const evt = document.getElementById('listen').value || 'hh';
+      log('info', 'listen', evt);
+      socket.off(evt);
+      socket.on(evt, (data) => {
+        log('ok', 'recv', evt, data);
+      });
+    });
+  </script>
+</body>
+</html>
+
+

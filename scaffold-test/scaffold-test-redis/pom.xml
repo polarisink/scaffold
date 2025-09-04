@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>github.polarisink</groupId>
-        <artifactId>scaffold-biz</artifactId>
+        <artifactId>scaffold-test</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
-    <artifactId>scaffold-biz-rbac</artifactId>
+    <artifactId>scaffold-test-redis</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -20,11 +18,11 @@
     <dependencies>
         <dependency>
             <groupId>github.polarisink</groupId>
-            <artifactId>scaffold-starter-web</artifactId>
+            <artifactId>scaffold-core-redis</artifactId>
         </dependency>
         <dependency>
-            <groupId>github.polarisink</groupId>
-            <artifactId>scaffold-core-redis</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
 
@@ -33,10 +31,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

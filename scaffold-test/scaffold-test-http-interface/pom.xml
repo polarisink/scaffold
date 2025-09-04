@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>github.polarisink</groupId>
-        <artifactId>scaffold-biz</artifactId>
+        <artifactId>scaffold-test</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>scaffold-biz-http-interface</artifactId>
+    <artifactId>scaffold-test-http-interface</artifactId>
 
     <dependencies>
         <dependency>

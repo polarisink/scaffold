@@ -27,10 +27,7 @@
         <!--   数据库相关     -->
         <!--这里三个依赖的版本暂时不要动，mbp和pagehelper整合有版本问题，暂时已解决
         参考自：https://blog.csdn.net/jamesleel/article/details/136445743-->
-        <mybatis-plus.version>3.5.5</mybatis-plus.version>
-        <sqlparser.version>6.1.0</sqlparser.version>
-        <pagehelper.version>2.1.0</pagehelper.version>
-        <p6spy.version>1.9.1</p6spy.version>
+        <mybatis-plus.version>3.5.12</mybatis-plus.version>
         <mysql.version>8.0.23</mysql.version>
         <mariadb.version>3.5.2</mariadb.version>
         <!--    工具    -->
@@ -49,6 +46,8 @@
         <concept-download.version>2.1.0</concept-download.version>
         <poi.version>5.4.1</poi.version>
         <concept-coroutines.version>2.0.0</concept-coroutines.version>
+        <javacv.version>1.5.12</javacv.version>
+        <ffmpeg.version>7.1-1.5.11</ffmpeg.version>
     </properties>
 
     <dependencyManagement>
@@ -124,22 +123,7 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-                <version>${mybatis-plus.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>${pagehelper.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>sqlparser4.5</artifactId>
-                <version>${sqlparser.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.gavlyukovskiy</groupId>
-                <artifactId>p6spy-spring-boot-starter</artifactId>
-                <version>${p6spy.version}</version>
+                <version>3.5.7</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
@@ -208,6 +192,16 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>javacv-platform</artifactId>
+                <version>${javacv.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>ffmpeg-platform</artifactId>
+                <version>${ffmpeg.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -319,6 +313,6 @@
     <modules>
         <module>scaffold-starters</module>
         <module>scaffold-core</module>
-        <module>scaffold-biz</module>
+        <module>scaffold-test</module>
     </modules>
 </project>

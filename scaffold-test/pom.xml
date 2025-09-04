@@ -9,15 +9,15 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>scaffold-biz</artifactId>
+    <artifactId>scaffold-test</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>scaffold-biz-rbac</module>
-        <module>scaffold-biz-websocket</module>
-        <module>scaffold-biz-sse</module>
-        <module>scaffold-biz-http-interface</module>
-        <module>scaffold-biz-download</module>
-        <module>scaffold-biz-redis</module>
+        <module>scaffold-test-rbac</module>
+        <module>scaffold-test-websocket</module>
+        <module>scaffold-test-sse</module>
+        <module>scaffold-test-http-interface</module>
+        <module>scaffold-test-download</module>
+        <module>scaffold-test-redis</module>
     </modules>
 
 </project>

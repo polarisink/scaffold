@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>scaffold-core-base</module>
+        <module>scaffold-core-ffmpeg</module>
         <module>scaffold-core-redis</module>
         <module>scaffold-core-orm</module>
         <module>scaffold-core-swagger</module>
