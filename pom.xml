@@ -23,10 +23,7 @@
         <!--   spring相关     -->
         <spring-boot-maven-plugin.version>3.2.4</spring-boot-maven-plugin.version>
         <spring-boot-dependencies.version>3.2.4</spring-boot-dependencies.version>
-        <spring-cloud.version>2023.0.2</spring-cloud.version>
         <!--   数据库相关     -->
-        <!--这里三个依赖的版本暂时不要动，mbp和pagehelper整合有版本问题，暂时已解决
-        参考自：https://blog.csdn.net/jamesleel/article/details/136445743-->
         <mybatis-plus.version>3.5.12</mybatis-plus.version>
         <mysql.version>8.0.23</mysql.version>
         <mariadb.version>3.5.2</mariadb.version>
@@ -40,7 +37,7 @@
         <minio.version>8.5.10</minio.version>
         <easy-query.version>2.0.63</easy-query.version>
         <nimbus-jose-jwt.version>9.39.3</nimbus-jose-jwt.version>
-        <netty-all.version>4.1.107.Final</netty-all.version>
+        <netty-all.version>4.2.6.Final</netty-all.version>
         <netty-socketio.version>2.0.11</netty-socketio.version>
         <retrofit.version>2.11.0</retrofit.version>
         <concept-download.version>2.1.0</concept-download.version>
@@ -130,11 +127,6 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.mariadb.jdbc</groupId>
-                <artifactId>mariadb-java-client</artifactId>
-                <version>${mariadb.version}</version>
-            </dependency>
             <!--基于knife4j-openapi3的api接口文档生成-->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
@@ -202,6 +194,11 @@
                 <groupId>org.bytedeco</groupId>
                 <artifactId>ffmpeg-platform</artifactId>
                 <version>${ffmpeg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty-all.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -314,5 +311,6 @@
         <module>scaffold-starters</module>
         <module>scaffold-core</module>
         <module>scaffold-test</module>
+        <module>scaffold-biz</module>
     </modules>
 </project>
