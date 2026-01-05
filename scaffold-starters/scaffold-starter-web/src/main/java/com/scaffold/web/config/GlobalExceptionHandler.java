@@ -2,10 +2,10 @@ package com.scaffold.web.config;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
-import com.scaffold.core.base.constant.ResultCodeEnum;
-import com.scaffold.core.base.exception.BaseException;
-import com.scaffold.core.base.util.JsonUtil;
-import com.scaffold.core.base.util.R;
+import com.scaffold.base.constant.ResultCodeEnum;
+import com.scaffold.base.exception.BaseException;
+import com.scaffold.base.util.JsonUtil;
+import com.scaffold.base.util.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.core.MethodParameter;
@@ -26,7 +26,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.concurrent.CompletionException;
 
-import static com.scaffold.core.base.constant.GlobalConstant.GLOBAL_ERROR_CODE;
+import static com.scaffold.base.constant.GlobalConstant.GLOBAL_ERROR_CODE;
 
 /**
  * 全局异常处理器

@@ -1,6 +1,6 @@
 package com.scaffold.security.vo;
 
-import com.scaffold.core.base.util.CollUtils;
+import com.scaffold.base.util.CollUtils;
 import lombok.Getter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

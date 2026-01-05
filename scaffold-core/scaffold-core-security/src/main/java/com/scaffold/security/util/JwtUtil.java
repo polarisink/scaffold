@@ -4,10 +4,10 @@ import cn.hutool.crypto.SecureUtil;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
-import com.scaffold.core.base.constant.GlobalConstant;
-import com.scaffold.core.base.constant.ResultCodeEnum;
-import com.scaffold.core.base.exception.BaseException;
-import com.scaffold.core.base.util.JsonUtil;
+import com.scaffold.base.constant.GlobalConstant;
+import com.scaffold.base.constant.ResultCodeEnum;
+import com.scaffold.base.exception.BaseException;
+import com.scaffold.base.util.JsonUtil;
 import com.scaffold.security.vo.PayloadDTO;
 import lombok.extern.slf4j.Slf4j;
 

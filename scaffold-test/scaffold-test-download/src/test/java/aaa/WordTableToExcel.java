@@ -119,8 +119,8 @@ public class WordTableToExcel {
 
     private static String getVMergeVal(XWPFTableCell cell) {
         if (cell.getCTTc() != null
-            && cell.getCTTc().getTcPr() != null
-            && cell.getCTTc().getTcPr().isSetVMerge()) {
+                && cell.getCTTc().getTcPr() != null
+                && cell.getCTTc().getTcPr().isSetVMerge()) {
             STMerge.Enum val = cell.getCTTc().getTcPr().getVMerge().getVal();
             return val != null ? val.toString() : "continue";
         }

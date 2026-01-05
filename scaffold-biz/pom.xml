@@ -16,19 +16,10 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>github.polarisink</groupId>
             <artifactId>scaffold-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>github.polarisink</groupId>
-            <artifactId>scaffold-core-websocket</artifactId>
         </dependency>
     </dependencies>
 

@@ -1,9 +1,9 @@
 package com.scaffold.security.config;
 
-import com.scaffold.core.base.constant.GlobalConstant;
-import com.scaffold.core.base.util.R;
+import com.scaffold.base.util.R;
 import com.scaffold.security.util.ResponseUtil;
 import com.scaffold.security.vo.AuthCodeEnum;
+import com.scaffold.security.vo.SecurityProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,14 +51,14 @@ public class SecurityConfig {
      * @throws Exception ex
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityProperties securityProperties) throws Exception {
         //设置INHERITABLE策略，可在子线程中获取用户信息
         SecurityContextHolder.setStrategyName(MODE_INHERITABLETHREADLOCAL);
         return http
                 //tokenFilter放在UsernamePasswordAuthenticationFilter前面
                 .addFilterBefore(tokenAndLogFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(c -> c
-                        .requestMatchers(GlobalConstant.IGNORE_PATH_LIST).permitAll()
+                        .requestMatchers(securityProperties.getIgnoreList()).permitAll()
                         .anyRequest().authenticated())
                 //异常处理
                 .exceptionHandling(e -> e

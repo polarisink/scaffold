@@ -3,7 +3,7 @@ package com.scaffold.redis.core;
 import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.scaffold.core.base.util.JsonUtil;
+import com.scaffold.base.util.JsonUtil;
 import com.scaffold.redis.domain.RedisListenerMethod;
 import com.scaffold.redis.domain.RedisMessage;
 import com.scaffold.redis.utils.RedisUtils;

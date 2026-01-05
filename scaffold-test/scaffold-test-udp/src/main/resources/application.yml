@@ -1,0 +1,19 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: scaffold-test-jna
+
+# PDW 解析配置
+pdw:
+  parse:
+    min-pw: 2.0      # 信号分选识别的最小脉宽（us）
+    max-dtoa: 50000  # 信号分选识别的最大脉冲间隔（us）
+    min-dtoa: 5      # 信号分选识别的最小脉冲间隔（us）
+
+# 动态库路径配置（可选，如果不配置，JNA会自动在系统库路径中查找）
+# pdw:
+#   library:
+#     path: /path/to/pdw/library  # 动态库所在路径
+

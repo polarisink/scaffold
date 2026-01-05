@@ -45,3 +45,4 @@ bin/
 **/rebel.xml
 /qodana.yaml
 **/logs/**
+/.cursor/

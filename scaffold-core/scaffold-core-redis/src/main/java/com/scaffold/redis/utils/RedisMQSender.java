@@ -1,6 +1,6 @@
 package com.scaffold.redis.utils;
 
-import com.scaffold.core.base.util.JsonUtil;
+import com.scaffold.base.util.JsonUtil;
 import com.scaffold.redis.domain.RedisMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

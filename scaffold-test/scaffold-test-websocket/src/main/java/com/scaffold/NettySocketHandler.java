@@ -6,7 +6,7 @@ import com.corundumstudio.socketio.annotation.OnConnect;
 import com.corundumstudio.socketio.annotation.OnDisconnect;
 import com.corundumstudio.socketio.annotation.OnEvent;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.scaffold.core.base.util.JsonUtil;
+import com.scaffold.base.util.JsonUtil;
 import com.scaffold.redis.annotations.RedisStreamListener;
 import com.scaffold.redis.annotations.RedisSubTopic;
 import com.scaffold.redis.core.RedisMqSender;

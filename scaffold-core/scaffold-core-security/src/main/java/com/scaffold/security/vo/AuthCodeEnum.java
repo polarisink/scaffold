@@ -1,7 +1,7 @@
 package com.scaffold.security.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.scaffold.core.base.exception.IResponseEnum;
+import com.scaffold.base.exception.IResponseEnum;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

@@ -19,7 +19,6 @@
         <maven.compiler.target>21</maven.compiler.target>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
-        <lombok.version>1.18.30</lombok.version>
         <!--   spring相关     -->
         <spring-boot-maven-plugin.version>3.2.4</spring-boot-maven-plugin.version>
         <spring-boot-dependencies.version>3.2.4</spring-boot-dependencies.version>
@@ -28,13 +27,13 @@
         <mysql.version>8.0.23</mysql.version>
         <mariadb.version>3.5.2</mariadb.version>
         <!--    工具    -->
+        <lombok.version>1.18.30</lombok.version>
         <hutool.version>5.8.25</hutool.version>
         <mapStruct.version>1.4.2.Final</mapStruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <guava.version>33.0.0-jre</guava.version>
         <redisson-starter.version>3.16.1</redisson-starter.version>
         <knife4j-swagger.version>4.5.0</knife4j-swagger.version>
-        <minio.version>8.5.10</minio.version>
         <easy-query.version>2.0.63</easy-query.version>
         <nimbus-jose-jwt.version>9.39.3</nimbus-jose-jwt.version>
         <netty-all.version>4.2.6.Final</netty-all.version>
@@ -45,6 +44,9 @@
         <concept-coroutines.version>2.0.0</concept-coroutines.version>
         <javacv.version>1.5.12</javacv.version>
         <ffmpeg.version>7.1-1.5.11</ffmpeg.version>
+        <lang3.version>3.18.0</lang3.version>
+        <jna.version>5.14.0</jna.version>
+        <s3.version>2.20.59</s3.version>
     </properties>
 
     <dependencyManagement>
@@ -107,6 +109,11 @@
                 <version>${guava.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${lang3.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapStruct.version}</version>
@@ -120,7 +127,7 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-                <version>3.5.7</version>
+                <version>3.5.12</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
@@ -132,12 +139,6 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
                 <version>${knife4j-swagger.version}</version>
-            </dependency>
-            <!--对象存储-->
-            <dependency>
-                <groupId>io.minio</groupId>
-                <artifactId>minio</artifactId>
-                <version>${minio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.nimbusds</groupId>
@@ -201,6 +202,21 @@
                 <version>${netty-all.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.alicp.jetcache</groupId>
+                <artifactId>jetcache-starter-redis</artifactId>
+                <version>2.7.8</version>
+            </dependency>
+            <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna</artifactId>
+                <version>${jna.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>s3</artifactId>
+                <version>${s3.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot-dependencies.version}</version>
@@ -228,6 +244,10 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
     </dependencies>
 
@@ -312,5 +332,6 @@
         <module>scaffold-core</module>
         <module>scaffold-test</module>
         <module>scaffold-biz</module>
+        <module>scaffold-module</module>
     </modules>
 </project>

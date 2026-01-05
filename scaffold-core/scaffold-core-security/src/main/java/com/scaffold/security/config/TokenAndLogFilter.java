@@ -1,8 +1,8 @@
 package com.scaffold.security.config;
 
-import com.scaffold.core.base.constant.GlobalConstant;
-import com.scaffold.core.base.util.JsonUtil;
-import com.scaffold.core.base.util.ServletUtils;
+import com.scaffold.base.constant.GlobalConstant;
+import com.scaffold.base.util.JsonUtil;
+import com.scaffold.base.util.ServletUtils;
 import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.util.ResponseUtil;
 import com.scaffold.security.vo.AuthCodeEnum;

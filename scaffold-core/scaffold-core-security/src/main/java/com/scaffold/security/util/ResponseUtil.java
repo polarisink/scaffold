@@ -1,6 +1,6 @@
 package com.scaffold.security.util;
 
-import com.scaffold.core.base.util.JsonUtil;
+import com.scaffold.base.util.JsonUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 

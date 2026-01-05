@@ -1,6 +1,6 @@
 package com.scaffold.redis.core;
 
-import com.scaffold.core.base.util.JsonUtil;
+import com.scaffold.base.util.JsonUtil;
 import com.scaffold.redis.domain.RedisMessage;
 import com.scaffold.redis.utils.RedisUtils;
 import jakarta.annotation.Nonnull;

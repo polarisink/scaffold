@@ -4,6 +4,7 @@ import com.corundumstudio.socketio.AuthorizationListener;
 import com.corundumstudio.socketio.AuthorizationResult;
 import com.corundumstudio.socketio.HandshakeData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
+@ConditionalOnMissingBean(AuthorizationListener.class)
 public class SocketAuthListener implements AuthorizationListener {
 
 
