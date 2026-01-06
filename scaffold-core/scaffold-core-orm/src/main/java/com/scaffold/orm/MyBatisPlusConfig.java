@@ -1,4 +1,4 @@
-package com.scaffold.web.config;
+package com.scaffold.orm;
 
 
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.MybatisMapWrapperFactory;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.scaffold.orm.MysqlInjector;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

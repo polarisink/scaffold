@@ -4,3 +4,18 @@ server:
 spring:
   lifecycle:
     timeout-per-shutdown-phase: 30s
+  cache:
+    type: caffeine
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/scaffold?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+file-storage:
+  enabled: true
+  type: local
+  local:
+    base-path: /Users/aries/Downloads/files

@@ -6,6 +6,9 @@ package com.scaffold.security.config;
  */
 public interface TokenService {
 
+    static String tokenPrefix(Long userId) {
+        return "token:" + userId;
+    }
 
     /**
      * 设置用户id的token

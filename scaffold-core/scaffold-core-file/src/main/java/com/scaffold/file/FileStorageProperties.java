@@ -1,4 +1,3 @@
-// src/main/java/.../properties/FileUploadProperties.java
 package com.scaffold.file;
 
 import lombok.Data;
@@ -6,13 +5,15 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
-import static com.scaffold.file.FileUploadProperties.FILE_STORAGE_PREFIX;
+import static com.scaffold.file.FileStorageProperties.FILE_STORAGE_PREFIX;
 
 @Data
 @ConfigurationProperties(prefix = FILE_STORAGE_PREFIX)
-public class FileUploadProperties implements InitializingBean {
+public class FileStorageProperties implements InitializingBean {
 
     public static final String FILE_STORAGE_PREFIX = "file-storage";
+
+    private Boolean enabled = false;
 
     /**
      * 存储类型: local, s3

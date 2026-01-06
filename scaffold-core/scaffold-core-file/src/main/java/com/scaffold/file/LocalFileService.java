@@ -16,10 +16,10 @@ import java.util.UUID;
 @Slf4j
 public class LocalFileService implements FileUploadService {
 
-    private final FileUploadProperties.Local local;
+    private final FileStorageProperties.Local local;
     private final Path baseDirPath;
 
-    public LocalFileService(FileUploadProperties properties) {
+    public LocalFileService(FileStorageProperties properties) {
         this.local = properties.getLocal();
         this.baseDirPath = Paths.get(local.getBasePath()).toAbsolutePath().normalize();
         try {

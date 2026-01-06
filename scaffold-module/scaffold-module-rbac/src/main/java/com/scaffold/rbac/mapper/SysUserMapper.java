@@ -51,7 +51,7 @@ public interface SysUserMapper extends JpaRepository<SysUser, Long> {
      * @return 用户id集合
      */
     default List<Long> selectAllEnabledUserId() {
-        return null;
+        return List.of();
     }
 
 }

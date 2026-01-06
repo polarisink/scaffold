@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@ConditionalOnMissingBean(TokenService.class)
+//@ConditionalOnMissingBean(TokenService.class)
 public class TokenServiceImpl implements TokenService {
 
 

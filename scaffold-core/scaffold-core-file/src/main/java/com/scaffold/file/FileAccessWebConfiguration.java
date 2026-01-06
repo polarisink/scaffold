@@ -1,33 +1,28 @@
-// src/main/java/.../config/FileAccessWebConfiguration.java
 package com.scaffold.file;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static com.scaffold.file.FileUploadProperties.FILE_STORAGE_PREFIX;
-
+// 只有当启用且配置为 LOCAL 存储类型时，才激活这个 Web 映射配置
 @Slf4j
 @Configuration
-// 只有当配置为 LOCAL 存储类型时，才激活这个 Web 映射配置
-@ConditionalOnProperty(prefix = FILE_STORAGE_PREFIX, name = "type", havingValue = "local", matchIfMissing = true)
+@RequiredArgsConstructor
+@ConditionalOnExpression("#{'${file-storage.enabled:false}' == 'true' && '${file-storage.type}' == 'local'}")
 public class FileAccessWebConfiguration implements WebMvcConfigurer {
 
-    private final FileUploadProperties properties;
-
-    public FileAccessWebConfiguration(FileUploadProperties properties) {
-        this.properties = properties;
-    }
+    private final FileStorageProperties properties;
 
     /**
      * 将本地存储路径映射为 HTTP 访问路径
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        if (properties.getType() == FileUploadProperties.StorageType.LOCAL) {
-            FileUploadProperties.Local local = properties.getLocal();
+        if (properties.getType() == FileStorageProperties.StorageType.LOCAL) {
+            FileStorageProperties.Local local = properties.getLocal();
             String basePath = local.getBasePath();
 
             // 确保路径以斜杠结束，并且是 file: 协议

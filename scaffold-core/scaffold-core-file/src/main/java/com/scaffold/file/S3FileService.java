@@ -17,10 +17,10 @@ import java.util.UUID;
 @Slf4j
 public class S3FileService implements FileUploadService {
 
-    private final FileUploadProperties.S3 s3Config;
+    private final FileStorageProperties.S3 s3Config;
     private final S3Client s3Client;
 
-    public S3FileService(FileUploadProperties properties) {
+    public S3FileService(FileStorageProperties properties) {
         this.s3Config = properties.getS3();
         try {
             this.s3Client = S3Client.builder()

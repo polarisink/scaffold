@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>github.polarisink</groupId>
+    <groupId>com.polarisink</groupId>
     <artifactId>scaffold</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -53,48 +53,53 @@
         <dependencies>
             <!--项目模块版本-->
             <dependency>
-                <groupId>github.polarisink</groupId>
+                <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-base</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>github.polarisink</groupId>
+                <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-file</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>github.polarisink</groupId>
+                <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-log</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>github.polarisink</groupId>
+                <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-orm</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>github.polarisink</groupId>
+                <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-redis</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>github.polarisink</groupId>
+                <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-security</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>github.polarisink</groupId>
+                <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-swagger</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>github.polarisink</groupId>
+                <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-websocket</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>github.polarisink</groupId>
+                <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-starter-web</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.polarisink</groupId>
+                <artifactId>scaffold-module-rbac</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <!--工具类版本-->

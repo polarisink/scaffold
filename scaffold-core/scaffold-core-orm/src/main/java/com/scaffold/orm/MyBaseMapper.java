@@ -27,7 +27,7 @@ public interface MyBaseMapper<T> extends BaseMapper<T> {
      * @param batchSize 批次大小
      * @param parallel  是否并行执行
      */
-    default void insertOrUpdateBatch(@Param("list") Collection<T> list, int batchSize, boolean parallel) {
+    default void insertBatchSomeColumn(@Param("list") Collection<T> list, int batchSize, boolean parallel) {
         List<List<T>> split = CollUtil.split(list, batchSize);
         if (parallel) {
             split.parallelStream().forEach(this::insertBatchSomeColumn);

@@ -2,6 +2,8 @@ package com.scaffold.file;
 
 import com.scaffold.base.util.R;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/file")
 @RequiredArgsConstructor
+@ConditionalOnBean(FileUploadService.class)
 public class FileController {
 
     private final FileUploadService fileUploadService;

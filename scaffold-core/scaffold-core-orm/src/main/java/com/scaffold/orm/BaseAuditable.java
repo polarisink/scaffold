@@ -25,6 +25,11 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseAuditable {
 
+    public static final String GMT_MODIFIED = "gmtModified";
+    public static final String GMT_CREATED = "gmtCreated";
+    public static final String CREATED_BY = "createdBy";
+    public static final String MODIFIED_BY = "modifiedBy";
+
     /**
      * id
      */
