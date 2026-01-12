@@ -2,6 +2,7 @@ package com.scaffold;
 
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
+import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.annotation.OnConnect;
 import com.corundumstudio.socketio.annotation.OnDisconnect;
 import com.corundumstudio.socketio.annotation.OnEvent;
@@ -12,7 +13,9 @@ import com.scaffold.redis.annotations.RedisSubTopic;
 import com.scaffold.redis.core.RedisMqSender;
 import com.scaffold.redis.domain.RedisMessage;
 import com.scaffold.socket.util.NettySocketUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.Message;
@@ -31,7 +34,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 @Component
-public class NettySocketHandler implements CommandLineRunner {
+@RequiredArgsConstructor
+public class NettySocketHandler implements CommandLineRunner, DisposableBean {
     private final static String QUERY_CLIENT_ID = "clientId";
     /**
      * 客户端保存用Map
@@ -41,6 +45,7 @@ public class NettySocketHandler implements CommandLineRunner {
      * 连接数
      */
     public static AtomicInteger onlineCount = new AtomicInteger(0);
+    private final SocketIOServer server;
 
     /**
      * 客户端连上socket服务器时执行此事件
@@ -104,6 +109,11 @@ public class NettySocketHandler implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        log.debug("socketHandler start-------------------------------");
+        server.start();
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        server.stop();
     }
 }

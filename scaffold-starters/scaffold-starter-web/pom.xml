@@ -29,11 +29,6 @@
             <groupId>com.polarisink</groupId>
             <artifactId>scaffold-core-swagger</artifactId>
         </dependency>
-       <!-- <dependency>
-            <groupId>com.polarisink</groupId>
-            <artifactId>scaffold-core-orm</artifactId>
-        </dependency>-->
-
         <!--   单元测试     -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
