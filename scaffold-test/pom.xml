@@ -20,6 +20,7 @@
         <module>scaffold-test-download</module>
         <module>scaffold-test-redis</module>
         <module>scaffold-test-udp</module>
+        <module>scaffold-test-audio</module>
     </modules>
 
 </project>

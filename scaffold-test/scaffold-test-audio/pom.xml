@@ -5,31 +5,26 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.polarisink</groupId>
-        <artifactId>scaffold</artifactId>
+        <artifactId>scaffold-test</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>scaffold-biz</artifactId>
+    <artifactId>scaffold-test-audio</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.polarisink</groupId>
             <artifactId>scaffold-starter-web</artifactId>
         </dependency>
-        <!--
-        如果不需要数据库服务就不需要这个
-        如果只需要数据库不需要用户系统就引如scaffold-core-orm
-        如果需要权限系统就引入scaffold-module-rbac
-        -->
         <dependency>
             <groupId>com.polarisink</groupId>
-            <artifactId>scaffold-module-rbac</artifactId>
+            <artifactId>scaffold-core-orm</artifactId>
         </dependency>
     </dependencies>
-
 </project>
