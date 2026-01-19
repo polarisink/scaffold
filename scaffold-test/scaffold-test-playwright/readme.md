@@ -1,0 +1,2 @@
+# [用于服务端将html转为pdf然后进行打印下载的功能](https://mp.weixin.qq.com/s?__biz=MzI3MzU4MzY0OQ==&mid=2247484176&idx=1&sn=4644ce2bba136dc2232402fd48aa0004&chksm=ea6c4f98247fcd85b03b0ec568a63366f63dc57fc258f464f097854e2383fa14b6fd63e1223f&mpshare=1&scene=24&srcid=0109PtYTCC8P5npVPfXLJ0wj&sharer_shareinfo=0c2f1f0ce38e50ed60affcb1f99dc27e&sharer_shareinfo_first=0c2f1f0ce38e50ed60affcb1f99dc27e#rd)
+

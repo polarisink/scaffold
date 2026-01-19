@@ -1,0 +1,1 @@
+# [测试调用whisper进行离线大模型语音识别](https://mp.weixin.qq.com/s?__biz=Mzg5MzIxNjEzOQ==&mid=2247495836&idx=1&sn=73ca22312eb6f6ef014cd28eb73767f5&chksm=c11891f4f762771c223bca23e25f310cfd07757a90f525848418fa7ecb593c54ca21c65757b1&mpshare=1&scene=24&srcid=0111bUSYPihBxVqR7pZthg8j&sharer_shareinfo=68f0c8a0671006f7c22fe8372d8cd0e1&sharer_shareinfo_first=68f0c8a0671006f7c22fe8372d8cd0e1#rd)
