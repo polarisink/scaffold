@@ -2,7 +2,6 @@ package com.scaffold.web.config;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
-import com.scaffold.base.constant.ResultCodeEnum;
 import com.scaffold.base.exception.BaseException;
 import com.scaffold.base.util.JsonUtil;
 import com.scaffold.base.util.R;
@@ -39,6 +38,8 @@ import static com.scaffold.base.constant.GlobalConstant.GLOBAL_ERROR_CODE;
 @ConditionalOnWebApplication
 public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
 
+    private static final String SERVER_ERROR_MSG = "服务器或网络开小差了，请联系管理员";
+
 
     /**
      * 处理自定义异常
@@ -50,7 +51,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
     public R<Void> handleException(BaseException e) {
         String msg = e.getMessage();
         if (CharSequenceUtil.isBlank(msg)) {
-            msg = ResultCodeEnum.SERVER_ERROR.getMessage();
+            msg = SERVER_ERROR_MSG;
         }
         return R.failed(GLOBAL_ERROR_CODE, msg);
     }
@@ -68,8 +69,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
     @ResponseBody
     public R<Void> handleException(IllegalArgumentException e) {
         log.error(ExceptionUtil.stacktraceToString(e));
-        String message = ResultCodeEnum.SERVER_ERROR.getMessage();
-        return R.failed(GLOBAL_ERROR_CODE, message);
+        return R.failed(GLOBAL_ERROR_CODE, SERVER_ERROR_MSG);
     }
 
     /**
@@ -143,8 +143,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
     @ExceptionHandler(NoResourceFoundException.class)
     public R<Void> handleNoResourceFoundException(NoResourceFoundException e) {
         log.error("resource not found: {}", e.getResourcePath());
-        String message = ResultCodeEnum.SERVER_ERROR.getMessage();
-        return R.failed(GLOBAL_ERROR_CODE, message);
+        return R.failed(GLOBAL_ERROR_CODE, SERVER_ERROR_MSG);
     }
 
     /**
@@ -175,8 +174,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
             log.error(msg);
         }
         log.error(ExceptionUtil.stacktraceToString(e));
-        String message = ResultCodeEnum.SERVER_ERROR.getMessage();
-        return R.failed(GLOBAL_ERROR_CODE, message);
+        return R.failed(GLOBAL_ERROR_CODE, SERVER_ERROR_MSG);
     }
 
     @Override

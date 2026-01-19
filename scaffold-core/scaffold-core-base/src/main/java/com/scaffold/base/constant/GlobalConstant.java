@@ -11,6 +11,8 @@ public interface GlobalConstant {
      * 树根节点的父id
      */
     Long ROOT_PARENT_ID = 0L;
+
+    //todo 这个应该写入配置的
     String SECRET = "abcdefghijklmnopqrstuvwxyz";
 
     /**

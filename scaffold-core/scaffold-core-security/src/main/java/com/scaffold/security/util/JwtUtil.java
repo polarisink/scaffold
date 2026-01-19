@@ -5,11 +5,11 @@ import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.scaffold.base.constant.GlobalConstant;
-import com.scaffold.base.constant.ResultCodeEnum;
 import com.scaffold.base.exception.BaseException;
 import com.scaffold.base.util.JsonUtil;
 import com.scaffold.security.vo.PayloadDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
 
 /**
  * JWT工具类
@@ -21,7 +21,7 @@ public class JwtUtil {
 
     public static String generateToken(PayloadDTO p) {
         //校验基本信息
-        ResultCodeEnum.TOKEN_UNAUTHORIZED.isFalse(p.getUsername() == null || p.getUsername().isBlank());
+        Assert.hasText(p.getUsername(), "错误的token");
         try {
             //创建JWS头，设置签名算法和类型
             JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).
