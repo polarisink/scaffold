@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.polarisink</groupId>
         <artifactId>scaffold</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${rversion}</version>
     </parent>
 
     <description>抽出来的业务模块，可用可不用</description>

@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.polarisink</groupId>
         <artifactId>scaffold-test</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${rversion}</version>
     </parent>
     <artifactId>scaffold-test-http-interface</artifactId>
 

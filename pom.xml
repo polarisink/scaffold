@@ -7,9 +7,10 @@
     <groupId>com.polarisink</groupId>
     <artifactId>scaffold</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>${rversion}</version>
 
     <properties>
+        <rversion>1.0-SNAPSHOT</rversion>
         <!--    编译相关    -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -19,6 +20,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
+        <flatten.version>1.7.3</flatten.version>
         <!--   spring相关     -->
         <spring-boot-maven-plugin.version>3.2.4</spring-boot-maven-plugin.version>
         <spring-boot-dependencies.version>3.2.4</spring-boot-dependencies.version>
@@ -47,6 +49,7 @@
         <lang3.version>3.18.0</lang3.version>
         <jna.version>5.14.0</jna.version>
         <s3.version>2.20.59</s3.version>
+        <playwright.version>1.56.0</playwright.version>
     </properties>
 
     <dependencyManagement>
@@ -55,52 +58,52 @@
             <dependency>
                 <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-base</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-file</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-log</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-orm</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-redis</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-security</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-swagger</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-core-websocket</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-starter-web</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.polarisink</groupId>
                 <artifactId>scaffold-module-rbac</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <!--工具类版本-->
             <dependency>
@@ -227,6 +230,11 @@
                 <version>${redisson-starter.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.microsoft.playwright</groupId>
+                <artifactId>playwright</artifactId>
+                <version>${playwright.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot-dependencies.version}</version>
@@ -332,6 +340,31 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>${flatten.version}</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
