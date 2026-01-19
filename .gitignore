@@ -46,3 +46,4 @@ bin/
 /qodana.yaml
 **/logs/**
 /.cursor/
+/**/.flattened-pom.xml
