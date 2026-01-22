@@ -63,13 +63,18 @@ public class VertxDeployer implements ApplicationRunner, DisposableBean {
                 .onSuccess(a -> log.info("udp服务器部署成功"))
                 //失败
                 .onFailure(e -> log.error("udp服务器部署失败：{}", e.getMessage()));
-        Future.all(tcpFuture, udpFuture).onComplete(ar -> {
-            if (ar.succeeded()) {
-                log.info("所有服务集群部署成功！系统运行中...");
-            } else {
-                log.error("部分服务部署失败，请检查配置", ar.cause());
-            }
-        });
+        Future.all(tcpFuture, udpFuture)
+                .onComplete(ar -> {
+                    if (ar.succeeded()) {
+                        log.info("所有服务集群部署成功！系统运行中...");
+                /*vertx.eventBus().send(UdpVerticle.UDP_MSG_EVENT, new JsonObject()
+                        .put("data", new byte[]{1, 2, 3, 4})
+                        .put("port", 8080)
+                        .put("host", "127.0.0.1"));*/
+                    } else {
+                        log.error("部分服务部署失败，请检查配置", ar.cause());
+                    }
+                });
 
         //latch.await();
 

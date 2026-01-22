@@ -16,6 +16,7 @@ import java.util.Map;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TcpVerticle extends VerticleBase {
+    private volatile boolean running = false;
     private NetServer server;
     @Setter
     private Integer instanceId;
@@ -28,7 +29,6 @@ public class TcpVerticle extends VerticleBase {
     public Future<?> start() {
         //用于多实例共享map
         Map<String, String> map = vertx.sharedData().getLocalMap("tcp");
-
         // 1. 创建服务器
         server = vertx.createNetServer(new NetServerOptions().setReusePort(true));
 
@@ -40,18 +40,24 @@ public class TcpVerticle extends VerticleBase {
                 log.info("{}从：{}收到数据: {}", getName(), remoteAddress, buffer.toString());
                 socket.write("PONG: " + buffer);
             });
-
             // 监听关闭事件
             socket.closeHandler(v -> log.info("连接已关闭: {}", remoteAddress));
         });
 
         // 3. 启动监听（5.x 推荐 Future 风格）
-        return server.listen(1234).onSuccess(s -> log.info("{}启动成功，端口： {}", getName(), s.actualPort())).onFailure(err -> log.error("{}启动失败： {}", getName(), err.getMessage()));
+        return server.listen(1234)
+                //成功
+                .onSuccess(s -> {
+                    log.info("{}启动成功，端口： {}", getName(), s.actualPort());
+                    running = true;
+                })
+                //失败
+                .onFailure(err -> log.error("{}启动失败： {}", getName(), err.getMessage()));
     }
 
     @Override
     public Future<?> stop() throws Exception {
-        if (server != null) {
+        if (server != null && running) {
             server.shutdown();
         }
         log.info("{}已停止", getName());
