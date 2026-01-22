@@ -22,6 +22,7 @@
         <module>scaffold-test-udp</module>
         <module>scaffold-test-audio</module>
         <module>scaffold-test-playwright</module>
+        <module>scaffold-test-vertx</module>
     </modules>
 
 </project>

@@ -1,0 +1,6 @@
+spring:
+  main:
+    # 即使没有 Web 容器，也保持 Spring 上下文开启
+    web-application-type: none
+    # 保持程序在后台不退出
+    keep-alive: true

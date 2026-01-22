@@ -50,6 +50,7 @@
         <jna.version>5.14.0</jna.version>
         <s3.version>2.20.59</s3.version>
         <playwright.version>1.56.0</playwright.version>
+        <vertx.version>5.0.5</vertx.version>
     </properties>
 
     <dependencyManagement>
@@ -233,6 +234,13 @@
                 <groupId>com.microsoft.playwright</groupId>
                 <artifactId>playwright</artifactId>
                 <version>${playwright.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-stack-depchain</artifactId>
+                <version>${vertx.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
