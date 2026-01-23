@@ -39,6 +39,10 @@ public class VertxDeployer implements ApplicationRunner, DisposableBean {
 
     @Override
     public void run(ApplicationArguments args) {
+        // 注册自定义对象的解码器
+        vertx.eventBus().registerDefaultCodec(UdpMsgVo.class, new GenericCodec<>(UdpMsgVo.class));
+
+        //多实例部署
         DeploymentOptions deploymentOptions = new DeploymentOptions().setInstances(4).setThreadingModel(ThreadingModel.VIRTUAL_THREAD);
 
         //tcp服务器部署
@@ -63,6 +67,7 @@ public class VertxDeployer implements ApplicationRunner, DisposableBean {
                 .onSuccess(a -> log.info("udp服务器部署成功"))
                 //失败
                 .onFailure(e -> log.error("udp服务器部署失败：{}", e.getMessage()));
+
         Future.all(tcpFuture, udpFuture)
                 .onComplete(ar -> {
                     if (ar.succeeded()) {
