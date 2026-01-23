@@ -9,7 +9,7 @@
         <version>${rversion}</version>
     </parent>
 
-    <artifactId>scaffold-test-websocket</artifactId>
+    <artifactId>scaffold-test-netty-socketio</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

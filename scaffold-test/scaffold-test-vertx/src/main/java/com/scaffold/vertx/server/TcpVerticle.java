@@ -7,7 +7,7 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.NetServer;
 import io.vertx.core.net.NetServerOptions;
 import io.vertx.core.parsetools.RecordParser;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -23,14 +23,14 @@ import java.util.Map;
 @Slf4j
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@RequiredArgsConstructor
 public class TcpVerticle extends VerticleBase {
+    private final NetProperties netProperties;
     private volatile boolean running = false;
     private NetServer server;
-    @Setter
-    private Integer instanceId;
 
     private String getName() {
-        return "tcp服务器-" + instanceId;
+        return config().getString("serverName") + "-" +config().getInteger("instanceId", 0);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class TcpVerticle extends VerticleBase {
         });
 
         // 3. 启动监听（5.x 推荐 Future 风格）
-        return server.listen(1234)
+        return server.listen(netProperties.getTcpPort(), netProperties.getTcpHost())
                 //成功
                 .onSuccess(s -> {
                     log.info("{}启动成功，端口： {}", getName(), s.actualPort());

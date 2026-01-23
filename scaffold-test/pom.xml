@@ -14,7 +14,7 @@
     <artifactId>scaffold-test</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>scaffold-test-websocket</module>
+        <module>scaffold-test-netty-socketio</module>
         <module>scaffold-test-sse</module>
         <module>scaffold-test-http-interface</module>
         <module>scaffold-test-download</module>
