@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * pdf服务
- *
+ * <p>
  * # 指定下载路径
  * export PLAYWRIGHT_BROWSERS_PATH=/opt/playwright-browsers
  * mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install chromium"

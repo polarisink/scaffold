@@ -1,7 +1,5 @@
 package com.scaffold.audio;
 
-import io.swagger.v3.core.util.AnnotationsUtils;
-
 public class TranscriptionResult {
     public static TranscriptionResult failure(String s) {
         return null;

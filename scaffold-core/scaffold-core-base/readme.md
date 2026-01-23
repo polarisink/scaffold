@@ -1,6 +1,7 @@
 # scaffold的基础模块
 
 包括以下：
+
 - 异步配置
 - jackson配置
 - restCliebnt配置

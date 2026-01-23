@@ -21,7 +21,7 @@ public class AudioPreprocessingService {
     /**
      * 使用FFmpeg预处理音频文件
      */
-    public String preprocessAudio(String inputFilePath)throws IOException {
+    public String preprocessAudio(String inputFilePath) throws IOException {
         // 创建临时文件
         File inputFile = new File(inputFilePath);
         String outputFileName = "preprocessed_" + System.currentTimeMillis() + ".wav";
@@ -57,7 +57,7 @@ public class AudioPreprocessingService {
     /**
      * 验证音频文件基本信息
      */
-    public AudioFileInfo getAudioInfo(String filePath)throws IOException {
+    public AudioFileInfo getAudioInfo(String filePath) throws IOException {
         String[] cmd = {
                 "ffprobe",
                 "-v", "quiet",

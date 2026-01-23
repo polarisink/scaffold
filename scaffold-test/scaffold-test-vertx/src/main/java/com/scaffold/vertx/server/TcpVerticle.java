@@ -30,7 +30,7 @@ public class TcpVerticle extends VerticleBase {
     private NetServer server;
 
     private String getName() {
-        return config().getString("serverName") + "-" +config().getInteger("instanceId", 0);
+        return config().getString("serverName") + "-" + config().getInteger("instanceId", 0);
     }
 
     @Override
