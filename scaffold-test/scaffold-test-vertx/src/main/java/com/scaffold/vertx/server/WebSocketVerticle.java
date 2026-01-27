@@ -154,25 +154,27 @@ public class WebSocketVerticle extends VerticleBase {
      */
     private void registerEventBusConsumers() {
         // 全服公告
-        consumerList.add(vertx.eventBus().<String>consumer(WS_BROADCAST_ALL, msg -> {
+        MessageConsumer<String> broadcastConsumer = vertx.eventBus().<String>consumer(WS_BROADCAST_ALL, msg -> {
             localSocketMap.values().forEach(ws -> ws.writeTextMessage("【系统】" + msg.body()));
-        }));
-
+        });
         // 定向消息 (ws.instance.0, ws.instance.1 ...)
-        consumerList.add(vertx.eventBus().<JsonObject>consumer(WS_INSTANCE + getInstanceId(), msg -> {
+        MessageConsumer<JsonObject> instanceConsumer = vertx.eventBus().<JsonObject>consumer(WS_INSTANCE + getInstanceId(), msg -> {
             JsonObject json = msg.body();
             ServerWebSocket ws = localSocketMap.get(json.getString("to"));
             if (ws != null) ws.writeTextMessage(json.getString("payload"));
-        }));
+        });
         // 强踢指令
-        consumerList.add(vertx.eventBus().<String>consumer(WS_KICK, msg -> {
+        MessageConsumer<String> kickConsumer = vertx.eventBus().<String>consumer(WS_KICK, msg -> {
             String uid = msg.body();
             ServerWebSocket ws = localSocketMap.get(uid);
             if (ws != null) {
                 ws.writeTextMessage("你已被系统强制下线").onComplete(a -> ws.close());
                 handleUserOffline(uid);
             }
-        }));
+        });
+        consumerList.add(broadcastConsumer);
+        consumerList.add(instanceConsumer);
+        consumerList.add(kickConsumer);
     }
 
     /**
