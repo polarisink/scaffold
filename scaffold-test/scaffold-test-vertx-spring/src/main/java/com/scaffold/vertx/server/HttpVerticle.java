@@ -5,24 +5,25 @@ import io.vertx.core.VerticleBase;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.internal.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * HTTP服务器
  */
+@Slf4j
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
 public class HttpVerticle extends VerticleBase {
-    private static final Logger log = LogManager.getLogger(HttpVerticle.class);
-
-
+    private final NetProperties netProperties;
     private HttpServer server;
 
     private String getName() {
@@ -70,12 +71,13 @@ public class HttpVerticle extends VerticleBase {
             JsonObject body = ctx.body().asJsonObject();
             ctx.response().setStatusCode(201).putHeader("content-type", "application/json").end(new JsonObject().put("status", "saved").encode());
         });
+
         // 3、运行server
         return server
                 //使用router
                 .requestHandler(router)
                 //监听
-                .listen(config().getInteger("port"), config().getString("host"))
+                .listen(netProperties.getHttpPort(), netProperties.getHttpHost())
                 //成功
                 .onSuccess(s -> log.info("{}启动成功，端口： {}", getName(), s.actualPort()))
                 //失败

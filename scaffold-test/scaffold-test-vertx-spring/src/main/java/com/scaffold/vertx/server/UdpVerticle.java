@@ -8,8 +8,9 @@ import io.vertx.core.datagram.DatagramSocketOptions;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -17,11 +18,14 @@ import org.apache.logging.log4j.Logger;
  * <p>
  * 不能通过autowired的方式进行注入使用,只能通过eventBus进行沟通
  */
+@Slf4j
+@Component
+//用于多实例部署
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
 public class UdpVerticle extends VerticleBase {
-    private static final Logger log = LogManager.getLogger(UdpVerticle.class);
-
     public static final String UDP_MSG_EVENT = "service.udp.event";
+    private final NetProperties netProperties;
     private DatagramSocket socket;
     @Getter
     private volatile boolean running = false;
@@ -49,7 +53,7 @@ public class UdpVerticle extends VerticleBase {
         });
 
         // 3. 绑定端口
-        return socket.listen(config().getInteger("port"), config().getString("host"))
+        return socket.listen(netProperties.getUdpPort(), netProperties.getUdpHost())
                 //成功之后的逻辑处理
                 .onSuccess(s -> {
                     //打印成功日志

@@ -4,14 +4,14 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.VerticleBase;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.dns.DnsClient;
 import io.vertx.core.net.NetServer;
 import io.vertx.core.net.NetServerOptions;
 import io.vertx.core.parsetools.RecordParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -20,10 +20,12 @@ import java.util.Map;
  * <p>
  * 不能通过autowired的方式进行注入使用,只能通过eventBus进行沟通
  */
+@Slf4j
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
 public class TcpVerticle extends VerticleBase {
-    private static final Logger log = LogManager.getLogger(TcpVerticle.class);
-
+    private final NetProperties netProperties;
     private volatile boolean running = false;
     private NetServer server;
 
@@ -33,6 +35,8 @@ public class TcpVerticle extends VerticleBase {
 
     @Override
     public Future<?> start() {
+        //用于多实例共享map
+        Map<String, String> map = vertx.sharedData().getLocalMap("tcp");
         // 1. 创建服务器
         server = vertx.createNetServer(new NetServerOptions().setReusePort(true));
 
@@ -68,7 +72,7 @@ public class TcpVerticle extends VerticleBase {
         });
 
         // 3. 启动监听（5.x 推荐 Future 风格）
-        return server.listen(config().getInteger("port"), config().getString("host"))
+        return server.listen(netProperties.getTcpPort(), netProperties.getTcpHost())
                 //成功
                 .onSuccess(s -> {
                     log.info("{}启动成功，端口： {}", getName(), s.actualPort());

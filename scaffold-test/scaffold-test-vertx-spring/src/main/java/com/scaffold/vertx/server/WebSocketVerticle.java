@@ -9,8 +9,10 @@ import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.LocalMap;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,17 +36,20 @@ import java.util.concurrent.ConcurrentHashMap;
  * 穿透代理：有些负载均衡器（Load Balancer）只在有“数据往来”时才保持连接。协议帧有时被视为管理流量，不计入活跃数据，而业务字符串消息则一定能延长连接寿命。
  *
  */
+@Slf4j
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
 public class WebSocketVerticle extends VerticleBase {
     public static final String WS_BROADCAST_ALL = "broadcast.all";
     public static final String WS_INSTANCE = "ws.instance.";
     public static final String WS_KICK = "ws.command.kick";
-    private static final Logger log = LogManager.getLogger(WebSocketVerticle.class);
     // 1. 本地连接池：Key=userId, Value=Socket对象 (仅限连接到本实例的用户)
     private final Map<String, ServerWebSocket> localSocketMap = new ConcurrentHashMap<>();
     // 2. 本地活跃时间池：Key=userId, Value=最后一次Ping/消息时间戳
     private final Map<String, Long> lastActiveTimeMap = new ConcurrentHashMap<>();
     private final List<MessageConsumer<?>> consumerList = new ArrayList<>();
+    private final NetProperties netProperties;
     // 3. 心跳定时器id
     private Long heartbeatTimerId;
     // 4. ws服务器
@@ -85,7 +90,7 @@ public class WebSocketVerticle extends VerticleBase {
         setupWebSocketHandler();
 
         // 3. 执行端口绑定，并利用回调开启后续任务
-        return server.listen(config().getInteger("port"), config().getString("host"))
+        return server.listen(netProperties.getWsPort(), netProperties.getWsHost())
                 //成功回调
                 .onSuccess(s -> {
 
