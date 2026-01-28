@@ -1,0 +1,8 @@
+wsPort: 9076
+wsHost: localhost
+udpPort: 9077
+udpHost: localhost
+tcpPort: 9078
+tcpHost: localhost
+httpPort: 9080
+httpHost: localhost

@@ -1,15 +1,11 @@
 package com.scaffold.vertx.server;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * 网络配置
  */
 @Data
-@Configuration
-@ConfigurationProperties(prefix = "net")
 public class NetProperties {
     //多网卡时绑定网卡
     private Integer wsPort = 8076;
