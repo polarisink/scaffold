@@ -1,7 +1,6 @@
 package com.scaffold.base.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -30,7 +29,6 @@ public class RestClientConfig {
         return factory.createClient(tClass);
     }
 
-    @Bean
     public RestClient.Builder builder(ObjectMapper objectMapper, ClientHttpRequestInterceptor interceptor) {
         return RestClient.builder()
                 //消息转换器

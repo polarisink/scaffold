@@ -1,7 +1,10 @@
 # 优雅停机，这能保证服务停止时，不再接收新请求，但会处理完当前正在进行的请求，避免用户操作中断。
 server:
   shutdown: graceful
+  port: 8080
 spring:
+  application:
+    name: scaffold-biz
   lifecycle:
     timeout-per-shutdown-phase: 30s
   cache:
@@ -14,6 +17,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  boot:
+    admin:
+      client:
+        url: http://localhost:10000
+
 file-storage:
   enabled: true
   type: local

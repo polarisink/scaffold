@@ -9,6 +9,8 @@
     <packaging>pom</packaging>
     <version>${rversion}</version>
 
+    <description>个人项目脚手架</description>
+
     <properties>
         <rversion>1.0-SNAPSHOT</rversion>
         <!--    编译相关    -->
@@ -22,8 +24,9 @@
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <flatten.version>1.7.3</flatten.version>
         <!--   spring相关     -->
-        <spring-boot-maven-plugin.version>3.2.4</spring-boot-maven-plugin.version>
-        <spring-boot-dependencies.version>3.2.4</spring-boot-dependencies.version>
+        <spring-boot-maven-plugin.version>3.5.7</spring-boot-maven-plugin.version>
+        <spring-boot-dependencies.version>3.5.7</spring-boot-dependencies.version>
+        <spring-boot-adin-dependencies.version>3.5.7</spring-boot-adin-dependencies.version>
         <!--   数据库相关     -->
         <mybatis-plus.version>3.5.12</mybatis-plus.version>
         <mysql.version>8.0.23</mysql.version>
@@ -51,6 +54,7 @@
         <s3.version>2.20.59</s3.version>
         <playwright.version>1.56.0</playwright.version>
         <vertx.version>5.0.5</vertx.version>
+        <spring-boot-admin.version>3.5.7</spring-boot-admin.version>
     </properties>
 
     <dependencyManagement>
@@ -58,199 +62,23 @@
             <!--项目模块版本-->
             <dependency>
                 <groupId>com.polarisink</groupId>
-                <artifactId>scaffold-core-base</artifactId>
+                <artifactId>scaffold-denpendices</artifactId>
                 <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.polarisink</groupId>
-                <artifactId>scaffold-core-file</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.polarisink</groupId>
-                <artifactId>scaffold-core-log</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.polarisink</groupId>
-                <artifactId>scaffold-core-orm</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.polarisink</groupId>
-                <artifactId>scaffold-core-redis</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.polarisink</groupId>
-                <artifactId>scaffold-core-security</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.polarisink</groupId>
-                <artifactId>scaffold-core-swagger</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.polarisink</groupId>
-                <artifactId>scaffold-core-websocket</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.polarisink</groupId>
-                <artifactId>scaffold-starter-web</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.polarisink</groupId>
-                <artifactId>scaffold-module-rbac</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <!--工具类版本-->
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-all</artifactId>
-                <version>${hutool.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${lang3.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct</artifactId>
-                <version>${mapStruct.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-processor</artifactId>
-                <version>${mapStruct.version}</version>
-            </dependency>
-            <!--orm-->
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-                <version>3.5.12</version>
-            </dependency>
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql.version}</version>
-            </dependency>
-            <!--基于knife4j-openapi3的api接口文档生成-->
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-                <version>${knife4j-swagger.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.nimbusds</groupId>
-                <artifactId>nimbus-jose-jwt</artifactId>
-                <version>${nimbus-jose-jwt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.corundumstudio.socketio</groupId>
-                <artifactId>netty-socketio</artifactId>
-                <version>${netty-socketio.version}</version>
-            </dependency>
-            <!--retrofit的三个依赖-->
-            <dependency>
-                <groupId>com.squareup.retrofit2</groupId>
-                <artifactId>retrofit</artifactId>
-                <version>${retrofit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.squareup.retrofit2</groupId>
-                <artifactId>converter-jackson</artifactId>
-                <version>${retrofit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.squareup.retrofit2</groupId>
-                <artifactId>converter-scalars</artifactId>
-                <version>${retrofit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.linyuzai</groupId>
-                <artifactId>concept-download-spring-boot-starter</artifactId>
-                <version>${concept-download.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.linyuzai</groupId>
-                <artifactId>concept-download-coroutines</artifactId>
-                <version>${concept-coroutines.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi</artifactId>
-                <version>${poi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml</artifactId>
-                <version>${poi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>javacv-platform</artifactId>
-                <version>${javacv.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>ffmpeg-platform</artifactId>
-                <version>${ffmpeg.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-                <version>${netty-all.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alicp.jetcache</groupId>
-                <artifactId>jetcache-starter-redis</artifactId>
-                <version>2.7.8</version>
-            </dependency>
-            <dependency>
-                <groupId>net.java.dev.jna</groupId>
-                <artifactId>jna</artifactId>
-                <version>${jna.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>s3</artifactId>
-                <version>${s3.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson-spring-boot-starter</artifactId>
-                <version>${redisson-starter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.playwright</groupId>
-                <artifactId>playwright</artifactId>
-                <version>${playwright.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.vertx</groupId>
-                <artifactId>vertx-stack-depchain</artifactId>
-                <version>${vertx.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
+    <modules>
+        <module>scaffold-starters</module>
+        <module>scaffold-core</module>
+        <module>scaffold-test</module>
+        <module>scaffold-biz</module>
+        <module>scaffold-module</module>
+        <module>scaffold-denpendices</module>
+    </modules>
 
     <build>
         <finalName>${project.name}</finalName>
@@ -353,11 +181,4 @@
     </build>
 
 
-    <modules>
-        <module>scaffold-starters</module>
-        <module>scaffold-core</module>
-        <module>scaffold-test</module>
-        <module>scaffold-biz</module>
-        <module>scaffold-module</module>
-    </modules>
 </project>

@@ -26,9 +26,13 @@
         如果只需要数据库不需要用户系统就引如scaffold-core-orm
         如果需要权限系统就引入scaffold-module-rbac
         -->
-        <dependency>
+       <!-- <dependency>
             <groupId>com.polarisink</groupId>
             <artifactId>scaffold-module-rbac</artifactId>
+        </dependency>-->
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
         </dependency>
     </dependencies>
 

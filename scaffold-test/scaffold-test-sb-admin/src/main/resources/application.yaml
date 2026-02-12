@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: scaffold-test-sb-admin
+
+server:
+  port: 10000
