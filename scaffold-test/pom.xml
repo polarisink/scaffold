@@ -24,7 +24,8 @@
         <module>scaffold-test-playwright</module>
         <module>scaffold-test-vertx-spring</module>
         <module>scaffold-test-vertx</module>
-        <module>scaffold-test-sb-admin</module>
+        <module>scaffold-test-sb-admin-server</module>
+        <module>scaffold-test-sb-admin-client</module>
         <module>scaffold-test-langchain4j</module>
     </modules>
 

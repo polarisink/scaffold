@@ -30,10 +30,6 @@
             <groupId>com.polarisink</groupId>
             <artifactId>scaffold-module-rbac</artifactId>
         </dependency>-->
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-client</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

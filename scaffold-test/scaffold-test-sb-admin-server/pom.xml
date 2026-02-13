@@ -7,7 +7,7 @@
         <artifactId>scaffold-test</artifactId>
         <version>${rversion}</version>
     </parent>
-    <artifactId>scaffold-test-sb-admin</artifactId>
+    <artifactId>scaffold-test-sb-admin-server</artifactId>
     <name>scaffold-test-sb-admin</name>
     <description>scaffold-test-sb-admin</description>
 

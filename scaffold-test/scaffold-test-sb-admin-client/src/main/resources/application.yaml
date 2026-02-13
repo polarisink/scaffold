@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: scaffold-test-sb-admin
+  boot:
+    admin:
+      client:
+        url: http://localhost:10000
+server:
+  port: 10001
+
+logging:
+  level:
+    de.codecentric.boot.admin.client.registration.DefaultApplicationRegistrator: DEBUG
+    root: info
