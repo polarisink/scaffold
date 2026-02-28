@@ -225,6 +225,7 @@ public class WebSocketVerticle extends VerticleBase {
         }
         //停止所有消费者
         consumerList.forEach(MessageConsumer::unregister);
+        log.info("{}已停止", getName());
         return server != null ? server.close() : Future.succeededFuture();
     }
 }

@@ -36,6 +36,7 @@ public class VertxDeployer implements ApplicationRunner, DisposableBean {
         } /*else {
             latch.countDown();
         }*/
+        log.info("vertx服务器已停止");
     }
 
     @Override

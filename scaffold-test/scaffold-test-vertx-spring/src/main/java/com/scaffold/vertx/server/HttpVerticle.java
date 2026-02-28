@@ -86,6 +86,7 @@ public class HttpVerticle extends VerticleBase {
 
     @Override
     public Future<?> stop() throws Exception {
+        log.info("{}已停止", getName());
         return server != null ? server.close() : Future.succeededFuture();
     }
 }
