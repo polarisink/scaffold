@@ -3,13 +3,11 @@ package com.scaffold.base.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
-import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -22,9 +20,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -69,7 +64,6 @@ public class JacksonConfig {
         JavaTimeModule javaTimeModule = getJavaTimeModule();
         objectMapper.registerModule(javaTimeModule);
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(BigDecimal.class, BigDecimalToStringSerializer.instance);
         objectMapper.registerModule(simpleModule);
 
         // 忽略json字符串中不识别的属性
@@ -92,42 +86,5 @@ public class JacksonConfig {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         return mapper;
-    }
-
-    @JacksonStdImpl
-    static class BigDecimalToStringSerializer extends ToStringSerializer {
-        final static BigDecimalToStringSerializer instance = new BigDecimalToStringSerializer();
-
-        BigDecimalToStringSerializer() {
-            super(Object.class);
-        }
-
-        @Override
-        public boolean isEmpty(SerializerProvider prov, Object value) {
-            if (value == null) {
-                return true;
-            }
-            String str = ((BigDecimal) value).stripTrailingZeros().toPlainString();
-            return str.isEmpty();
-        }
-
-        @Override
-        public void serialize(Object value, JsonGenerator gen, SerializerProvider provider)
-                throws IOException {
-            gen.writeString(((BigDecimal) value).stripTrailingZeros().toPlainString());
-        }
-
-        @Override
-        public JsonNode getSchema(SerializerProvider provider, Type typeHint) {
-            return createSchemaNode("string", true);
-        }
-
-        @Override
-        public void serializeWithType(Object value, JsonGenerator gen,
-                                      SerializerProvider provider, TypeSerializer typeSer)
-                throws IOException {
-            // no type info, just regular serialization
-            serialize(value, gen, provider);
-        }
     }
 }
