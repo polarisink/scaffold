@@ -20,12 +20,11 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class NettySocketConfig {
     private final AuthorizationListener authorizationListener;
-    private final ResourceLoader resourceLoader;
 
     @Value("${train.socketio.host:127.0.0.1}")
     private String host;
 
-    @Value("${train.socketio.port:8080}")
+    @Value("${train.socketio.port:8081}")
     private Integer port;
     @Value("${train.socketio.context:}")
     private String contextPath = "";

@@ -11,6 +11,7 @@
 
     <description>个人项目脚手架</description>
 
+
     <properties>
         <rversion>1.0-SNAPSHOT</rversion>
         <!--    编译相关    -->
@@ -20,41 +21,6 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
-        <flatten.version>1.7.3</flatten.version>
-        <!--   spring相关     -->
-        <spring-boot-maven-plugin.version>3.5.7</spring-boot-maven-plugin.version>
-        <spring-boot-dependencies.version>3.5.7</spring-boot-dependencies.version>
-        <spring-boot-adin-dependencies.version>3.5.7</spring-boot-adin-dependencies.version>
-        <!--   数据库相关     -->
-        <mybatis-plus.version>3.5.12</mybatis-plus.version>
-        <mysql.version>8.0.23</mysql.version>
-        <mariadb.version>3.5.2</mariadb.version>
-        <!--    工具    -->
-        <lombok.version>1.18.30</lombok.version>
-        <hutool.version>5.8.25</hutool.version>
-        <mapStruct.version>1.4.2.Final</mapStruct.version>
-        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-        <guava.version>33.0.0-jre</guava.version>
-        <redisson-starter.version>3.52.0</redisson-starter.version>
-        <knife4j-swagger.version>4.5.0</knife4j-swagger.version>
-        <easy-query.version>2.0.63</easy-query.version>
-        <nimbus-jose-jwt.version>9.39.3</nimbus-jose-jwt.version>
-        <netty-all.version>4.2.6.Final</netty-all.version>
-        <netty-socketio.version>2.0.11</netty-socketio.version>
-        <retrofit.version>2.11.0</retrofit.version>
-        <concept-download.version>2.1.0</concept-download.version>
-        <poi.version>5.4.1</poi.version>
-        <concept-coroutines.version>2.0.0</concept-coroutines.version>
-        <javacv.version>1.5.12</javacv.version>
-        <ffmpeg.version>7.1-1.5.11</ffmpeg.version>
-        <lang3.version>3.18.0</lang3.version>
-        <jna.version>5.14.0</jna.version>
-        <s3.version>2.20.59</s3.version>
-        <playwright.version>1.56.0</playwright.version>
-        <vertx.version>5.0.5</vertx.version>
-        <spring-boot-admin.version>3.5.7</spring-boot-admin.version>
     </properties>
 
     <dependencyManagement>
@@ -80,105 +46,6 @@
         <module>scaffold-denpendices</module>
     </modules>
 
-    <build>
-        <finalName>${project.name}</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>*</include>
-                </includes>
-            </resource>
-        </resources>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot-maven-plugin.version}</version>
-                    <configuration>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>repackage</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <!--        提供覆盖默认 Java 编译器版本的选项            -->
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>UTF-8</encoding>
-                    <parameters>true</parameters>
-                    <annotationProcessorPaths>
-                        <!-- 必须要加, 否则生成不了 MapperImpl 实现类 -->
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${mapStruct.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                        <!-- 如果是 0.1.0 有可能出现生成了mapStruct的实现类, 但该类只创建了对象, 没有进行赋值 -->
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>${lombok-mapstruct-binding.version}</version>
-                        </path>
-                        <path>
-                            <groupId>com.easy-query</groupId>
-                            <artifactId>sql-processor</artifactId>
-                            <version>${easy-query.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <version>${flatten.version}</version>
-                <configuration>
-                    <updatePomFile>true</updatePomFile>
-                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flatten</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>flatten</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>flatten.clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 
 </project>

@@ -257,11 +257,11 @@
                 <artifactId>langchain4j-spring-boot-starter</artifactId>
                 <version>${langchain4j.version}</version>
             </dependency>
-            <dependency>
+            <!--<dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
                 <version>${okhttp.version}</version>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-stack-depchain</artifactId>
