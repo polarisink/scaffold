@@ -24,12 +24,13 @@ import java.util.Map;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
-public class TcpVerticle extends VerticleBase {
+public class TcpVerticle extends VerticleBase implements IServer {
     private final NetProperties netProperties;
     private volatile boolean running = false;
     private NetServer server;
 
-    private String getName() {
+    @Override
+    public String serverName() {
         return config().getString("serverName") + "-" + config().getInteger("instanceId", 0);
     }
 
@@ -75,11 +76,11 @@ public class TcpVerticle extends VerticleBase {
         return server.listen(netProperties.getTcpPort(), netProperties.getTcpHost())
                 //成功
                 .onSuccess(s -> {
-                    log.info("{}启动成功，端口： {}", getName(), s.actualPort());
+                    log.info("{}启动成功，端口： {}", serverName(), s.actualPort());
                     running = true;
                 })
                 //失败
-                .onFailure(err -> log.error("{}启动失败： {}", getName(), err.getMessage()));
+                .onFailure(err -> log.error("{}启动失败： {}", serverName(), err.getMessage()));
     }
 
     @Override
@@ -87,7 +88,7 @@ public class TcpVerticle extends VerticleBase {
         if (server != null && running) {
             server.shutdown();
         }
-        log.info("{}已停止", getName());
+        log.info("{}已停止", serverName());
         return super.stop();
     }
 }

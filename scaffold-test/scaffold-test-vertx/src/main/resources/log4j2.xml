@@ -30,7 +30,8 @@
         <property name="ENCODER_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %5pid --- [%15.15t] %c{1.} [%L] : %m%n
         </property>
         <!--日志输出格式-控制台彩色打印-->
-        <property name="DEFAULT_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{%-5level} %style{%5pid}{bright,magenta} --- [%17.17t] %cyan{%c{1.} [%L]} : %m%n
+        <property name="DEFAULT_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{%-5level} %style{%5pid}{bright,magenta}
+            --- [%17.17t] %cyan{%c{1.} [%L]} : %m%n
         </property>
     </properties>
 

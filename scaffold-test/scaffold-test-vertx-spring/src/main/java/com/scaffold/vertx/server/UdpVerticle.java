@@ -23,14 +23,15 @@ import org.springframework.stereotype.Component;
 //用于多实例部署
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
-public class UdpVerticle extends VerticleBase {
+public class UdpVerticle extends VerticleBase implements IServer {
     public static final String UDP_MSG_EVENT = "service.udp.event";
     private final NetProperties netProperties;
     private DatagramSocket socket;
     @Getter
     private volatile boolean running = false;
 
-    private String getName() {
+    @Override
+    public String serverName() {
         return config().getString("serverName") + "-" + config().getInteger("instanceId", 0);
     }
 
@@ -47,7 +48,7 @@ public class UdpVerticle extends VerticleBase {
         socket.handler(packet -> {
             Buffer data = packet.data();
 
-            log.info("{}收到来自 {} 的包: {}", getName(), packet.sender(), data.toString());
+            log.info("{}收到来自 {} 的包: {}", serverName(), packet.sender(), data.toString());
             // 回复数据
             socket.send("ACK", packet.sender().port(), packet.sender().host());
         });
@@ -57,7 +58,7 @@ public class UdpVerticle extends VerticleBase {
                 //成功之后的逻辑处理
                 .onSuccess(s -> {
                     //打印成功日志
-                    log.info("{}启动成功，端口：{}", getName(), s.localAddress().port());
+                    log.info("{}启动成功，端口：{}", serverName(), s.localAddress().port());
                     //状态修改
                     running = true;
                     //启动成功之后事件监听，用于udp消息的发送
@@ -69,7 +70,7 @@ public class UdpVerticle extends VerticleBase {
                                 //失败
                                 .onFailure(err -> log.error("发送{}失败: {}", vo.name(), err.getMessage()));
                     });
-                }).onFailure(err -> log.error("{}启动失败： {}", getName(), err.getMessage()));
+                }).onFailure(err -> log.error("{}启动失败： {}", serverName(), err.getMessage()));
     }
 
     @Override
@@ -78,7 +79,7 @@ public class UdpVerticle extends VerticleBase {
             socket.close();
         }
         running = false;
-        log.info("{}已停止", getName());
+        log.info("{}已停止", serverName());
         return super.stop();
     }
 }

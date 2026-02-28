@@ -40,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
-public class WebSocketVerticle extends VerticleBase {
+public class WebSocketVerticle extends VerticleBase implements IServer {
     public static final String WS_BROADCAST_ALL = "broadcast.all";
     public static final String WS_INSTANCE = "ws.instance.";
     public static final String WS_KICK = "ws.command.kick";
@@ -72,7 +72,8 @@ public class WebSocketVerticle extends VerticleBase {
      *
      * @return
      */
-    private String getName() {
+    @Override
+    public String serverName() {
         return config().getString("serverName") + "-" + config().getInteger("instanceId", 0);
     }
 
@@ -103,10 +104,10 @@ public class WebSocketVerticle extends VerticleBase {
                     startHeartbeatTimer();
 
                     //打印成功日志
-                    log.info("{} 启动成功，端口： {}", getName(), server.actualPort());
+                    log.info("{} 启动成功，端口： {}", serverName(), server.actualPort());
                 })
                 //失败打印原因
-                .onFailure(e -> log.error("{} 启动失败", getName(), e));
+                .onFailure(e -> log.error("{} 启动失败", serverName(), e));
     }
 
     /**
@@ -186,7 +187,7 @@ public class WebSocketVerticle extends VerticleBase {
             lastActiveTimeMap.forEach((uid, lastTime) -> {
                 ServerWebSocket ws = localSocketMap.get(uid);
                 if (now - lastTime > 90000) {
-                    log.warn("{} 用户 {} 心跳超时", getName(), uid);
+                    log.warn("{} 用户 {} 心跳超时", serverName(), uid);
                     if (ws != null) ws.close();
                     handleUserOffline(uid);
                 }
@@ -225,7 +226,7 @@ public class WebSocketVerticle extends VerticleBase {
         }
         //停止所有消费者
         consumerList.forEach(MessageConsumer::unregister);
-        log.info("{}已停止", getName());
+        log.info("{}已停止", serverName());
         return server != null ? server.close() : Future.succeededFuture();
     }
 }

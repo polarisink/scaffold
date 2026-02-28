@@ -22,11 +22,12 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
-public class HttpVerticle extends VerticleBase {
+public class HttpVerticle extends VerticleBase implements IServer {
     private final NetProperties netProperties;
     private HttpServer server;
 
-    private String getName() {
+    @Override
+    public String serverName() {
         return config().getString("serverName") + "-" + config().getInteger("instanceId", 0);
     }
 
@@ -79,14 +80,14 @@ public class HttpVerticle extends VerticleBase {
                 //监听
                 .listen(netProperties.getHttpPort(), netProperties.getHttpHost())
                 //成功
-                .onSuccess(s -> log.info("{}启动成功，端口： {}", getName(), s.actualPort()))
+                .onSuccess(s -> log.info("{}启动成功，端口： {}", serverName(), s.actualPort()))
                 //失败
-                .onFailure(err -> log.error("{}启动失败", getName(), err));
+                .onFailure(err -> log.error("{}启动失败", serverName(), err));
     }
 
     @Override
     public Future<?> stop() throws Exception {
-        log.info("{}已停止", getName());
+        log.info("{}已停止", serverName());
         return server != null ? server.close() : Future.succeededFuture();
     }
 }

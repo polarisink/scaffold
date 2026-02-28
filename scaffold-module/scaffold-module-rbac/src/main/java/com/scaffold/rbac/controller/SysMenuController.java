@@ -75,7 +75,7 @@ public class SysMenuController {
     @Log(title = MENU, businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
     @Operation(summary = "删除", description = "传入id")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable Long id) {
         sysMenuService.deleteById(id);
     }
 }
