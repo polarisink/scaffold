@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>scaffold-core</artifactId>
-        <groupId>com.polarisink</groupId>
+        <groupId>com.scaffold</groupId>
         <version>${rversion}</version>
     </parent>
     <artifactId>scaffold-core-websocket</artifactId>
@@ -13,7 +13,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.polarisink</groupId>
+            <groupId>com.scaffold</groupId>
             <artifactId>scaffold-core-base</artifactId>
         </dependency>
         <dependency>

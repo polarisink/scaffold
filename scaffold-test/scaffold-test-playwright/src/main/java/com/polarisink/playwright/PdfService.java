@@ -1,4 +1,4 @@
-package com.polarisink.playwright;
+package com.scaffold.playwright;
 
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.LoadState;

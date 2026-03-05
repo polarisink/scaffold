@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>scaffold-core</artifactId>
-        <groupId>com.polarisink</groupId>
+        <groupId>com.scaffold</groupId>
         <version>${rversion}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>

@@ -1,4 +1,4 @@
-package com.polarisink.playwright;
+package com.scaffold.playwright;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

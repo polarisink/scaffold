@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.polarisink</groupId>
+    <groupId>com.scaffold</groupId>
     <version>${rversion}</version>
     <artifactId>scaffold-denpendices</artifactId>
 
@@ -65,52 +65,52 @@
         <dependencies>
             <!--项目模块版本-->
             <dependency>
-                <groupId>com.polarisink</groupId>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-base</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
-                <groupId>com.polarisink</groupId>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-file</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
-                <groupId>com.polarisink</groupId>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-log</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
-                <groupId>com.polarisink</groupId>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-orm</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
-                <groupId>com.polarisink</groupId>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-redis</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
-                <groupId>com.polarisink</groupId>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-security</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
-                <groupId>com.polarisink</groupId>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-swagger</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
-                <groupId>com.polarisink</groupId>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-websocket</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
-                <groupId>com.polarisink</groupId>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-web</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
-                <groupId>com.polarisink</groupId>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-module-rbac</artifactId>
                 <version>${rversion}</version>
             </dependency>

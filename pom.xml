@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.polarisink</groupId>
+    <groupId>com.scaffold</groupId>
     <artifactId>scaffold</artifactId>
     <packaging>pom</packaging>
     <version>${rversion}</version>
@@ -27,7 +27,7 @@
         <dependencies>
             <!--项目模块版本-->
             <dependency>
-                <groupId>com.polarisink</groupId>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-denpendices</artifactId>
                 <version>${rversion}</version>
                 <type>pom</type>
