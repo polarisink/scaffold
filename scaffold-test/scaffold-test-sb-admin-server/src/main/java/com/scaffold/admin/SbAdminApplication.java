@@ -1,4 +1,4 @@
-package com.polarisink.admin;
+package com.scaffold.admin;
 
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;

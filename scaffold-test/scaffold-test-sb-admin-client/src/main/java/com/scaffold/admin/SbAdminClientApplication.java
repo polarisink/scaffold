@@ -1,4 +1,4 @@
-package com.polarisink.admin;
+package com.scaffold.admin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
