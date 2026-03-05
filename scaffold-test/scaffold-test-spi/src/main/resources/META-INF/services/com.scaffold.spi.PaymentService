@@ -1,0 +1,2 @@
+com.scaffold.spi.AlipayService
+com.scaffold.spi.WechatPayService
