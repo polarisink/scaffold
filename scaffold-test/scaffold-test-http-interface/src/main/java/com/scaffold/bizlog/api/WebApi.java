@@ -1,4 +1,4 @@
-package com.scaffold.hl.api;
+package com.scaffold.bizlog.api;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.service.annotation.GetExchange;

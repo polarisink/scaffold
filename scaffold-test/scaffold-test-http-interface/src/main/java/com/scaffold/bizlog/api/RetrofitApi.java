@@ -1,4 +1,4 @@
-package com.scaffold.hl.api;
+package com.scaffold.bizlog.api;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

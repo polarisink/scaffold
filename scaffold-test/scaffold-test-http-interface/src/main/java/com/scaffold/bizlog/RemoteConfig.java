@@ -1,8 +1,8 @@
-package com.scaffold.hl;
+package com.scaffold.bizlog;
 
-import com.scaffold.hl.api.RestApi;
-import com.scaffold.hl.api.RetrofitApi;
-import com.scaffold.hl.api.WebApi;
+import com.scaffold.bizlog.api.RestApi;
+import com.scaffold.bizlog.api.RetrofitApi;
+import com.scaffold.bizlog.api.WebApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;

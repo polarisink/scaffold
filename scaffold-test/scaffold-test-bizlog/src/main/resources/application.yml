@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: scaffold-test-bizlog
+server:
+  port: 8888

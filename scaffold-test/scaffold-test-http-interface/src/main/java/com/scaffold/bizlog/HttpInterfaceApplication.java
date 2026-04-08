@@ -1,4 +1,4 @@
-package com.scaffold.hl;
+package com.scaffold.bizlog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,8 +1,8 @@
-package com.scaffold.hl;
+package com.scaffold.bizlog;
 
-import com.scaffold.hl.api.RestApi;
-import com.scaffold.hl.api.RetrofitApi;
-import com.scaffold.hl.api.WebApi;
+import com.scaffold.bizlog.api.RestApi;
+import com.scaffold.bizlog.api.RetrofitApi;
+import com.scaffold.bizlog.api.WebApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
