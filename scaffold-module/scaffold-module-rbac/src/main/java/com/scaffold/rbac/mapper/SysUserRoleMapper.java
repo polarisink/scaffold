@@ -69,7 +69,7 @@ public interface SysUserRoleMapper extends MyBaseMapper<SysUserRole> {
      * @return 是否存在
      */
     default boolean existsByRoleId(Long roleId) {
-        return selectCount(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getRoleId, roleId)) > 0;
+        return exists(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getRoleId, roleId));
     }
 
     /*

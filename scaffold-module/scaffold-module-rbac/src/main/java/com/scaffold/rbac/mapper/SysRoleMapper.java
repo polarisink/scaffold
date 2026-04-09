@@ -35,10 +35,10 @@ public interface SysRoleMapper extends MyBaseMapper<SysRole> {
     }
 
     default boolean existsByRoleName(String roleName) {
-        return selectCount(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleName, roleName)) > 0;
+        return exists(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleName, roleName));
     }
 
     default boolean existsByRoleCode(String roleCode) {
-        return selectCount(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, roleCode)) > 0;
+        return exists(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, roleCode));
     }
 }

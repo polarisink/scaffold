@@ -27,7 +27,7 @@ public interface SysUserMapper extends MyBaseMapper<SysUser> {
      * @return 是否存在
      */
     default boolean existsByUsername(String username) {
-        return selectCount(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username)) > 0;
+        return exists(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
     }
 
 
