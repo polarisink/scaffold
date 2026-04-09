@@ -1,12 +1,15 @@
 package com.scaffold.rbac.mapper;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.scaffold.orm.MyBaseMapper;
 import com.scaffold.rbac.entity.SysMenu;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 菜单(SysMenu)表Mapper接口
@@ -14,12 +17,7 @@ import java.util.Set;
  * @author aries
  * @since 2024-07-22 20:38:40
  */
-
-public interface SysMenuMapper extends JpaRepository<SysMenu, Long> {
-
-    default Long selectParentIdById(String id) {
-        return 1L;
-    }
+public interface SysMenuMapper extends MyBaseMapper<SysMenu> {
 
 
     /**
@@ -28,7 +26,9 @@ public interface SysMenuMapper extends JpaRepository<SysMenu, Long> {
      * @param menuName 菜单名
      * @return 是否存在
      */
-    boolean existsByMenuName(String menuName);
+    default boolean existsByMenuName(String menuName) {
+        return exists(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getMenuName, menuName));
+    }
 
     /**
      * 通过用户名找到所有菜单set
@@ -37,7 +37,7 @@ public interface SysMenuMapper extends JpaRepository<SysMenu, Long> {
      * @return 菜单set
      */
     default List<SysMenu> findMenuCollByUserId(Long userId) {
-        return null;
+        return List.of();
     }
 
     /**
@@ -47,7 +47,7 @@ public interface SysMenuMapper extends JpaRepository<SysMenu, Long> {
      * @return 菜单列表
      */
     default List<SysMenu> findMenuCollByRoleId(Long roleId) {
-        return null;
+        return List.of();
     }
 
     /**
@@ -56,7 +56,9 @@ public interface SysMenuMapper extends JpaRepository<SysMenu, Long> {
      * @param pId 父id
      * @return 是否有孩子
      */
-    boolean existsByParentId(Long pId);
+    default boolean existsByParentId(Long pId) {
+        return selectCount(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getParentId, pId)) > 0;
+    }
 
     /**
      * 通过父id计数
@@ -65,7 +67,7 @@ public interface SysMenuMapper extends JpaRepository<SysMenu, Long> {
      * @return
      */
     default long countByParentId(Long pId) {
-        return 0L;
+        return selectCount(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getParentId, pId));
     }
 
     /**
@@ -75,7 +77,13 @@ public interface SysMenuMapper extends JpaRepository<SysMenu, Long> {
      * @return 父id集合
      */
     default Collection<Long> findParentIdByIdIn(Collection<Long> menuIdSet) {
-        return null;
+        if (menuIdSet == null || menuIdSet.isEmpty()) {
+            return List.of();
+        }
+        LambdaQueryWrapper<SysMenu> wrapper = Wrappers.<SysMenu>lambdaQuery()
+                .in(SysMenu::getId, menuIdSet)
+                .select(SysMenu::getParentId);
+        return selectList(wrapper).stream().map(SysMenu::getParentId).collect(Collectors.toSet());
     }
 
     /**
@@ -84,8 +92,10 @@ public interface SysMenuMapper extends JpaRepository<SysMenu, Long> {
      * @return 父节点
      */
     default Set<Long> selectAllParentId() {
-        return null;
+        return selectList(Wrappers.<SysMenu>lambdaQuery().select(SysMenu::getParentId))
+                .stream()
+                .map(SysMenu::getParentId)
+                .collect(Collectors.toSet());
     }
 
 }
-

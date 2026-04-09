@@ -2,6 +2,7 @@ package com.scaffold.rbac.entity;
 
 
 import com.scaffold.orm.BaseAuditable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,10 +24,12 @@ public class SysUserRole extends BaseAuditable implements Serializable {
     /**
      * 用户id
      */
+    @Column(name = "user_id", columnDefinition = "bigint comment '用户ID'")
     private Long userId;
     /**
      * 角色id
      */
+    @Column(name = "role_id", columnDefinition = "bigint comment '角色ID'")
     private Long roleId;
 
 
@@ -35,4 +38,3 @@ public class SysUserRole extends BaseAuditable implements Serializable {
         this.roleId = roleId;
     }
 }
-

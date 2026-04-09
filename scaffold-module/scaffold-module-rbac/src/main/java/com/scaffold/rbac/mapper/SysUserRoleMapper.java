@@ -1,8 +1,9 @@
 package com.scaffold.rbac.mapper;
 
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.scaffold.orm.MyBaseMapper;
 import com.scaffold.rbac.entity.SysUserRole;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * @author aries
  * @since 2024-07-22 20:38:42
  */
-public interface SysUserRoleMapper extends JpaRepository<SysUserRole, Long> {
+public interface SysUserRoleMapper extends MyBaseMapper<SysUserRole> {
     /**
      * 通过用户id获取角色id集合
      *
@@ -21,7 +22,13 @@ public interface SysUserRoleMapper extends JpaRepository<SysUserRole, Long> {
      * @return 角色id集合
      */
     default List<Long> selectRoleIdByUserId(Long userId) {
-        return null;
+        return selectList(Wrappers.<SysUserRole>lambdaQuery()
+                .eq(SysUserRole::getUserId, userId)
+                .select(SysUserRole::getRoleId))
+                .stream()
+                .map(SysUserRole::getRoleId)
+                .sorted()
+                .toList();
     }
 
     /**
@@ -31,6 +38,9 @@ public interface SysUserRoleMapper extends JpaRepository<SysUserRole, Long> {
      * @param roleIdColl 角色id集合,为空时不加此条件
      */
     default void deleteByUserIdAndRoleIdIn(Long userId, Collection<Long> roleIdColl) {
+        delete(Wrappers.<SysUserRole>lambdaQuery()
+                .eq(SysUserRole::getUserId, userId)
+                .in(roleIdColl != null && !roleIdColl.isEmpty(), SysUserRole::getRoleId, roleIdColl));
     }
 
     /**
@@ -40,7 +50,16 @@ public interface SysUserRoleMapper extends JpaRepository<SysUserRole, Long> {
      * @return 用户id集合
      */
     default List<Long> selectUserIdByRoleIdIn(Collection<Long> roleIdColl) {
-        return null;
+        if (roleIdColl == null || roleIdColl.isEmpty()) {
+            return List.of();
+        }
+        return selectList(Wrappers.<SysUserRole>lambdaQuery()
+                .in(SysUserRole::getRoleId, roleIdColl)
+                .select(SysUserRole::getUserId))
+                .stream()
+                .map(SysUserRole::getUserId)
+                .distinct()
+                .toList();
     }
 
     /**
@@ -50,7 +69,7 @@ public interface SysUserRoleMapper extends JpaRepository<SysUserRole, Long> {
      * @return 是否存在
      */
     default boolean existsByRoleId(Long roleId) {
-        return true;
+        return selectCount(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getRoleId, roleId)) > 0;
     }
 
     /*
@@ -69,4 +88,3 @@ public interface SysUserRoleMapper extends JpaRepository<SysUserRole, Long> {
         delete(w);
     }*/
 }
-

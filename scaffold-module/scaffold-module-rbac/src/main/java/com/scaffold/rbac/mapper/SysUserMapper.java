@@ -1,8 +1,13 @@
 package com.scaffold.rbac.mapper;
 
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.scaffold.base.util.PageResponse;
+import com.scaffold.orm.MyBaseMapper;
 import com.scaffold.rbac.entity.SysUser;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
@@ -12,8 +17,7 @@ import java.util.List;
  * @author aries
  * @since 2024-07-22 20:40:08
  */
-
-public interface SysUserMapper extends JpaRepository<SysUser, Long> {
+public interface SysUserMapper extends MyBaseMapper<SysUser> {
 
 
     /**
@@ -22,7 +26,9 @@ public interface SysUserMapper extends JpaRepository<SysUser, Long> {
      * @param username 用户名
      * @return 是否存在
      */
-    boolean existsByUsername(String username);
+    default boolean existsByUsername(String username) {
+        return selectCount(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username)) > 0;
+    }
 
 
     /**
@@ -32,17 +38,17 @@ public interface SysUserMapper extends JpaRepository<SysUser, Long> {
      * @return 用户
      */
     default SysUser findByUsername(String username) {
-        return null;
+        return selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username).last("limit 1"));
     }
 
     /**
-     * 通过组织id查下面的人列表
+     * 通过组织id查下面的人列表 
      *
      * @param orgId 组织id
      * @return 人员列表
      */
     default List<SysUser> selectByOrgId(String orgId) {
-        return null;
+        return selectList(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOrgId, orgId));
     }
 
     /**
@@ -51,8 +57,20 @@ public interface SysUserMapper extends JpaRepository<SysUser, Long> {
      * @return 用户id集合
      */
     default List<Long> selectAllEnabledUserId() {
-        return List.of();
+        return selectList(Wrappers.<SysUser>lambdaQuery()
+                .eq(SysUser::getStatus, true)
+                .select(SysUser::getId))
+                .stream()
+                .map(SysUser::getId)
+                .toList();
+    }
+
+    default PageResponse<SysUser> page(com.scaffold.rbac.vo.user.SysUserPageVO vo) {
+        IPage<SysUser> page = selectPage(new Page<>(vo.getPageNo(), vo.getPageSize()),
+                Wrappers.<SysUser>lambdaQuery()
+                        .like(StrUtil.isNotBlank(vo.getUsername()), SysUser::getUsername, vo.getUsername())
+                        .orderByDesc(SysUser::getGmtModified));
+        return new PageResponse<>(page.getRecords(), page.getPages(), page.getCurrent(), page.getTotal(), page.getSize());
     }
 
 }
-

@@ -69,7 +69,7 @@ public class RbacCache {
      */
     @Cacheable(cacheNames = RbacCacheConst.MENU_TREE, key = "0")
     public List<SysMenu> menuTree() {
-        List<SysMenu> menuList = sysMenuMapper.findAll();
+        List<SysMenu> menuList = sysMenuMapper.selectList(null);
         List<SysMenu> tree = ITree.toTree(GlobalConstant.ROOT_PARENT_ID, menuList, Comparator.comparing(SysMenu::getSortNo));
         log.info("cache menu tree success");
         return tree;

@@ -1,10 +1,14 @@
 package com.scaffold.rbac.mapper;
 
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scaffold.base.util.PageResponse;
+import com.scaffold.orm.MyBaseMapper;
 import com.scaffold.rbac.entity.SysRole;
 import com.scaffold.rbac.vo.role.SysRolePageVO;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * 角色(SysRole)表Mapper接口
@@ -12,8 +16,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author aries
  * @since 2024-07-22 20:38:40
  */
-
-public interface SysRoleMapper extends JpaRepository<SysRole, Long> {
+public interface SysRoleMapper extends MyBaseMapper<SysRole> {
     /**
      * 单表分页
      * <p>
@@ -23,11 +26,19 @@ public interface SysRoleMapper extends JpaRepository<SysRole, Long> {
      * @return 分页结果
      */
     default PageResponse<SysRole> page(SysRolePageVO vo) {
-        return null;
+        IPage<SysRole> page = selectPage(new Page<>(vo.getPageNo(), vo.getPageSize()),
+                Wrappers.<SysRole>lambdaQuery()
+                        .like(StrUtil.isNotBlank(vo.getRoleName()), SysRole::getRoleName, vo.getRoleName())
+                        .like(StrUtil.isNotBlank(vo.getRoleCode()), SysRole::getRoleCode, vo.getRoleCode())
+                        .orderByDesc(SysRole::getGmtModified));
+        return new PageResponse<>(page.getRecords(), page.getPages(), page.getCurrent(), page.getTotal(), page.getSize());
     }
 
-    boolean existsByRoleName(String roleName);
+    default boolean existsByRoleName(String roleName) {
+        return selectCount(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleName, roleName)) > 0;
+    }
 
-    boolean existsByRoleCode(String roleCode);
+    default boolean existsByRoleCode(String roleCode) {
+        return selectCount(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, roleCode)) > 0;
+    }
 }
-

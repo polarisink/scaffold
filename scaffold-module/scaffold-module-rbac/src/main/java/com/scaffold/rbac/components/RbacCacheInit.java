@@ -30,7 +30,7 @@ public class RbacCacheInit implements ApplicationRunner {
             rbacCache.menuTree();
             //缓存组织机构数
             //缓存角色
-            roleMapper.findAll().forEach(r -> rbacCache.roleWrapper(r.getId()));
+            roleMapper.selectList(null).forEach(r -> rbacCache.roleWrapper(r.getId()));
             //只给可用用户加载缓存
             userMapper.selectAllEnabledUserId().forEach(rbacCache::userTree);
             log.info("rbac cache init success...");
