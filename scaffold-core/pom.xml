@@ -14,10 +14,6 @@
         <module>scaffold-core-base</module>
         <module>scaffold-core-redis</module>
         <module>scaffold-core-orm</module>
-        <module>scaffold-core-swagger</module>
-        <module>scaffold-core-log</module>
-        <module>scaffold-core-security</module>
-        <module>scaffold-core-file</module>
         <module>scaffold-core-websocket</module>
     </modules>
 </project>

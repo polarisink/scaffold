@@ -1,58 +1,99 @@
 # Scaffold - Spring Boot 脚手架
 
-一个现代化的 Spring Boot 脚手架项目，集成多种常用功能模块，旨在快速构建企业级应用。
+面向小团队的 Spring Boot 多模块脚手架，目标是提供一个默认精简、按需装配、可以持续演进的后端基础盘。
 
-## 技术栈
+## 当前基线
 
-- **Spring Boot**: 3.2.4
+- **Spring Boot**: 3.5.7
+- **Java**: 21
 - **MyBatis Plus**: 3.5.12
-- **数据库**: MySQL 8.0.23
-- **Redis**: 通过 Redisson 操作
-- **文件存储**: 支持本地和 S3/MinIO 存储
+- **MySQL**: 8.0.23
+- **Redis**: Redisson
+- **文件存储**: 本地 / S3
 - **接口文档**: Knife4j OpenAPI3
-- **工具库**: Hutool、Guava、Apache Commons Lang3
-- **JNA**: 用于调用本地库
-- **WebSocket**: 实时通信支持
-- **SSE**: Server-Sent Events 支持
 
-## 项目结构
+## 模块分层
 
-```
+```text
 scaffold/
-├── scaffold-biz/          # 业务模块
-├── scaffold-core/         # 核心模块
-│   ├── scaffold-core-base # 基础功能
-│   ├── scaffold-core-file # 文件存储
-│   ├── scaffold-core-log  # 日志处理
-│   ├── scaffold-core-orm  # ORM 框架
-│   ├── scaffold-core-redis # Redis 操作
-│   ├── scaffold-core-security # 安全框架
-│   ├── scaffold-core-swagger # 接口文档
-│   └── scaffold-core-websocket # WebSocket 支持
-├── scaffold-module/       # 业务模块
-│   └── scaffold-module-rbac # RBAC 权限管理
-├── scaffold-starters/     # 启动器
-│   └── scaffold-starter-web # Web 启动器
-└── scaffold-test/         # 测试模块
-    ├── scaffold-test-download # 下载功能测试
-    ├── scaffold-test-http-interface # HTTP 接口测试
-    ├── scaffold-test-redis # Redis 测试
-    ├── scaffold-test-sse # SSE 测试
-    ├── scaffold-test-udp # UDP 测试
-    └── scaffold-test-websocket # WebSocket 测试
+├── scaffold-biz/           # 默认业务启动项目
+├── scaffold-core/          # 基础能力模块
+├── scaffold-starters/      # 面向业务的 starter 装配层
+├── scaffold-module/        # 可选业务模块，例如 rbac
+└── scaffold-test/          # 技术实验 / 示例模块，仅 examples profile 构建
 ```
 
-## 功能特性
+分层约束：
 
-- **统一响应格式**: R类提供统一的响应格式
-- **异常处理**: 全局异常处理机制
-- **配置管理**: 统一的配置管理
-- **文件上传下载**: 支持本地和云存储
-- **日志管理**: 基于注解的日志记录
-- **安全框架**: JWT 认证和授权
-- **异步任务**: 异步任务支持
-- **缓存**: Redis 缓存支持
-- **分页**: MyBatis Plus 分页支持
+- `core` 负责底层能力，不直接表达业务语义
+- `starter` 负责组合装配，对业务项目暴露最少接入面
+- `module` 负责可选业务能力，引入即可生效，移除不应影响默认启动
+- `scaffold-test` 不进入默认构建链路
+
+当前 starter 结构：
+
+- `scaffold-starter-web`: Web 基座、统一返回、参数校验
+- `scaffold-starter-swagger`: OpenAPI / Knife4j 文档自动装配
+- `scaffold-starter-security`: 安全认证、默认 token 存储、Redis token 支持
+- `scaffold-starter-orm`: JPA、MyBatis Plus、数据库驱动和 ORM 接入
+- `scaffold-starter-file`: 文件上传、访问映射和存储接入
+- `scaffold-starter-observability`: 日志切面与 Actuator
+
+设计约束：
+
+- `scaffold-core-orm` 只保留 ORM 基础实现和公共抽象
+- JPA、MyBatis Plus、数据库驱动等接入型依赖统一由 `scaffold-starter-orm` 暴露给业务模块
+- `scaffold-starter-security` 默认提供内存 token 存储，也可通过配置切换到 Redis
+- `scaffold-starter-file` 负责暴露文件上传服务、访问路径映射和上传接口
+- `scaffold-starter-swagger` 独立暴露接口文档自动装配，避免 `starter-web` 默认耦合文档依赖
+
+## 快速启动
+
+1. 安装 Java 21 和 Maven 3.9+
+2. 运行默认业务项目：
+
+```bash
+mvn -pl scaffold-biz -am spring-boot:run
+```
+
+3. 如果需要本地文件上传或文档功能，参考 [application-local.yml.example](/Users/aries/IdeaProjects/scaffold/scaffold-biz/src/main/resources/application-local.yml.example) 新建本地 profile 配置
+
+默认策略：
+
+- 文件存储默认关闭
+- Swagger 默认关闭
+- CORS 默认仅放行本地开发地址
+- `rbac` 默认不启用，需要显式引入模块依赖
+- `security.token.store-type` 默认是 `memory`，可切换为 `redis`
+
+推荐组合：
+
+- 纯 Web 服务：`scaffold-starter-web` + `scaffold-starter-observability`
+- 需要接口文档：再加 `scaffold-starter-swagger`
+- 带文件能力：再加 `scaffold-starter-file`
+- 带数据库能力：再加 `scaffold-starter-orm`
+- 带认证能力：再加 `scaffold-starter-security`
+
+## 构建说明
+
+默认构建只包含正式交付模块：
+
+```bash
+mvn clean verify
+```
+
+如需构建示例和实验模块：
+
+```bash
+mvn -Pexamples clean verify
+```
+
+## 改造重点
+
+- 移除了 `scaffold-biz` 对 `rbac` 的硬编码扫描
+- `scaffold-test` 已移入 `examples` profile
+- `starter-web` 不再向业务项目传播测试依赖
+- 文档和文件存储改为默认关闭，避免把 demo 配置带到生产
 
 ## 许可证
 

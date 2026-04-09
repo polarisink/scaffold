@@ -40,11 +40,18 @@
     <modules>
         <module>scaffold-starters</module>
         <module>scaffold-core</module>
-        <module>scaffold-test</module>
         <module>scaffold-biz</module>
         <module>scaffold-module</module>
         <module>scaffold-denpendices</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>examples</id>
+            <modules>
+                <module>scaffold-test</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>

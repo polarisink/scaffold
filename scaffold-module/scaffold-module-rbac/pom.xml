@@ -24,17 +24,24 @@
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-core-orm</artifactId>
+            <artifactId>scaffold-starter-swagger</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-starter-orm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-starter-observability</artifactId>
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-core-redis</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-core-security</artifactId>
-        </dependency>
-
     </dependencies>
 
 </project>

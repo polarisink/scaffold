@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-core-swagger</artifactId>
+            <artifactId>scaffold-starter-swagger</artifactId>
         </dependency>
     </dependencies>
 

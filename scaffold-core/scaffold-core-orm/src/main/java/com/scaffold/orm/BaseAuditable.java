@@ -5,11 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +17,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
 public class BaseAuditable {
 
     public static final String GMT_MODIFIED = "gmtModified";
@@ -41,13 +35,11 @@ public class BaseAuditable {
      * 修改时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @LastModifiedDate
     @Column(columnDefinition = "datetime comment '更新时间'")
     protected LocalDateTime gmtModified;
     /**
      * 创建时间
      */
-    @CreatedDate
     @TableField(fill = FieldFill.INSERT)
     @Column(columnDefinition = "datetime comment '创建时间'")
     protected LocalDateTime gmtCreated;
@@ -55,7 +47,6 @@ public class BaseAuditable {
     /**
      * 创造者id
      */
-    @CreatedBy
     @TableField(fill = FieldFill.INSERT)
     @Column(columnDefinition = "bigint(11) comment '创建者id'")
     protected Long createdBy;
@@ -63,7 +54,6 @@ public class BaseAuditable {
     /**
      * 修改者id
      */
-    @LastModifiedBy
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @Column(columnDefinition = "bigint(11) comment '修改者id'")
     protected Long modifiedBy;

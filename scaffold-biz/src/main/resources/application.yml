@@ -7,6 +7,8 @@ spring:
     name: scaffold-biz
   lifecycle:
     timeout-per-shutdown-phase: 30s
+  profiles:
+    default: local
   cache:
     type: caffeine
 #  datasource:
@@ -19,7 +21,26 @@ spring:
 #      ddl-auto: update
 
 file-storage:
-  enabled: true
+  enabled: false
   type: local
   local:
-    base-path: /Users/aries/Downloads/files
+    base-path: ${SCAFFOLD_FILE_STORAGE_BASE_PATH:./.data/files}
+
+security:
+  cors:
+    enabled: true
+    allowed-origin-patterns:
+      - "http://localhost:*"
+      - "http://127.0.0.1:*"
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+    allowed-headers:
+      - "*"
+
+swagger:
+  enabled: false

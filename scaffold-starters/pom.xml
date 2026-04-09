@@ -12,6 +12,11 @@
     <artifactId>scaffold-starters</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>scaffold-starter-file</module>
+        <module>scaffold-starter-observability</module>
+        <module>scaffold-starter-orm</module>
+        <module>scaffold-starter-security</module>
+        <module>scaffold-starter-swagger</module>
         <module>scaffold-starter-web</module>
     </modules>
 </project>

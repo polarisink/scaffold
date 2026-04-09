@@ -16,15 +16,32 @@
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-starter-file</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-starter-orm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-starter-observability</artifactId>
+        </dependency>
         <!--
         如果不需要数据库服务就不需要这个
-        如果只需要数据库不需要用户系统就引如scaffold-core-orm
+        如果只需要数据库不需要用户系统就引入scaffold-starter-orm
         如果需要权限系统就引入scaffold-module-rbac
         -->
         <!-- <dependency>
              <groupId>com.scaffold</groupId>
              <artifactId>scaffold-module-rbac</artifactId>
          </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

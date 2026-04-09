@@ -72,16 +72,6 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-core-file</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-core-log</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-orm</artifactId>
                 <version>${rversion}</version>
             </dependency>
@@ -92,22 +82,37 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-core-security</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-core-swagger</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-websocket</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-web</artifactId>
+                <version>${rversion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-starter-swagger</artifactId>
+                <version>${rversion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-starter-security</artifactId>
+                <version>${rversion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-starter-orm</artifactId>
+                <version>${rversion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-starter-file</artifactId>
+                <version>${rversion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-starter-observability</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>

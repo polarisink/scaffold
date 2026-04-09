@@ -17,23 +17,6 @@
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-core-base</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-core-log</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-core-file</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-core-swagger</artifactId>
-        </dependency>
-        <!--   单元测试     -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-        </dependency>
         <!--参数校验-->
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -45,7 +28,8 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
