@@ -3,7 +3,7 @@ package com.scaffold.security.starter;
 import com.scaffold.redis.utils.RedisUtils;
 import com.scaffold.security.config.TokenService;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 public class RedisTokenService implements TokenService {
 
@@ -15,7 +15,7 @@ public class RedisTokenService implements TokenService {
 
     @Override
     public void set(Long userId, String token) {
-        RedisUtils.set(TokenService.tokenPrefix(userId), token, ttlMinutes, TimeUnit.MINUTES);
+        RedisUtils.set(TokenService.tokenPrefix(userId), token, Duration.ofMinutes(ttlMinutes));
     }
 
     @Override

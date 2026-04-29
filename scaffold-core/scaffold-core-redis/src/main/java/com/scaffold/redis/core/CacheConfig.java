@@ -1,9 +1,10 @@
 package com.scaffold.redis.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.redisson.api.RedissonClient;
+import org.redisson.codec.JsonJacksonCodec;
+import org.redisson.spring.cache.RedissonSpringCacheManager;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -12,14 +13,8 @@ import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.RedisSerializer;
 
-import java.time.Duration;
+import java.util.Map;
 
 /**
  * 缓存配置
@@ -31,13 +26,10 @@ import java.time.Duration;
 public class CacheConfig {
 
     @Bean
-    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory, @Qualifier("redisObjectMapper") ObjectMapper objectMapper) {
-
-        RedisCacheConfiguration cacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofDays(3))
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.string()))
-                .serializeValuesWith((RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper))));
-        return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(cacheConfig).build();
+    public CacheManager cacheManager(RedissonClient redissonClient) {
+        org.redisson.spring.cache.CacheConfig cacheConfig = new org.redisson.spring.cache.CacheConfig();
+        cacheConfig.setTTL(3 * 24 * 60 * 60 * 1000L);
+        return new RedissonSpringCacheManager(redissonClient, Map.of("cache", cacheConfig), new JsonJacksonCodec());
     }
 
     @Bean

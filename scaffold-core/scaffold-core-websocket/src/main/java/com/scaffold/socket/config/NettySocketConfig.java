@@ -2,6 +2,7 @@ package com.scaffold.socket.config;
 
 import com.corundumstudio.socketio.AuthorizationListener;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.corundumstudio.socketio.Transport;
 import com.corundumstudio.socketio.annotation.SpringAnnotationScanner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +55,8 @@ public class NettySocketConfig {
         // 刚才设置的密码
         config.setKeyStorePassword("123456");
          */
+        //前端最好显示声明websocket，使用polling性能比较差
+        config.setTransports(Transport.WEBSOCKET,Transport.POLLING);
         config.setAuthorizationListener(authorizationListener);
         SocketIOServer server = new SocketIOServer(config);
         server.start();

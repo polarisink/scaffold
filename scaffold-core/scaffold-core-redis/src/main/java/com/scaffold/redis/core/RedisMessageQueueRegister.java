@@ -9,6 +9,7 @@ import com.scaffold.redis.domain.RedisMessage;
 import com.scaffold.redis.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.StreamGroup;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.redis.connection.stream.*;
@@ -46,7 +47,7 @@ public class RedisMessageQueueRegister implements ApplicationRunner {
             List<String> groupName = null;
             try {
                 //没这个会报错，因此处理一下
-                groupName = RedisUtils.groups(streamKey).stream().map(StreamInfo.XInfoGroup::groupName).toList();
+                groupName = RedisUtils.groups(streamKey).stream().map(StreamGroup::getName).toList();
             } catch (Exception e) {
                 log.error("groups error:{}", e.getMessage());
             }
@@ -83,7 +84,7 @@ public class RedisMessageQueueRegister implements ApplicationRunner {
                                 log.error("targetMethod {} invoke error: {}", targetMethod, e.getMessage());
                             }
                         }
-                        RedisUtils.acknowledge(consumerGroupName, message);
+                        RedisUtils.acknowledge(streamKey, consumerGroupName, String.valueOf(message.getId()));
                     });
             log.info("start message queue listeners：{}.{}", streamKey, consumerGroupName);
         }
