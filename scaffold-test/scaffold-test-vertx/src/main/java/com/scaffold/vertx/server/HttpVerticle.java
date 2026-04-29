@@ -10,17 +10,14 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * HTTP服务器
  */
+@Slf4j
 @RequiredArgsConstructor
 public class HttpVerticle extends VerticleBase {
-    private static final Logger log = LogManager.getLogger(HttpVerticle.class);
-
-
     private HttpServer server;
 
     private String getName() {

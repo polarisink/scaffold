@@ -7,8 +7,7 @@ import io.vertx.core.datagram.DatagramSocket;
 import io.vertx.core.datagram.DatagramSocketOptions;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -16,10 +15,9 @@ import org.apache.logging.log4j.Logger;
  * <p>
  * 不能通过autowired的方式进行注入使用,只能通过eventBus进行沟通
  */
+@Slf4j
 @RequiredArgsConstructor
 public class UdpVerticle extends VerticleBase {
-    private static final Logger log = LogManager.getLogger(UdpVerticle.class);
-
     public static final String UDP_MSG_EVENT = "service.udp.event";
     private DatagramSocket socket;
     @Getter

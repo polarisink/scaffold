@@ -8,16 +8,13 @@ import io.vertx.core.Future;
 import io.vertx.core.ThreadingModel;
 import io.vertx.core.VerticleBase;
 import io.vertx.core.json.JsonObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class MainVerticle extends VerticleBase {
-    private static final Logger log = LogManager.getLogger(MainVerticle.class);
-
-
     @Override
     public Future<?> start() {
         ConfigStoreOptions yamlStore = new ConfigStoreOptions()

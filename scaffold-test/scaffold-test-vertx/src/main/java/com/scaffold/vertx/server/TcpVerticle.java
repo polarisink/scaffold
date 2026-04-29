@@ -8,18 +8,16 @@ import io.vertx.core.net.NetServer;
 import io.vertx.core.net.NetServerOptions;
 import io.vertx.core.parsetools.RecordParser;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * tcp服务器
  * <p>
  * 不能通过autowired的方式进行注入使用,只能通过eventBus进行沟通
  */
+@Slf4j
 @RequiredArgsConstructor
 public class TcpVerticle extends VerticleBase {
-    private static final Logger log = LogManager.getLogger(TcpVerticle.class);
-
     private volatile boolean running = false;
     private NetServer server;
 
