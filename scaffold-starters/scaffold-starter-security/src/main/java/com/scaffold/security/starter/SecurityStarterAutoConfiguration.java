@@ -44,8 +44,8 @@ public class SecurityStarterAutoConfiguration {
     @ConditionalOnMissingBean(TokenService.class)
     @ConditionalOnBean(RedissonClient.class)
     @ConditionalOnProperty(prefix = "security.token", name = "store-type", havingValue = "redis")
-    public TokenService redisTokenService(SecurityProperties securityProperties,RedissonClient redissonClient) {
-        return new RedisTokenService(securityProperties.getToken().getTtlMinutes(),redissonClient);
+    public TokenService redisTokenService(SecurityProperties securityProperties) {
+        return new RedisTokenService(securityProperties.getToken().getTtlMinutes());
     }
 
     @Bean
