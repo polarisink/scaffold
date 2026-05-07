@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -26,22 +27,12 @@ import java.net.InetSocketAddress;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UdpServer implements ApplicationRunner, DisposableBean {
+public class UdpServer implements  SmartLifecycle {
 
     private final UdpProperties udpProperties;
     private volatile boolean running = false;
     private EventLoopGroup workerGroup;
     private Channel channel;
-
-    @Override
-    public void destroy() {
-        stopServer();
-    }
-
-    @Override
-    public void run(ApplicationArguments args) {
-        startServer();
-    }
 
     public <T extends IBytes> void send(T iBytes) {
         send(iBytes.toBuf(), iBytes.getName());
@@ -150,6 +141,21 @@ public class UdpServer implements ApplicationRunner, DisposableBean {
             log.error("udp服务器停止被中断", e);
             Thread.currentThread().interrupt();
         }
+    }
+
+    @Override
+    public void start() {
+        startServer();
+    }
+
+    @Override
+    public void stop() {
+        stopServer();
+    }
+
+    @Override
+    public boolean isRunning() {
+        return running;
     }
 
     public static class EvaluateServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
