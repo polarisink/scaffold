@@ -1,0 +1,22 @@
+<service>
+    <id>minio</id>
+    <name>MinIO</name>
+    <description>MinIO Object Storage</description>
+
+    <executable>C:\minio\minio.exe</executable>
+    <arguments>server "C:\minio\data" --console-address ":9001" --address ":9000"</arguments>
+    <workingdirectory>C:\minio</workingdirectory>
+
+    <env name="MINIO_ROOT_USER" value="minioadmin"/>
+    <env name="MINIO_ROOT_PASSWORD" value="minioadmin123456"/>
+
+    <log mode="roll-by-size">
+        <sizeThreshold>10485760</sizeThreshold>
+        <keepFiles>10</keepFiles>
+    </log>
+    <logpath>C:\minio\logs</logpath>
+
+    <onfailure action="restart" delay="10 sec"/>
+    <stoptimeout>30 sec</stoptimeout>
+    <startmode>Automatic</startmode>
+</service>
