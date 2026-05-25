@@ -57,7 +57,11 @@ public class S3FileService implements FileUploadService {
     @Override
     public String upload(InputStream inputStream, String originalFilename, String contentType) {
         String fileKey = generateFileKey(originalFilename);
+        return uploadToPath(inputStream, fileKey, contentType);
+    }
 
+    @Override
+    public String uploadToPath(InputStream inputStream, String fileKey, String contentType) {
         try (inputStream) {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(s3Config.getBucketName())
@@ -67,7 +71,7 @@ public class S3FileService implements FileUploadService {
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, inputStream.available()));
             return fileKey;
         } catch (Exception e) {
-            log.error("文件上传失败: {}", originalFilename, e);
+            log.error("文件上传失败: {}", fileKey, e);
             throw new RuntimeException("文件上传失败", e);
         }
     }

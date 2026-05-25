@@ -35,14 +35,27 @@ public class LocalFileService implements FileUploadService {
     @Override
     public String upload(InputStream inputStream, String originalFilename, String contentType) {
         String fileKey = generateFileKey(originalFilename);
+        return uploadToPath(inputStream, fileKey, contentType);
+    }
+
+    @Override
+    public String uploadToPath(InputStream inputStream, String fileKey, String contentType) {
         Path targetPath = baseDirPath.resolve(fileKey);
 
         try (inputStream) {
-            Files.copy(inputStream, targetPath);
-            log.info("文件上传成功，存储路径: {}", targetPath);
+            Path normalizedTargetPath = targetPath.toAbsolutePath().normalize();
+            if (!normalizedTargetPath.startsWith(baseDirPath)) {
+                throw new IllegalArgumentException("文件存储路径非法: " + fileKey);
+            }
+            Path parent = normalizedTargetPath.getParent();
+            if (parent != null && !Files.exists(parent)) {
+                Files.createDirectories(parent);
+            }
+            Files.copy(inputStream, normalizedTargetPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            log.info("文件上传成功，存储路径: {}", normalizedTargetPath);
             return local.getAccessPath().replace("**", "") + fileKey;
         } catch (IOException e) {
-            log.error("本地文件上传失败: {}", originalFilename, e);
+            log.error("本地文件上传失败: {}", fileKey, e);
             throw new RuntimeException("文件上传失败", e);
         }
     }
