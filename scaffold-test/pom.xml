@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.scaffold</groupId>
         <artifactId>scaffold</artifactId>
-        <version>${rversion}</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     <description>测试模块，放一些测试代码</description>

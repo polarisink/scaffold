@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.scaffold</groupId>
-    <version>${rversion}</version>
-    <artifactId>scaffold-denpendices</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <artifactId>scaffold-dependencies</artifactId>
 
     <description>基础 bom 文件，管理整个项目的依赖版本</description>
 
@@ -13,7 +13,6 @@
 
 
     <properties>
-        <rversion>1.0-SNAPSHOT</rversion>
         <!--    编译相关    -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -68,57 +67,57 @@
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-base</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-orm</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-redis</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-websocket</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-web</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-swagger</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-security</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-orm</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-file</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-observability</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-module-rbac</artifactId>
-                <version>${rversion}</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <!--工具类版本-->
             <dependency>

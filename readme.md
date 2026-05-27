@@ -49,11 +49,11 @@ scaffold/
 
 ## 快速启动
 
-1. 安装 Java 21 和 Maven 3.9+
+1. 安装 Java 21
 2. 运行默认业务项目：
 
 ```bash
-mvn -pl scaffold-biz -am spring-boot:run
+./mvnw -pl scaffold-biz -am spring-boot:run
 ```
 
 3. 如果需要本地文件上传或文档功能，参考 [application-local.yml.example](/Users/aries/IdeaProjects/scaffold/scaffold-biz/src/main/resources/application-local.yml.example) 新建本地 profile 配置
@@ -79,14 +79,25 @@ mvn -pl scaffold-biz -am spring-boot:run
 默认构建只包含正式交付模块：
 
 ```bash
-mvn clean verify
+./mvnw clean verify
 ```
 
 如需构建示例和实验模块：
 
 ```bash
-mvn -Pexamples clean verify
+./mvnw -Pexamples clean verify
 ```
+
+## 质量保障
+
+- 默认 CI 校验正式交付链路 `scaffold-biz`
+- `examples` profile 由独立 job 做冒烟验证
+- 每个核心 starter 都有最小自动装配测试，防止后续重构把默认接入链路改坏
+
+## 维护文档
+
+- [贡献约束](/Users/aries/IdeaProjects/scaffold/CONTRIBUTING.md)
+- [模块分层与设计约束](/Users/aries/IdeaProjects/scaffold/docs/architecture.md)
 
 ## 改造重点
 

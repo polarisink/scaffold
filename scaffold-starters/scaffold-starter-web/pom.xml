@@ -5,7 +5,7 @@
     <parent>
         <artifactId>scaffold-starters</artifactId>
         <groupId>com.scaffold</groupId>
-        <version>${rversion}</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,6 +16,10 @@
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-core-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
         <!--参数校验-->
         <dependency>
@@ -29,6 +33,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

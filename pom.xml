@@ -7,13 +7,12 @@
     <groupId>com.scaffold</groupId>
     <artifactId>scaffold</artifactId>
     <packaging>pom</packaging>
-    <version>${rversion}</version>
+    <version>1.0-SNAPSHOT</version>
 
     <description>个人项目脚手架</description>
 
 
     <properties>
-        <rversion>1.0-SNAPSHOT</rversion>
         <!--    编译相关    -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -21,6 +20,7 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <maven.wrapper.version>3.3.4</maven.wrapper.version>
     </properties>
 
     <dependencyManagement>
@@ -28,8 +28,8 @@
             <!--项目模块版本-->
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-denpendices</artifactId>
-                <version>${rversion}</version>
+                <artifactId>scaffold-dependencies</artifactId>
+                <version>1.0-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -42,7 +42,7 @@
         <module>scaffold-core</module>
         <module>scaffold-biz</module>
         <module>scaffold-module</module>
-        <module>scaffold-denpendices</module>
+        <module>scaffold-dependencies</module>
     </modules>
 
     <profiles>
@@ -53,5 +53,50 @@
             </modules>
         </profile>
     </profiles>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>3.5.7</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.13.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.2.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.6.2</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-java-and-maven</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <requireJavaVersion>
+                                        <version>[21,)</version>
+                                    </requireJavaVersion>
+                                    <requireMavenVersion>
+                                        <version>[3.9.0,)</version>
+                                    </requireMavenVersion>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>
