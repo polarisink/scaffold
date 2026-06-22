@@ -30,6 +30,8 @@
         <module>scaffold-test-langchain4j</module>
         <module>scaffold-test-spi</module>
         <module>scaffold-test-bizlog</module>
+        <module>scaffold-test-sqlite</module>
+        <module>scaffold-test-postgresql-geo</module>
     </modules>
 
 </project>

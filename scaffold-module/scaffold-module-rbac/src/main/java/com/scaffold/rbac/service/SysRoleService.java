@@ -5,6 +5,7 @@ import com.scaffold.base.constant.GlobalConstant;
 import com.scaffold.base.util.CollUtils;
 import com.scaffold.base.util.ITree;
 import com.scaffold.base.util.PageResponse;
+import com.scaffold.base.util.TreeIterators;
 import com.scaffold.rbac.components.RbacCache;
 import com.scaffold.rbac.contant.RbacResultEnum;
 import com.scaffold.rbac.entity.SysRole;
@@ -71,7 +72,7 @@ public class SysRoleService {
         if (menuIdSet == null || menuIdSet.isEmpty()) {
             return Set.of();
         }
-        Set<Long> res = ITree.iterate(true, menuIdSet, sysMenuMapper::findParentIdByIdIn);
+        Set<Long> res = TreeIterators.iterate(true, menuIdSet, sysMenuMapper::findParentIdByIdIn);
         res.remove(GlobalConstant.ROOT_PARENT_ID);
         return res;
     }

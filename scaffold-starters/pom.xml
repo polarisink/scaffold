@@ -18,5 +18,7 @@
         <module>scaffold-starter-security</module>
         <module>scaffold-starter-swagger</module>
         <module>scaffold-starter-web</module>
+        <module>scaffold-starter-postgresql-cache</module>
+        <module>scaffold-starter-postgresql-job</module>
     </modules>
 </project>

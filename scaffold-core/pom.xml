@@ -13,6 +13,7 @@
     <modules>
         <module>scaffold-core-base</module>
         <module>scaffold-core-redis</module>
+        <module>scaffold-core-postgresql-cache</module>
         <module>scaffold-core-orm</module>
         <module>scaffold-core-websocket</module>
     </modules>

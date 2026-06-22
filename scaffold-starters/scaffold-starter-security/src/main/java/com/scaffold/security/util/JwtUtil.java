@@ -16,59 +16,104 @@ import com.scaffold.base.util.JsonUtil;
 import com.scaffold.security.vo.PayloadDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 
 @Slf4j
 public class JwtUtil {
 
-    public static String JWT_SECRET_KEY = GlobalConstant.SECRET;
+    private static final String JWT_SECRET_KEY = GlobalConstant.SECRET;
+    private static final byte[] SIGNING_KEY = SecureUtil.md5(JWT_SECRET_KEY).getBytes(StandardCharsets.UTF_8);
 
-    public static String generateToken(PayloadDTO p) {
-        Assert.hasText(p.getUsername(), "错误的token");
+    private JwtUtil() {
+    }
+
+    public static String generateToken(PayloadDTO payloadDTO) {
+        Assert.notNull(payloadDTO, "token payload不能为空");
+        Assert.hasText(payloadDTO.getUsername(), "错误的token");
+        Assert.notNull(payloadDTO.getUserId(), "错误的token");
+        normalizePayload(payloadDTO);
         try {
             JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).type(JOSEObjectType.JWT).build();
-            Payload payload = new Payload(JsonUtil.toJson(p));
+            Payload payload = new Payload(JsonUtil.toJson(payloadDTO));
             JWSObject jwsObject = new JWSObject(jwsHeader, payload);
-            JWSSigner jwsSigner = new MACSigner(SecureUtil.md5(JWT_SECRET_KEY));
+            JWSSigner jwsSigner = new MACSigner(SIGNING_KEY);
             jwsObject.sign(jwsSigner);
             return jwsObject.serialize();
         } catch (Exception e) {
-            log.error("generate token error:{}", e.getMessage());
-            throw new BaseException("token获取失败,请稍后重试！");
+            log.error("generate token error", e);
+            throw new BaseException("token生成失败，请稍后重试");
         }
     }
 
     public static PayloadDTO resolveToken(String token) {
         try {
-            if (token == null || token.isBlank()) {
-                throw new IllegalArgumentException("不合法的token");
-            }
+            Assert.hasText(token, "token不能为空");
             JWSObject jwsObject = JWSObject.parse(token);
-            JWSVerifier jwsVerifier = new MACVerifier(SecureUtil.md5(JWT_SECRET_KEY));
+            JWSVerifier jwsVerifier = new MACVerifier(SIGNING_KEY);
             boolean verify = jwsObject.verify(jwsVerifier);
             if (!verify) {
-                throw new BaseException("校验token失败");
+                throw new BaseException("token校验失败");
             }
-            String payload = jwsObject.getPayload().toString();
-            return JsonUtil.read(payload, PayloadDTO.class);
+            PayloadDTO payloadDTO = JsonUtil.read(jwsObject.getPayload().toString(), PayloadDTO.class);
+            validatePayload(payloadDTO);
+            return payloadDTO;
+        } catch (BaseException e) {
+            throw e;
         } catch (Exception e) {
-            log.error("analysisToken error:{}", e.getMessage());
-            throw new BaseException("analysisToken error");
+            log.error("resolve token error", e);
+            throw new BaseException("token解析失败");
         }
     }
 
     public static String getRealToken(String authorizationToken) {
-        if (authorizationToken == null || authorizationToken.isBlank()) {
+        if (!StringUtils.hasText(authorizationToken)) {
             return null;
         }
-        if (authorizationToken.length() < 100) {
+        String bearer = GlobalConstant.AUTHORIZATION_TOKEN_BEARER.trim();
+        String normalized = authorizationToken.trim();
+        if (normalized.length() <= bearer.length()) {
             return null;
         }
-        if (authorizationToken.startsWith(GlobalConstant.AUTHORIZATION_TOKEN_BEARER.toLowerCase().trim())) {
-            authorizationToken = authorizationToken.replaceFirst(GlobalConstant.AUTHORIZATION_TOKEN_BEARER.toLowerCase(), "");
+        if (!normalized.regionMatches(true, 0, bearer, 0, bearer.length())) {
+            return null;
         }
-        if (authorizationToken.startsWith(GlobalConstant.AUTHORIZATION_TOKEN_BEARER.trim())) {
-            authorizationToken = authorizationToken.replaceFirst(GlobalConstant.AUTHORIZATION_TOKEN_BEARER, "");
+        String token = normalized.substring(bearer.length()).trim();
+        return StringUtils.hasText(token) ? token : null;
+    }
+
+    private static void normalizePayload(PayloadDTO payloadDTO) {
+        long now = Instant.now().getEpochSecond();
+        if (!StringUtils.hasText(payloadDTO.getSub()) && payloadDTO.getUserId() != null) {
+            payloadDTO.setSub(String.valueOf(payloadDTO.getUserId()));
         }
-        return authorizationToken;
+        if (!StringUtils.hasText(payloadDTO.getJti())) {
+            payloadDTO.setJti(payloadDTO.getUserId() + "-" + now);
+        }
+        if (payloadDTO.getIat() == null || payloadDTO.getIat() <= 0) {
+            payloadDTO.setIat(now);
+        }
+        if (payloadDTO.getExp() == null || payloadDTO.getExp() <= payloadDTO.getIat()) {
+            payloadDTO.setExp(payloadDTO.getIat() + 365L * 24 * 60 * 60);
+        }
+    }
+
+    private static void validatePayload(PayloadDTO payloadDTO) {
+        if (payloadDTO == null) {
+            throw new BaseException("token内容为空");
+        }
+        if (payloadDTO.getUserId() == null || !StringUtils.hasText(payloadDTO.getUsername())) {
+            throw new BaseException("token内容非法");
+        }
+        Long exp = payloadDTO.getExp();
+        if (exp == null) {
+            throw new BaseException("token缺少过期时间");
+        }
+        long now = Instant.now().getEpochSecond();
+        if (exp <= now) {
+            throw new BaseException("token已过期");
+        }
     }
 }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.scaffold.base.exception.BaseException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +22,10 @@ import org.springframework.stereotype.Component;
 @Component
 @DependsOn("jacksonConfig")
 public class JsonUtil {
+    private static final ObjectMapper DEFAULT_MAPPER = createDefaultMapper();
     @Getter
-    private static final ObjectMapper mapper = SpringUtil.getBean(ObjectMapper.class);
-    private static final ObjectMapper redisMapper = SpringUtil.getBean("redisObjectMapper", ObjectMapper.class);
+    private static volatile ObjectMapper mapper;
+    private static volatile ObjectMapper redisMapper;
 
     /**
      * 将对象转为json字符串
@@ -31,11 +34,11 @@ public class JsonUtil {
      * @return json字符串
      */
     public static String toJson(Object obj) {
-        return execute(() -> mapper.writeValueAsString(obj), "toJson error");
+        return execute(() -> mapper().writeValueAsString(obj), "toJson error");
     }
 
     public static String toRedisJson(Object obj) {
-        return execute(() -> redisMapper.writeValueAsString(obj), "toJson error");
+        return execute(() -> redisMapper().writeValueAsString(obj), "toJson error");
     }
 
     /**
@@ -47,19 +50,19 @@ public class JsonUtil {
      * @return 对象
      */
     public static <T> T read(String json, Class<T> clazz) {
-        return execute(() -> mapper.readValue(json, clazz), "readValue error");
+        return execute(() -> mapper().readValue(json, clazz), "readValue error");
     }
 
     public static <T> T read(byte[] json, Class<T> clazz) {
-        return execute(() -> mapper.readValue(json, clazz), "readValue error");
+        return execute(() -> mapper().readValue(json, clazz), "readValue error");
     }
 
     public static <T> T read(byte[] json, TypeReference<T> typeReference) {
-        return execute(() -> mapper.readValue(json, typeReference), "readValue error");
+        return execute(() -> mapper().readValue(json, typeReference), "readValue error");
     }
 
     public static <T> T redisRead(String json, Class<T> clazz) {
-        return execute(() -> redisMapper.readValue(json, clazz), "readValue error");
+        return execute(() -> redisMapper().readValue(json, clazz), "readValue error");
     }
 
     /**
@@ -71,7 +74,7 @@ public class JsonUtil {
      * @return 结果
      */
     public static <T> T convert(Object object, TypeReference<T> typeReference) {
-        return execute(() -> mapper.convertValue(object, typeReference), "convertValue error");
+        return execute(() -> mapper().convertValue(object, typeReference), "convertValue error");
     }
 
     /**
@@ -83,7 +86,7 @@ public class JsonUtil {
      * @return 结果
      */
     public static <T> T convert(Object object, Class<T> aClass) {
-        return execute(() -> mapper.convertValue(object, aClass), "convertValue error");
+        return execute(() -> mapper().convertValue(object, aClass), "convertValue error");
     }
 
     /**
@@ -95,7 +98,7 @@ public class JsonUtil {
      * @return 对象
      */
     public static <T> T read(String json, JavaType javaType) {
-        return execute(() -> mapper.readValue(json, javaType), "readValue error");
+        return execute(() -> mapper().readValue(json, javaType), "readValue error");
     }
 
     /**
@@ -105,15 +108,15 @@ public class JsonUtil {
      * @return byte数组
      */
     public static byte[] writeBytes(Object a) {
-        return execute(() -> mapper.writeValueAsBytes(a), "readValue error");
+        return execute(() -> mapper().writeValueAsBytes(a), "readValue error");
     }
 
     public static JsonNode readTree(String json) {
-        return execute(() -> mapper.readTree(json), "readTree error");
+        return execute(() -> mapper().readTree(json), "readTree error");
     }
 
     public static JsonNode readTree(byte[] bytes) {
-        return execute(() -> mapper.readTree(bytes), "readTree error");
+        return execute(() -> mapper().readTree(bytes), "readTree error");
     }
 
 
@@ -126,11 +129,48 @@ public class JsonUtil {
      * @return 对象
      */
     public static <T> T read(String json, TypeReference<T> typeReference) {
-        return execute(() -> mapper.readValue(json, typeReference), "readValue error");
+        return execute(() -> mapper().readValue(json, typeReference), "readValue error");
     }
 
     public static <T> T redisRead(String json, TypeReference<T> typeReference) {
-        return execute(() -> redisMapper.readValue(json, typeReference), "readValue error");
+        return execute(() -> redisMapper().readValue(json, typeReference), "readValue error");
+    }
+
+    private static ObjectMapper mapper() {
+        ObjectMapper current = mapper;
+        if (current != null) {
+            return current;
+        }
+        mapper = resolveMapper(null);
+        return mapper;
+    }
+
+    private static ObjectMapper redisMapper() {
+        ObjectMapper current = redisMapper;
+        if (current != null) {
+            return current;
+        }
+        redisMapper = resolveMapper("redisObjectMapper");
+        return redisMapper;
+    }
+
+    private static ObjectMapper resolveMapper(String beanName) {
+        try {
+            if (beanName == null) {
+                return SpringUtil.getBean(ObjectMapper.class);
+            }
+            return SpringUtil.getBean(beanName, ObjectMapper.class);
+        } catch (Exception e) {
+            log.debug("Spring ObjectMapper not available, fallback to default mapper");
+            return DEFAULT_MAPPER.copy();
+        }
+    }
+
+    private static ObjectMapper createDefaultMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return objectMapper;
     }
 
     /**
