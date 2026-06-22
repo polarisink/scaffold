@@ -1,0 +1,19 @@
+server:
+  port: 8096
+
+spring:
+  application:
+    name: scaffold-test-postgresql-geo
+  datasource:
+    url: jdbc:postgresql://localhost:5432/aries
+    username: aries
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+      continue-on-error: false
+
+logging:
+  level:
+    com.scaffold.geo: debug
