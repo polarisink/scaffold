@@ -12,7 +12,7 @@ public interface GlobalConstant {
      */
     Long ROOT_PARENT_ID = 0L;
 
-    //todo 这个应该写入配置的
+    // todo 这个应该写入配置的
     String SECRET = "abcdefghijklmnopqrstuvwxyz";
 
     /**
@@ -39,5 +39,12 @@ public interface GlobalConstant {
      * 默认时间格式
      */
     String DEFAULT_TIME_FORMAT = "HH:mm:ss";
+
+
+    /*
+     * 用于跟踪
+     */
+    String TRACE_ID = "traceId";
+
 
 }

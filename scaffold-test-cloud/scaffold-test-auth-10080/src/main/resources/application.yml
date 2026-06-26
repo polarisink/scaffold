@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: cloud-auth
+  main:
+    web-application-type: reactive
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:123456}
+  datasource:
+    url: ${RBAC_DATASOURCE_URL:jdbc:mysql://localhost:3306/training?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai}
+    username: ${RBAC_DATASOURCE_USERNAME:root}
+    password: ${RBAC_DATASOURCE_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: ${RBAC_JPA_DDL_AUTO:none}
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  port: 10080
+
+sa-token:
+  token-name: Authorization
+  token-prefix: Bearer
+  timeout: 2592000
+  active-timeout: -1
+  is-concurrent: true
+  is-share: false
+  token-style: uuid
+  is-log: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  tracing:
+    propagation:
+      type: w3c
+    sampling:
+      probability: 1.0
+
+logging:
+  pattern:
+    level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}]"

@@ -1,0 +1,34 @@
+server:
+  port: 8091
+
+spring:
+  application:
+    name: seata-server
+  main:
+    web-application-type: none
+
+logging:
+  config: classpath:logback-spring.xml
+  file:
+    path: ${log.home:${user.home}/logs/seata}
+
+seata:
+  registry:
+    type: nacos
+    nacos:
+      server-addr: nacos:8848
+      application: seata-server
+      group: SEATA_GROUP
+      cluster: default
+      namespace: ''
+      username: nacos
+      password: nacos
+  config:
+    type: nacos
+    nacos:
+      server-addr: nacos:8848
+      group: SEATA_GROUP
+      namespace: ''
+      data-id: seataServer.properties
+      username: nacos
+      password: nacos

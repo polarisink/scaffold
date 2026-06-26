@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:123456}
+    sentinel:
+      transport:
+        dashboard: ${SENTINEL_DASHBOARD:localhost:8858}
+      eager: true
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: cloud-auth
+              uri: lb://cloud-auth
+              predicates:
+                - Path=/auth/**
+            - id: cloud-provider
+              uri: lb://cloud-provider
+              predicates:
+                - Path=/provider/**
+              filters:
+                - StripPrefix=1
+            - id: cloud-consumer
+              uri: lb://cloud-consumer
+              predicates:
+                - Path=/consumer/**
+              filters:
+                - StripPrefix=1
+
+server:
+  port: 10000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway,prometheus
+  tracing:
+    propagation:
+      type: w3c
+    sampling:
+      probability: 1.0
+logging:
+  pattern:
+    level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}]"

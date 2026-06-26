@@ -1,5 +1,7 @@
 package com.scaffold.geo.dto;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.time.OffsetDateTime;
 
 public record MapPlaceResponse(
@@ -8,7 +10,7 @@ public record MapPlaceResponse(
         double lon,
         double lat,
         Double distanceMeters,
-        String geoJson,
+        JsonNode geoJson,
         OffsetDateTime createdAt
 ) {
 }

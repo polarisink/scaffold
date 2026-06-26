@@ -14,6 +14,8 @@ public class WebProperties {
 
     private Cors cors = new Cors();
 
+    private Response response = new Response();
+
     @Getter
     @Setter
     public static class Cors {
@@ -26,5 +28,20 @@ public class WebProperties {
         private List<String> exposedHeaders = new ArrayList<>();
         private boolean allowCredentials = false;
         private long maxAge = 3600L;
+    }
+
+    @Getter
+    @Setter
+    public static class Response {
+        private String serverErrorMessage = "服务器或网络开小差了，请联系管理员";
+        private List<String> ignoredClassNamePrefixes = new ArrayList<>(List.of(
+                "org.springdoc.webmvc",
+                "org.springframework.boot.actuate",
+                "de.codecentric.boot.admin"
+        ));
+        private List<String> rawBodyPathPatterns = new ArrayList<>(List.of(
+                "/actuator",
+                "/actuator/**"
+        ));
     }
 }

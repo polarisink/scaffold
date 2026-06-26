@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: cloud-seata
+
+server:
+  port: 10093
+
+seata:
+  application-id: ${spring.application.name}
+  tx-service-group: scaffold-seata-tx-group
+  service:
+    vgroup-mapping:
+      scaffold-seata-tx-group: default
+  registry:
+    type: nacos
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+      application: seata-server
+      group: ${SEATA_NACOS_GROUP:SEATA_GROUP}
+      namespace: ${NACOS_NAMESPACE:}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:123456}
+  config:
+    type: nacos
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+      group: ${SEATA_NACOS_GROUP:SEATA_GROUP}
+      namespace: ${NACOS_NAMESPACE:}
+      data-id: ${SEATA_NACOS_DATA_ID:seataServer.properties}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:123456}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  tracing:
+    propagation:
+      type: w3c
+    sampling:
+      probability: 1.0
+
+logging:
+  pattern:
+    level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}]"

@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: cloud-provider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: 123456
+
+server:
+  port: 10081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  tracing:
+    propagation:
+      type: w3c
+    sampling:
+      probability: 1.0
+logging:
+  pattern:
+    level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}]"

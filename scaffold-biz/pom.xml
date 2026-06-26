@@ -31,11 +31,12 @@
         <!--
         如果不需要数据库服务就不需要这个
         如果只需要数据库不需要用户系统就引入scaffold-starter-orm
-        如果需要权限系统就引入scaffold-module-rbac
+        如果需要 Spring Security Servlet 权限系统就引入 scaffold-module-rbac-security-servlet
+        如果需要 Sa-Token Servlet 权限系统就引入 scaffold-module-rbac-sa-token-servlet
         -->
         <!-- <dependency>
              <groupId>com.scaffold</groupId>
-             <artifactId>scaffold-module-rbac</artifactId>
+             <artifactId>scaffold-module-rbac-security-servlet</artifactId>
          </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

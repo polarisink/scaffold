@@ -1,0 +1,92 @@
+package com.scaffold.rbac.mapper;
+
+
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.scaffold.orm.MyBaseMapper;
+import com.scaffold.rbac.entity.SysUserRole;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.Collection;
+import java.util.List;
+
+/**
+ * 用户角色表(SysUserRole)表Mapper接口
+ *
+ * @author aries
+ * @since 2024-07-22 20:38:42
+ */
+@Mapper
+public interface SysUserRoleMapper extends MyBaseMapper<SysUserRole> {
+    /**
+     * 通过用户id获取角色id集合
+     *
+     * @param userId 用户id,不能为空
+     * @return 角色id集合
+     */
+    default List<Long> selectRoleIdByUserId(Long userId) {
+        return selectList(Wrappers.<SysUserRole>lambdaQuery()
+                .eq(SysUserRole::getUserId, userId)
+                .select(SysUserRole::getRoleId))
+                .stream()
+                .map(SysUserRole::getRoleId)
+                .sorted()
+                .toList();
+    }
+
+    /**
+     * 通过用户id和角色id集合删除
+     *
+     * @param userId     用户id
+     * @param roleIdColl 角色id集合,为空时不加此条件
+     */
+    default void deleteByUserIdAndRoleIdIn(Long userId, Collection<Long> roleIdColl) {
+        delete(Wrappers.<SysUserRole>lambdaQuery()
+                .eq(SysUserRole::getUserId, userId)
+                .in(roleIdColl != null && !roleIdColl.isEmpty(), SysUserRole::getRoleId, roleIdColl));
+    }
+
+    /**
+     * 通过角色id查询用户id
+     *
+     * @param roleIdColl 角色id集合
+     * @return 用户id集合
+     */
+    default List<Long> selectUserIdByRoleIdIn(Collection<Long> roleIdColl) {
+        if (roleIdColl == null || roleIdColl.isEmpty()) {
+            return List.of();
+        }
+        return selectList(Wrappers.<SysUserRole>lambdaQuery()
+                .in(SysUserRole::getRoleId, roleIdColl)
+                .select(SysUserRole::getUserId))
+                .stream()
+                .map(SysUserRole::getUserId)
+                .distinct()
+                .toList();
+    }
+
+    /**
+     * 通过角色id查询是否存在
+     *
+     * @param roleId 角色id
+     * @return 是否存在
+     */
+    default boolean existsByRoleId(Long roleId) {
+        return exists(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getRoleId, roleId));
+    }
+
+    /*
+     *//**
+     * 通过用户id和角色id集合删除
+     * <p>
+     * 因为in性能差一点，所以多写了一个，不然跟下面的进行服用也可以
+     *
+     * @param userIdColl 用户id
+     * @param roleIdColl 角色id集合,为空时不加此条件
+     *//*
+    default void deleteByUserIdInAndRoleIdIn(@NotNull Collection<String> userIdColl, @Nullable Collection<String> roleIdColl) {
+        LambdaQueryWrapper<SysUserRole> w = new LambdaQueryWrapper<SysUserRole>()
+                .in(SysUserRole::getUserId, userIdColl)
+                .in(roleIdColl != null && !roleIdColl.isEmpty(), SysUserRole::getRoleId, roleIdColl);
+        delete(w);
+    }*/
+}

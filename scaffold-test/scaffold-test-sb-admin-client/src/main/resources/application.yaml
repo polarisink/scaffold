@@ -1,12 +1,21 @@
 spring:
   application:
-    name: scaffold-test-sb-admin
+    name: scaffold-test-sb-client
   boot:
     admin:
       client:
         url: http://localhost:10000
 server:
-  port: 10001
+  port: 9999
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,loggers,threaddump,heapdump
+  endpoint:
+    health:
+      show-details: always
 
 logging:
   level:

@@ -52,6 +52,12 @@
                 <module>scaffold-test</module>
             </modules>
         </profile>
+        <profile>
+            <id>examples-cloud</id>
+            <modules>
+                <module>scaffold-test-cloud</module>
+            </modules>
+        </profile>
     </profiles>
 
     <build>
@@ -60,7 +66,7 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>3.5.7</version>
+                    <version>3.5.15</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

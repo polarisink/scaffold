@@ -46,7 +46,7 @@ public class MapQueryController {
     }
 
     @GetMapping("/places/{id}")
-    public R<MapPlaceResponse> findPlace(@PathVariable Long id) {
+    public R<MapPlaceResponse> findPlace(@PathVariable("id") Long id) {
         return R.success(mapQueryService.findPlace(id));
     }
 

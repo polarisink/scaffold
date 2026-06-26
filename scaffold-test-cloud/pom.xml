@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.scaffold</groupId>
+        <artifactId>scaffold</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <description>测试模块，放一些测试代码</description>
+
+    <artifactId>scaffold-test-cloud</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>scaffold-dependencies-cloud</module>
+        <module>scaffold-test-auth-10080</module>
+        <module>scaffold-test-provider-10081</module>
+        <module>scaffold-test-consumer-10082</module>
+        <module>scaffold-test-gateway-10000</module>
+        <module>scaffold-test-dubbo-api</module>
+        <module>scaffold-test-dubbo-provider-10881</module>
+        <module>scaffold-test-dubbo-consumer-10092</module>
+        <module>scaffold-test-seata-10093</module>
+    </modules>
+
+</project>

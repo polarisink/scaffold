@@ -1,5 +1,6 @@
 package com.scaffold.geo.repository;
 
+import com.scaffold.base.util.JsonUtil;
 import com.scaffold.geo.dto.CreatePlaceRequest;
 import com.scaffold.geo.dto.MapPlaceResponse;
 import com.scaffold.geo.dto.MapRegionResponse;
@@ -36,7 +37,7 @@ public class MapGeoRepository {
                 rs.getDouble("lon"),
                 rs.getDouble("lat"),
                 distanceMeters,
-                rs.getString("geojson"),
+                JsonUtil.readTree(rs.getString("geojson")),
                 createdAtUtc
         );
     };

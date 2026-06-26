@@ -13,6 +13,10 @@
     <artifactId>scaffold-module</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>scaffold-module-rbac</module>
+        <module>scaffold-module-rbac-data</module>
+        <module>scaffold-module-rbac-security-servlet</module>
+        <module>scaffold-module-rbac-sa-token-servlet</module>
+        <module>scaffold-module-rbac-auth-security-webflux</module>
+        <module>scaffold-module-rbac-auth-sa-webflux</module>
     </modules>
 </project>

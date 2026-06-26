@@ -19,10 +19,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 客户端工具类
@@ -43,7 +40,7 @@ public class ServletUtils extends JakartaServletUtil {
      * 获取String参数
      */
     public static String getParameter(String name, String defaultValue) {
-        return Convert.toStr(getRequest().getParameter(name), defaultValue);
+        return Convert.toStr(Objects.requireNonNull(getRequest()).getParameter(name), defaultValue);
     }
 
     /**
@@ -57,7 +54,7 @@ public class ServletUtils extends JakartaServletUtil {
      * 获取Integer参数
      */
     public static Integer getParameterToInt(String name, Integer defaultValue) {
-        return Convert.toInt(getRequest().getParameter(name), defaultValue);
+        return Convert.toInt(Objects.requireNonNull(getRequest()).getParameter(name), defaultValue);
     }
 
     /**
@@ -71,7 +68,7 @@ public class ServletUtils extends JakartaServletUtil {
      * 获取Boolean参数
      */
     public static Boolean getParameterToBool(String name, Boolean defaultValue) {
-        return Convert.toBool(getRequest().getParameter(name), defaultValue);
+        return Convert.toBool(Objects.requireNonNull(getRequest()).getParameter(name), defaultValue);
     }
 
     /**
@@ -104,7 +101,7 @@ public class ServletUtils extends JakartaServletUtil {
      */
     public static HttpServletRequest getRequest() {
         try {
-            return getRequestAttributes().getRequest();
+            return Objects.requireNonNull(getRequestAttributes()).getRequest();
         } catch (Exception e) {
             return null;
         }
@@ -115,7 +112,7 @@ public class ServletUtils extends JakartaServletUtil {
      */
     public static HttpServletResponse getResponse() {
         try {
-            return getRequestAttributes().getResponse();
+            return Objects.requireNonNull(getRequestAttributes()).getResponse();
         } catch (Exception e) {
             return null;
         }
@@ -132,7 +129,7 @@ public class ServletUtils extends JakartaServletUtil {
     }
 
     public static String getHeader(String name) {
-        String value = getRequest().getHeader(name);
+        String value = Objects.requireNonNull(getRequest()).getHeader(name);
         if (StrUtil.isEmpty(value)) {
             return StrUtil.EMPTY;
         }

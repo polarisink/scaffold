@@ -1,0 +1,65 @@
+services:
+  nacos-schema:
+    image: curlimages/curl:8.17.0
+    user: root
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -eu
+        clean_version="$${NACOS_VERSION#v}"
+        clean_version="$${clean_version%-*}"
+        new_url="https://raw.githubusercontent.com/alibaba/nacos/$${clean_version}/plugin-default-impl/nacos-default-datasource-plugin/nacos-datasource-plugin-mysql/src/main/resources/META-INF/mysql-schema.sql"
+        old_url="https://raw.githubusercontent.com/alibaba/nacos/$${clean_version}/distribution/conf/mysql-schema.sql"
+        echo "Downloading Nacos MySQL schema for $${clean_version}"
+        curl -fsSL "$${new_url}" -o /mysql-init/mysql-schema.sql || curl -fsSL "$${old_url}" -o /mysql-init/mysql-schema.sql
+        test -s /mysql-init/mysql-schema.sql
+        echo "Nacos MySQL schema is ready"
+    environment:
+      NACOS_VERSION: ${NACOS_VERSION:-v3.1.2-slim}
+    volumes:
+      - nacos-mysql-init:/mysql-init
+
+  nacos-mysql:
+    image: mysql:8.0.30
+    container_name: scaffold-nacos-mysql
+    restart: unless-stopped
+    depends_on:
+      nacos-schema:
+        condition: service_completed_successfully
+    environment:
+      MYSQL_ROOT_PASSWORD: ${NACOS_MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${NACOS_MYSQL_DATABASE:-nacos_devtest}
+      MYSQL_USER: ${NACOS_MYSQL_USER:-nacos}
+      MYSQL_PASSWORD: ${NACOS_MYSQL_PASSWORD:-nacos}
+      LANG: C.UTF-8
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "${NACOS_MYSQL_PORT:-3306}:3306"
+    volumes:
+      - nacos-mysql-data:/var/lib/mysql
+      - nacos-mysql-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${NACOS_MYSQL_ROOT_PASSWORD:-root}"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+
+  nacos:
+    depends_on:
+      nacos-mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_PLATFORM: mysql
+      MYSQL_SERVICE_HOST: nacos-mysql
+      MYSQL_SERVICE_PORT: 3306
+      MYSQL_SERVICE_DB_NAME: ${NACOS_MYSQL_DATABASE:-nacos_devtest}
+      MYSQL_SERVICE_USER: ${NACOS_MYSQL_USER:-nacos}
+      MYSQL_SERVICE_PASSWORD: ${NACOS_MYSQL_PASSWORD:-nacos}
+      MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+
+volumes:
+  nacos-mysql-data:
+  nacos-mysql-init:

@@ -1,0 +1,26 @@
+server:
+  port: 8093
+
+spring:
+  application:
+    name: scaffold-test-qwen3-asr
+  servlet:
+    multipart:
+      max-file-size: 512MB
+      max-request-size: 512MB
+
+qwen3-asr:
+  # Use a Python interpreter from an isolated env with qwen-asr installed.
+  python: ${QWEN3_ASR_PYTHON:python3}
+  script: ${QWEN3_ASR_SCRIPT:scaffold-test/scaffold-test-qwen3-asr/scripts/qwen3_asr_cli.py}
+  # Must be a local model directory, for example /data/models/Qwen3-ASR-0.6B.
+  model-path: ${QWEN3_ASR_MODEL_PATH:}
+  # Optional local aligner directory, required only when returnTimeStamps=true.
+  forced-aligner-path: ${QWEN3_ASR_FORCED_ALIGNER_PATH:}
+  # auto: CUDA -> cuda:0/bfloat16, Apple Silicon -> mps/float16, fallback -> cpu/float32.
+  device-map: ${QWEN3_ASR_DEVICE_MAP:auto}
+  dtype: ${QWEN3_ASR_DTYPE:auto}
+  max-inference-batch-size: ${QWEN3_ASR_MAX_BATCH_SIZE:8}
+  max-new-tokens: ${QWEN3_ASR_MAX_NEW_TOKENS:512}
+  timeout-seconds: ${QWEN3_ASR_TIMEOUT_SECONDS:900}
+  upload-dir: ${QWEN3_ASR_UPLOAD_DIR:target/qwen3-asr-uploads}

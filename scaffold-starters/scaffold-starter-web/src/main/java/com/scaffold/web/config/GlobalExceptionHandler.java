@@ -5,6 +5,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 import com.scaffold.base.exception.BaseException;
 import com.scaffold.base.util.JsonUtil;
 import com.scaffold.base.util.R;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.core.MethodParameter;
@@ -12,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -34,11 +37,14 @@ import static com.scaffold.base.constant.GlobalConstant.GLOBAL_ERROR_CODE;
  * @date 2020-04-11 10:14
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestControllerAdvice
 @ConditionalOnWebApplication
 public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
 
-    private static final String SERVER_ERROR_MSG = "服务器或网络开小差了，请联系管理员";
+    private final WebProperties webProperties;
+
+    private final PathMatcher pathMatcher = new AntPathMatcher();
 
 
     /**
@@ -51,7 +57,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
     public R<Void> handleException(BaseException e) {
         String msg = e.getMessage();
         if (CharSequenceUtil.isBlank(msg)) {
-            msg = SERVER_ERROR_MSG;
+            msg = serverErrorMessage();
         }
         return R.failed(GLOBAL_ERROR_CODE, msg);
     }
@@ -63,13 +69,11 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
      * @param e e
      * @return {@link R}<{@link ?}>
      */
-    @ExceptionHandler({
-            IllegalArgumentException.class
-    })
+    @ExceptionHandler({IllegalArgumentException.class})
     @ResponseBody
     public R<Void> handleException(IllegalArgumentException e) {
         log.error(ExceptionUtil.stacktraceToString(e));
-        return R.failed(GLOBAL_ERROR_CODE, SERVER_ERROR_MSG);
+        return R.failed(GLOBAL_ERROR_CODE, serverErrorMessage());
     }
 
     /**
@@ -102,9 +106,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
      * @param e 异常
      * @return 异常结果
      */
-    @ExceptionHandler(value = {
-            CompletionException.class
-    })
+    @ExceptionHandler(value = {CompletionException.class})
     @ResponseBody
     public R<Void> handleException(CompletionException e) {
         String msg = e.getMessage();
@@ -143,7 +145,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
     @ExceptionHandler(NoResourceFoundException.class)
     public R<Void> handleNoResourceFoundException(NoResourceFoundException e) {
         log.error("resource not found: {}", e.getResourcePath());
-        return R.failed(GLOBAL_ERROR_CODE, SERVER_ERROR_MSG);
+        return R.failed(GLOBAL_ERROR_CODE, serverErrorMessage());
     }
 
     /**
@@ -155,7 +157,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public R<Void> handleException(MethodArgumentTypeMismatchException e) {
         Throwable cause = e.getCause();
-        //一般嵌套一两次就可以拿到信息了
+        // 一般嵌套一两次就可以拿到信息了
         String msg = cause.getCause() == null ? cause.getMessage() : cause.getCause().getMessage();
         return R.failed(GLOBAL_ERROR_CODE, msg);
     }
@@ -174,18 +176,20 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
             log.error(msg);
         }
         log.error(ExceptionUtil.stacktraceToString(e));
-        return R.failed(GLOBAL_ERROR_CODE, SERVER_ERROR_MSG);
+        return R.failed(GLOBAL_ERROR_CODE, serverErrorMessage());
     }
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        //org.springdoc.webmvc.ui.SwaggerConfigResource org.springdoc.webmvc.api.MultipleOpenApiWebMvcResource
-        //springdoc的直接放开
-        return !returnType.getDeclaringClass().getName().startsWith("org.springdoc.webmvc");
+        String declaringClassName = returnType.getDeclaringClass().getName();
+        return webProperties.getResponse().getIgnoredClassNamePrefixes().stream().noneMatch(declaringClassName::startsWith);
     }
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        if (shouldWriteRawBody(request.getURI().getPath())) {
+            return body;
+        }
         if (body == null) {
             return R.success();
         }
@@ -196,5 +200,19 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
             return body;
         }
         return R.success(body);
+    }
+
+    /**
+     * 是否写入原生数据而不加包装
+     *
+     * @param path 路径
+     * @return 是否包装
+     */
+    private boolean shouldWriteRawBody(String path) {
+        return webProperties.getResponse().getRawBodyPathPatterns().stream().anyMatch(pattern -> pathMatcher.match(pattern, path));
+    }
+
+    private String serverErrorMessage() {
+        return webProperties.getResponse().getServerErrorMessage();
     }
 }

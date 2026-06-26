@@ -11,7 +11,6 @@
 
     <packaging>pom</packaging>
 
-
     <properties>
         <!--    编译相关    -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,23 +23,26 @@
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <flatten.version>1.7.3</flatten.version>
         <!--   spring相关     -->
-        <spring-boot-maven-plugin.version>3.5.7</spring-boot-maven-plugin.version>
-        <spring-boot-dependencies.version>3.5.7</spring-boot-dependencies.version>
-        <spring-boot-adin-dependencies.version>3.5.7</spring-boot-adin-dependencies.version>
+        <spring-boot-maven-plugin.version>3.5.15</spring-boot-maven-plugin.version>
+        <spring-boot-dependencies.version>3.5.15</spring-boot-dependencies.version>
+        <spring-boot-adin-dependencies.version>3.5.15</spring-boot-adin-dependencies.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
+        <spring-cloud-alibaba.version>2025.0.0.0</spring-cloud-alibaba.version>
+        <dubbo.version>3.3.6</dubbo.version>
         <!--   数据库相关     -->
         <mybatis-plus.version>3.5.12</mybatis-plus.version>
         <mysql.version>8.0.23</mysql.version>
         <mariadb.version>3.5.2</mariadb.version>
         <!--    工具    -->
         <lombok.version>1.18.30</lombok.version>
-        <hutool.version>5.8.25</hutool.version>
+        <hutool.version>5.8.40</hutool.version>
         <mapStruct.version>1.4.2.Final</mapStruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <guava.version>33.0.0-jre</guava.version>
         <redisson-starter.version>3.52.0</redisson-starter.version>
         <knife4j-swagger.version>4.5.0</knife4j-swagger.version>
         <easy-query.version>2.0.63</easy-query.version>
-        <nimbus-jose-jwt.version>9.39.3</nimbus-jose-jwt.version>
+        <nimbus-jose-jwt.version>10.0.2</nimbus-jose-jwt.version>
         <netty-all.version>4.2.6.Final</netty-all.version>
         <netty-socketio.version>2.0.11</netty-socketio.version>
         <retrofit.version>2.11.0</retrofit.version>
@@ -60,6 +62,7 @@
         <sa-token.version>1.44.0</sa-token.version>
         <bizlog.version>3.0.6</bizlog.version>
         <yauaa.version>7.32.0</yauaa.version>
+        <spatial.version>7.4.1.Final</spatial.version>
     </properties>
 
     <dependencyManagement>
@@ -102,7 +105,27 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-security</artifactId>
+                <artifactId>scaffold-starter-auth-core</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-starter-spring-security-servlet</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-starter-spring-security-webflux</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-starter-sa-token-servlet</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-starter-sa-token-webflux</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -132,7 +155,32 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-module-rbac</artifactId>
+                <artifactId>scaffold-module-rbac-security-servlet</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-module-rbac-data</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-module-rbac-sa-token-servlet</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-module-rbac-auth-security-webflux</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-module-rbac-auth-sa-webflux</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-dependencies-cloud</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <!--工具类版本-->
@@ -285,6 +333,11 @@
                 <artifactId>sa-token-spring-boot3-starter</artifactId>
                 <version>${sa-token.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-reactor-spring-boot3-starter</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
             <!--<dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
@@ -300,10 +353,41 @@
                 <artifactId>yauaa</artifactId>
                 <version>${yauaa.version}</version>
             </dependency>
+            <!-- Source: https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-spatial -->
+            <dependency>
+                <groupId>org.hibernate.orm</groupId>
+                <artifactId>hibernate-spatial</artifactId>
+                <version>${spatial.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-registry-nacos</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-stack-depchain</artifactId>
                 <version>${vertx.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
