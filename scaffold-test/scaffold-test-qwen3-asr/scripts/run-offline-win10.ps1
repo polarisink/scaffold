@@ -10,10 +10,12 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# 优先使用环境变量指定的虚拟环境解释器。
 if (-not $env:QWEN3_ASR_PYTHON) {
     $env:QWEN3_ASR_PYTHON = "python"
 }
 
+# 禁止依赖库在推理时联网下载模型或数据集。
 $env:HF_HUB_OFFLINE = "1"
 $env:TRANSFORMERS_OFFLINE = "1"
 $env:HF_DATASETS_OFFLINE = "1"

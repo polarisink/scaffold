@@ -1,5 +1,6 @@
 server:
-  port: 8093
+  address: ${QWEN3_ASR_SERVER_ADDRESS:127.0.0.1}
+  port: ${QWEN3_ASR_SERVER_PORT:8093}
 
 spring:
   application:
@@ -9,15 +10,21 @@ spring:
       max-file-size: 512MB
       max-request-size: 512MB
 
+swagger:
+  enabled: true
+  title: Qwen3-ASR HTTP API
+  description: 本地音频转写服务接口
+  version: v1.0
+
 qwen3-asr:
-  # Use a Python interpreter from an isolated env with qwen-asr installed.
-  python: ${QWEN3_ASR_PYTHON:python3}
-  script: ${QWEN3_ASR_SCRIPT:scaffold-test/scaffold-test-qwen3-asr/scripts/qwen3_asr_cli.py}
-  # Must be a local model directory, for example /data/models/Qwen3-ASR-0.6B.
+  # 未配置时自动查找模块内的 .venv、推理脚本和 Qwen3-ASR-0.6B 模型。
+  python: ${QWEN3_ASR_PYTHON:}
+  script: ${QWEN3_ASR_SCRIPT:}
+  # 也可显式指定其他本地模型目录，例如 /data/models/Qwen3-ASR-1.7B。
   model-path: ${QWEN3_ASR_MODEL_PATH:}
-  # Optional local aligner directory, required only when returnTimeStamps=true.
+  # 可选的本地对齐模型目录；returnTimeStamps=true 时必须配置。
   forced-aligner-path: ${QWEN3_ASR_FORCED_ALIGNER_PATH:}
-  # auto: CUDA -> cuda:0/bfloat16, Apple Silicon -> mps/float16, fallback -> cpu/float32.
+  # auto 会依次选择 CUDA、Apple Silicon MPS，最后回退到 CPU，并匹配合适精度。
   device-map: ${QWEN3_ASR_DEVICE_MAP:auto}
   dtype: ${QWEN3_ASR_DTYPE:auto}
   max-inference-batch-size: ${QWEN3_ASR_MAX_BATCH_SIZE:8}

@@ -1,0 +1,58 @@
+# 纯运行时 Compose 文件。镜像请先通过 scripts/build-docker-image.sh 构建。
+x-qwen3-asr-common: &qwen3-asr-common
+  container_name: qwen3-asr
+  ports:
+    - "${QWEN3_ASR_HOST_PORT:-8093}:8093"
+  environment: &qwen3-asr-environment
+    QWEN3_ASR_MODEL_PATH: /models/${QWEN3_ASR_MODEL_NAME:-Qwen3-ASR-0.6B}
+    QWEN3_ASR_MAX_BATCH_SIZE: ${QWEN3_ASR_MAX_BATCH_SIZE:-8}
+    QWEN3_ASR_MAX_NEW_TOKENS: ${QWEN3_ASR_MAX_NEW_TOKENS:-512}
+    QWEN3_ASR_TIMEOUT_SECONDS: ${QWEN3_ASR_TIMEOUT_SECONDS:-900}
+  shm_size: 4gb
+  restart: unless-stopped
+
+x-qwen3-asr-external-model: &qwen3-asr-external-model
+  volumes:
+    - type: bind
+      source: ${QWEN3_ASR_MODEL_SOURCE:-./models/Qwen3-ASR-0.6B}
+      target: /models/${QWEN3_ASR_MODEL_NAME:-Qwen3-ASR-0.6B}
+      read_only: true
+
+services:
+  qwen3-asr-cpu-external:
+    <<: [*qwen3-asr-common, *qwen3-asr-external-model]
+    profiles: [cpu-external]
+    image: ${QWEN3_ASR_CPU_EXTERNAL_IMAGE:-scaffold-qwen3-asr:cpu-external}
+    environment:
+      <<: *qwen3-asr-environment
+      QWEN3_ASR_DEVICE_MAP: cpu
+      QWEN3_ASR_DTYPE: float32
+
+  qwen3-asr-cpu-embedded:
+    <<: *qwen3-asr-common
+    profiles: [cpu-embedded]
+    image: ${QWEN3_ASR_CPU_EMBEDDED_IMAGE:-scaffold-qwen3-asr:cpu-embedded}
+    environment:
+      <<: *qwen3-asr-environment
+      QWEN3_ASR_DEVICE_MAP: cpu
+      QWEN3_ASR_DTYPE: float32
+
+  qwen3-asr-gpu-external:
+    <<: [*qwen3-asr-common, *qwen3-asr-external-model]
+    profiles: [gpu-external]
+    image: ${QWEN3_ASR_GPU_EXTERNAL_IMAGE:-scaffold-qwen3-asr:gpu-external}
+    environment:
+      <<: *qwen3-asr-environment
+      QWEN3_ASR_DEVICE_MAP: cuda:0
+      QWEN3_ASR_DTYPE: float16
+    gpus: all
+
+  qwen3-asr-gpu-embedded:
+    <<: *qwen3-asr-common
+    profiles: [gpu-embedded]
+    image: ${QWEN3_ASR_GPU_EMBEDDED_IMAGE:-scaffold-qwen3-asr:gpu-embedded}
+    environment:
+      <<: *qwen3-asr-environment
+      QWEN3_ASR_DEVICE_MAP: cuda:0
+      QWEN3_ASR_DTYPE: float16
+    gpus: all

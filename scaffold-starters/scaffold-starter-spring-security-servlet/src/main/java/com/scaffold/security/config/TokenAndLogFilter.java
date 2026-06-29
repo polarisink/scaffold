@@ -69,7 +69,7 @@ public class TokenAndLogFilter extends OncePerRequestFilter {
         Object requestBody = "";
         Object responseBody = "";
         try {
-            ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
+            ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request, request.getContentLength());
             ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
             start = System.currentTimeMillis();
             filterChain.doFilter(requestWrapper, responseWrapper);

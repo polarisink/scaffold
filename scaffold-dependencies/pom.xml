@@ -21,7 +21,6 @@
         <maven.compiler.target>21</maven.compiler.target>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
-        <flatten.version>1.7.3</flatten.version>
         <!--   spring相关     -->
         <spring-boot-maven-plugin.version>3.5.15</spring-boot-maven-plugin.version>
         <spring-boot-dependencies.version>3.5.15</spring-boot-dependencies.version>
@@ -31,11 +30,13 @@
         <dubbo.version>3.3.6</dubbo.version>
         <!--   数据库相关     -->
         <mybatis-plus.version>3.5.12</mybatis-plus.version>
-        <mysql.version>8.0.23</mysql.version>
+        <mysql.version>8.0.28</mysql.version>
         <mariadb.version>3.5.2</mariadb.version>
         <!--    工具    -->
         <lombok.version>1.18.30</lombok.version>
         <hutool.version>5.8.40</hutool.version>
+        <jackson.version>2.18.6</jackson.version>
+        <bouncycastle.version>1.84</bouncycastle.version>
         <mapStruct.version>1.4.2.Final</mapStruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <guava.version>33.0.0-jre</guava.version>
@@ -182,6 +183,19 @@
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-dependencies-cloud</artifactId>
                 <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <!--安全补丁版本覆盖，避免上游 BOM 将 Jackson/Bouncy Castle 管理到存在告警的补丁线。-->
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bouncycastle.version}</version>
             </dependency>
             <!--工具类版本-->
             <dependency>
@@ -472,31 +486,6 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <version>${flatten.version}</version>
-                <configuration>
-                    <updatePomFile>true</updatePomFile>
-                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flatten</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>flatten</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>flatten.clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

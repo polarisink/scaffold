@@ -1,0 +1,11 @@
+.git
+.idea
+.DS_Store
+**/.flattened-pom.xml
+**/.venv*
+**/__pycache__
+**/*.pyc
+**/node_modules
+**/target
+wheelhouse
+scaffold-test/scaffold-test-qwen3-asr/models
