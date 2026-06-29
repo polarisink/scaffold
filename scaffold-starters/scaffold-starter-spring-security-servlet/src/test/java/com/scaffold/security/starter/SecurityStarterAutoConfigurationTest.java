@@ -1,12 +1,14 @@
 package com.scaffold.security.starter;
 
 import com.scaffold.security.config.TokenService;
+import com.scaffold.security.config.TokenAuthenticationFilter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
+import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.User;
@@ -23,6 +25,7 @@ class SecurityStarterAutoConfigurationTest {
                     SecurityAutoConfiguration.class,
                     WebMvcAutoConfiguration.class,
                     UserDetailsServiceAutoConfiguration.class,
+                    AuthCoreAutoConfiguration.class,
                     SecurityStarterAutoConfiguration.class
             ));
 
@@ -31,12 +34,14 @@ class SecurityStarterAutoConfigurationTest {
         contextRunner.run(context -> {
             assertThat(context).hasSingleBean(TokenService.class);
             assertThat(context.getBean(TokenService.class)).isInstanceOf(InMemoryTokenService.class);
+            assertThat(context).hasSingleBean(TokenAuthenticationFilter.class);
         });
     }
 
     @Test
     void shouldFallbackWhenRedisStoreRequestedWithoutRedisson() {
         contextRunner
+                .withClassLoader(new FilteredClassLoader("org.redisson"))
                 .withPropertyValues("security.token.store-type=redis")
                 .run(context -> assertThat(context.getBean(TokenService.class)).isNotInstanceOf(RedisTokenService.class));
     }

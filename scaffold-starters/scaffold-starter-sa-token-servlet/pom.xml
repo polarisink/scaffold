@@ -21,8 +21,8 @@
             <artifactId>sa-token-spring-boot3-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-starter-web</artifactId>
         </dependency>
     </dependencies>
 </project>

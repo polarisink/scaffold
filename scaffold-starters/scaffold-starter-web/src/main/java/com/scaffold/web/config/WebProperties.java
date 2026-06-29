@@ -16,6 +16,8 @@ public class WebProperties {
 
     private Response response = new Response();
 
+    private RequestLog requestLog = new RequestLog();
+
     @Getter
     @Setter
     public static class Cors {
@@ -43,5 +45,14 @@ public class WebProperties {
                 "/actuator",
                 "/actuator/**"
         ));
+    }
+
+    @Getter
+    @Setter
+    public static class RequestLog {
+        private boolean enabled = true;
+        private long slowThresholdMillis = 1000L;
+        private int maxPayloadLength = 16 * 1024;
+        private List<String> excludePathPatterns = new ArrayList<>();
     }
 }

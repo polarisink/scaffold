@@ -36,15 +36,15 @@ import static org.springframework.security.core.context.SecurityContextHolder.MO
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
-    @Qualifier("tokenAndLogFilter")
-    private final TokenAndLogFilter tokenAndLogFilter;
+    @Qualifier("tokenAuthenticationFilter")
+    private final TokenAuthenticationFilter tokenAuthenticationFilter;
     private final SecurityProperties securityProperties;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityProperties securityProperties, PasswordEncoder passwordEncoder) throws Exception {
         SecurityContextHolder.setStrategyName(MODE_INHERITABLETHREADLOCAL);
         return http
-                .addFilterBefore(tokenAndLogFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(c -> c
                         .requestMatchers(securityProperties.getIgnoreList()).permitAll()
                         .anyRequest().authenticated())

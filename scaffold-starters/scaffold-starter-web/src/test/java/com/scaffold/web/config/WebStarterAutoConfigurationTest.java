@@ -3,6 +3,7 @@ package com.scaffold.web.config;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +18,32 @@ class WebStarterAutoConfigurationTest {
             assertThat(context).hasSingleBean(WebConfig.class);
             assertThat(context).hasSingleBean(GlobalExceptionHandler.class);
             assertThat(context).hasSingleBean(WebProperties.class);
+            assertThat(context).hasSingleBean(RequestLogFilter.class);
+            assertThat(context).hasSingleBean(FilterRegistrationBean.class);
         });
+    }
+
+    @Test
+    void shouldAllowRequestLoggingToBeDisabled() {
+        contextRunner
+                .withPropertyValues("scaffold.web.request-log.enabled=false")
+                .run(context -> assertThat(context).doesNotHaveBean(RequestLogFilter.class));
+    }
+
+    @Test
+    void shouldBindRequestLogProperties() {
+        contextRunner
+                .withPropertyValues(
+                        "scaffold.web.request-log.slow-threshold-millis=500",
+                        "scaffold.web.request-log.max-payload-length=2048",
+                        "scaffold.web.request-log.exclude-path-patterns[0]=/actuator/**"
+                )
+                .run(context -> {
+                    WebProperties.RequestLog requestLog = context.getBean(WebProperties.class).getRequestLog();
+                    assertThat(requestLog.getSlowThresholdMillis()).isEqualTo(500);
+                    assertThat(requestLog.getMaxPayloadLength()).isEqualTo(2048);
+                    assertThat(requestLog.getExcludePathPatterns()).containsExactly("/actuator/**");
+                });
     }
 
     @Test
