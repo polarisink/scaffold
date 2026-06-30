@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.scaffold</groupId>
         <artifactId>scaffold</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${rversion}</version>
     </parent>
 
     <description>测试模块，放一些测试代码</description>
@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>scaffold-dependencies-cloud</module>
+        <module>scaffold-cloud-common-dependencies</module>
         <module>scaffold-test-auth-10080</module>
         <module>scaffold-test-provider-10081</module>
         <module>scaffold-test-consumer-10082</module>

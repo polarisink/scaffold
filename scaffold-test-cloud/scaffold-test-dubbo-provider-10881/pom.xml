@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.scaffold</groupId>
         <artifactId>scaffold-test-cloud</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${rversion}</version>
     </parent>
 
     <artifactId>scaffold-test-dubbo-provider-10881</artifactId>
@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-dependencies-cloud</artifactId>
+            <artifactId>scaffold-cloud-common-dependencies</artifactId>
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>

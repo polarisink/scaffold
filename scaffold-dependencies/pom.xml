@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.scaffold</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${rversion}</version>
     <artifactId>scaffold-dependencies</artifactId>
 
     <description>基础 bom 文件，管理整个项目的依赖版本</description>
@@ -42,6 +42,7 @@
         <guava.version>33.0.0-jre</guava.version>
         <redisson-starter.version>3.52.0</redisson-starter.version>
         <knife4j-swagger.version>4.5.0</knife4j-swagger.version>
+        <swagger-annotations.version>2.2.19</swagger-annotations.version>
         <easy-query.version>2.0.63</easy-query.version>
         <nimbus-jose-jwt.version>10.0.2</nimbus-jose-jwt.version>
         <netty-all.version>4.2.6.Final</netty-all.version>
@@ -64,6 +65,7 @@
         <bizlog.version>3.0.6</bizlog.version>
         <yauaa.version>7.32.0</yauaa.version>
         <spatial.version>7.4.1.Final</spatial.version>
+        <jetcache.version>2.7.8</jetcache.version>
     </properties>
 
     <dependencyManagement>
@@ -72,117 +74,117 @@
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-base</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-orm</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-redis</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-postgresql-cache</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-websocket</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-web</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-swagger</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-auth-core</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-spring-security-servlet</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-spring-security-webflux</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-sa-token-servlet</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-sa-token-webflux</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-orm</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-file</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-observability</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-postgresql-cache</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-postgresql-job</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-module-rbac-security-servlet</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-module-rbac-data</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-module-rbac-sa-token-servlet</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-module-rbac-auth-security-webflux</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-module-rbac-auth-sa-webflux</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-dependencies-cloud</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <artifactId>scaffold-cloud-common-dependencies</artifactId>
+                <version>${rversion}</version>
             </dependency>
             <!--安全补丁版本覆盖，避免上游 BOM 将 Jackson/Bouncy Castle 管理到存在告警的补丁线。-->
             <dependency>
@@ -227,7 +229,7 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-                <version>3.5.12</version>
+                <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
@@ -239,6 +241,11 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
                 <version>${knife4j-swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations-jakarta</artifactId>
+                <version>${swagger-annotations.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.nimbusds</groupId>
@@ -304,7 +311,7 @@
             <dependency>
                 <groupId>com.alicp.jetcache</groupId>
                 <artifactId>jetcache-starter-redis</artifactId>
-                <version>2.7.8</version>
+                <version>${jetcache.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.java.dev.jna</groupId>
@@ -451,6 +458,39 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <!--
+                This BOM does not inherit from the reactor root. Interpolate
+                dependencyManagement so the published POM has no rversion
+                placeholder that consumers would need to define themselves.
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.7.3</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>bom</flattenMode>
+                    <pomElements>
+                        <dependencyManagement>interpolate</dependencyManagement>
+                    </pomElements>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
