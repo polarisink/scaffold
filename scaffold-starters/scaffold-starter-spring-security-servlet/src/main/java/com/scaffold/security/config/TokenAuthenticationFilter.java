@@ -52,7 +52,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         PayloadDTO dto = JwtUtil.resolveToken(token);
-        if (!tokenService.has(dto.getUserId())) {
+        if (!tokenService.has(dto.getUserId().toString())) {
             log.error("{} unauthorized: token is expired", url);
             ResponseUtil.writeBody(response, AuthCodeEnum.UNAUTHORIZED);
             return;

@@ -5,7 +5,7 @@ import com.scaffold.security.config.TokenService;
 
 import java.time.Duration;
 
-public class RedisTokenService implements TokenService {
+public class RedisTokenService implements TokenService{
 
     private final long ttlMinutes;
 
@@ -14,22 +14,22 @@ public class RedisTokenService implements TokenService {
     }
 
     @Override
-    public void set(Long userId, String token) {
-        RedisUtils.set(TokenService.tokenPrefix(userId), token, Duration.ofMinutes(ttlMinutes));
+    public void set(String userId, String token) {
+        RedisUtils.set(tokenPrefix(userId), token, Duration.ofMinutes(ttlMinutes));
     }
 
     @Override
-    public String get(Long userId) {
-        return RedisUtils.get(TokenService.tokenPrefix(userId));
+    public String get(String userId) {
+        return RedisUtils.get(tokenPrefix(userId));
     }
 
     @Override
-    public boolean has(Long userId) {
-        return RedisUtils.hasKey(TokenService.tokenPrefix(userId));
+    public boolean has(String userId) {
+        return RedisUtils.hasKey(tokenPrefix(userId));
     }
 
     @Override
-    public void del(Long userId) {
-        RedisUtils.del(TokenService.tokenPrefix(userId));
+    public void del(String userId) {
+        RedisUtils.del(tokenPrefix(userId));
     }
 }

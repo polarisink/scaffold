@@ -20,22 +20,22 @@ public class InMemoryTokenService implements TokenService {
     }
 
     @Override
-    public void set(Long userId, String token) {
-        tokenCache.put(TokenService.tokenPrefix(userId), token);
+    public void set(String userId, String token) {
+        tokenCache.put(tokenPrefix(userId), token);
     }
 
     @Override
-    public String get(Long userId) {
-        return tokenCache.getIfPresent(TokenService.tokenPrefix(userId));
+    public String get(String userId) {
+        return tokenCache.getIfPresent(tokenPrefix(userId));
     }
 
     @Override
-    public boolean has(Long userId) {
-        return tokenCache.getIfPresent(TokenService.tokenPrefix(userId)) != null;
+    public boolean has(String userId) {
+        return tokenCache.getIfPresent(tokenPrefix(userId)) != null;
     }
 
     @Override
-    public void del(Long userId) {
-        tokenCache.invalidate(TokenService.tokenPrefix(userId));
+    public void del(String userId) {
+        tokenCache.invalidate(tokenPrefix(userId));
     }
 }

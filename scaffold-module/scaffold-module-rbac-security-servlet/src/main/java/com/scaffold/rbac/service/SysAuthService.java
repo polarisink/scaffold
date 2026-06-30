@@ -3,18 +3,14 @@ package com.scaffold.rbac.service;
 import cn.hutool.extra.spring.SpringUtil;
 import com.scaffold.base.exception.BaseException;
 import com.scaffold.log.LoginLogEvent;
-import com.scaffold.rbac.vo.auth.LoginVO;
+import com.scaffold.rbac.vo.auth.LoginVo;
 import com.scaffold.security.config.TokenService;
 import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.vo.LoginUser;
 import com.scaffold.security.vo.PayloadDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,7 +25,7 @@ public class SysAuthService {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
-    public String login(LoginVO vo) {
+    public String login(LoginVo vo) {
         UsernamePasswordAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(vo.username(), vo.password());
         Authentication a = getAuthentication(authenticationToken);
         LoginUser loginUser = (LoginUser) a.getPrincipal();
@@ -38,7 +34,7 @@ public class SysAuthService {
         Long userId = dto.getUserId();
         String username = dto.getUsername();
         String token = JwtUtil.generateToken(dto);
-        tokenService.set(userId, token);
+        tokenService.set(userId.toString(), token);
         LoginLogEvent event = new LoginLogEvent();
         event.setUsername(vo.username());
         event.setUserId(userId);
@@ -65,6 +61,9 @@ public class SysAuthService {
     }
 
     public void logout() {
-        tokenService.del(LoginUser.userId());
+        Long userId = LoginUser.userId();
+        if (userId != null) {
+            tokenService.del(userId.toString());
+        }
     }
 }

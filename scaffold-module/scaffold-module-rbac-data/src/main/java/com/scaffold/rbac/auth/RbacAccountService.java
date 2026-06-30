@@ -20,7 +20,7 @@ public class RbacAccountService {
     private final SysUserMapper userMapper;
     private final SysUserRoleMapper userRoleMapper;
     private final SysRoleMapper roleMapper;
-    private final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
     public RbacLoginUser login(String username, String password) {
         SysUser user = userMapper.findByUsername(username);
@@ -41,7 +41,7 @@ public class RbacAccountService {
         if (CollectionUtils.isEmpty(roleIdList)) {
             return List.of();
         }
-        return roleMapper.selectBatchIds(roleIdList)
+        return roleMapper.selectByIds(roleIdList)
                 .stream()
                 .map(SysRole::getRoleCode)
                 .toList();

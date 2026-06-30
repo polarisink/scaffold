@@ -5,6 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.scaffold.base.util.R;
 import com.scaffold.rbac.auth.RbacAccountService;
 import com.scaffold.rbac.auth.RbacLoginUser;
+import com.scaffold.rbac.vo.auth.LoginVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ public class SaWebFluxAuthController {
     private final RbacAccountService accountService;
 
     @PostMapping("/login")
-    public R<SaTokenInfo> login(@RequestBody SaWebFluxLoginRequest request) {
+    public R<SaTokenInfo> login(@RequestBody LoginVo request) {
         RbacLoginUser user = accountService.login(request.username(), request.password());
         StpUtil.login(user.userId());
         StpUtil.getSession().set("username", user.username());

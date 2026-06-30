@@ -1,9 +1,13 @@
 package com.scaffold.rbac.mapper;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.scaffold.base.util.PageResponse;
 import com.scaffold.orm.MyBaseMapper;
 import com.scaffold.rbac.entity.SysUser;
+import com.scaffold.rbac.vo.user.SysUserPageVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -39,7 +43,7 @@ public interface SysUserMapper extends MyBaseMapper<SysUser> {
     }
 
     /**
-     * 通过组织id查下面的人列表 
+     * 通过组织id查下面的人列表
      *
      * @param orgId 组织id
      * @return 人员列表
@@ -54,12 +58,12 @@ public interface SysUserMapper extends MyBaseMapper<SysUser> {
      * @return 用户id集合
      */
     default List<Long> selectAllEnabledUserId() {
-        return selectList(Wrappers.<SysUser>lambdaQuery()
-                .eq(SysUser::getStatus, true)
-                .select(SysUser::getId))
-                .stream()
-                .map(SysUser::getId)
-                .toList();
+        return selectList(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getStatus, true).select(SysUser::getId)).stream().map(SysUser::getId).toList();
+    }
+
+    default PageResponse<SysUser> page(SysUserPageVO vo) {
+        Page<SysUser> page = selectPage(new Page<>(vo.getPageNo(), vo.getPageSize()), Wrappers.<SysUser>lambdaQuery().like(StrUtil.isNotBlank(vo.getUsername()), SysUser::getUsername, vo.getUsername()).orderByDesc(SysUser::getGmtModified));
+        return null;
     }
 
 }

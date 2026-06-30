@@ -20,4 +20,5 @@ public record PageResponse<T>(
         long total,
         long size
 ) {
+
 }

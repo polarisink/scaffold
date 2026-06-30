@@ -1,16 +1,17 @@
 package com.scaffold.security.config;
 
-public interface TokenService {
 
-    static String tokenPrefix(Long userId) {
+public interface TokenService{
+
+    default String tokenPrefix(String userId) {
         return "token:" + userId;
     }
 
-    void set(Long userId, String token);
+    void set(String userId, String token);
 
-    String get(Long userId);
+    String get(String userId);
 
-    boolean has(Long userId);
+    boolean has(String userId);
 
-    void del(Long userId);
+    void del(String userId);
 }

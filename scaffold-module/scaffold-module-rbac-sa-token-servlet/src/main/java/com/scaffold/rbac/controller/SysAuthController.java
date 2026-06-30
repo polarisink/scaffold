@@ -2,7 +2,7 @@ package com.scaffold.rbac.controller;
 
 import com.scaffold.base.util.R;
 import com.scaffold.rbac.service.SysAuthService;
-import com.scaffold.rbac.vo.auth.LoginVO;
+import com.scaffold.rbac.vo.auth.LoginVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class SysAuthController {
 
     @Operation(summary = "登录")
     @PostMapping("/login")
-    public R<String> login(@RequestBody LoginVO loginVO) {
+    public R<String> login(@RequestBody LoginVo loginVO) {
         return R.success(authService.login(loginVO));
     }
 

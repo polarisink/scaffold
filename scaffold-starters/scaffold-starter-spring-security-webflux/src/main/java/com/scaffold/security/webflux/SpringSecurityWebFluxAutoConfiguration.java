@@ -53,7 +53,7 @@ public class SpringSecurityWebFluxAutoConfiguration {
                 return unauthorized(exchange);
             }
             PayloadDTO dto = JwtUtil.resolveToken(token);
-            if (!tokenService.has(dto.getUserId())) {
+            if (!tokenService.has(dto.getUserId().toString())) {
                 return unauthorized(exchange);
             }
             List<SimpleGrantedAuthority> authorities = dto.getAuthorities().stream()

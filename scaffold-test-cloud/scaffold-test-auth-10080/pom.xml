@@ -23,10 +23,6 @@
             <artifactId>scaffold-module-rbac-auth-sa-webflux</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-orm</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>

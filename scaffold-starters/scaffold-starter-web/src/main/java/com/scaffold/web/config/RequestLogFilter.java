@@ -55,7 +55,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
         }
     }
 
-    private void writeLog(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response,
+    private  void writeLog(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response,
                           long consume, int maxPayloadLength) {
         Object requestBody = payload(request.getContentAsByteArray(), request.getContentType(),
                 request.getCharacterEncoding(), maxPayloadLength);
@@ -76,7 +76,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
                 requestBody, consume, response.getStatus(), responseBody);
     }
 
-    private Object payload(byte[] content, String contentType, String characterEncoding, int maxPayloadLength) {
+    private static Object payload(byte[] content, String contentType, String characterEncoding, int maxPayloadLength) {
         if (content.length == 0 || !isJson(contentType)) {
             return "";
         }
@@ -91,7 +91,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
         return JsonUtil.readTree(visibleContent);
     }
 
-    private boolean isJson(String contentType) {
+    private static boolean isJson(String contentType) {
         if (contentType == null || contentType.isBlank()) {
             return false;
         }
@@ -102,7 +102,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
         }
     }
 
-    private Charset resolveCharset(String characterEncoding) {
+    private static Charset resolveCharset(String characterEncoding) {
         if (characterEncoding == null || characterEncoding.isBlank()) {
             return StandardCharsets.UTF_8;
         }
