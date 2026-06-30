@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scaffold.base.util.PageResponse;
 import com.scaffold.orm.MyBaseMapper;
+import com.scaffold.orm.starter.PageUtils;
 import com.scaffold.rbac.entity.SysUser;
 import com.scaffold.rbac.vo.user.SysUserPageVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -63,7 +64,7 @@ public interface SysUserMapper extends MyBaseMapper<SysUser> {
 
     default PageResponse<SysUser> page(SysUserPageVO vo) {
         Page<SysUser> page = selectPage(new Page<>(vo.getPageNo(), vo.getPageSize()), Wrappers.<SysUser>lambdaQuery().like(StrUtil.isNotBlank(vo.getUsername()), SysUser::getUsername, vo.getUsername()).orderByDesc(SysUser::getGmtModified));
-        return null;
+        return PageUtils.of(page);
     }
 
 }

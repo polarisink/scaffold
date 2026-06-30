@@ -17,14 +17,14 @@ spring:
       ddl-auto: create
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
-easy-query:
-  enable: true
-  database: mysql
-  name-conversion: underlined
-  delete-throw: true
-  print-sql: true
-  default-track: true
-  keep-native-style: true
+#easy-query:
+#  enable: true
+#  database: mysql
+#  name-conversion: underlined
+#  delete-throw: true
+#  print-sql: true
+#  default-track: true
+#  keep-native-style: true
 
 logging:
   level:

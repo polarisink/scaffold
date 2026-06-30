@@ -45,11 +45,7 @@ public class SysUserService {
 
     @Transactional(readOnly = true)
     public PageResponse<SysUser> page(SysUserPageVO vo) {
-        IPage<SysUser> page = sysUserMapper.selectPage(new Page<>(vo.getPageNo(), vo.getPageSize()),
-                Wrappers.<SysUser>lambdaQuery()
-                        .like(StrUtil.isNotBlank(vo.getUsername()), SysUser::getUsername, vo.getUsername())
-                        .orderByDesc(SysUser::getGmtModified));
-        return new PageResponse<>(page.getRecords(), page.getPages(), page.getCurrent(), page.getTotal(), page.getSize());
+        return sysUserMapper.page(vo);
     }
 
     @Transactional(rollbackFor = Exception.class)
