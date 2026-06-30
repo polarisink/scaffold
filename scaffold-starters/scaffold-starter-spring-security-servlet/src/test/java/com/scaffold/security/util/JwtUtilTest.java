@@ -8,16 +8,29 @@ import java.time.Instant;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class JwtUtilTest {
+    private static final String SECRET = "0123456789abcdef0123456789abcdef";
+    private final JwtUtil jwtUtil = new JwtUtil(SECRET);
+
+    @Test
+    void shouldRejectMissingOrShortSecret() {
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new JwtUtil(null))
+                .withMessage("security.token.jwt.secret 不能为空");
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> new JwtUtil("too-short"))
+                .withMessage("security.token.jwt.secret 长度不能少于 32 字节");
+    }
 
     @Test
     void shouldGenerateAndResolveToken() {
         PayloadDTO payloadDTO = PayloadDTO.of(1L, "aries", List.of("admin"));
 
-        String token = JwtUtil.generateToken(payloadDTO);
-        PayloadDTO resolved = JwtUtil.resolveToken(token);
+        String token = jwtUtil.generateToken(payloadDTO);
+        PayloadDTO resolved = jwtUtil.resolveToken(token);
 
         assertThat(token).isNotBlank();
         assertThat(resolved.getUserId()).isEqualTo(1L);
@@ -33,9 +46,9 @@ class JwtUtilTest {
         payloadDTO.setIat(now - 10);
         payloadDTO.setExp(now - 1);
 
-        String token = JwtUtil.generateToken(payloadDTO);
+        String token = jwtUtil.generateToken(payloadDTO);
 
-        assertThatThrownBy(() -> JwtUtil.resolveToken(token))
+        assertThatThrownBy(() -> jwtUtil.resolveToken(token))
                 .isInstanceOf(BaseException.class)
                 .hasMessage("token已过期");
     }

@@ -24,12 +24,13 @@ import reactor.core.scheduler.Schedulers;
 public class SecurityWebFluxAuthController {
     private final RbacAccountService accountService;
     private final TokenService tokenService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/login")
     public Mono<R<SecurityWebFluxTokenInfo>> login(@RequestBody LoginVo request) {
         return Mono.fromCallable(() -> {
                     RbacLoginUser user = accountService.login(request.username(), request.password());
-                    String token = JwtUtil.generateToken(PayloadDTO.of(user.userId(), user.username(), user.roleCodeList()));
+                    String token = jwtUtil.generateToken(PayloadDTO.of(user.userId(), user.username(), user.roleCodeList()));
                     tokenService.set(user.userId().toString(), token);
                     return R.success(new SecurityWebFluxTokenInfo(
                             HttpHeaders.AUTHORIZATION, token, user.userId(), user.username()));

@@ -29,6 +29,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final PathMatcher pathMatcher;
     private final TokenService tokenService;
     private final SecurityProperties securityProperties;
+    private final JwtUtil jwtUtil;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -51,7 +52,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             ResponseUtil.writeBody(response, AuthCodeEnum.UNAUTHORIZED);
             return;
         }
-        PayloadDTO dto = JwtUtil.resolveToken(token);
+        PayloadDTO dto = jwtUtil.resolveToken(token);
         if (!tokenService.has(dto.getUserId().toString())) {
             log.error("{} unauthorized: token is expired", url);
             ResponseUtil.writeBody(response, AuthCodeEnum.UNAUTHORIZED);

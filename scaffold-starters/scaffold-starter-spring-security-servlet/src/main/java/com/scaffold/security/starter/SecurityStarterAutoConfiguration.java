@@ -3,6 +3,7 @@ package com.scaffold.security.starter;
 import com.scaffold.security.config.SecurityConfig;
 import com.scaffold.security.config.TokenAuthenticationFilter;
 import com.scaffold.security.config.TokenService;
+import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.vo.SecurityProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,12 +24,19 @@ public class SecurityStarterAutoConfiguration {
         return new AntPathMatcher();
     }
 
+    @Bean
+    @ConditionalOnMissingBean
+    public JwtUtil jwtUtil(SecurityProperties securityProperties) {
+        return new JwtUtil(securityProperties.getToken().getJwtSecret());
+    }
+
     @Bean("tokenAuthenticationFilter")
     @ConditionalOnMissingBean
     public TokenAuthenticationFilter tokenAuthenticationFilter(
             PathMatcher pathMatcher,
             TokenService tokenService,
-            SecurityProperties securityProperties) {
-        return new TokenAuthenticationFilter(pathMatcher, tokenService, securityProperties);
+            SecurityProperties securityProperties,
+            JwtUtil jwtUtil) {
+        return new TokenAuthenticationFilter(pathMatcher, tokenService, securityProperties, jwtUtil);
     }
 }

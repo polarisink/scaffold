@@ -20,12 +20,24 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
 file-storage:
-  enabled: false
+  enabled: true
   type: local
   local:
-    base-path: ${SCAFFOLD_FILE_STORAGE_BASE_PATH:./.data/files}
+    base-path: /Users/aries/Documents/www
+#    base-path: ${SCAFFOLD_FILE_STORAGE_BASE_PATH:./.data/files}
+
+#file-storage:
+#  enabled: true
+#  type: s3
+#  s3:
+#    endpoint: http://127.0.0.1:9000
+#    access-key: minioadmin
+#    secret-key: minioadmin
+#    bucket-name: scaffold
 
 security:
+  token:
+    ttl-minutes: 30
   cors:
     enabled: true
     allowed-origin-patterns:

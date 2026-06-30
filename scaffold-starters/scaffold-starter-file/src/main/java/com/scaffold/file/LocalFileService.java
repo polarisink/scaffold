@@ -1,6 +1,8 @@
 package com.scaffold.file;
 
 import lombok.extern.slf4j.Slf4j;
+import com.scaffold.file.vo.FolderUploadFileResult;
+import com.scaffold.file.vo.FolderUploadRequest;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -33,13 +37,13 @@ public class LocalFileService implements FileUploadService {
     }
 
     @Override
-    public String upload(InputStream inputStream, String originalFilename, String contentType) {
+    public String upload(InputStream inputStream, String originalFilename, String contentType, long contentLength) {
         String fileKey = generateFileKey(originalFilename);
-        return uploadToPath(inputStream, fileKey, contentType);
+        return uploadToPath(inputStream, fileKey, contentType, contentLength);
     }
 
     @Override
-    public String uploadToPath(InputStream inputStream, String fileKey, String contentType) {
+    public String uploadToPath(InputStream inputStream, String fileKey, String contentType, long contentLength) {
         Path targetPath = baseDirPath.resolve(fileKey);
 
         try (inputStream) {
@@ -58,6 +62,20 @@ public class LocalFileService implements FileUploadService {
             log.error("本地文件上传失败: {}", fileKey, e);
             throw new RuntimeException("文件上传失败", e);
         }
+    }
+
+    @Override
+    public List<FolderUploadFileResult> uploadFolder(FolderUploadRequest request) throws IOException {
+        List<FolderUploadSupport.UploadFile> files = FolderUploadSupport.resolveFiles(request);
+        List<FolderUploadFileResult> results = new ArrayList<>(files.size());
+        for (FolderUploadSupport.UploadFile file : files) {
+            try (InputStream inputStream = Files.newInputStream(file.sourcePath())) {
+                String accessPath = uploadToPath(
+                        inputStream, file.storagePath(), file.contentType(), file.contentLength());
+                results.add(FolderUploadSupport.result(file, accessPath));
+            }
+        }
+        return results;
     }
 
     @Override

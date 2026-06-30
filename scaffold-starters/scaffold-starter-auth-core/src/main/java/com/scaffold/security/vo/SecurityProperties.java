@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @ConfigurationProperties(prefix = "security")
 public class SecurityProperties {
-    private static final String[] DEFAULT_IGNORE_LIST = {"/auth/*", "/scenario/detail/*", "/actuator/**", "/favicon.ico", "/error", "/v3/api-docs/swagger-config", "/v3/api-docs/*", "/swagger-ui/**", "/*/v3/api-docs/**", "/swagger-ui.html", "/doc.html", "/webjars/**"};
+    private static final String[] DEFAULT_IGNORE_LIST = {"/files/**","/file/**","/auth/*", "/scenario/detail/*", "/actuator/**", "/favicon.ico", "/error", "/v3/api-docs/swagger-config", "/v3/api-docs/*", "/swagger-ui/**", "/*/v3/api-docs/**", "/swagger-ui.html", "/doc.html", "/webjars/**","/v3/api-docs"};
     private String[] ignoreList;
     private Cors cors = new Cors();
     private Token token = new Token();
@@ -42,7 +42,7 @@ public class SecurityProperties {
     @Getter
     @Setter
     public static class Token {
-        private String storeType = "memory";
         private long ttlMinutes = 30;
+        private String jwtSecret = "adf1efcs123reqwefwewqdsafrtrgeew";
     }
 }

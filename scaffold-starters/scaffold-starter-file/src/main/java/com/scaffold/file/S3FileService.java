@@ -1,11 +1,15 @@
 package com.scaffold.file;
 
 import lombok.extern.slf4j.Slf4j;
+import com.scaffold.file.vo.FolderUploadFileResult;
+import com.scaffold.file.vo.FolderUploadRequest;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -14,10 +18,12 @@ import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 public class S3FileService implements FileUploadService {
@@ -33,7 +39,11 @@ public class S3FileService implements FileUploadService {
                     .credentialsProvider(StaticCredentialsProvider.create(
                             AwsBasicCredentials.create(s3Config.getAccessKey(), s3Config.getSecretKey())))
                     .region(Region.of(s3Config.getRegion()))
-                    .forcePathStyle(true)
+                    .serviceConfiguration(S3Configuration.builder()
+                            .pathStyleAccessEnabled(true)
+                            .expectContinueEnabled(false)
+                            .build())
+                    .httpClientBuilder(ApacheHttpClient.builder().expectContinueEnabled(false))
                     .build();
             try {
                 HeadBucketRequest headBucketRequest = HeadBucketRequest.builder()
@@ -54,26 +64,51 @@ public class S3FileService implements FileUploadService {
         }
     }
 
-    @Override
-    public String upload(InputStream inputStream, String originalFilename, String contentType) {
-        String fileKey = generateFileKey(originalFilename);
-        return uploadToPath(inputStream, fileKey, contentType);
+    S3FileService(FileStorageProperties properties, S3Client s3Client) {
+        this.s3Config = properties.getS3();
+        this.s3Client = s3Client;
     }
 
     @Override
-    public String uploadToPath(InputStream inputStream, String fileKey, String contentType) {
+    public String upload(InputStream inputStream, String originalFilename, String contentType, long contentLength) {
+        String fileKey = extractOriginalFilename(originalFilename);
+        return uploadToPath(inputStream, fileKey, contentType, contentLength);
+    }
+
+    @Override
+    public String uploadToPath(InputStream inputStream, String fileKey, String contentType, long contentLength) {
         try (inputStream) {
-            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                    .bucket(s3Config.getBucketName())
-                    .key(fileKey)
-                    .contentType(contentType)
-                    .build();
-            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, inputStream.available()));
-            return fileKey;
+            return putObject(fileKey, contentType, RequestBody.fromInputStream(inputStream, contentLength));
         } catch (Exception e) {
             log.error("文件上传失败: {}", fileKey, e);
             throw new RuntimeException("文件上传失败", e);
         }
+    }
+
+    @Override
+    public List<FolderUploadFileResult> uploadFolder(FolderUploadRequest request) throws IOException {
+        List<FolderUploadSupport.UploadFile> files = FolderUploadSupport.resolveFiles(request);
+        List<FolderUploadFileResult> results = new ArrayList<>(files.size());
+        for (FolderUploadSupport.UploadFile file : files) {
+            try {
+                String accessPath = putObject(file.storagePath(), file.contentType(), RequestBody.fromFile(file.sourcePath()));
+                results.add(FolderUploadSupport.result(file, accessPath));
+            } catch (Exception e) {
+                log.error("文件夹上传失败: {}", file.sourcePath(), e);
+                throw new IOException("文件夹上传失败: " + file.sourcePath(), e);
+            }
+        }
+        return results;
+    }
+
+    private String putObject(String fileKey, String contentType, RequestBody requestBody) {
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(s3Config.getBucketName())
+                .key(fileKey)
+                .contentType(contentType)
+                .build();
+        s3Client.putObject(putObjectRequest, requestBody);
+        return fileKey;
     }
 
     @Override
@@ -113,12 +148,15 @@ public class S3FileService implements FileUploadService {
         return "s3";
     }
 
-    private String generateFileKey(String originalFilename) {
-        String ext = "";
-        int lastDot = originalFilename.lastIndexOf('.');
-        if (lastDot > 0) {
-            ext = originalFilename.substring(lastDot);
+    private static String extractOriginalFilename(String originalFilename) {
+        if (originalFilename == null || originalFilename.isBlank()) {
+            throw new IllegalArgumentException("原始文件名不能为空");
         }
-        return UUID.randomUUID().toString().replace("-", "") + ext;
+        String normalized = originalFilename.replace('\\', '/');
+        String filename = normalized.substring(normalized.lastIndexOf('/') + 1);
+        if (filename.isBlank() || ".".equals(filename) || "..".equals(filename)) {
+            throw new IllegalArgumentException("原始文件名非法: " + originalFilename);
+        }
+        return filename;
     }
 }

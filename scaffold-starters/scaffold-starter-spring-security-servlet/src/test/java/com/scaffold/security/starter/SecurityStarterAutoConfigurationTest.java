@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SecurityStarterAutoConfigurationTest {
 
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
+            .withPropertyValues("security.token.jwt.secret=0123456789abcdef0123456789abcdef")
             .withUserConfiguration(TestSecuritySupport.class)
             .withConfiguration(AutoConfigurations.of(
                     SecurityAutoConfiguration.class,

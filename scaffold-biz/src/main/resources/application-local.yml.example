@@ -8,6 +8,9 @@ swagger:
   enabled: true
 
 security:
+  token:
+    jwt:
+      secret: ${SCAFFOLD_JWT_SECRET:}
   cors:
     enabled: true
     allowed-origin-patterns:

@@ -1,6 +1,5 @@
 package com.scaffold.security.util;
 
-import cn.hutool.crypto.SecureUtil;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -24,13 +23,18 @@ import java.time.Instant;
 @Slf4j
 public class JwtUtil {
 
-    private static final String JWT_SECRET_KEY = GlobalConstant.SECRET;
-    private static final byte[] SIGNING_KEY = SecureUtil.md5(JWT_SECRET_KEY).getBytes(StandardCharsets.UTF_8);
+    private static final int MINIMUM_KEY_LENGTH = 32;
+    private final byte[] signingKey;
 
-    private JwtUtil() {
+    public JwtUtil(String secret) {
+        Assert.hasText(secret, "security.token.jwt-secret 不能为空");
+        byte[] key = secret.getBytes(StandardCharsets.UTF_8);
+        Assert.isTrue(key.length >= MINIMUM_KEY_LENGTH,
+                "security.token.jwt-secret 长度不能少于 32 字节");
+        this.signingKey = key;
     }
 
-    public static String generateToken(PayloadDTO payloadDTO) {
+    public String generateToken(PayloadDTO payloadDTO) {
         Assert.notNull(payloadDTO, "token payload不能为空");
         Assert.hasText(payloadDTO.getUsername(), "错误的token");
         Assert.notNull(payloadDTO.getUserId(), "错误的token");
@@ -39,7 +43,7 @@ public class JwtUtil {
             JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).type(JOSEObjectType.JWT).build();
             Payload payload = new Payload(JsonUtil.toJson(payloadDTO));
             JWSObject jwsObject = new JWSObject(jwsHeader, payload);
-            JWSSigner jwsSigner = new MACSigner(SIGNING_KEY);
+            JWSSigner jwsSigner = new MACSigner(signingKey);
             jwsObject.sign(jwsSigner);
             return jwsObject.serialize();
         } catch (Exception e) {
@@ -48,11 +52,11 @@ public class JwtUtil {
         }
     }
 
-    public static PayloadDTO resolveToken(String token) {
+    public PayloadDTO resolveToken(String token) {
         try {
             Assert.hasText(token, "token不能为空");
             JWSObject jwsObject = JWSObject.parse(token);
-            JWSVerifier jwsVerifier = new MACVerifier(SIGNING_KEY);
+            JWSVerifier jwsVerifier = new MACVerifier(signingKey);
             boolean verify = jwsObject.verify(jwsVerifier);
             if (!verify) {
                 throw new BaseException("token校验失败");

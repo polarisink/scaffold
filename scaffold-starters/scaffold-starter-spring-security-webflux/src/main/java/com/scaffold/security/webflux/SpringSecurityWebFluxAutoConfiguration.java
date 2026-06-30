@@ -5,6 +5,7 @@ import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.vo.PayloadDTO;
 import com.scaffold.security.vo.SecurityProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +28,12 @@ import java.util.List;
 public class SpringSecurityWebFluxAutoConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean
+    public JwtUtil jwtUtil(SecurityProperties securityProperties) {
+        return new JwtUtil(securityProperties.getToken().getJwtSecret());
+    }
+
+    @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, WebFilter tokenWebFilter) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
@@ -39,7 +46,7 @@ public class SpringSecurityWebFluxAutoConfiguration {
     }
 
     @Bean
-    public WebFilter tokenWebFilter(SecurityProperties securityProperties, TokenService tokenService) {
+    public WebFilter tokenWebFilter(SecurityProperties securityProperties, TokenService tokenService, JwtUtil jwtUtil) {
         PathMatcher pathMatcher = new AntPathMatcher();
         return (exchange, chain) -> {
             String path = exchange.getRequest().getURI().getPath();
@@ -52,7 +59,7 @@ public class SpringSecurityWebFluxAutoConfiguration {
             if (token == null || token.isEmpty()) {
                 return unauthorized(exchange);
             }
-            PayloadDTO dto = JwtUtil.resolveToken(token);
+            PayloadDTO dto = jwtUtil.resolveToken(token);
             if (!tokenService.has(dto.getUserId().toString())) {
                 return unauthorized(exchange);
             }

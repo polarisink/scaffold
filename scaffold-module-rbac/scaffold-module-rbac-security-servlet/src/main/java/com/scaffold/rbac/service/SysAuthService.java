@@ -24,6 +24,7 @@ import java.util.List;
 public class SysAuthService {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+    private final JwtUtil jwtUtil;
 
     public String login(LoginVo vo) {
         UsernamePasswordAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(vo.username(), vo.password());
@@ -33,7 +34,7 @@ public class SysAuthService {
         PayloadDTO dto = PayloadDTO.of(loginUser.getUserId(), loginUser.getUsername(), roleCodeList);
         Long userId = dto.getUserId();
         String username = dto.getUsername();
-        String token = JwtUtil.generateToken(dto);
+        String token = jwtUtil.generateToken(dto);
         tokenService.set(userId.toString(), token);
         LoginLogEvent event = new LoginLogEvent();
         event.setUsername(vo.username());

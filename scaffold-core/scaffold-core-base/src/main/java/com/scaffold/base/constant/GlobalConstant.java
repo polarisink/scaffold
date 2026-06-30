@@ -12,9 +12,6 @@ public interface GlobalConstant {
      */
     Long ROOT_PARENT_ID = 0L;
 
-    // todo 这个应该写入配置的
-    String SECRET = "abcdefghijklmnopqrstuvwxyz";
-
     /**
      * 错误码
      */

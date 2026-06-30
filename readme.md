@@ -128,6 +128,7 @@ scaffold-test-cloud/
 - CORS 默认仅放行本地开发地址
 - RBAC 默认不启用，需要显式引入对应业务模块
 - 认证 token store 默认是 `memory`，可通过 `security.token.store-type=redis` 切换为 Redis
+- Spring Security JWT 密钥由 `security.token.jwt.secret` 配置，建议通过至少 32 字节的 `SCAFFOLD_JWT_SECRET` 环境变量提供
 
 推荐组合：
 

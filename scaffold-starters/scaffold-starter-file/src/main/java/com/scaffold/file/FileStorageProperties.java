@@ -33,12 +33,12 @@ public class FileStorageProperties implements InitializingBean {
     }
 
     public enum StorageType {
-        LOCAL,
-        S3,
+        LOCAL, S3,
     }
 
     @Data
     public static class Local {
+        // note 需要手动把这个路径加到权限和日志忽略列表中
         private String accessPath = "/files/**";
         private String basePath = "/data/uploads/";
     }
