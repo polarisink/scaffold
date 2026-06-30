@@ -1,6 +1,7 @@
 package com.scaffold.rbac.entity;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.scaffold.base.util.ITree;
 import com.scaffold.orm.BaseAuditable;
 import jakarta.persistence.Column;
@@ -57,6 +58,7 @@ public class SysMenu extends BaseAuditable implements Serializable, ITree<SysMen
     private Integer sortNo;
 
     @Transient
+    @TableField(exist = false)
     private List<SysMenu> children;
 
 }

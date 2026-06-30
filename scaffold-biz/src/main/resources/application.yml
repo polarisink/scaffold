@@ -1,24 +1,23 @@
 # 优雅停机，这能保证服务停止时，不再接收新请求，但会处理完当前正在进行的请求，避免用户操作中断。
 server:
   shutdown: graceful
-  port: 8081
+  port: 8082
 spring:
   application:
     name: scaffold-biz
   lifecycle:
     timeout-per-shutdown-phase: 30s
-  profiles:
-    default: local
   cache:
     type: caffeine
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/scaffold?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
-#    username: root
-#    password: 123456
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/scaffold?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
 
 file-storage:
   enabled: false
@@ -43,4 +42,4 @@ security:
       - "*"
 
 swagger:
-  enabled: false
+  enabled: true

@@ -14,6 +14,7 @@ import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,7 +30,9 @@ public class CacheConfig {
     public CacheManager cacheManager(RedissonClient redissonClient) {
         org.redisson.spring.cache.CacheConfig cacheConfig = new org.redisson.spring.cache.CacheConfig();
         cacheConfig.setTTL(3 * 24 * 60 * 60 * 1000L);
-        return new RedissonSpringCacheManager(redissonClient, Map.of("cache", cacheConfig), new JsonJacksonCodec());
+        // Redisson 会向配置 Map 中添加运行时动态创建的缓存，因此这里必须使用可变 Map。
+        return new RedissonSpringCacheManager(redissonClient,
+                new HashMap<>(Map.of("cache", cacheConfig)), new JsonJacksonCodec());
     }
 
     @Bean

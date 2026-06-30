@@ -31,7 +31,7 @@ public class RedisMessageQueueRegister implements ApplicationRunner {
 
 
     private final StreamMessageListenerContainer<String, ObjectRecord<String, String>> streamMessageListenerContainer;
-    private final TypeFactory factory = JsonUtil.getMapper().getTypeFactory();
+    private final TypeFactory factory = JsonUtil.mapper().getTypeFactory();
 
     @Override
     public void run(ApplicationArguments args) {

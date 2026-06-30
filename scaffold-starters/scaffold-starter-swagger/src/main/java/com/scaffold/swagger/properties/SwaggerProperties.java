@@ -1,16 +1,17 @@
 package com.scaffold.swagger.properties;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
-@Getter
-@Configuration
+/**
+ * 由 SwaggerStarterAutoConfiguration 统一注册，不能添加组件类注解，否则会产生重复 Bean。
+ */
+@Data
 @ConfigurationProperties(prefix = SwaggerProperties.PREFIX)
 public class SwaggerProperties {
     public static final String PREFIX = "swagger";

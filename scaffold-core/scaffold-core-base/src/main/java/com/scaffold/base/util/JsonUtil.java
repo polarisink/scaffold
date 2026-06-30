@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
+import java.net.URL;
+
 /**
  * Json工具类，使用的是Jackson
  *
@@ -42,6 +44,18 @@ public class JsonUtil {
     }
 
     /**
+     * 从javaType解析对象
+     *
+     * @param json     json
+     * @param javaType java类型
+     * @param <T>      泛型
+     * @return 对象
+     */
+    public static <T> T read(String json, JavaType javaType) {
+        return execute(() -> mapper().readValue(json, javaType), "readValue error");
+    }
+
+    /**
      * 将json字符串转为对象
      *
      * @param json  json字符串
@@ -51,6 +65,18 @@ public class JsonUtil {
      */
     public static <T> T read(String json, Class<T> clazz) {
         return execute(() -> mapper().readValue(json, clazz), "readValue error");
+    }
+
+    public static <T> T read(URL url, Class<T> clazz) {
+        return execute(() -> mapper().readValue(url, clazz), "readValue error");
+    }
+
+    public static <T> T read(URL url, JavaType javaType) {
+        return execute(() -> mapper().readValue(url, javaType), "readValue error");
+    }
+
+    public static <T> T read(URL url, TypeReference<T> typeReference) {
+        return execute(() -> mapper().readValue(url, typeReference), "readValue error");
     }
 
     public static <T> T read(byte[] json, Class<T> clazz) {
@@ -90,18 +116,6 @@ public class JsonUtil {
     }
 
     /**
-     * 从javaType解析对象
-     *
-     * @param json     json
-     * @param javaType java类型
-     * @param <T>      泛型
-     * @return 对象
-     */
-    public static <T> T read(String json, JavaType javaType) {
-        return execute(() -> mapper().readValue(json, javaType), "readValue error");
-    }
-
-    /**
      * 将对象转为byte数组
      *
      * @param a 对象
@@ -136,7 +150,7 @@ public class JsonUtil {
         return execute(() -> redisMapper().readValue(json, typeReference), "readValue error");
     }
 
-    private static ObjectMapper mapper() {
+    public static ObjectMapper mapper() {
         ObjectMapper current = mapper;
         if (current != null) {
             return current;

@@ -35,7 +35,7 @@ public class RbacCacheInit implements ApplicationRunner {
             userMapper.selectAllEnabledUserId().forEach(rbacCache::userTree);
             log.info("rbac cache init success...");
         } catch (Exception e) {
-            log.error("rbac cache init error: {}", e.getMessage());
+            log.error("rbac cache init error", e);
         }
     }
 }

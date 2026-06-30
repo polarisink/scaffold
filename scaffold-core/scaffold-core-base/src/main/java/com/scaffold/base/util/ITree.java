@@ -32,17 +32,17 @@ public interface ITree<T, K> {
      * @param comparator 同级排序规则，可为空；为空时保持原顺序
      * @param <K>        id 类型
      * @param <T>        节点类型
-     * @return 根节点集合；无数据时返回不可变空集合
+     * @return 根节点集合
      */
     static <K, T extends ITree<T, K>> List<T> toTree(K parentId, Collection<T> coll, @Nullable Comparator<T> comparator) {
         if (coll == null || coll.isEmpty()) {
-            return List.of();
+            return new ArrayList<>();
         }
 
         Map<Optional<K>, List<T>> grouped = coll.stream().collect(Collectors.groupingBy(node -> Optional.ofNullable(node.getParentId()), Collectors.toCollection(ArrayList::new)));
         List<T> roots = grouped.get(Optional.ofNullable(parentId));
         if (roots == null || roots.isEmpty()) {
-            return List.of();
+            return new ArrayList<>();
         }
 
         // 先清空所有节点 children，避免重复构树时残留旧结果。
