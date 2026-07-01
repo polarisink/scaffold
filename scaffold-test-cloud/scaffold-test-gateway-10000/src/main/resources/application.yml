@@ -15,20 +15,26 @@ spring:
       server:
         webflux:
           routes:
-            - id: cloud-auth
-              uri: lb://cloud-auth
+            - id: cloud-auth-10080
+              uri: lb://cloud-auth-10080
               predicates:
                 - Path=/auth/**
-            - id: cloud-provider
-              uri: lb://cloud-provider
+            - id: cloud-provider-10881
+              uri: lb://cloud-provider-10881
               predicates:
                 - Path=/provider/**
               filters:
                 - StripPrefix=1
-            - id: cloud-consumer
-              uri: lb://cloud-consumer
+            - id: cloud-consumer-10082
+              uri: lb://cloud-consumer-10082
               predicates:
                 - Path=/consumer/**
+              filters:
+                - StripPrefix=1
+            - id: cloud-order-10083
+              uri: lb://cloud-order-10083
+              predicates:
+                - Path=/order/**
               filters:
                 - StripPrefix=1
 

@@ -1,4 +1,4 @@
-package com.scaffold.cloud.gateway;
+package com.scaffold;
 
 import java.time.Instant;
 import java.util.Map;

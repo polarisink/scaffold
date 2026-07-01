@@ -1,4 +1,4 @@
-package com.scaffold.cloud.dubbo.provider;
+package com.scaffold;
 
 import com.scaffold.cloud.dubbo.api.GreetingService;
 import org.apache.dubbo.config.annotation.DubboService;

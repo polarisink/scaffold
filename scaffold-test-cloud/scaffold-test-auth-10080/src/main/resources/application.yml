@@ -18,7 +18,7 @@ spring:
     hibernate:
       ddl-auto: ${RBAC_JPA_DDL_AUTO:none}
     properties:
-      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+      hibernate.dialect: org.hibernate.dialect.MySQLDialect
 
 server:
   port: 10080
