@@ -7,7 +7,6 @@ import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';
 import {
   authenticateResponseInterceptor,
-  defaultResponseInterceptor,
   errorMessageResponseInterceptor,
   RequestClient,
 } from '@vben/request';
@@ -15,8 +14,6 @@ import { useAccessStore } from '@vben/stores';
 
 import { message } from '#/adapter/naive';
 import { useAuthStore } from '#/store';
-
-import { refreshTokenApi } from './core';
 
 const { apiURL } = useAppConfig(import.meta.env, import.meta.env.PROD);
 
@@ -47,12 +44,8 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
   /**
    * 刷新token逻辑
    */
-  async function doRefreshToken() {
-    const accessStore = useAccessStore();
-    const resp = await refreshTokenApi();
-    const newToken = resp.data;
-    accessStore.setAccessToken(newToken);
-    return newToken;
+  async function doRefreshToken(): Promise<string> {
+    throw new Error('当前后端不支持刷新令牌');
   }
 
   function formatToken(token: null | string) {
@@ -70,14 +63,22 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     },
   });
 
-  // 处理返回的响应数据格式
-  client.addResponseInterceptor(
-    defaultResponseInterceptor({
-      codeField: 'code',
-      dataField: 'data',
-      successCode: 0,
-    }),
-  );
+  // scaffold 的部分接口使用 R<T>，分页和树接口则直接返回数据。
+  client.addResponseInterceptor({
+    fulfilled: (response) => {
+      if (response.config.responseReturn === 'raw') return response;
+      if (response.config.responseReturn === 'body') return response.data;
+
+      const body = response.data as Record<string, unknown> | undefined;
+      if (body && typeof body === 'object' && typeof body.code === 'number') {
+        if (body.code === 200) return body.data;
+        throw Object.assign(new Error(String(body.msg || '请求失败')), {
+          response,
+        });
+      }
+      return body;
+    },
+  });
 
   // token过期的处理
   client.addResponseInterceptor(
@@ -96,7 +97,8 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       // 这里可以根据业务进行定制,你可以拿到 error 内的信息进行定制化处理，根据不同的 code 做不同的提示，而不是直接使用 message.error 提示 msg
       // 当前mock接口返回的错误字段是 error 或者 message
       const responseData = error?.response?.data ?? {};
-      const errorMessage = responseData?.error ?? responseData?.message ?? '';
+      const errorMessage =
+        responseData?.msg ?? responseData?.error ?? responseData?.message ?? '';
       // 如果没有错误信息，则会根据状态码进行提示
       message.error(errorMessage || msg);
     }),

@@ -11,7 +11,14 @@ import {
 export const overridesPreferences = defineOverridesPreferences({
   // overrides
   app: {
+    accessMode: 'backend',
+    defaultHomePath: '/dashboard/analytics',
     name: import.meta.env.VITE_APP_TITLE,
+  },
+  theme: {
+    colorPrimary: 'hsl(158 64% 40%)',
+    mode: 'light',
+    radius: '0.6',
   },
   copyright: appCopyrightPreferences,
 });
