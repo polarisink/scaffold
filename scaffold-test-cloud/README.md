@@ -9,11 +9,11 @@
 | `scaffold-test-auth-10080` | 基于 RBAC 公共数据层与 Sa-Token WebFlux 的认证服务 | `10080` |
 | `scaffold-test-provider-10081` | 注册到 Nacos 的 HTTP 服务提供者 | `10081` |
 | `scaffold-test-consumer-10082` | 通过 Spring Cloud LoadBalancer 调用 HTTP 服务的消费者 | `10082` |
+| `scaffold-test-order-10083` | 参与 Seata 全局事务的订单服务 | `10083` |
 | `scaffold-test-gateway-10000` | 为 Provider 和 Consumer 提供路由转发的 WebFlux 网关 | `10000` |
 | `scaffold-test-dubbo-api` | 共享的 `GreetingService` RPC 接口 | - |
 | `scaffold-test-dubbo-provider-10881` | 注册到 Nacos 的 Dubbo 服务提供者 | `10881` |
 | `scaffold-test-dubbo-consumer-10092` | 提供 HTTP 验证接口的 Dubbo 服务消费者 | `10092` |
-| `scaffold-test-seata-10093` | 使用 Seata 全局事务的客户端示例 | `10093` |
 
 `scaffold-dependencies-cloud` 是云服务示例的通用依赖模块，统一提供 Actuator
 与 OpenTelemetry tracing。各服务仍按需声明 Web、Nacos、Gateway、Dubbo、Seata
@@ -68,7 +68,7 @@ curl -H 'traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01' \
 curl 'http://localhost:10082/api/provider-echo?message=hello'
 ```
 
-消费者通过 Nacos 发现 `cloud-provider`，再经 Spring Cloud LoadBalancer
+消费者通过 Nacos 发现 `cloud-provider-10081`，再经 Spring Cloud LoadBalancer
 调用其 `/api/echo` 接口。
 
 ## Gateway 示例
@@ -146,7 +146,22 @@ done
 
 ## Seata 示例
 
-`scaffold-test-seata-10093` 使用 Nacos 同时作为 Seata 的注册中心和配置中心：
+该示例以 `scaffold-test-consumer-10082` 为全局事务发起方，并让 Provider、Consumer、
+Order 分别写入 `scaffold_provider`、`scaffold_consumer`、`scaffold_order` 数据库。
+三个模块都引入 `scaffold-starter-orm`，使用 JPA Entity 和 `JpaRepository` 完成
+业务表建表及 CRUD；三个库还各有一张 AT 模式所需的 `undo_log` 表。
+
+先创建数据库和 `undo_log`：
+
+```bash
+mysql -uroot -p < docker/mysql/seata-demo.sql
+```
+
+应用启动时，Hibernate 根据三个 `@Entity` 自动创建或更新 `provider_tx_record`、
+`consumer_tx_record`、`order_tx_record`，该行为由各模块的
+`spring.jpa.hibernate.ddl-auto` 控制，默认值为 `update`。
+
+再启动 Nacos、Seata Server 以及三个业务服务。Seata 使用以下配置：
 
 - 注册信息：`application=seata-server`、`group=SEATA_GROUP`
 - 配置：`dataId=seataServer.properties`、`group=SEATA_GROUP`
@@ -156,17 +171,26 @@ done
 [`seataServer.properties`](../docker/seata/seataServer.properties)
 发布到 Nacos，Data ID 为 `seataServer.properties`，Group 为 `SEATA_GROUP`。
 
-`scaffold-test-seata-10093` 随后通过 Nacos 查找 `seata-server`，并在
-`/api/seata/transaction` 入口使用 `@GlobalTransactional` 创建全局事务：
+分别启动 `CloudProviderApplication`、`CloudOrderApplication`、
+`CloudConsumerApplication` 后，使用不同的业务键验证提交和回滚。
+
+成功提交后三个计数均为 `1`：
 
 ```bash
-curl 'http://localhost:10093/api/seata/transaction'
-curl 'http://localhost:10093/api/seata/transaction?fail=true'
+curl -X POST 'http://localhost:10082/api/seata/transactions/tx-success-001'
+curl 'http://localhost:10082/api/seata/transactions/tx-success-001/counts'
 ```
 
-示例展示事务协调器客户端的集成与回滚入口。要验证跨数据库的 AT 模式回滚，
-还需启动 `seata-server`、配置数据源代理，并在每个参与事务的数据库中创建
-`undo_log` 表。
+失败请求会在三个分支全部写入后抛出异常；随后查询时三个计数都应为 `0`：
+
+```bash
+curl -X POST 'http://localhost:10082/api/seata/transactions/tx-rollback-001?fail=true'
+curl 'http://localhost:10082/api/seata/transactions/tx-rollback-001/counts'
+```
+
+Consumer 在编排方法上同时使用 `@GlobalTransactional` 和 `@Transactional`。
+当前 HTTP Interface 显式传递 `TX_XID` 请求头，Provider 和 Order 的 Seata MVC
+拦截器负责绑定及清理 XID，各分支在本地事务中通过 JPA `saveAndFlush` 写入业务表。
 
 先启动统一基础设施：
 
@@ -179,7 +203,7 @@ curl 'http://localhost:10093/api/seata/transaction?fail=true'
 `seata-server` 注册，同时从该组的 `seataServer.properties` 读取配置。
 客户端不再直连 `127.0.0.1:8091`，而是从 Nacos 发现可用的 Seata Server。
 
-默认 Nacos 账号为 `nacos/nacos`。服务地址、账号、密码、命名空间、组和 Data ID 可分别
+默认 Nacos 账号配置见 `docker/cloud.env`。服务地址、账号、密码、命名空间、组和 Data ID 可分别
 通过 `NACOS_SERVER_ADDR`、`NACOS_USERNAME`、`NACOS_PASSWORD`、`NACOS_NAMESPACE`、
 `SEATA_NACOS_GROUP`、`SEATA_NACOS_DATA_ID` 覆盖；修改 Server 侧认证或命名空间时，也应
 同步更新 [`docker/seata/application.yml`](../docker/seata/application.yml)。
@@ -201,7 +225,7 @@ curl 'http://localhost:10092/api/dubbo/greet?name=Codex'
 
 ```bash
 ./mvnw -Pexamples-cloud \
-  -pl :scaffold-test-auth-10080,:scaffold-test-provider-10081,:scaffold-test-consumer-10082,:scaffold-test-gateway-10000,:scaffold-test-dubbo-provider-10881,:scaffold-test-dubbo-consumer-10092,:scaffold-test-seata-10093 \
+  -pl :scaffold-test-auth-10080,:scaffold-test-provider-10081,:scaffold-test-consumer-10082,:scaffold-test-order-10083,:scaffold-test-gateway-10000,:scaffold-test-dubbo-provider-10881,:scaffold-test-dubbo-consumer-10092 \
   -am compile
 ```
 
@@ -229,8 +253,8 @@ export NACOS_PASSWORD=nacos
 ./docker/cloud-compose.sh services-up 3
 ```
 
-脚本会横向扩容 Provider、Consumer、Gateway、Dubbo Provider、Dubbo Consumer 和
-Seata Client。容器之间使用 Nacos 发现彼此，因此应用端口可以相同；每个容器都拥有
+脚本会横向扩容 Provider、Consumer、Order、Gateway、Dubbo Provider 和 Dubbo Consumer。
+容器之间使用 Nacos 发现彼此，因此应用端口可以相同；每个容器都拥有
 独立 IP。Gateway 的 `10000` 会被 Docker 为每个副本随机映射到一个宿主机端口，可查看入口：
 
 ```bash
@@ -288,9 +312,9 @@ export GRAFANA_ADMIN_PASSWORD=scaffold
 
 - `cloud-provider`
 - `cloud-consumer`
+- `cloud-order`
 - `cloud-gateway`
 - `dubbo-consumer`
-- `cloud-seata`
 - `prometheus`
 - `nacos`
 - `seata-server`

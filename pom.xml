@@ -20,6 +20,8 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <!-- 保留方法参数名，供 Spring MVC/Jackson 等框架通过反射读取。 -->
+        <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.wrapper.version>3.3.4</maven.wrapper.version>
         <flatten.version>1.7.3</flatten.version>
     </properties>

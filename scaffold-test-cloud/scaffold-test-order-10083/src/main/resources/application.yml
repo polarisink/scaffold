@@ -3,15 +3,20 @@ spring:
     name: cloud-order-10083
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 123456
-    url: jdbc:mysql://localhost:3306/scaffold_provider?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    username: ${ORDER_DATASOURCE_USERNAME:root}
+    password: ${ORDER_DATASOURCE_PASSWORD:123456}
+    url: ${ORDER_DATASOURCE_URL:jdbc:mysql://localhost:3306/scaffold_order?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: ${ORDER_JPA_DDL_AUTO:update}
+    database-platform: org.hibernate.dialect.MySQLDialect
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
-        username: nacos
-        password: 123456
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:123456}
 server:
   port: 10083
 

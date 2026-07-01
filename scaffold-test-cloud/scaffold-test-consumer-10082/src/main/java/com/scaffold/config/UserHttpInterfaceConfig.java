@@ -1,5 +1,6 @@
-package com.scaffold.consumer;
+package com.scaffold.config;
 
+import com.scaffold.remote.RemoteService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
@@ -17,7 +18,7 @@ public class UserHttpInterfaceConfig {
     public RemoteService userHttpInterface(RestClient.Builder loadBalancedRestClientBuilder) {
         RestClient restClient = loadBalancedRestClientBuilder
                 // 指定服务提供方的应用名称（必须与其 spring.application.name 一致）
-                .baseUrl("http://cloud-provider").build();
+                .baseUrl("http://cloud-provider-10081").build();
 
         // 创建 HttpServiceProxyFactory 工厂，用于生成接口代理对象
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(restClient)).build();

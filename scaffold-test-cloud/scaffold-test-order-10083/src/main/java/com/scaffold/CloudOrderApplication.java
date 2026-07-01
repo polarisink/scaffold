@@ -1,4 +1,4 @@
-package com.scaffold.provider;
+package com.scaffold;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,9 +6,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class CloudProviderApplication {
+public class CloudOrderApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CloudProviderApplication.class, args);
+        SpringApplication.run(CloudOrderApplication.class, args);
     }
 }

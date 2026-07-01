@@ -1,4 +1,4 @@
-package com.scaffold.consumer;
+package com.scaffold.remote;
 
 import com.scaffold.base.util.R;
 import org.springframework.web.bind.annotation.RequestParam;

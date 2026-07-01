@@ -26,6 +26,8 @@ Compose 平铺在 `docker/` 下，`flink/` 保留独立目录存放 Flink Sessio
 | Grafana | <http://localhost:3000> | `admin/admin` |
 
 版本、端口和账号可在 `docker/cloud.env` 中修改，也可以用同名环境变量覆盖。
+三库 Seata AT 回滚示例的数据库与 `undo_log` 初始化 SQL 位于
+`docker/mysql/seata-demo.sql`；业务表由各服务的 JPA Entity 自动创建。
 
 ## Cloud 业务服务
 

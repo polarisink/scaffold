@@ -104,8 +104,9 @@ scaffold-test-cloud/
 ├── scaffold-test-gateway-10000   # Spring Cloud Gateway WebFlux
 ├── scaffold-test-provider-10081
 ├── scaffold-test-consumer-10082
+├── scaffold-test-order-10083
 ├── scaffold-test-dubbo-*
-└── scaffold-test-seata-10093
+└── scaffold-cloud-common-dependencies
 ```
 
 `scaffold-test-auth-10080` 是薄启动模块，依赖 `scaffold-module-rbac-auth-sa-webflux` 提供 `/auth/login`、`/auth/logout`、`/auth/token-info`，Gateway 已配置 `/auth/** -> lb://cloud-auth`。

@@ -1,14 +1,15 @@
-package com.scaffold.consumer;
-
-import java.time.Instant;
-import java.util.Map;
+package com.scaffold.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.scaffold.remote.RemoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.Instant;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor

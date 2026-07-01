@@ -5,6 +5,8 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.support.RestClientAdapter;
+import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
 public class RestConfig {
@@ -16,5 +18,13 @@ public class RestConfig {
     @LoadBalanced
     public RestClient.Builder loadBalancedRestClientBuilder(RestClientBuilderConfigurer configurer) {
         return configurer.configure(RestClient.builder());
+    }
+
+    public static  <T> T createClient(RestClient.Builder builder, String baseUrl, Class<T> clientType) {
+        RestClient restClient = builder.clone().baseUrl(baseUrl).build();
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory
+                .builderFor(RestClientAdapter.create(restClient))
+                .build();
+        return factory.createClient(clientType);
     }
 }

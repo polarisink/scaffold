@@ -26,6 +26,13 @@ scrape_configs:
         type: A
         port: 10082
 
+  - job_name: cloud-order
+    metrics_path: /actuator/prometheus
+    dns_sd_configs:
+      - names: [cloud-order]
+        type: A
+        port: 10083
+
   - job_name: cloud-gateway
     metrics_path: /actuator/prometheus
     dns_sd_configs:
@@ -39,13 +46,6 @@ scrape_configs:
       - names: [dubbo-consumer]
         type: A
         port: 10092
-
-  - job_name: cloud-seata
-    metrics_path: /actuator/prometheus
-    dns_sd_configs:
-      - names: [cloud-seata]
-        type: A
-        port: 10093
 
   - job_name: prometheus
     static_configs:

@@ -1,3 +1,8 @@
+x-nacos-environment: &nacos
+  NACOS_SERVER_ADDR: ${NACOS_SERVER_ADDR:-host.docker.internal:8848}
+  NACOS_USERNAME: ${NACOS_USERNAME:-nacos}
+  NACOS_PASSWORD: ${NACOS_PASSWORD:-nacos}
+
 services:
   cloud-provider:
     image: scaffold-test-cloud-provider:local
@@ -6,10 +11,11 @@ services:
       dockerfile: docker/Dockerfile
       args:
         MODULE: scaffold-test-provider-10081
-    environment: &nacos
-      NACOS_SERVER_ADDR: ${NACOS_SERVER_ADDR:-host.docker.internal:8848}
-      NACOS_USERNAME: ${NACOS_USERNAME:-nacos}
-      NACOS_PASSWORD: ${NACOS_PASSWORD:-nacos}
+    environment:
+      <<: *nacos
+      PROVIDER_DATASOURCE_URL: ${PROVIDER_DATASOURCE_URL}
+      PROVIDER_DATASOURCE_USERNAME: ${BUSINESS_DATASOURCE_USERNAME:-root}
+      PROVIDER_DATASOURCE_PASSWORD: ${BUSINESS_DATASOURCE_PASSWORD:-123456}
     expose:
       - "10081"
     extra_hosts:
@@ -22,7 +28,11 @@ services:
       dockerfile: docker/Dockerfile
       args:
         MODULE: scaffold-test-consumer-10082
-    environment: *nacos
+    environment:
+      <<: *nacos
+      CONSUMER_DATASOURCE_URL: ${CONSUMER_DATASOURCE_URL}
+      CONSUMER_DATASOURCE_USERNAME: ${BUSINESS_DATASOURCE_USERNAME:-root}
+      CONSUMER_DATASOURCE_PASSWORD: ${BUSINESS_DATASOURCE_PASSWORD:-123456}
     expose:
       - "10082"
     extra_hosts:
@@ -70,20 +80,20 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  cloud-seata:
-    image: scaffold-test-seata-client:local
+  cloud-order:
+    image: scaffold-test-cloud-order:local
     build:
       context: ..
       dockerfile: docker/Dockerfile
       args:
-        MODULE: scaffold-test-seata-10093
+        MODULE: scaffold-test-order-10083
     environment:
       <<: *nacos
-      SEATA_NACOS_GROUP: ${SEATA_NACOS_GROUP:-SEATA_GROUP}
-      SEATA_NACOS_DATA_ID: ${SEATA_NACOS_DATA_ID:-seataServer.properties}
-      NACOS_NAMESPACE: ${NACOS_NAMESPACE:-}
+      ORDER_DATASOURCE_URL: ${ORDER_DATASOURCE_URL}
+      ORDER_DATASOURCE_USERNAME: ${BUSINESS_DATASOURCE_USERNAME:-root}
+      ORDER_DATASOURCE_PASSWORD: ${BUSINESS_DATASOURCE_PASSWORD:-123456}
     expose:
-      - "10093"
+      - "10083"
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

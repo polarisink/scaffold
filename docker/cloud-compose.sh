@@ -56,10 +56,10 @@ case "${1:-}" in
     services_compose up --detach --build --remove-orphans \
       --scale cloud-provider="$replicas" \
       --scale cloud-consumer="$replicas" \
+      --scale cloud-order="$replicas" \
       --scale cloud-gateway="$replicas" \
       --scale dubbo-provider="$replicas" \
-      --scale dubbo-consumer="$replicas" \
-      --scale cloud-seata="$replicas"
+      --scale dubbo-consumer="$replicas"
     echo "Gateway 入口端口："
     services_compose port cloud-gateway 10000
     ;;
