@@ -1,6 +1,11 @@
 spring:
   application:
-    name: cloud-consumer
+    name: cloud-consumer-10082
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/scaffold_consumer?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
   cloud:
     nacos:
       discovery:
@@ -14,6 +19,32 @@ spring:
 
 server:
   port: 10082
+
+seata:
+  application-id: ${spring.application.name}
+  tx-service-group: scaffold-seata-tx-group
+  service:
+    vgroup-mapping:
+      scaffold-seata-tx-group: default
+  registry:
+    type: nacos
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+      application: seata-server
+      group: ${SEATA_NACOS_GROUP:SEATA_GROUP}
+      namespace: ${NACOS_NAMESPACE:}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:123456}
+  config:
+    type: nacos
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+      group: ${SEATA_NACOS_GROUP:SEATA_GROUP}
+      namespace: ${NACOS_NAMESPACE:}
+      data-id: ${SEATA_NACOS_DATA_ID:seataServer.properties}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:123456}
+
 
 management:
   endpoints:

@@ -18,12 +18,12 @@
         <module>scaffold-cloud-common-dependencies</module>
         <module>scaffold-test-auth-10080</module>
         <module>scaffold-test-provider-10081</module>
+        <module>scaffold-test-order-10083</module>
         <module>scaffold-test-consumer-10082</module>
         <module>scaffold-test-gateway-10000</module>
         <module>scaffold-test-dubbo-api</module>
         <module>scaffold-test-dubbo-provider-10881</module>
         <module>scaffold-test-dubbo-consumer-10092</module>
-        <module>scaffold-test-seata-10093</module>
     </modules>
 
 </project>

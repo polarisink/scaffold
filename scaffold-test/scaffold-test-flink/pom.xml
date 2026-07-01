@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.scaffold</groupId>
+        <artifactId>scaffold</artifactId>
+        <version>${rversion}</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>scaffold-test-flink</artifactId>
+    <description>Apache Flink DataStream API 基础示例</description>
+
+    <properties>
+        <flink.version>2.2.1</flink.version>
+        <!-- Flink 官方镜像默认并推荐 Java 17，作业字节码与集群运行时保持一致。 -->
+        <maven.compiler.release>17</maven.compiler.release>
+    </properties>
+
+    <dependencies>
+        <!-- 保留模块原有的 Scaffold Web Starter 依赖。 -->
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-streaming-java</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-clients</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.13.4</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.scaffold.flink.WordCountJob</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <program-class>com.scaffold.flink.WordCountJob</program-class>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

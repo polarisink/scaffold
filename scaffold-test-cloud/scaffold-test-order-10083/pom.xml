@@ -10,8 +10,8 @@
         <version>${rversion}</version>
     </parent>
 
-    <artifactId>scaffold-test-consumer-10082</artifactId>
-    <description>Spring Cloud 服务消费者测试模块</description>
+    <artifactId>scaffold-test-order-10083</artifactId>
+    <description>Spring Cloud 服务提供者测试模块</description>
 
     <dependencies>
         <dependency>
@@ -29,10 +29,6 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.seata</groupId>

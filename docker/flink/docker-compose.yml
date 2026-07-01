@@ -1,0 +1,27 @@
+services:
+  jobmanager:
+    image: flink:${FLINK_VERSION:-2.2.1-scala_2.12}
+    container_name: scaffold-flink-jobmanager
+    command: jobmanager
+    restart: unless-stopped
+    ports:
+      - "${FLINK_WEB_PORT:-8081}:8081"
+    environment:
+      FLINK_PROPERTIES: |-
+        jobmanager.rpc.address: jobmanager
+        parallelism.default: ${FLINK_PARALLELISM:-2}
+    volumes:
+      # 挂载已存在的模块目录，避免首次启动时由 Docker 创建 root 权限的 target。
+      - ../../scaffold-test/scaffold-test-flink:/workspace:ro
+
+  taskmanager:
+    image: flink:${FLINK_VERSION:-2.2.1-scala_2.12}
+    command: taskmanager
+    restart: unless-stopped
+    depends_on:
+      - jobmanager
+    environment:
+      FLINK_PROPERTIES: |-
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: ${FLINK_TASK_SLOTS:-2}
+        parallelism.default: ${FLINK_PARALLELISM:-2}

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: cloud-gateway
+    name: cloud-gateway-10000
   cloud:
     nacos:
       discovery:

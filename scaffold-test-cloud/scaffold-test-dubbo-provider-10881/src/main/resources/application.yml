@@ -1,10 +1,10 @@
 spring:
   application:
-    name: dubbo-provider
+    name: dubbo-provider-10882
 
 dubbo:
   application:
-    name: dubbo-provider
+    name: ${spring.application.name}
   registry:
     address: nacos://${NACOS_SERVER_ADDR:localhost:8848}
     username: ${NACOS_USERNAME:nacos}

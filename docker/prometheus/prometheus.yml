@@ -1,0 +1,52 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: nacos
+    metrics_path: /nacos/actuator/prometheus
+    static_configs:
+      - targets: [nacos:8848]
+
+  - job_name: seata-server
+    static_configs:
+      - targets: [seata-server:9898]
+
+  - job_name: cloud-provider
+    metrics_path: /actuator/prometheus
+    dns_sd_configs:
+      - names: [cloud-provider]
+        type: A
+        port: 10081
+
+  - job_name: cloud-consumer
+    metrics_path: /actuator/prometheus
+    dns_sd_configs:
+      - names: [cloud-consumer]
+        type: A
+        port: 10082
+
+  - job_name: cloud-gateway
+    metrics_path: /actuator/prometheus
+    dns_sd_configs:
+      - names: [cloud-gateway]
+        type: A
+        port: 10000
+
+  - job_name: dubbo-consumer
+    metrics_path: /actuator/prometheus
+    dns_sd_configs:
+      - names: [dubbo-consumer]
+        type: A
+        port: 10092
+
+  - job_name: cloud-seata
+    metrics_path: /actuator/prometheus
+    dns_sd_configs:
+      - names: [cloud-seata]
+        type: A
+        port: 10093
+
+  - job_name: prometheus
+    static_configs:
+      - targets: [localhost:9090]

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: dubbo-consumer
+    name: dubbo-consumer-10092
 
 server:
   port: 10092

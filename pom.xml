@@ -44,6 +44,7 @@
         <module>scaffold-biz</module>
         <module>scaffold-module-rbac</module>
         <module>scaffold-dependencies</module>
+        <module>scaffold-test/scaffold-test-flink</module>
     </modules>
 
     <profiles>
