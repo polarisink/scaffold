@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.scaffold.rbac.contant.RbacCacheConst.USER_PERMISSIONS;
 import static com.scaffold.rbac.contant.RbacCacheConst.USER_ROLES;
@@ -48,7 +50,7 @@ public class RbacAccountService {
     public List<String> selectRoleCodeList(Long userId) {
         List<Long> roleIdList = userRoleMapper.selectRoleIdByUserId(userId);
         if (CollectionUtils.isEmpty(roleIdList)) {
-            return List.of();
+            return new ArrayList<>();
         }
         return roleMapper.selectByIds(roleIdList)
                 .stream()
@@ -56,7 +58,7 @@ public class RbacAccountService {
                 .filter(StringUtils::hasText)
                 .map(String::trim)
                 .distinct()
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -67,7 +69,7 @@ public class RbacAccountService {
     public List<String> selectPermissionCodeList(Long userId) {
         List<SysMenu> menuList = menuMapper.findMenuCollByUserId(userId);
         if (CollectionUtils.isEmpty(menuList)) {
-            return List.of();
+            return new ArrayList<>();
         }
         return menuList.stream()
                 .filter(menu -> Integer.valueOf(1).equals(menu.getMenuType()))
@@ -75,6 +77,6 @@ public class RbacAccountService {
                 .filter(StringUtils::hasText)
                 .map(String::trim)
                 .distinct()
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

@@ -1,25 +1,19 @@
 package com.scaffold.rbac.service;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.scaffold.base.exception.Assert;
 import com.scaffold.base.util.CollUtils;
 import com.scaffold.base.util.PageResponse;
 import com.scaffold.rbac.components.PasswordFactory;
 import com.scaffold.rbac.components.RbacCache;
 import com.scaffold.rbac.contant.RbacResultEnum;
 import com.scaffold.rbac.entity.SysMenu;
+import com.scaffold.rbac.entity.SysRole;
 import com.scaffold.rbac.entity.SysUser;
 import com.scaffold.rbac.entity.SysUserRole;
 import com.scaffold.rbac.mapper.SysUserMapper;
 import com.scaffold.rbac.mapper.SysUserRoleMapper;
-import com.scaffold.rbac.vo.user.PasswdUpdateVO;
-import com.scaffold.rbac.vo.user.SysUserCreateVO;
-import com.scaffold.rbac.vo.user.SysUserInfo;
-import com.scaffold.rbac.vo.user.SysUserPageVO;
-import com.scaffold.rbac.vo.user.SysUserUpdateVO;
+import com.scaffold.rbac.vo.user.*;
 import com.scaffold.security.config.TokenService;
 import com.scaffold.security.vo.LoginUser;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +30,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class SysUserService {
+public class SysUserService implements ISysUserService {
     private final SysUserMapper sysUserMapper;
     private final SysUserRoleMapper sysUserRoleMapper;
     private final RbacCache rbacCache;
@@ -49,7 +43,7 @@ public class SysUserService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public String save(SysUserCreateVO vo) {
+    public Long save(SysUserCreateVO vo) {
         RbacResultEnum.UNIQUE_USERNAME.isFalse(sysUserMapper.existsByUsername(vo.username()));
         SysUser entity = new SysUser();
         BeanUtils.copyProperties(vo, entity);
@@ -58,7 +52,7 @@ public class SysUserService {
         Long userId = entity.getId();
         List<SysUserRole> userRoleList = CollUtils.toList(vo.roleIdList(), roleId -> new SysUserRole(userId, roleId));
         sysUserRoleMapper.insertBatchSomeColumn(userRoleList);
-        return userId.toString();
+        return userId;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -89,16 +83,23 @@ public class SysUserService {
 
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long userId) {
+        Long currentUserId = LoginUser.userId();
+        Assert.notEquals(currentUserId, userId, "不能删除自己");
         sysUserMapper.deleteById(userId);
         sysUserRoleMapper.deleteByUserIdAndRoleIdIn(userId, null);
         rbacCache.userClear(userId);
     }
 
     @Transactional(readOnly = true)
-    public SysUserInfo userInfo() {
-        SysUser user = sysUserMapper.findByUsername(LoginUser.username());
-        List<SysMenu> menus = rbacCache.userTree(LoginUser.userId());
-        return new SysUserInfo(user, menus);
+    public SysUserInfo userInfo(Long userId) {
+        if (userId == null) {
+            userId = LoginUser.userId();
+        }
+        SysUser user = sysUserMapper.selectById(userId);
+        Assert.notNull(user, "当前用户不存在");
+        List<SysMenu> menus = rbacCache.userTree(userId);
+        List<SysRole> roles = rbacCache.roles(userId);
+        return new SysUserInfo(user, roles, menus);
     }
 
     public void updatePasswd(PasswdUpdateVO vo) {

@@ -6,7 +6,10 @@ import com.scaffold.base.util.CollUtils;
 import com.scaffold.base.util.ITree;
 import com.scaffold.rbac.contant.RbacCacheConst;
 import com.scaffold.rbac.entity.SysMenu;
+import com.scaffold.rbac.entity.SysRole;
 import com.scaffold.rbac.mapper.SysMenuMapper;
+import com.scaffold.rbac.mapper.SysRoleMapper;
+import com.scaffold.rbac.mapper.SysUserRoleMapper;
 import com.scaffold.rbac.vo.menu.SysRoleWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +35,8 @@ import static com.scaffold.rbac.contant.RbacCacheConst.USER_ROLES;
 @RequiredArgsConstructor
 public class RbacCache {
     private final SysMenuMapper sysMenuMapper;
+    private final SysUserRoleMapper sysUserRoleMapper;
+    private final SysRoleMapper sysRoleMapper;
 
 
     /**
@@ -46,6 +51,11 @@ public class RbacCache {
         List<SysMenu> tree = ITree.toTree(GlobalConstant.ROOT_PARENT_ID, menuSet, Comparator.comparing(SysMenu::getSortNo));
         log.info("cache user tree success,key: 【{}】", userId);
         return tree;
+    }
+
+    public List<SysRole> roles(Long userId) {
+        List<Long> roleIds = sysUserRoleMapper.selectRoleIdByUserId(userId);
+        return sysRoleMapper.selectByIds(roleIds);
     }
 
     /**

@@ -1,10 +1,12 @@
 package com.scaffold.redis.core;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.spring.cache.RedissonSpringCacheManager;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -26,13 +28,16 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CacheConfig {
 
+    @Qualifier("redisObjectMapper")
+    private final ObjectMapper redisObjectMapper;
+
     @Bean
     public CacheManager cacheManager(RedissonClient redissonClient) {
         org.redisson.spring.cache.CacheConfig cacheConfig = new org.redisson.spring.cache.CacheConfig();
         cacheConfig.setTTL(3 * 24 * 60 * 60 * 1000L);
         // Redisson 会向配置 Map 中添加运行时动态创建的缓存，因此这里必须使用可变 Map。
         return new RedissonSpringCacheManager(redissonClient,
-                new HashMap<>(Map.of("cache", cacheConfig)), new JsonJacksonCodec());
+                new HashMap<>(Map.of("cache", cacheConfig)), new JsonJacksonCodec(redisObjectMapper));
     }
 
     @Bean

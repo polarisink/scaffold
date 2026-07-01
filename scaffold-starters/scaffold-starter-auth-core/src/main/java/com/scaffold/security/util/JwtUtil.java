@@ -29,8 +29,7 @@ public class JwtUtil {
     public JwtUtil(String secret) {
         Assert.hasText(secret, "security.token.jwt-secret 不能为空");
         byte[] key = secret.getBytes(StandardCharsets.UTF_8);
-        Assert.isTrue(key.length >= MINIMUM_KEY_LENGTH,
-                "security.token.jwt-secret 长度不能少于 32 字节");
+        Assert.isTrue(key.length >= MINIMUM_KEY_LENGTH, "security.token.jwt-secret 长度不能少于 32 字节");
         this.signingKey = key;
     }
 

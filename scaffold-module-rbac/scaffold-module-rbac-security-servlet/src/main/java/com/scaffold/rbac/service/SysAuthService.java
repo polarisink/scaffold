@@ -21,11 +21,12 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SysAuthService {
+public class SysAuthService implements ISysAuthService{
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final JwtUtil jwtUtil;
 
+    @Override
     public String login(LoginVo vo) {
         UsernamePasswordAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(vo.username(), vo.password());
         Authentication a = getAuthentication(authenticationToken);
@@ -61,6 +62,7 @@ public class SysAuthService {
         }
     }
 
+    @Override
     public void logout() {
         Long userId = LoginUser.userId();
         if (userId != null) {

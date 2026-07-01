@@ -13,9 +13,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SysAuthService {
+public class SysAuthService implements ISysAuthService{
     private final RbacAccountService accountService;
 
+    @Override
     public String login(LoginVo vo) {
         RbacLoginUser loginUser = accountService.login(vo.username(), vo.password());
         StpUtil.login(loginUser.userId());
@@ -29,6 +30,7 @@ public class SysAuthService {
         return StpUtil.getTokenValue();
     }
 
+    @Override
     public void logout() {
         StpUtil.logout();
     }

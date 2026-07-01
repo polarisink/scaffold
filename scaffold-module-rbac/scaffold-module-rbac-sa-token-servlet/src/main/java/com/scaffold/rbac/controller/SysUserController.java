@@ -4,7 +4,9 @@ import com.scaffold.base.util.PageResponse;
 import com.scaffold.base.util.R;
 import com.scaffold.log.BusinessType;
 import com.scaffold.log.Log;
+import com.scaffold.rbac.auth.RbacLoginUser;
 import com.scaffold.rbac.entity.SysUser;
+import com.scaffold.rbac.service.ISysUserService;
 import com.scaffold.rbac.service.SysUserService;
 import com.scaffold.rbac.vo.user.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +30,7 @@ import static com.scaffold.rbac.contant.RbacLogConst.USER;
 @Tag(name = "用户", description = "接口")
 public class SysUserController {
 
-    private final SysUserService sysUserService;
+    private final ISysUserService sysUserService;
 
 
     /**
@@ -52,7 +54,7 @@ public class SysUserController {
     @PostMapping
     @Log(title = ROLE, businessType = BusinessType.INSERT)
     @Operation(summary = "保存", description = "新增用户，传入用户信息及所属角色")
-    public R<String> save(@RequestBody @Valid SysUserCreateVO createVO) {
+    public R<Long> save(@RequestBody @Valid SysUserCreateVO createVO) {
         return R.success(sysUserService.save(createVO));
     }
 
@@ -87,8 +89,8 @@ public class SysUserController {
      */
     @Operation(summary = "用户信息")
     @GetMapping
-    public SysUserInfo userInfo() {
-        return sysUserService.userInfo();
+    public SysUserInfo userInfo(@RequestParam(required = false) Long userId) {
+        return sysUserService.userInfo(userId);
     }
 
     /**
