@@ -19,8 +19,11 @@ spring:
               uri: lb://cloud-auth-10080
               predicates:
                 - Path=/auth/**
-            - id: cloud-provider-10881
-              uri: lb://cloud-provider-10881
+              filters:
+                # Auth 业务路径保留 /auth，只将聚合文档路径改写为 /v3/api-docs。
+                - RewritePath=/auth/(?<segment>v3/api-docs.*), /$\{segment}
+            - id: cloud-provider-10081
+              uri: lb://cloud-provider-10081
               predicates:
                 - Path=/provider/**
               filters:
@@ -40,6 +43,33 @@ spring:
 
 server:
   port: 10000
+
+knife4j:
+  gateway:
+    # 生产环境可通过 KNIFE4J_GATEWAY_ENABLED=false 关闭聚合文档。
+    enabled: ${KNIFE4J_GATEWAY_ENABLED:true}
+    strategy: discover
+    tags-sorter: order
+    operations-sorter: order
+    discover:
+      enabled: true
+      version: openapi3
+      excluded-services:
+        - cloud-gateway-.*
+        - dubbo-.*
+      service-config:
+        cloud-auth-10080:
+          group-name: 认证服务
+          order: 1
+        cloud-provider-10081:
+          group-name: Provider 服务
+          order: 2
+        cloud-consumer-10082:
+          group-name: Consumer 服务
+          order: 3
+        cloud-order-10083:
+          group-name: Order 服务
+          order: 4
 
 management:
   endpoints:

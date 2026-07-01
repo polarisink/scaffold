@@ -20,6 +20,8 @@ spring:
 server:
   port: 10083
 
+swagger:
+  enabled: true
 
 seata:
   application-id: ${spring.application.name}

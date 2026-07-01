@@ -27,6 +27,10 @@
             <artifactId>scaffold-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-starter-swagger</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>

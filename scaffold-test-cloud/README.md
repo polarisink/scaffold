@@ -83,12 +83,23 @@ curl 'http://localhost:10000/consumer/api/provider-echo?message=hello'
 
 网关使用 `lb://` 路由，并在转发前移除 `/provider` 或 `/consumer` 的首段路径。
 
+Gateway 还会通过 Nacos 自动发现并聚合 Auth、Provider、Consumer 和 Order 的
+OpenAPI 3 文档。启动这些服务和 Gateway 后，统一访问：
+
+```text
+http://localhost:10000/doc.html
+```
+
+Knife4j 页面左上角可以切换微服务分组，无需分别打开各服务的文档。纯 Dubbo
+服务和 Gateway 自身不会加入聚合列表。生产环境应设置
+`KNIFE4J_GATEWAY_ENABLED=false` 关闭文档入口。
+
 ## Auth 示例
 
 `scaffold-test-auth-10080` 是薄启动模块，依赖 `scaffold-module-rbac-auth-sa-webflux`。
 该模块复用 `scaffold-module-rbac-data` 中的用户、角色、关联表和 MyBatis Mapper，
 并通过 `scaffold-starter-sa-token-webflux` 提供 WebFlux 登录能力。Gateway 已将
-`/auth/**` 路由到 `cloud-auth`。
+`/auth/**` 路由到 `cloud-auth-10080`。
 
 默认读取 `training` 库，可通过环境变量覆盖：
 

@@ -18,6 +18,7 @@
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-cloud-common-dependencies</artifactId>
         </dependency>
+        <!--这里可以使用scaffold-module-rbac-auth-sa-webflux或scaffold-module-rbac-auth-security-webflux-->
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-module-rbac-auth-sa-webflux</artifactId>
@@ -25,6 +26,10 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-api</artifactId>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

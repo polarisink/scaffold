@@ -116,20 +116,9 @@ public class R<T> implements Serializable {
     }
 
     /**
-     * 失败
-     *
-     * @param code 代码
-     * @return {@link R}<{@link T}>
-     */
-    public static <T> R<T> failed(Integer code) {
-        return of(null, code, null);
-    }
-
-    /**
      * 返回成功
      */
     public static <T> R<T> success() {
-
         return new R<>(null, HttpStatus.HTTP_OK, null);
     }
 

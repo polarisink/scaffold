@@ -25,6 +25,9 @@ spring:
 server:
   port: 10082
 
+swagger:
+  enabled: true
+
 seata:
   application-id: ${spring.application.name}
   tx-service-group: scaffold-seata-tx-group
