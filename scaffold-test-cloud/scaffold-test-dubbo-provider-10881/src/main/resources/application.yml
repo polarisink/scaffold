@@ -23,6 +23,3 @@ management:
       type: w3c
     sampling:
       probability: 1.0
-logging:
-  pattern:
-    level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}]"

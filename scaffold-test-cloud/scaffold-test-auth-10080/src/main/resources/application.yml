@@ -10,7 +10,7 @@ spring:
         username: ${NACOS_USERNAME:nacos}
         password: ${NACOS_PASSWORD:123456}
   datasource:
-    url: ${RBAC_DATASOURCE_URL:jdbc:mysql://localhost:3306/training?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai}
+    url: ${RBAC_DATASOURCE_URL:jdbc:mysql://localhost:3306/scaffold?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai}
     username: ${RBAC_DATASOURCE_USERNAME:root}
     password: ${RBAC_DATASOURCE_PASSWORD:123456}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -43,7 +43,3 @@ management:
       type: w3c
     sampling:
       probability: 1.0
-
-logging:
-  pattern:
-    level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}]"

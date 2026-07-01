@@ -27,7 +27,7 @@ server:
 
 swagger:
   enabled: true
-
+  title: 消费者服务接口文档
 seata:
   application-id: ${spring.application.name}
   tx-service-group: scaffold-seata-tx-group
@@ -64,6 +64,3 @@ management:
       type: w3c
     sampling:
       probability: 1.0
-logging:
-  pattern:
-    level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}]"
