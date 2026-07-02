@@ -247,7 +247,7 @@ WHERE NOT EXISTS (SELECT 1
 INSERT INTO sys_user
 (username, password, org_id, status, deleted, gmt_created, gmt_modified)
 SELECT 'admin',
-       '$2a$10$nFuSB2Gcl8e3WbwA6gt38.8NQXZ0EffEztRoAlbRtXXb6eDtjCgl2',
+       '{bcrypt}$2a$10$nFuSB2Gcl8e3WbwA6gt38.8NQXZ0EffEztRoAlbRtXXb6eDtjCgl2',
        org.id,
        1,
        0,
