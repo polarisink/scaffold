@@ -33,6 +33,9 @@
         <module>scaffold-test-sqlite</module>
         <module>scaffold-test-postgresql-geo</module>
         <module>scaffold-test-qwen3-asr</module>
+        <module>scaffold-test-flink</module>
+        <module>scaffold-test-geo</module>
+        <module>scaffold-test-yauaa</module>
     </modules>
 
 </project>

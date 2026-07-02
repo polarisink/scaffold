@@ -8,7 +8,6 @@
         <groupId>com.scaffold</groupId>
         <artifactId>scaffold</artifactId>
         <version>${rversion}</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>scaffold-test-flink</artifactId>
