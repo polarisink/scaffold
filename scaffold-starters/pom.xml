@@ -24,5 +24,6 @@
         <module>scaffold-starter-web</module>
         <module>scaffold-starter-postgresql-cache</module>
         <module>scaffold-starter-postgresql-job</module>
+        <module>scaffold-starter-geo</module>
     </modules>
 </project>

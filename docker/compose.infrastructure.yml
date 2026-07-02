@@ -25,7 +25,7 @@ services:
     depends_on:
       nacos:
         condition: service_started
-    entrypoint: ["/bin/sh", "/scripts/init-nacos-configs.sh"]
+    entrypoint: [ "/bin/sh", "/scripts/init-nacos-configs.sh" ]
     environment:
       NACOS_ADDR: http://nacos:8848
       NACOS_USERNAME: ${NACOS_USERNAME:-nacos}
@@ -61,7 +61,7 @@ services:
     ports:
       - "${SENTINEL_PORT:-8858}:8858"
     healthcheck:
-      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:8858/ || exit 1"]
+      test: [ "CMD-SHELL", "wget -q -O /dev/null http://localhost:8858/ || exit 1" ]
       interval: 15s
       timeout: 5s
       retries: 10

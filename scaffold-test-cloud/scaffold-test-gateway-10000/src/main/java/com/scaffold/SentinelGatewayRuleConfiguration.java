@@ -1,9 +1,5 @@
 package com.scaffold;
 
-import java.time.Instant;
-import java.util.Map;
-import java.util.Set;
-
 import com.alibaba.csp.sentinel.adapter.gateway.common.rule.GatewayFlowRule;
 import com.alibaba.csp.sentinel.adapter.gateway.common.rule.GatewayRuleManager;
 import com.alibaba.csp.sentinel.adapter.gateway.sc.callback.GatewayCallbackManager;
@@ -14,6 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerResponse;
+
+import java.time.Instant;
+import java.util.Map;
+import java.util.Set;
 
 @Configuration
 public class SentinelGatewayRuleConfiguration implements ApplicationRunner {

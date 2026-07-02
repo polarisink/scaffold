@@ -42,7 +42,7 @@ services:
       - nacos-mysql-data:/var/lib/mysql
       - nacos-mysql-init:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${NACOS_MYSQL_ROOT_PASSWORD:-root}"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${NACOS_MYSQL_ROOT_PASSWORD:-root}" ]
       interval: 5s
       timeout: 10s
       retries: 20

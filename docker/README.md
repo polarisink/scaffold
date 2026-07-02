@@ -17,13 +17,13 @@ Compose 平铺在 `docker/` 下，`flink/` 保留独立目录存放 Flink Sessio
 
 访问地址：
 
-| 服务 | 地址 | 默认账号 |
-| --- | --- | --- |
+| 服务            | 地址                      | 默认账号                 |
+|---------------|-------------------------|----------------------|
 | Nacos Console | <http://localhost:8080> | `nacos/nacos`（开启认证时） |
-| Sentinel | <http://localhost:8858> | `sentinel/sentinel` |
-| Seata | `localhost:8091` | - |
-| Prometheus | <http://localhost:9090> | - |
-| Grafana | <http://localhost:3000> | `admin/admin` |
+| Sentinel      | <http://localhost:8858> | `sentinel/sentinel`  |
+| Seata         | `localhost:8091`        | -                    |
+| Prometheus    | <http://localhost:9090> | -                    |
+| Grafana       | <http://localhost:3000> | `admin/admin`        |
 
 版本、端口和账号可在 `docker/cloud.env` 中修改，也可以用同名环境变量覆盖。
 三库 Seata AT 回滚示例的数据库与 `undo_log` 初始化 SQL 位于

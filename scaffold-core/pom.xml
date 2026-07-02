@@ -16,5 +16,6 @@
         <module>scaffold-core-postgresql-cache</module>
         <module>scaffold-core-orm</module>
         <module>scaffold-core-websocket</module>
+        <module>scaffold-core-geo</module>
     </modules>
 </project>

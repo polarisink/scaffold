@@ -12,7 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.StreamGroup;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.data.redis.connection.stream.*;
+import org.springframework.data.redis.connection.stream.Consumer;
+import org.springframework.data.redis.connection.stream.ObjectRecord;
+import org.springframework.data.redis.connection.stream.ReadOffset;
+import org.springframework.data.redis.connection.stream.StreamOffset;
 import org.springframework.data.redis.stream.StreamMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
@@ -46,12 +49,12 @@ public class RedisMessageQueueRegister implements ApplicationRunner {
             String consumerName = split[2];
             List<String> groupName = null;
             try {
-                //没这个会报错，因此处理一下
+                // 没这个会报错，因此处理一下
                 groupName = RedisUtils.groups(streamKey).stream().map(StreamGroup::getName).toList();
             } catch (Exception e) {
                 log.error("groups error:{}", e.getMessage());
             }
-            //如果没这个streamKey或streamKey下没对应group，就创建
+            // 如果没这个streamKey或streamKey下没对应group，就创建
             if (groupName == null || !groupName.contains(consumerGroupName)) {
                 RedisUtils.createGroup(streamKey, consumerGroupName);
             }
@@ -65,7 +68,7 @@ public class RedisMessageQueueRegister implements ApplicationRunner {
                         for (RedisListenerMethod rlm : redisListenerMethodList) {
                             Method targetMethod = rlm.getTargetMethod();
                             RedisMessage<?> redisMessage;
-                            //是否是使用Message进行包装
+                            // 是否是使用Message进行包装
                             Boolean messageFlag = rlm.getMessageFlag();
                             try {
                                 if (messageFlag) {

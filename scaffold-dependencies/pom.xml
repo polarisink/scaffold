@@ -64,9 +64,12 @@
         <okhttp.version>5.3.2</okhttp.version>
         <sa-token.version>1.44.0</sa-token.version>
         <bizlog.version>3.0.6</bizlog.version>
+        <geotools.version>35.0</geotools.version>
         <yauaa.version>7.32.0</yauaa.version>
         <spatial.version>7.4.1.Final</spatial.version>
         <jetcache.version>2.7.8</jetcache.version>
+        <flatten.version>1.7.3</flatten.version>
+        <geotools.version>35.0</geotools.version>
     </properties>
 
     <dependencyManagement>
@@ -95,6 +98,16 @@
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-websocket</artifactId>
+                <version>${rversion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-core-geo</artifactId>
+                <version>${rversion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-starter-geo</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
@@ -408,6 +421,21 @@
                 <version>${dubbo.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-bom</artifactId>
+                <version>${geotools.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--大依赖pom-->
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-bom</artifactId>
+                <version>${geotools.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-registry-nacos</artifactId>
                 <version>${dubbo.version}</version>
@@ -487,7 +515,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.7.3</version>
+                <version>${flatten.version}</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
                     <flattenMode>bom</flattenMode>
@@ -550,5 +578,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>osgeo</id>
+            <name>OSGeo Release Repository</name>
+            <url>https://repo.osgeo.org/repository/release/</url>
+        </repository>
+    </repositories>
 
 </project>

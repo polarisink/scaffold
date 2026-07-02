@@ -11,7 +11,7 @@ public class StringToEnumConverter<T extends IResponseEnum> implements Converter
 
     public StringToEnumConverter(Class<T> clazz) {
         for (T enumConstant : clazz.getEnumConstants()) {
-            //通过code进行转换
+            // 通过code进行转换
             enumMap.put(String.valueOf(enumConstant.getCode()), enumConstant);
         }
 

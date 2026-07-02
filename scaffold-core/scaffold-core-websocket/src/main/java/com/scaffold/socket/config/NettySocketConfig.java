@@ -39,24 +39,24 @@ public class NettySocketConfig {
     @Bean
     public SocketIOServer socketIOServer() throws IOException {
         com.corundumstudio.socketio.Configuration config = new com.corundumstudio.socketio.Configuration();
-        //设置host
+        // 设置host
         config.setHostname(host);
-        //设置端口
+        // 设置端口
         config.setPort(port);
-        //设置路径
+        // 设置路径
         if (contextPath != null && !contextPath.isBlank()) {
             config.setContext(contextPath);
         }
-        //初始化认证监听器
-        //设置认证监听器
+        // 初始化认证监听器
+        // 设置认证监听器
         // 开启 SSL
         /*config.setKeyStoreFormat("PKCS12");
         config.setKeyStore(resourceLoader.getResource("classpath:keystore.p12").getInputStream());
         // 刚才设置的密码
         config.setKeyStorePassword("123456");
          */
-        //前端最好显示声明websocket，使用polling性能比较差
-        config.setTransports(Transport.WEBSOCKET,Transport.POLLING);
+        // 前端最好显示声明websocket，使用polling性能比较差
+        config.setTransports(Transport.WEBSOCKET, Transport.POLLING);
         config.setAuthorizationListener(authorizationListener);
         SocketIOServer server = new SocketIOServer(config);
         server.start();

@@ -47,6 +47,7 @@
         <module>scaffold-module-rbac</module>
         <module>scaffold-dependencies</module>
         <module>scaffold-test/scaffold-test-flink</module>
+        <module>scaffold-test/scaffold-test-geo</module>
     </modules>
 
     <profiles>
@@ -136,4 +137,11 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>osgeo</id>
+            <name>OSGeo Release Repository</name>
+            <url>https://repo.osgeo.org/repository/release/</url>
+        </repository>
+    </repositories>
 </project>

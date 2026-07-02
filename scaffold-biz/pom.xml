@@ -35,9 +35,9 @@
         如果需要 Sa-Token Servlet 权限系统就引入 scaffold-module-rbac-sa-token-servlet
         -->
         <dependency>
-             <groupId>com.scaffold</groupId>
-             <artifactId>scaffold-module-rbac-security-servlet</artifactId>
-         </dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-module-rbac-security-servlet</artifactId>
+        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

@@ -55,12 +55,12 @@ scaffold-starters/
 
 认证选择：
 
-| 场景 | 推荐依赖 |
-| --- | --- |
-| Spring Boot MVC + Spring Security | `scaffold-starter-spring-security-servlet` |
-| Spring Boot WebFlux + Spring Security | `scaffold-starter-spring-security-webflux` |
-| Spring Boot MVC + Sa-Token | `scaffold-starter-sa-token-servlet` |
-| Spring Boot WebFlux / Gateway + Sa-Token | `scaffold-starter-sa-token-webflux` |
+| 场景                                       | 推荐依赖                                       |
+|------------------------------------------|--------------------------------------------|
+| Spring Boot MVC + Spring Security        | `scaffold-starter-spring-security-servlet` |
+| Spring Boot WebFlux + Spring Security    | `scaffold-starter-spring-security-webflux` |
+| Spring Boot MVC + Sa-Token               | `scaffold-starter-sa-token-servlet`        |
+| Spring Boot WebFlux / Gateway + Sa-Token | `scaffold-starter-sa-token-webflux`        |
 
 `scaffold-starter-auth-core` 提供公共认证基础能力，包括：
 
@@ -92,7 +92,8 @@ scaffold-module/
 - 使用 Sa-Token WebFlux 认证服务：引入 `scaffold-module-rbac-auth-sa-webflux`
 - 只复用用户、角色、菜单数据库访问：引入 `scaffold-module-rbac-data`
 
-所有 RBAC 认证模块都复用 `scaffold-module-rbac-data`，避免数据库层重复实现。Servlet 版本提供完整后台管理接口，包含 `/auth`、`/user`、`/role`、`/menu`；WebFlux 版本只提供认证相关接口，避免维护四份管理 CRUD。
+所有 RBAC 认证模块都复用 `scaffold-module-rbac-data`，避免数据库层重复实现。Servlet 版本提供完整后台管理接口，包含 `/auth`、
+`/user`、`/role`、`/menu`；WebFlux 版本只提供认证相关接口，避免维护四份管理 CRUD。
 
 ## Cloud 示例
 
@@ -109,7 +110,8 @@ scaffold-test-cloud/
 └── scaffold-cloud-common-dependencies
 ```
 
-`scaffold-test-auth-10080` 是薄启动模块，依赖 `scaffold-module-rbac-auth-sa-webflux` 提供 `/auth/login`、`/auth/logout`、`/auth/token-info`，Gateway 已配置 `/auth/** -> lb://cloud-auth`。
+`scaffold-test-auth-10080` 是薄启动模块，依赖 `scaffold-module-rbac-auth-sa-webflux` 提供 `/auth/login`、`/auth/logout`、
+`/auth/token-info`，Gateway 已配置 `/auth/** -> lb://cloud-auth`。
 
 ## 快速启动
 

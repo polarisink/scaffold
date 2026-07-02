@@ -4,16 +4,16 @@
 
 ## 子模块
 
-| 模块 | 用途 | 端口 |
-| --- | --- | --- |
-| `scaffold-test-auth-10080` | 基于 RBAC 公共数据层与 Sa-Token WebFlux 的认证服务 | `10080` |
-| `scaffold-test-provider-10081` | 注册到 Nacos 的 HTTP 服务提供者 | `10081` |
-| `scaffold-test-consumer-10082` | 通过 Spring Cloud LoadBalancer 调用 HTTP 服务的消费者 | `10082` |
-| `scaffold-test-order-10083` | 参与 Seata 全局事务的订单服务 | `10083` |
-| `scaffold-test-gateway-10000` | 为 Provider 和 Consumer 提供路由转发的 WebFlux 网关 | `10000` |
-| `scaffold-test-dubbo-api` | 共享的 `GreetingService` RPC 接口 | - |
-| `scaffold-test-dubbo-provider-10881` | 注册到 Nacos 的 Dubbo 服务提供者 | `10881` |
-| `scaffold-test-dubbo-consumer-10092` | 提供 HTTP 验证接口的 Dubbo 服务消费者 | `10092` |
+| 模块                                   | 用途                                          | 端口      |
+|--------------------------------------|---------------------------------------------|---------|
+| `scaffold-test-auth-10080`           | 基于 RBAC 公共数据层与 Sa-Token WebFlux 的认证服务       | `10080` |
+| `scaffold-test-provider-10081`       | 注册到 Nacos 的 HTTP 服务提供者                      | `10081` |
+| `scaffold-test-consumer-10082`       | 通过 Spring Cloud LoadBalancer 调用 HTTP 服务的消费者 | `10082` |
+| `scaffold-test-order-10083`          | 参与 Seata 全局事务的订单服务                          | `10083` |
+| `scaffold-test-gateway-10000`        | 为 Provider 和 Consumer 提供路由转发的 WebFlux 网关    | `10000` |
+| `scaffold-test-dubbo-api`            | 共享的 `GreetingService` RPC 接口                | -       |
+| `scaffold-test-dubbo-provider-10881` | 注册到 Nacos 的 Dubbo 服务提供者                     | `10881` |
+| `scaffold-test-dubbo-consumer-10092` | 提供 HTTP 验证接口的 Dubbo 服务消费者                   | `10092` |
 
 `scaffold-dependencies-cloud` 是云服务示例的通用依赖模块，统一提供 Actuator
 与 OpenTelemetry tracing。各服务仍按需声明 Web、Nacos、Gateway、Dubbo、Seata

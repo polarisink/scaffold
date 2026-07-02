@@ -65,7 +65,7 @@ public class JacksonConfig {
         JavaTimeModule javaTimeModule = getJavaTimeModule();
         objectMapper.registerModule(javaTimeModule);
         SimpleModule simpleModule = new SimpleModule();
-        //long序列化为字符串，避免前端js精度不对报错
+        // long序列化为字符串，避免前端js精度不对报错
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
         objectMapper.registerModule(simpleModule);
@@ -84,7 +84,7 @@ public class JacksonConfig {
     public ObjectMapper redisObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(getJavaTimeModule());
-        //缓存类型,上面配置不生效，使用下面的
+        // 缓存类型,上面配置不生效，使用下面的
         mapper.setDefaultTyping(new StdTypeResolverBuilder().init(JsonTypeInfo.Id.CLASS, null).inclusion(JsonTypeInfo.As.PROPERTY));
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
