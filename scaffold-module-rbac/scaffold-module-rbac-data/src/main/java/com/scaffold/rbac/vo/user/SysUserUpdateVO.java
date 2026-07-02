@@ -4,6 +4,7 @@ package com.scaffold.rbac.vo.user;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -26,12 +27,11 @@ public class SysUserUpdateVO implements Serializable {
     @Schema(description = "用户名")
     private String username;
 
-    @NotBlank(message = "组织不能为空")
+    @NotNull(message = "所属部门不能为空")
     @Schema(description = "组织id")
-    private String orgId;
+    private Long orgId;
 
     @NotEmpty(message = "用户必须包含角色")
     @Schema(description = "角色id集合")
     private List<Long> roleIdList;
 }
-

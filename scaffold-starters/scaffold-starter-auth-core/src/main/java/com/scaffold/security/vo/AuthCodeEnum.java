@@ -9,8 +9,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum AuthCodeEnum implements IResponseEnum {
-    ACCESS_DENIED(403, "禁止访问"),
-    UNAUTHORIZED(443, "未授权"),
+    ACCESS_DENIED(40300, "禁止访问"),
+    UNAUTHORIZED(40100, "未授权"),
+    TOKEN_INVALID(40101, "Token 无效"),
+    TOKEN_EXPIRED(40102, "Token 已过期"),
     AUTHENTICATION_FAILED(444, "认证失败"),
     LOGIN_FAILED(445, "登录失败");
 

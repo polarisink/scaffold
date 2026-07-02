@@ -6,8 +6,10 @@ import com.scaffold.base.util.CollUtils;
 import com.scaffold.base.util.ITree;
 import com.scaffold.rbac.contant.RbacCacheConst;
 import com.scaffold.rbac.entity.SysMenu;
+import com.scaffold.rbac.entity.SysOrg;
 import com.scaffold.rbac.entity.SysRole;
 import com.scaffold.rbac.mapper.SysMenuMapper;
+import com.scaffold.rbac.mapper.SysOrgMapper;
 import com.scaffold.rbac.mapper.SysRoleMapper;
 import com.scaffold.rbac.mapper.SysUserRoleMapper;
 import com.scaffold.rbac.vo.menu.SysRoleWrapper;
@@ -22,6 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import static com.scaffold.base.constant.GlobalConstant.ROOT_PARENT_ID_STR;
 import static com.scaffold.rbac.contant.RbacCacheConst.USER_TREE;
 import static com.scaffold.rbac.contant.RbacCacheConst.USER_PERMISSIONS;
 import static com.scaffold.rbac.contant.RbacCacheConst.USER_ROLES;
@@ -37,7 +40,7 @@ public class RbacCache {
     private final SysMenuMapper sysMenuMapper;
     private final SysUserRoleMapper sysUserRoleMapper;
     private final SysRoleMapper sysRoleMapper;
-
+    private final SysOrgMapper sysOrgMapper;
 
     /**
      * 用户菜单缓存
@@ -80,12 +83,26 @@ public class RbacCache {
      *
      * @return 树
      */
-    @Cacheable(cacheNames = RbacCacheConst.MENU_TREE, key = "0")
+    @Cacheable(cacheNames = RbacCacheConst.MENU_TREE, key = ROOT_PARENT_ID_STR)
     public List<SysMenu> menuTree() {
         List<SysMenu> menuList = sysMenuMapper.selectList(null);
         List<SysMenu> tree = ITree.toTree(GlobalConstant.ROOT_PARENT_ID, menuList, Comparator.comparing(SysMenu::getSortNo));
         log.info("cache menu tree success");
         return tree;
+    }
+
+    @Cacheable(cacheNames = RbacCacheConst.ORG_TREE, key = ROOT_PARENT_ID_STR)
+    public List<SysOrg> orgTree() {
+        List<SysOrg> orgList = sysOrgMapper.selectList(null);
+        Comparator<SysOrg> comparator = Comparator.comparing(SysOrg::getSort, Comparator.nullsLast(Integer::compareTo)).thenComparing(SysOrg::getId);
+        List<SysOrg> tree = ITree.toTree(GlobalConstant.ROOT_PARENT_ID, orgList, comparator);
+        log.info("cache org tree success");
+        return tree;
+    }
+
+    @CacheEvict(cacheNames = RbacCacheConst.ORG_TREE, key = ROOT_PARENT_ID_STR)
+    public void orgClear() {
+        log.info("clear org tree cache success");
     }
 
 

@@ -1,6 +1,7 @@
 package com.scaffold.rbac.vo.user;
 
 import com.scaffold.rbac.entity.SysMenu;
+import com.scaffold.rbac.entity.SysOrg;
 import com.scaffold.rbac.entity.SysRole;
 import com.scaffold.rbac.entity.SysUser;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,6 +12,8 @@ import java.util.List;
 public record SysUserInfo(
         @Schema(description = "用户")
         SysUser user,
+        @Schema(description = "所属组织")
+        SysOrg org,
         List<SysRole> roles,
         @Schema(description = "菜单")
         List<SysMenu> menus) {

@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.scaffold</groupId>
-        <artifactId>scaffold</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>scaffold-test</artifactId>
+        <version>${rversion}</version>
     </parent>
 
     <artifactId>scaffold-test-geo</artifactId>
@@ -15,7 +15,6 @@
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-starter-geo</artifactId>
-            <version>${rversion}</version>
         </dependency>
     </dependencies>
 

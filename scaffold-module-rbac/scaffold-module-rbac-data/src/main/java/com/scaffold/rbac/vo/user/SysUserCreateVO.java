@@ -4,6 +4,7 @@ package com.scaffold.rbac.vo.user;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -21,6 +22,6 @@ public record SysUserCreateVO(
 
         @NotBlank(message = "用户名不能为空") @Schema(description = "名字") String username,
         @NotBlank(message = "密码不能为空") @Schema(description = "密码") String password,
+        @NotNull(message = "所属部门不能为空") @Schema(description = "组织id") Long orgId,
         @NotEmpty(message = "用户必须包含角色") @Schema(description = "角色id集合") List<Long> roleIdList) {
 }
-

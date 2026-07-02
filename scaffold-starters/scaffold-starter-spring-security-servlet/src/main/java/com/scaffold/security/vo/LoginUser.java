@@ -2,6 +2,7 @@ package com.scaffold.security.vo;
 
 import com.scaffold.base.util.CollUtils;
 import lombok.Getter;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +37,13 @@ public class LoginUser extends User implements Serializable {
     }
 
     private static Authentication getAuthentication() {
-        return SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || authentication instanceof AnonymousAuthenticationToken) {
+            return null;
+        }
+        return authentication;
     }
 
     public static LoginUser currentUser() {
@@ -44,7 +51,15 @@ public class LoginUser extends User implements Serializable {
         if (a == null) {
             return null;
         }
-        return new LoginUser(Long.valueOf(a.getPrincipal().toString()), a.getCredentials().toString(), a.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+        if (a.getPrincipal() instanceof LoginUser loginUser) {
+            return loginUser;
+        }
+        Long userId = resolveUserId(a.getPrincipal());
+        String username = username();
+        if (userId == null || username == null) {
+            return null;
+        }
+        return new LoginUser(userId, username, a.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
     }
 
     public static Long userId() {
@@ -52,7 +67,7 @@ public class LoginUser extends User implements Serializable {
         if (a == null) {
             return null;
         }
-        return Long.valueOf(a.getPrincipal().toString());
+        return resolveUserId(a.getPrincipal());
     }
 
     public static String username() {
@@ -60,6 +75,27 @@ public class LoginUser extends User implements Serializable {
         if (a == null) {
             return null;
         }
-        return a.getCredentials().toString();
+        if (a.getPrincipal() instanceof LoginUser loginUser) {
+            return loginUser.getUsername();
+        }
+        Object credentials = a.getCredentials();
+        return credentials == null ? null : credentials.toString();
+    }
+
+    private static Long resolveUserId(Object principal) {
+        if (principal instanceof LoginUser loginUser) {
+            return loginUser.getUserId();
+        }
+        if (principal instanceof Number number) {
+            return number.longValue();
+        }
+        if (principal == null) {
+            return null;
+        }
+        try {
+            return Long.valueOf(principal.toString());
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
     }
 }

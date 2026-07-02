@@ -1,5 +1,7 @@
 package com.scaffold.security.config;
 
+import com.scaffold.base.exception.BaseException;
+import com.scaffold.base.util.R;
 import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.util.ResponseUtil;
 import com.scaffold.security.vo.AuthCodeEnum;
@@ -49,13 +51,20 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String token = getRealToken(request.getHeader(HttpHeaders.AUTHORIZATION));
         if (token == null || token.isEmpty()) {
             log.error("{} unauthorized: token is not present", url);
-            ResponseUtil.writeBody(response, AuthCodeEnum.UNAUTHORIZED);
+            writeUnauthorized(response, AuthCodeEnum.UNAUTHORIZED);
             return;
         }
-        PayloadDTO dto = jwtUtil.resolveToken(token);
+        PayloadDTO dto;
+        try {
+            dto = jwtUtil.resolveToken(token);
+        } catch (BaseException exception) {
+            log.error("{} unauthorized: invalid token", url);
+            writeUnauthorized(response, AuthCodeEnum.TOKEN_INVALID);
+            return;
+        }
         if (!tokenService.has(dto.getUserId().toString())) {
             log.error("{} unauthorized: token is expired", url);
-            ResponseUtil.writeBody(response, AuthCodeEnum.UNAUTHORIZED);
+            writeUnauthorized(response, AuthCodeEnum.TOKEN_EXPIRED);
             return;
         }
         List<SimpleGrantedAuthority> authorityList = dto.getAuthorities().stream()
@@ -65,5 +74,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 dto.getUserId(), dto.getUsername(), authorityList);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
+    }
+
+    private static void writeUnauthorized(HttpServletResponse response, AuthCodeEnum reason) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        ResponseUtil.writeBody(response, R.failed(reason.getCode(), reason.getMessage()));
     }
 }

@@ -4,6 +4,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.scaffold.base.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.*;
+import org.redisson.api.options.KeysScanOptions;
 import org.redisson.api.stream.StreamAddArgs;
 import org.redisson.api.stream.StreamCreateGroupArgs;
 import org.redisson.client.codec.StringCodec;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Component
@@ -70,11 +73,19 @@ public final class RedisUtils {
     }
 
     public static List<String> scan(String pattern) {
-        return keys().getKeysStreamByPattern(pattern).collect(Collectors.toList());
+        return keysByPattern(pattern).collect(Collectors.toList());
     }
 
     public static List<String> findKeysForPage(String patternKey, int page, int size) {
-        return keys().getKeysStreamByPattern(patternKey).skip((long) page * size).limit(size).collect(Collectors.toList());
+        return keysByPattern(patternKey)
+                .skip((long) page * size)
+                .limit(size)
+                .collect(Collectors.toList());
+    }
+
+    private static Stream<String> keysByPattern(String pattern) {
+        Iterable<String> matchedKeys = keys().getKeys(KeysScanOptions.defaults().pattern(pattern));
+        return StreamSupport.stream(matchedKeys.spliterator(), false);
     }
 
     public static boolean hasKey(String key) {

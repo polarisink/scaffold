@@ -29,6 +29,6 @@ public class SysUser extends BaseAuditable implements Serializable {
     @Column(name = "password", columnDefinition = "varchar(255) comment '密码'")
     private String password;
 
-    @Column(name = "org_id", columnDefinition = "varchar(64) comment '组织ID'")
-    private String orgId;
+    @Column(name = "org_id", columnDefinition = "bigint comment '组织ID'")
+    private Long orgId;
 }

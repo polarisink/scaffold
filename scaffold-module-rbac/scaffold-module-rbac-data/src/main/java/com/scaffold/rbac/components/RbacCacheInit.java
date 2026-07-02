@@ -28,7 +28,7 @@ public class RbacCacheInit implements ApplicationRunner {
             //检查是否有这两个角色，没有就新增，这两个角色没有菜单
             //缓存菜单树
             rbacCache.menuTree();
-            //缓存组织机构数
+            rbacCache.orgTree();
             //缓存角色
             roleMapper.selectList(null).forEach(r -> rbacCache.roleWrapper(r.getId()));
             //只给可用用户加载缓存

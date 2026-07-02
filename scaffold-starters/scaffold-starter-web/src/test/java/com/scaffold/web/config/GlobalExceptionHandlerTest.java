@@ -37,7 +37,7 @@ class GlobalExceptionHandlerTest {
     void wrapsControllerResponse() throws Exception {
         mockMvc.perform(get("/test/ping"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.code").value(0))
                 .andExpect(jsonPath("$.data.message").value("pong"));
     }
 
@@ -53,7 +53,7 @@ class GlobalExceptionHandlerTest {
         mockMvc.perform(get("/test/error"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(600))
-                .andExpect(jsonPath("$.msg").value("自定义错误消息"));
+                .andExpect(jsonPath("$.message").value("自定义错误消息"));
     }
 
     @RestController

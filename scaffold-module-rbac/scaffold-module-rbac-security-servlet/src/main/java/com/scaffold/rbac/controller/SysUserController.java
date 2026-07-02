@@ -64,7 +64,7 @@ public class SysUserController {
     @PutMapping
     @Log(title = ROLE, businessType = BusinessType.UPDATE)
     @Operation(summary = "修改", description = "修改用户信息，这里不能修改密码")
-    public void updateById(@RequestBody SysUserUpdateVO updateVO) {
+    public void updateById(@RequestBody @Valid SysUserUpdateVO updateVO) {
         sysUserService.updateById(updateVO);
     }
 

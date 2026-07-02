@@ -4,6 +4,7 @@ import com.scaffold.base.util.R;
 import com.scaffold.security.util.ResponseUtil;
 import com.scaffold.security.vo.AuthCodeEnum;
 import com.scaffold.security.vo.SecurityProperties;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,7 +26,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +52,10 @@ public class SecurityConfig {
                         .authenticationEntryPoint(authenticationEntryPoint())
                         .accessDeniedHandler((request, response, ex) -> {
                             log.error("access denied path: {}", request.getRequestURI());
-                            ResponseUtil.writeBody(response, AuthCodeEnum.ACCESS_DENIED);
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            ResponseUtil.writeBody(response, R.failed(
+                                    AuthCodeEnum.ACCESS_DENIED.getCode(),
+                                    AuthCodeEnum.ACCESS_DENIED.getMessage()));
                         })
                 )
                 .authenticationProvider(authenticationProvider(passwordEncoder))
@@ -81,16 +84,17 @@ public class SecurityConfig {
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (request, response, ex) -> {
-            String msg = AuthCodeEnum.UNAUTHORIZED.getMessage();
+            String message = AuthCodeEnum.UNAUTHORIZED.getMessage();
             if (ex.getMessage() != null) {
-                msg = ex.getMessage();
+                message = ex.getMessage();
             }
             Throwable cause = ex.getCause();
             if (cause != null && cause.getMessage() != null) {
-                msg = cause.getMessage();
+                message = cause.getMessage();
             }
-            ResponseUtil.writeBody(response, R.failed(AuthCodeEnum.UNAUTHORIZED.getCode(), msg));
-            log.error("{} unauthorized: {}", request.getRequestURI(), msg);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            ResponseUtil.writeBody(response, R.failed(AuthCodeEnum.UNAUTHORIZED.getCode(), message));
+            log.error("{} unauthorized: {}", request.getRequestURI(), message);
         };
     }
 

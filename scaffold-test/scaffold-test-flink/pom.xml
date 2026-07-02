@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.scaffold</groupId>
-        <artifactId>scaffold</artifactId>
+        <artifactId>scaffold-test</artifactId>
         <version>${rversion}</version>
     </parent>
 

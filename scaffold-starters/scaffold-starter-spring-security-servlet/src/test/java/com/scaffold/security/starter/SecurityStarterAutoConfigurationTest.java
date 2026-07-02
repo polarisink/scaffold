@@ -3,6 +3,7 @@ package com.scaffold.security.starter;
 import com.scaffold.security.config.TokenService;
 import com.scaffold.security.config.TokenAuthenticationFilter;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SecurityStarterAutoConfigurationTest {
 
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
-            .withPropertyValues("security.token.jwt.secret=0123456789abcdef0123456789abcdef")
+            .withPropertyValues("security.token.jwt-secret=0123456789abcdef0123456789abcdef")
             .withUserConfiguration(TestSecuritySupport.class)
             .withConfiguration(AutoConfigurations.of(
                     SecurityAutoConfiguration.class,
@@ -40,11 +41,15 @@ class SecurityStarterAutoConfigurationTest {
     }
 
     @Test
-    void shouldFallbackWhenRedisStoreRequestedWithoutRedisson() {
+    void shouldFailWhenRedisStoreRequestedWithoutRedisson() {
         contextRunner
                 .withClassLoader(new FilteredClassLoader("org.redisson"))
                 .withPropertyValues("security.token.store-type=redis")
-                .run(context -> assertThat(context.getBean(TokenService.class)).isNotInstanceOf(RedisTokenService.class));
+                .run(context -> {
+                    assertThat(context).hasFailed();
+                    assertThat(context.getStartupFailure())
+                            .hasRootCauseInstanceOf(NoSuchBeanDefinitionException.class);
+                });
     }
 
     @Configuration(proxyBeanMethods = false)

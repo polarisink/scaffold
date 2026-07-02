@@ -15,9 +15,15 @@ spring:
     username: root
     password: 123456
   jpa:
+    # 先由 Hibernate 更新表结构，再执行 data.sql 初始化基础数据。
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQLDialect
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
 
 file-storage:
   enabled: true

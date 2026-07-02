@@ -170,7 +170,7 @@ curl http://127.0.0.1:8093/qwen3-asr/health
 模型尚未加载时返回：
 
 ```json
-{"code":200,"msg":null,"data":{"status":"UP","modelStatus":"NOT_LOADED"}}
+{"code":0,"message":null,"data":{"status":"UP","modelStatus":"NOT_LOADED"}}
 ```
 
 成功完成首次转写后，`modelStatus` 为 `READY`。

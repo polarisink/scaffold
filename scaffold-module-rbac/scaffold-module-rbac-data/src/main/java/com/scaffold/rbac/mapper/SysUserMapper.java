@@ -49,8 +49,12 @@ public interface SysUserMapper extends MyBaseMapper<SysUser> {
      * @param orgId 组织id
      * @return 人员列表
      */
-    default List<SysUser> selectByOrgId(String orgId) {
+    default List<SysUser> selectByOrgId(Long orgId) {
         return selectList(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOrgId, orgId));
+    }
+
+    default boolean existsByOrgId(Long orgId) {
+        return exists(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOrgId, orgId));
     }
 
     /**

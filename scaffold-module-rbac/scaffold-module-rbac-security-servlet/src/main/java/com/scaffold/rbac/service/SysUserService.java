@@ -13,6 +13,7 @@ import com.scaffold.rbac.entity.SysUser;
 import com.scaffold.rbac.entity.SysUserRole;
 import com.scaffold.rbac.mapper.SysUserMapper;
 import com.scaffold.rbac.mapper.SysUserRoleMapper;
+import com.scaffold.rbac.mapper.SysOrgMapper;
 import com.scaffold.rbac.vo.user.*;
 import com.scaffold.security.config.TokenService;
 import com.scaffold.security.vo.LoginUser;
@@ -36,6 +37,7 @@ public class SysUserService implements ISysUserService {
     private final RbacCache rbacCache;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+    private final SysOrgMapper sysOrgMapper;
 
     @Transactional(readOnly = true)
     public PageResponse<SysUser> page(SysUserPageVO vo) {
@@ -45,6 +47,7 @@ public class SysUserService implements ISysUserService {
     @Transactional(rollbackFor = Exception.class)
     public Long save(SysUserCreateVO vo) {
         RbacResultEnum.UNIQUE_USERNAME.isFalse(sysUserMapper.existsByUsername(vo.username()));
+        RbacResultEnum.ORG_NOT_FOUND.notNull(sysOrgMapper.selectById(vo.orgId()));
         SysUser entity = new SysUser();
         BeanUtils.copyProperties(vo, entity);
         entity.setPassword(PasswordFactory.encode(vo.password()));
@@ -61,6 +64,7 @@ public class SysUserService implements ISysUserService {
         SysUser entity = sysUserMapper.selectById(userId);
         boolean uniqueName = Objects.equals(vo.getUsername(), entity.getUsername()) || !sysUserMapper.existsByUsername(vo.getUsername());
         RbacResultEnum.UNIQUE_USERNAME.isTrue(uniqueName);
+        RbacResultEnum.ORG_NOT_FOUND.notNull(sysOrgMapper.selectById(vo.getOrgId()));
         BeanUtils.copyProperties(vo, entity);
         sysUserMapper.updateById(entity);
         List<Long> newRoleIdList = vo.getRoleIdList();
@@ -99,7 +103,7 @@ public class SysUserService implements ISysUserService {
         Assert.notNull(user, "当前用户不存在");
         List<SysMenu> menus = rbacCache.userTree(userId);
         List<SysRole> roles = rbacCache.roles(userId);
-        return new SysUserInfo(user, roles, menus);
+        return new SysUserInfo(user, sysOrgMapper.selectById(user.getOrgId()), roles, menus);
     }
 
     public void updatePasswd(PasswdUpdateVO vo) {

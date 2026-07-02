@@ -63,13 +63,12 @@
         <spring-boot-admin.version>3.5.7</spring-boot-admin.version>
         <okhttp.version>5.3.2</okhttp.version>
         <sa-token.version>1.44.0</sa-token.version>
-        <bizlog.version>3.0.6</bizlog.version>
+        <bizlog.version>3.0.5</bizlog.version>
         <geotools.version>35.0</geotools.version>
         <yauaa.version>7.32.0</yauaa.version>
         <spatial.version>7.4.1.Final</spatial.version>
         <jetcache.version>2.7.8</jetcache.version>
         <flatten.version>1.7.3</flatten.version>
-        <geotools.version>35.0</geotools.version>
     </properties>
 
     <dependencyManagement>
@@ -419,13 +418,6 @@
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.geotools</groupId>
-                <artifactId>gt-bom</artifactId>
-                <version>${geotools.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
             </dependency>
             <!--大依赖pom-->
             <dependency>

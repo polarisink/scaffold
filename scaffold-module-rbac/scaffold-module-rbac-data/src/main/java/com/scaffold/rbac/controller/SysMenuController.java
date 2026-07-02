@@ -51,7 +51,7 @@ public class SysMenuController {
     @PostMapping
     @Log(title = MENU, businessType = BusinessType.INSERT)
     @Operation(summary = "保存", description = "传入sysMenu")
-    public R<String> save(@RequestBody @Valid SysMenuCreateVO createVO) {
+    public R<Long> save(@RequestBody @Valid SysMenuCreateVO createVO) {
         return R.success(sysMenuService.save(createVO));
     }
 

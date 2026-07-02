@@ -1,6 +1,5 @@
 package com.scaffold.base.util;
 
-import cn.hutool.http.HttpStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,14 +14,17 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 public class R<T> implements Serializable {
+    public static final int SUCCESS_CODE = 0;
+    public static final int SYSTEM_ERROR_CODE = 50000;
+
     /**
      * 状态码
      */
-    private int code = HttpStatus.HTTP_OK;
+    private int code = SUCCESS_CODE;
     /**
      * 提示信息
      */
-    private String msg;
+    private String message;
     /**
      * 业务数据
      */
@@ -37,17 +39,17 @@ public class R<T> implements Serializable {
      *
      * @param data 数据
      * @param code 代码
-     * @param msg  味精
+     * @param message 提示信息
      */
-    private R(T data, Integer code, String msg) {
+    private R(T data, Integer code, String message) {
         if (null != data) {
             setData(data);
         }
         if (null != code) {
             setCode(code);
         }
-        if (null != msg) {
-            setMsg(msg);
+        if (null != message) {
+            setMessage(message);
         }
 
     }
@@ -56,11 +58,11 @@ public class R<T> implements Serializable {
      * 成功
      *
      * @param data 数据
-     * @param msg  味精
+     * @param message 提示信息
      * @return {@link R}<{@link T}>
      */
-    public static <T> R<T> success(T data, String msg) {
-        return of(data, HttpStatus.HTTP_OK, msg);
+    public static <T> R<T> success(T data, String message) {
+        return of(data, SUCCESS_CODE, message);
     }
 
     /**
@@ -76,21 +78,21 @@ public class R<T> implements Serializable {
     /**
      * @param data 数据
      * @param code 代码
-     * @param msg  味精
+     * @param message 提示信息
      * @return {@link R}<{@link T}>
      */
-    private static <T> R<T> of(T data, Integer code, String msg) {
-        return new R<>(data, code, msg);
+    private static <T> R<T> of(T data, Integer code, String message) {
+        return new R<>(data, code, message);
     }
 
     /**
      * 失败
      *
-     * @param msg 味精
+     * @param message 提示信息
      * @return {@link R}<{@link T}>
      */
-    public static <T> R<T> failed(String msg) {
-        return of(null, HttpStatus.HTTP_VERSION, msg);
+    public static <T> R<T> failed(String message) {
+        return of(null, SYSTEM_ERROR_CODE, message);
     }
 
 
@@ -112,14 +114,14 @@ public class R<T> implements Serializable {
      * @return {@link R}<{@link T}>
      */
     public static <T> R<T> failed() {
-        return of(null, HttpStatus.HTTP_VERSION, null);
+        return of(null, SYSTEM_ERROR_CODE, null);
     }
 
     /**
      * 返回成功
      */
     public static <T> R<T> success() {
-        return new R<>(null, HttpStatus.HTTP_OK, null);
+        return new R<>(null, SUCCESS_CODE, null);
     }
 
 }

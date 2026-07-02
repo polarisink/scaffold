@@ -5,12 +5,16 @@ package com.scaffold.base.constant;
  * @date 2020-05-14 9:52
  */
 public interface GlobalConstant {
-    String[] IGNORE_PATH_LIST = {"/auth/*", "/scenario/detail/*", "/favicon.ico", "/error", "/v3/api-docs/swagger-config", "/v3/api-docs/*", "/swagger-ui/**", "/*/v3/api-docs/**", "/swagger-ui.html", "/doc.html", "/webjars/**"};
 
     /**
      * 树根节点的父id
      */
     Long ROOT_PARENT_ID = 0L;
+
+    /**
+     * 树根节点的父id
+     */
+    String ROOT_PARENT_ID_STR = "0";
 
     /**
      * 错误码

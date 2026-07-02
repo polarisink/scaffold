@@ -26,7 +26,7 @@ public class UserController {
 
     @GetMapping("/delete/{userId}")
     @Operation(summary = "根据ID删除用户", description = "传入用户ID，删除用户数据")
-    public String deleteUser(@PathVariable("userId") Long userId) {
+    public String deleteUser(@PathVariable Long userId) {
         boolean result = userService.deleteUser(userId);
         return result ? "删除成功" : "删除失败";
     }

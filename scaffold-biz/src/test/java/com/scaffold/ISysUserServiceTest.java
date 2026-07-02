@@ -15,7 +15,7 @@ class ISysUserServiceTest {
 
     @Test
     void save() {
-        SysUserCreateVO vo = new SysUserCreateVO("admin", "admin", List.of(1L));
+        SysUserCreateVO vo = new SysUserCreateVO("admin", "admin", 1L, List.of(1L));
         sysUserService.save(vo);
     }
 }

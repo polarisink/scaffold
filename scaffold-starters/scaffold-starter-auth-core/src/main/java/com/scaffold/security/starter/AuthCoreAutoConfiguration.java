@@ -1,7 +1,6 @@
 package com.scaffold.security.starter;
 
 import com.scaffold.security.config.TokenService;
-import com.scaffold.security.config.TokenServiceImpl;
 import com.scaffold.security.vo.SecurityProperties;
 import org.redisson.api.RedissonClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -27,12 +26,6 @@ public class AuthCoreAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(TokenService.class)
-    public TokenService tokenService() {
-        return new TokenServiceImpl();
-    }
-
-    @Bean
     @ConditionalOnMissingBean(PasswordEncoder.class)
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -42,11 +35,11 @@ public class AuthCoreAutoConfiguration {
     @ConditionalOnClass(RedissonClient.class)
     @ConditionalOnBean(RedissonClient.class)
     @ConditionalOnProperty(prefix = "security.token", name = "store-type", havingValue = "redis")
-    static class RedisTokenConfiguration {
+    public static class RedisTokenConfiguration {
 
         @Bean
         @ConditionalOnMissingBean(TokenService.class)
-        TokenService redisTokenService(SecurityProperties securityProperties) {
+        public TokenService redisTokenService(SecurityProperties securityProperties) {
             return new RedisTokenService(securityProperties.getToken().getTtlMinutes());
         }
     }

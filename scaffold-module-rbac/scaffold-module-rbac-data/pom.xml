@@ -22,6 +22,10 @@
             <artifactId>scaffold-starter-orm</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.github.mouzt</groupId>
+            <artifactId>bizlog-sdk</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-starter-observability</artifactId>
         </dependency>
