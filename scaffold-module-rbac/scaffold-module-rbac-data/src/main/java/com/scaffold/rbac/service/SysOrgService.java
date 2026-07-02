@@ -80,6 +80,15 @@ public class SysOrgService {
         rbacCache.orgClear();
     }
 
+    // @formatter:off
+    @LogRecord(
+            success = "删除组织【{{#orgId}}】，菜单ID：{{#vo.id}}",
+            type = "组织模块",
+            subType = "删除组织",
+            bizNo = "{{#id}}",
+            fail = "更新组织【{{#orgId}}】失败，原因：{{#_errorMsg}}"
+    )
+    // @formatter:on
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long orgId) {
         RbacResultEnum.ORG_NOT_FOUND.notNull(sysOrgMapper.selectById(orgId));

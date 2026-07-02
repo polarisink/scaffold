@@ -1,5 +1,6 @@
 package com.scaffold.rbac.service;
 
+import com.mzt.logapi.starter.annotation.LogRecord;
 import com.scaffold.base.util.PageResponse;
 import com.scaffold.rbac.contant.RbacResultEnum;
 import com.scaffold.rbac.entity.SysDictType;
@@ -36,6 +37,15 @@ public class SysDictTypeService {
         return dictTypeMapper.listEnabled();
     }
 
+    // @formatter:off
+    @LogRecord(type = "字典类型模块",// 大类
+            subType = "新增字典类型",// 小类
+            success = "新增字典类型【{{#vo.dictName}}】，字典类型ID：{{#_ret}}",// 成功日志
+            fail = "新增字典类型【{{#vo.dictName}}】失败，原因：{{#_errorMsg}}",// 失败日志
+            bizNo = "{{#_ret}}",  // 使用返回值（新字典类型ID）作为业务编号
+            extra = "{{#vo.toString()}}"  // 记录完整的创建请求
+    )
+    // @formatter:on
     @Transactional(rollbackFor = Exception.class)
     public Long save(SysDictTypeCreateVO vo) {
         RbacResultEnum.UNIQUE_DICT_NAME.isFalse(dictTypeMapper.existsByDictName(vo.dictName()));
@@ -47,6 +57,15 @@ public class SysDictTypeService {
         return entity.getId();
     }
 
+    // @formatter:off
+    @LogRecord(
+            success = "更新字典类型【{{#vo.dictName}}】，字典类型ID：{{#vo.id}}",
+            type = "字典类型模块",
+            subType = "更新字典类型",
+            bizNo = "{{#vo.id}}",
+            fail = "更新字典类型【{{#vo.dictName}}】失败，原因：{{#_errorMsg}}"
+    )
+    // @formatter:on
     @CacheEvict(cacheNames = DICT_DATA, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void updateById(SysDictTypeUpdateVO vo) {
@@ -65,6 +84,15 @@ public class SysDictTypeService {
         }
     }
 
+    // @formatter:off
+    @LogRecord(
+            success = "删除字典类型，字典类型ID：{{#id}}",
+            type = "字典类型模块",
+            subType = "删除字典类型",
+            bizNo = "{{#id}}",
+            fail = "删除字典类型（ID：{{#id}}）失败，原因：{{#_errorMsg}}"
+    )
+    // @formatter:on
     @CacheEvict(cacheNames = DICT_DATA, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {

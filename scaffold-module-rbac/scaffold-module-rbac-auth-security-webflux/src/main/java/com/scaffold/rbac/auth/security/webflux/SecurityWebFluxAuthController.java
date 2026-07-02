@@ -4,6 +4,7 @@ import com.scaffold.base.util.R;
 import com.scaffold.rbac.auth.RbacAccountService;
 import com.scaffold.rbac.auth.RbacLoginUser;
 import com.scaffold.rbac.vo.auth.LoginVo;
+import com.scaffold.rbac.service.RbacLogRecordService;
 import com.scaffold.security.config.TokenService;
 import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.vo.PayloadDTO;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -25,25 +27,45 @@ public class SecurityWebFluxAuthController {
     private final RbacAccountService accountService;
     private final TokenService tokenService;
     private final JwtUtil jwtUtil;
+    private final RbacLogRecordService logRecordService;
 
     @PostMapping("/login")
-    public Mono<R<SecurityWebFluxTokenInfo>> login(@RequestBody LoginVo request) {
+    public Mono<R<SecurityWebFluxTokenInfo>> login(@RequestBody LoginVo request, ServerWebExchange exchange) {
         return Mono.fromCallable(() -> {
-                    RbacLoginUser user = accountService.login(request.username(), request.password());
-                    String token = jwtUtil.generateToken(PayloadDTO.of(user.userId(), user.username(), user.roleCodeList()));
-                    tokenService.set(user.userId().toString(), token);
-                    return R.success(new SecurityWebFluxTokenInfo(
-                            HttpHeaders.AUTHORIZATION, token, user.userId(), user.username()));
+                    try {
+                        RbacLoginUser user = accountService.login(request.username(), request.password());
+                        String token = jwtUtil.generateToken(
+                                PayloadDTO.of(user.userId(), user.username(), user.roleCodeList()));
+                        tokenService.set(user.userId().toString(), token);
+                        logRecordService.recordLogin(user.userId(), user.username(),
+                                RbacLogRecordService.ACTION_LOGIN, true, "登录成功",
+                                clientIp(exchange), userAgent(exchange));
+                        return R.success(new SecurityWebFluxTokenInfo(
+                                HttpHeaders.AUTHORIZATION, token, user.userId(), user.username()));
+                    } catch (RuntimeException exception) {
+                        logRecordService.recordLogin(null, request.username(),
+                                RbacLogRecordService.ACTION_LOGIN, false, exception.getMessage(),
+                                clientIp(exchange), userAgent(exchange));
+                        throw exception;
+                    }
                 })
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
     @PostMapping("/logout")
-    public Mono<R<Void>> logout() {
+    public Mono<R<Void>> logout(ServerWebExchange exchange) {
         return ReactiveSecurityContextHolder.getContext()
-                .map(context -> Long.valueOf(context.getAuthentication().getPrincipal().toString()))
-                .flatMap(userId -> Mono.fromRunnable(() -> tokenService.del(userId.toString()))
-                        .subscribeOn(Schedulers.boundedElastic()))
+                .flatMap(context -> {
+                    Long userId = Long.valueOf(context.getAuthentication().getPrincipal().toString());
+                    String username = context.getAuthentication().getCredentials().toString();
+                    return Mono.fromRunnable(() -> {
+                                tokenService.del(userId.toString());
+                                logRecordService.recordLogin(userId, username,
+                                        RbacLogRecordService.ACTION_LOGOUT, true, "退出成功",
+                                        clientIp(exchange), userAgent(exchange));
+                            })
+                            .subscribeOn(Schedulers.boundedElastic());
+                })
                 .thenReturn(R.success());
     }
 
@@ -56,5 +78,14 @@ public class SecurityWebFluxAuthController {
                     String token = tokenService.get(userId.toString());
                     return R.success(new SecurityWebFluxTokenInfo(HttpHeaders.AUTHORIZATION, token, userId, username));
                 }).subscribeOn(Schedulers.boundedElastic()));
+    }
+
+    private static String clientIp(ServerWebExchange exchange) {
+        return exchange.getRequest().getRemoteAddress() == null ? null
+                : exchange.getRequest().getRemoteAddress().getAddress().getHostAddress();
+    }
+
+    private static String userAgent(ServerWebExchange exchange) {
+        return exchange.getRequest().getHeaders().getFirst(HttpHeaders.USER_AGENT);
     }
 }

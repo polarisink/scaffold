@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,7 @@ public class SysMenuService {
     private final RbacCache rbacCache;
     private final SysUserRoleMapper sysUserRoleMapper;
 
+    @Transactional(readOnly = true)
     public List<SysMenu> tree() {
         return rbacCache.menuTree();
     }

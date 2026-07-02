@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mzt.logapi.starter.annotation.LogRecord;
 import com.scaffold.base.constant.GlobalConstant;
 import com.scaffold.base.util.CollUtils;
 import com.scaffold.base.util.PageResponse;
@@ -54,6 +55,15 @@ public class SysRoleService {
         return rbacCache.roleWrapper(roleId);
     }
 
+    // @formatter:off
+    @LogRecord(type = "角色模块",
+            subType = "新增角色",
+            success = "新增角色【{{#vo.roleName}}】，菜单ID：{{#_ret}}",
+            fail = "新增角色【{{#vo.roleName}}】失败，原因：{{#_errorMsg}}",
+            bizNo = "{{#_ret}}",
+            extra = "{{#vo.toString()}}"
+    )
+    // @formatter:on
     @Transactional(rollbackFor = Exception.class)
     public Long save(SysRoleCreateVO vo) {
         RbacResultEnum.UNIQUE_ROLE_NAME.isFalse(sysRoleMapper.existsByRoleName(vo.roleName()));
@@ -81,6 +91,15 @@ public class SysRoleService {
         return res;
     }
 
+    // @formatter:off
+    @LogRecord(
+            success = "更新角色【{{#vo.roleName}}】，菜单ID：{{#vo.id}}",
+            type = "角色模块",
+            subType = "更新角色",
+            bizNo = "{{#vo.id}}",
+            fail = "更新角色【{{#vo.roleName}}】失败，原因：{{#_errorMsg}}"
+    )
+    // @formatter:on
     @Transactional(rollbackFor = Exception.class)
     public void updateById(SysRoleUpdateVO vo) {
         Long roleId = vo.id();
@@ -111,6 +130,15 @@ public class SysRoleService {
         affectedUserIdList.forEach(rbacCache::userClear);
     }
 
+    // @formatter:off
+    @LogRecord(
+            success = "删除角色【{{#roleId}}】，菜单ID：{{#vo.id}}",
+            type = "角色模块",
+            subType = "删除角色",
+            bizNo = "{{#id}}",
+            fail = "更新角色【{{#roleId}}】失败，原因：{{#_errorMsg}}"
+    )
+    // @formatter:on
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long roleId) {
         RbacResultEnum.CAN_NOT_DELETE_ROLE_HAS_USER.isFalse(sysUserRoleMapper.existsByRoleId(roleId));

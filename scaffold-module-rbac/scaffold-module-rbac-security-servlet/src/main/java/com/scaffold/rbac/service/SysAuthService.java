@@ -1,8 +1,6 @@
 package com.scaffold.rbac.service;
 
-import cn.hutool.extra.spring.SpringUtil;
 import com.scaffold.base.exception.BaseException;
-import com.scaffold.log.LoginLogEvent;
 import com.scaffold.rbac.vo.auth.LoginVo;
 import com.scaffold.security.config.TokenService;
 import com.scaffold.security.util.JwtUtil;
@@ -25,24 +23,28 @@ public class SysAuthService implements ISysAuthService{
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final JwtUtil jwtUtil;
+    private final RbacLogRecordService logRecordService;
 
     @Override
     public String login(LoginVo vo) {
-        UsernamePasswordAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(vo.username(), vo.password());
-        Authentication a = getAuthentication(authenticationToken);
-        LoginUser loginUser = (LoginUser) a.getPrincipal();
-        List<String> roleCodeList = a.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-        PayloadDTO dto = PayloadDTO.of(loginUser.getUserId(), loginUser.getUsername(), roleCodeList);
-        Long userId = dto.getUserId();
-        String username = dto.getUsername();
-        String token = jwtUtil.generateToken(dto);
-        tokenService.set(userId.toString(), token);
-        LoginLogEvent event = new LoginLogEvent();
-        event.setUsername(vo.username());
-        event.setUserId(userId);
-        event.setUsername(username);
-        SpringUtil.getApplicationContext().publishEvent(event);
-        return token;
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    UsernamePasswordAuthenticationToken.unauthenticated(vo.username(), vo.password());
+            Authentication a = getAuthentication(authenticationToken);
+            LoginUser loginUser = (LoginUser) a.getPrincipal();
+            List<String> roleCodeList = a.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+            PayloadDTO dto = PayloadDTO.of(loginUser.getUserId(), loginUser.getUsername(), roleCodeList);
+            Long userId = dto.getUserId();
+            String token = jwtUtil.generateToken(dto);
+            tokenService.set(userId.toString(), token);
+            logRecordService.recordLogin(userId, dto.getUsername(), RbacLogRecordService.ACTION_LOGIN,
+                    true, "登录成功", null, null);
+            return token;
+        } catch (RuntimeException exception) {
+            logRecordService.recordLogin(null, vo.username(), RbacLogRecordService.ACTION_LOGIN,
+                    false, exception.getMessage(), null, null);
+            throw exception;
+        }
     }
 
     private Authentication getAuthentication(UsernamePasswordAuthenticationToken authenticationToken) {
@@ -65,8 +67,11 @@ public class SysAuthService implements ISysAuthService{
     @Override
     public void logout() {
         Long userId = LoginUser.userId();
+        String username = LoginUser.username();
         if (userId != null) {
             tokenService.del(userId.toString());
+            logRecordService.recordLogin(userId, username, RbacLogRecordService.ACTION_LOGOUT,
+                    true, "退出成功", null, null);
         }
     }
 }

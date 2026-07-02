@@ -1,5 +1,6 @@
 package com.scaffold.rbac.service;
 
+import com.mzt.logapi.starter.annotation.LogRecord;
 import com.scaffold.base.util.PageResponse;
 import com.scaffold.rbac.contant.RbacResultEnum;
 import com.scaffold.rbac.entity.SysConfig;
@@ -37,6 +38,15 @@ public class SysConfigService {
         return config;
     }
 
+    // @formatter:off
+    @LogRecord(type = "配置模块",// 大类
+            subType = "新增配置",// 小类
+            success = "新增配置【{{#vo.configName}}】，配置ID：{{#_ret}}",// 成功日志
+            fail = "新增配置【{{#vo.configName}}】失败，原因：{{#_errorMsg}}",// 失败日志
+            bizNo = "{{#_ret}}",  // 使用返回值（新配置ID）作为业务编号
+            extra = "{{#vo.toString()}}"  // 记录完整的创建请求
+    )
+    // @formatter:on
     @CacheEvict(cacheNames = CONFIG_DATA, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public Long save(SysConfigCreateVO vo) {
@@ -49,6 +59,14 @@ public class SysConfigService {
         return entity.getId();
     }
 
+    // @formatter:off
+    @LogRecord(
+            success = "更新配置【{{#vo.configName}}】，配置ID：{{#vo.id}}",
+            type = "配置模块",
+            subType = "更新配置",
+            bizNo = "{{#vo.id}}",
+            fail = "更新配置【{{#vo.configName}}】失败，原因：{{#_errorMsg}}"
+    )
     @CacheEvict(cacheNames = CONFIG_DATA, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void updateById(SysConfigUpdateVO vo) {
@@ -71,6 +89,16 @@ public class SysConfigService {
         sysConfigMapper.updateById(entity);
     }
 
+
+    // @formatter:off
+    @LogRecord(
+            success = "删除配置，配置ID：{{#configId}}",
+            type = "配置模块",
+            subType = "删除配置",
+            bizNo = "{{#configId}}",
+            fail = "删除配置（ID：{{#configId}}）失败，原因：{{#_errorMsg}}"
+    )
+    // @formatter:on
     @CacheEvict(cacheNames = CONFIG_DATA, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long configId) {

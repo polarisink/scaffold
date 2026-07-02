@@ -204,6 +204,37 @@ WHERE parent.path = '/system'
                   WHERE path = '/system/menu' AND deleted = 0)
 LIMIT 1;
 
+-- 日志管理目录及子菜单
+INSERT INTO sys_menu
+(parent_id, menu_name, path, menu_type, menu_url, menu_icon_url, sort_no, deleted, gmt_created, gmt_modified)
+SELECT parent.id, '日志管理', '/system/log', 0, NULL,
+       'lucide:scroll-text', 50, 0, NOW(), NOW()
+FROM sys_menu parent
+WHERE parent.path = '/system'
+  AND parent.deleted = 0
+  AND NOT EXISTS (SELECT 1 FROM sys_menu WHERE path = '/system/log' AND deleted = 0)
+LIMIT 1;
+
+INSERT INTO sys_menu
+(parent_id, menu_name, path, menu_type, menu_url, menu_icon_url, sort_no, deleted, gmt_created, gmt_modified)
+SELECT parent.id, '操作日志', '/system/log/operation', 1,
+       'system:log:operation:view', 'lucide:clipboard-list', 0, 0, NOW(), NOW()
+FROM sys_menu parent
+WHERE parent.path = '/system/log'
+  AND parent.deleted = 0
+  AND NOT EXISTS (SELECT 1 FROM sys_menu WHERE path = '/system/log/operation' AND deleted = 0)
+LIMIT 1;
+
+INSERT INTO sys_menu
+(parent_id, menu_name, path, menu_type, menu_url, menu_icon_url, sort_no, deleted, gmt_created, gmt_modified)
+SELECT parent.id, '登录日志', '/system/log/login', 1,
+       'system:log:login:view', 'lucide:log-in', 10, 0, NOW(), NOW()
+FROM sys_menu parent
+WHERE parent.path = '/system/log'
+  AND parent.deleted = 0
+  AND NOT EXISTS (SELECT 1 FROM sys_menu WHERE path = '/system/log/login' AND deleted = 0)
+LIMIT 1;
+
 -- 管理员角色
 INSERT INTO sys_role
     (role_name, role_code, description, deleted, gmt_created, gmt_modified)
