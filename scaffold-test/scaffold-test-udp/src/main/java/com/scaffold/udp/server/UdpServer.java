@@ -10,9 +10,6 @@ import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -27,7 +24,7 @@ import java.net.InetSocketAddress;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UdpServer implements  SmartLifecycle {
+public class UdpServer implements SmartLifecycle {
 
     private final UdpProperties udpProperties;
     private volatile boolean running = false;
@@ -40,7 +37,7 @@ public class UdpServer implements  SmartLifecycle {
 
 
     public void send(ByteBuf buf, String logName) {
-        //不能根据这个做转发
+        // 不能根据这个做转发
         send(udpProperties.getReceiverHost(), udpProperties.getPort(), buf, logName);
     }
 
@@ -54,7 +51,7 @@ public class UdpServer implements  SmartLifecycle {
     public void send(String host, int port, ByteBuf buf, String logName) {
         Assert.isTrue(running, "udp服务未启动");
         InetSocketAddress receiver = new InetSocketAddress(host, port);
-        //InetSocketAddress sender = new InetSocketAddress(NetUtil.getLocalhostStr(), port);
+        // InetSocketAddress sender = new InetSocketAddress(NetUtil.getLocalhostStr(), port);
         ByteBuf copy = buf.copy();
         int length = copy.readableBytes();
         String copyStr = ByteBufUtil.hexDump(copy);
@@ -96,7 +93,7 @@ public class UdpServer implements  SmartLifecycle {
             // Netty工作线程组，处理网络IO
             Bootstrap bootstrap = new Bootstrap().channel(NioDatagramChannel.class)// 设置通道类型为UDP
                     .option(ChannelOption.SO_RCVBUF, 1024 * 1024 * 5)// 设置接收缓冲区大小
-                    .option(ChannelOption.SO_BROADCAST, true)//开启广播
+                    .option(ChannelOption.SO_BROADCAST, true)// 开启广播
                     .handler(new ChannelInitializer<NioDatagramChannel>() {// 设置ChannelInitializer
                         @Override
                         protected void initChannel(NioDatagramChannel ch) {
@@ -104,11 +101,11 @@ public class UdpServer implements  SmartLifecycle {
                         }
                     });
             ChannelFuture future = StrUtil.isBlank(udpProperties.getLocalhost())
-                    //不指定ip
+                    // 不指定ip
                     ? bootstrap.bind(udpProperties.getPort()).sync()
-                    //指定ip
+                    // 指定ip
                     : bootstrap.bind(udpProperties.getLocalhost(), udpProperties.getPort()).sync();
-            //ChannelFuture future = bootstrap.bind(udpProperties.getPort()).sync();
+            // ChannelFuture future = bootstrap.bind(udpProperties.getPort()).sync();
             channel = future.channel();
             running = true;
             log.info("udp服务器启动成功，监听端口: {}", udpProperties.getPort());

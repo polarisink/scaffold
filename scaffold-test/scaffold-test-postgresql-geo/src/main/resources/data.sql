@@ -4,7 +4,7 @@ VALUES (1, '人民广场', ST_SetSRID(ST_MakePoint(121.4737, 31.2304), 4326)),
        (3, '陆家嘴', ST_SetSRID(ST_MakePoint(121.4998, 31.2397), 4326)),
        (4, '上海南站', ST_SetSRID(ST_MakePoint(121.4300, 31.1546), 4326))
 ON CONFLICT (id) DO UPDATE
-    SET name = EXCLUDED.name,
+    SET name     = EXCLUDED.name,
         location = EXCLUDED.location;
 
 SELECT setval('map_place_id_seq', (SELECT max(id) FROM map_place));
@@ -29,7 +29,7 @@ VALUES (1,
             121.2800 31.1600
         ))', 4326)))
 ON CONFLICT (id) DO UPDATE
-    SET name = EXCLUDED.name,
+    SET name     = EXCLUDED.name,
         boundary = EXCLUDED.boundary;
 
 SELECT setval('map_region_id_seq', (SELECT max(id) FROM map_region));

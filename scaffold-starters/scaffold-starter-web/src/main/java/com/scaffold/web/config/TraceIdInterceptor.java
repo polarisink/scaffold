@@ -26,6 +26,7 @@ public class TraceIdInterceptor implements HandlerInterceptor {
         MDC.put(TRACE_ID, traceId);
         return true;
     }
+
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         // 特别重要！请求结束后一定要清掉 MDC，不然线程池复用会导致 traceId 串了

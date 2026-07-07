@@ -156,17 +156,17 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-observability</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-postgresql-cache</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-postgresql-job</artifactId>
+                <version>${rversion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-module-codegen</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>

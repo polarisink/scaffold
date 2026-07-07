@@ -63,12 +63,12 @@ public class TcpVerticle extends VerticleBase {
 
         // 3. 启动监听（5.x 推荐 Future 风格）
         return server.listen(config().getInteger("port"), config().getString("host"))
-                //成功
+                // 成功
                 .onSuccess(s -> {
                     log.info("{}启动成功，端口： {}", getName(), s.actualPort());
                     running = true;
                 })
-                //失败
+                // 失败
                 .onFailure(err -> log.error("{}启动失败： {}", getName(), err.getMessage()));
     }
 

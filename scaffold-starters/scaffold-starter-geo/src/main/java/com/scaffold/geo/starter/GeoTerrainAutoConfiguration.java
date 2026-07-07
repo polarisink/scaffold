@@ -1,11 +1,7 @@
 package com.scaffold.geo.starter;
 
 import com.scaffold.geo.region.GeoRegionIndex;
-import com.scaffold.geo.terrain.CachingElevationProvider;
-import com.scaffold.geo.terrain.DemSourceResolver;
-import com.scaffold.geo.terrain.ElevationProvider;
-import com.scaffold.geo.terrain.GeoTiffElevationProvider;
-import com.scaffold.geo.terrain.TerrainMetrics;
+import com.scaffold.geo.terrain.*;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -19,7 +15,9 @@ import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
 
-/** 地形组件自动配置。 */
+/**
+ * 地形组件自动配置。
+ */
 @AutoConfiguration
 @EnableConfigurationProperties(GeoTerrainProperties.class)
 @ConditionalOnProperty(prefix = GeoTerrainProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)

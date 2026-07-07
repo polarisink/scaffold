@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * 服务端本地音频转写请求。
  *
- * @param audioPath 服务进程可访问的音频文件路径
- * @param language 可选的语种提示，例如 {@code Chinese} 或 {@code English}
+ * @param audioPath        服务进程可访问的音频文件路径
+ * @param language         可选的语种提示，例如 {@code Chinese} 或 {@code English}
  * @param returnTimeStamps 是否使用 Forced Aligner 返回分段时间戳
  */
 @Schema(description = "服务端本地音频转写请求")

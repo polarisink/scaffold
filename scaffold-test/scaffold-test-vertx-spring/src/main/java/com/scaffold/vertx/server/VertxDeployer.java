@@ -22,15 +22,15 @@ import java.util.List;
 public class VertxDeployer implements ApplicationRunner, DisposableBean {
     private final ApplicationContext context;
     private final Vertx vertx;
-    //利用 CountDownLatch 配合 Spring 的销毁钩子，可以让主线程在服务运行期间保持阻塞，而在收到停止指令时优雅释放。
-    //private final CountDownLatch latch = new CountDownLatch(1);
+    // 利用 CountDownLatch 配合 Spring 的销毁钩子，可以让主线程在服务运行期间保持阻塞，而在收到停止指令时优雅释放。
+    // private final CountDownLatch latch = new CountDownLatch(1);
 
     @Override
     public void destroy() {
         if (vertx != null) {
             // 优雅关闭 Vert.x 并释放锁
             vertx.close().onComplete(ar -> {
-                //latch.countDown();
+                // latch.countDown();
                 log.info("Vert.x 已安全关闭");
             });
         } /*else {
@@ -63,11 +63,11 @@ public class VertxDeployer implements ApplicationRunner, DisposableBean {
                 log.error("❌ 部分服务部署失败", ar.cause());
             }
         });
-        //latch.await();
+        // latch.await();
 
         // 关键：防止主线程执行完毕直接退出
         // 这会让主线程进入等待状态，直到进程被 kill 信号终止
-        //Thread.currentThread().join();
+        // Thread.currentThread().join();
     }
 
     /**
@@ -79,9 +79,9 @@ public class VertxDeployer implements ApplicationRunner, DisposableBean {
         for (int i = 0; i < cfg.instances; i++) {
             // 每一个实例都拥有独立的 DeploymentOptions 和 Config
             DeploymentOptions opt = new DeploymentOptions()
-                    //虚拟线程开启
+                    // 虚拟线程开启
                     .setThreadingModel(ThreadingModel.VIRTUAL_THREAD)
-                    //设置实例id
+                    // 设置实例id
                     .setConfig(new JsonObject().put("instanceId", i).put("serverName", cfg.name));
 
             // 执行部署

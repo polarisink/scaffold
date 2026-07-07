@@ -60,7 +60,7 @@ public class HttpVerticle extends VerticleBase implements IServer {
             ctx.response().end();
         });
 
-        //ws踢人下线
+        // ws踢人下线
         router.delete("/ws/kick/:id").handler(ctx -> {
             String userId = ctx.pathParam("id");
             vertx.eventBus().publish("kick.user.all_instances", userId);
@@ -75,13 +75,13 @@ public class HttpVerticle extends VerticleBase implements IServer {
 
         // 3、运行server
         return server
-                //使用router
+                // 使用router
                 .requestHandler(router)
-                //监听
+                // 监听
                 .listen(netProperties.getHttpPort(), netProperties.getHttpHost())
-                //成功
+                // 成功
                 .onSuccess(s -> log.info("{}启动成功，端口： {}", serverName(), s.actualPort()))
-                //失败
+                // 失败
                 .onFailure(err -> log.error("{}启动失败", serverName(), err));
     }
 

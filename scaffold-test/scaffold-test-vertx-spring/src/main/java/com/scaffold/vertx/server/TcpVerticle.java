@@ -36,7 +36,7 @@ public class TcpVerticle extends VerticleBase implements IServer {
 
     @Override
     public Future<?> start() {
-        //用于多实例共享map
+        // 用于多实例共享map
         Map<String, String> map = vertx.sharedData().getLocalMap("tcp");
         // 1. 创建服务器
         server = vertx.createNetServer(new NetServerOptions().setReusePort(true));
@@ -74,12 +74,12 @@ public class TcpVerticle extends VerticleBase implements IServer {
 
         // 3. 启动监听（5.x 推荐 Future 风格）
         return server.listen(netProperties.getTcpPort(), netProperties.getTcpHost())
-                //成功
+                // 成功
                 .onSuccess(s -> {
                     log.info("{}启动成功，端口： {}", serverName(), s.actualPort());
                     running = true;
                 })
-                //失败
+                // 失败
                 .onFailure(err -> log.error("{}启动失败： {}", serverName(), err.getMessage()));
     }
 

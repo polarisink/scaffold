@@ -7,7 +7,8 @@ INSERT INTO sys_org
 SELECT 0, '总部', 'HEADQUARTERS', 0, 0, NOW(), NOW()
 WHERE NOT EXISTS (SELECT 1
                   FROM sys_org
-                  WHERE org_code = 'HEADQUARTERS' AND deleted = 0);
+                  WHERE org_code = 'HEADQUARTERS'
+                    AND deleted = 0);
 
 -- 一级菜单
 INSERT INTO sys_menu
@@ -24,7 +25,8 @@ SELECT 0,
        NOW()
 WHERE NOT EXISTS (SELECT 1
                   FROM sys_menu
-                  WHERE path = '/dashboard' AND deleted = 0);
+                  WHERE path = '/dashboard'
+                    AND deleted = 0);
 
 INSERT INTO sys_menu
 (parent_id, menu_name, path, menu_type, menu_url, menu_icon_url, sort_no, deleted, gmt_created, gmt_modified)
@@ -40,7 +42,8 @@ SELECT 0,
        NOW()
 WHERE NOT EXISTS (SELECT 1
                   FROM sys_menu
-                  WHERE path = '/system' AND deleted = 0);
+                  WHERE path = '/system'
+                    AND deleted = 0);
 
 -- 仪表盘子菜单
 INSERT INTO sys_menu
@@ -60,7 +63,8 @@ WHERE parent.path = '/dashboard'
   AND parent.deleted = 0
   AND NOT EXISTS (SELECT 1
                   FROM sys_menu
-                  WHERE path = '/dashboard/analytics' AND deleted = 0)
+                  WHERE path = '/dashboard/analytics'
+                    AND deleted = 0)
 LIMIT 1;
 
 INSERT INTO sys_menu
@@ -80,7 +84,8 @@ WHERE parent.path = '/dashboard'
   AND parent.deleted = 0
   AND NOT EXISTS (SELECT 1
                   FROM sys_menu
-                  WHERE path = '/dashboard/workspace' AND deleted = 0)
+                  WHERE path = '/dashboard/workspace'
+                    AND deleted = 0)
 LIMIT 1;
 
 -- 系统管理子菜单
@@ -101,7 +106,8 @@ WHERE parent.path = '/system'
   AND parent.deleted = 0
   AND NOT EXISTS (SELECT 1
                   FROM sys_menu
-                  WHERE path = '/system/user' AND deleted = 0)
+                  WHERE path = '/system/user'
+                    AND deleted = 0)
 LIMIT 1;
 
 INSERT INTO sys_menu
@@ -121,7 +127,8 @@ WHERE parent.path = '/system'
   AND parent.deleted = 0
   AND NOT EXISTS (SELECT 1
                   FROM sys_menu
-                  WHERE path = '/system/role' AND deleted = 0)
+                  WHERE path = '/system/role'
+                    AND deleted = 0)
 LIMIT 1;
 
 INSERT INTO sys_menu
@@ -141,7 +148,8 @@ WHERE parent.path = '/system'
   AND parent.deleted = 0
   AND NOT EXISTS (SELECT 1
                   FROM sys_menu
-                  WHERE path = '/system/org' AND deleted = 0)
+                  WHERE path = '/system/org'
+                    AND deleted = 0)
 LIMIT 1;
 
 INSERT INTO sys_menu
@@ -161,7 +169,8 @@ WHERE parent.path = '/system'
   AND parent.deleted = 0
   AND NOT EXISTS (SELECT 1
                   FROM sys_menu
-                  WHERE path = '/system/config' AND deleted = 0)
+                  WHERE path = '/system/config'
+                    AND deleted = 0)
 LIMIT 1;
 
 INSERT INTO sys_menu
@@ -181,7 +190,8 @@ WHERE parent.path = '/system'
   AND parent.deleted = 0
   AND NOT EXISTS (SELECT 1
                   FROM sys_menu
-                  WHERE path = '/system/dict' AND deleted = 0)
+                  WHERE path = '/system/dict'
+                    AND deleted = 0)
 LIMIT 1;
 
 INSERT INTO sys_menu
@@ -201,14 +211,23 @@ WHERE parent.path = '/system'
   AND parent.deleted = 0
   AND NOT EXISTS (SELECT 1
                   FROM sys_menu
-                  WHERE path = '/system/menu' AND deleted = 0)
+                  WHERE path = '/system/menu'
+                    AND deleted = 0)
 LIMIT 1;
 
 -- 日志管理目录及子菜单
 INSERT INTO sys_menu
 (parent_id, menu_name, path, menu_type, menu_url, menu_icon_url, sort_no, deleted, gmt_created, gmt_modified)
-SELECT parent.id, '日志管理', '/system/log', 0, NULL,
-       'lucide:scroll-text', 50, 0, NOW(), NOW()
+SELECT parent.id,
+       '日志管理',
+       '/system/log',
+       0,
+       NULL,
+       'lucide:scroll-text',
+       50,
+       0,
+       NOW(),
+       NOW()
 FROM sys_menu parent
 WHERE parent.path = '/system'
   AND parent.deleted = 0
@@ -217,8 +236,16 @@ LIMIT 1;
 
 INSERT INTO sys_menu
 (parent_id, menu_name, path, menu_type, menu_url, menu_icon_url, sort_no, deleted, gmt_created, gmt_modified)
-SELECT parent.id, '操作日志', '/system/log/operation', 1,
-       'system:log:operation:view', 'lucide:clipboard-list', 0, 0, NOW(), NOW()
+SELECT parent.id,
+       '操作日志',
+       '/system/log/operation',
+       1,
+       'system:log:operation:view',
+       'lucide:clipboard-list',
+       0,
+       0,
+       NOW(),
+       NOW()
 FROM sys_menu parent
 WHERE parent.path = '/system/log'
   AND parent.deleted = 0
@@ -227,13 +254,84 @@ LIMIT 1;
 
 INSERT INTO sys_menu
 (parent_id, menu_name, path, menu_type, menu_url, menu_icon_url, sort_no, deleted, gmt_created, gmt_modified)
-SELECT parent.id, '登录日志', '/system/log/login', 1,
-       'system:log:login:view', 'lucide:log-in', 10, 0, NOW(), NOW()
+SELECT parent.id,
+       '登录日志',
+       '/system/log/login',
+       1,
+       'system:log:login:view',
+       'lucide:log-in',
+       10,
+       0,
+       NOW(),
+       NOW()
 FROM sys_menu parent
 WHERE parent.path = '/system/log'
   AND parent.deleted = 0
   AND NOT EXISTS (SELECT 1 FROM sys_menu WHERE path = '/system/log/login' AND deleted = 0)
 LIMIT 1;
+
+-- 开发工具
+INSERT INTO sys_menu
+(parent_id, menu_name, path, menu_type, menu_url, menu_icon_url, sort_no, deleted, gmt_created, gmt_modified)
+SELECT 0,
+       '开发工具',
+       '/tool',
+       0,
+       NULL,
+       'lucide:wrench',
+       20,
+       0,
+       NOW(),
+       NOW()
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE path = '/tool' AND deleted = 0);
+
+INSERT INTO sys_menu
+(parent_id, menu_name, path, menu_type, menu_url, menu_icon_url, sort_no, deleted, gmt_created, gmt_modified)
+SELECT parent.id,
+       '代码生成器',
+       '/tool/codegen',
+       1,
+       'tool:codegen:view',
+       'lucide:blocks',
+       0,
+       0,
+       NOW(),
+       NOW()
+FROM sys_menu parent
+WHERE parent.path = '/tool'
+  AND parent.deleted = 0
+  AND NOT EXISTS (SELECT 1 FROM sys_menu WHERE path = '/tool/codegen' AND deleted = 0)
+LIMIT 1;
+
+-- 代码生成器按钮/API 权限。menu_type=2 仅作为权限码，不参与前端路由。
+INSERT INTO sys_menu
+(parent_id, menu_name, path, menu_type, menu_url, menu_icon_url, sort_no, deleted, gmt_created, gmt_modified)
+SELECT page.id,
+       permission.menu_name,
+       CONCAT('/tool/codegen/', permission.action_code),
+       2,
+       CONCAT('tool:codegen:', permission.action_code),
+       NULL,
+       permission.sort_no,
+       0,
+       NOW(),
+       NOW()
+FROM sys_menu page
+         CROSS JOIN (SELECT 'create' action_code, '新建生成配置' menu_name, 0 sort_no
+                     UNION ALL
+                     SELECT 'import', '导入数据库表', 10
+                     UNION ALL
+                     SELECT 'update', '修改生成配置', 20
+                     UNION ALL
+                     SELECT 'delete', '删除生成配置', 30
+                     UNION ALL
+                     SELECT 'download', '下载生成代码', 40) permission
+WHERE page.path = '/tool/codegen'
+  AND page.deleted = 0
+  AND NOT EXISTS (SELECT 1
+                  FROM sys_menu existing
+                  WHERE existing.menu_url = CONCAT('tool:codegen:', permission.action_code)
+                    AND existing.deleted = 0);
 
 -- 管理员角色
 INSERT INTO sys_role
@@ -241,7 +339,8 @@ INSERT INTO sys_role
 SELECT '管理员', 'admin', '拥有全部后台路由权限的系统管理员', 0, NOW(), NOW()
 WHERE NOT EXISTS (SELECT 1
                   FROM sys_role
-                  WHERE role_code = 'admin' AND deleted = 0);
+                  WHERE role_code = 'admin'
+                    AND deleted = 0);
 
 -- 默认管理员，用户名和初始密码均为 admin。
 INSERT INTO sys_user
@@ -258,7 +357,8 @@ WHERE org.org_code = 'HEADQUARTERS'
   AND org.deleted = 0
   AND NOT EXISTS (SELECT 1
                   FROM sys_user
-                  WHERE username = 'admin' AND deleted = 0)
+                  WHERE username = 'admin'
+                    AND deleted = 0)
 LIMIT 1;
 
 -- 仅修复尚未分配组织的既有管理员，不覆盖人工调整过的组织。

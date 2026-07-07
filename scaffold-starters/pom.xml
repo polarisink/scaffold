@@ -14,7 +14,6 @@
     <modules>
         <module>scaffold-starter-file</module>
         <module>scaffold-starter-auth-core</module>
-        <module>scaffold-starter-observability</module>
         <module>scaffold-starter-orm</module>
         <module>scaffold-starter-spring-security-servlet</module>
         <module>scaffold-starter-spring-security-webflux</module>

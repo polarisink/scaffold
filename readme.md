@@ -48,7 +48,6 @@ scaffold-starters/
 ├── scaffold-starter-swagger
 ├── scaffold-starter-orm
 ├── scaffold-starter-file
-├── scaffold-starter-observability
 ├── scaffold-starter-postgresql-cache
 └── scaffold-starter-postgresql-job
 ```
@@ -135,7 +134,7 @@ scaffold-test-cloud/
 
 推荐组合：
 
-- 纯 MVC Web 服务：`scaffold-starter-web` + `scaffold-starter-observability`
+- 纯 MVC Web 服务：`scaffold-starter-web`
 - 需要接口文档：再加 `scaffold-starter-swagger`
 - 带文件能力：再加 `scaffold-starter-file`
 - 带数据库能力：再加 `scaffold-starter-orm`

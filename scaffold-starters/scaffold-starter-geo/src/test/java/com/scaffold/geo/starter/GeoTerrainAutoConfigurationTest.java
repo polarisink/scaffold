@@ -2,11 +2,7 @@ package com.scaffold.geo.starter;
 
 import com.scaffold.geo.GeoCoordinate;
 import com.scaffold.geo.region.GeoRegionIndex;
-import com.scaffold.geo.terrain.CachingElevationProvider;
-import com.scaffold.geo.terrain.DemSourceResolver;
-import com.scaffold.geo.terrain.ElevationProvider;
-import com.scaffold.geo.terrain.GeoTiffElevationProvider;
-import com.scaffold.geo.terrain.TerrainMetrics;
+import com.scaffold.geo.terrain.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;

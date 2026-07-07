@@ -62,11 +62,11 @@ public class PostgresqlJobAutoConfiguration {
     @Bean
     @ConditionalOnBean(PostgresqlJobWorker.class)
     public PostgresqlJobNotificationListener postgresqlJobNotificationListener(ObjectProvider<DataSource> dataSourceProvider,
-                                                                              @Qualifier("postgresqlJobTaskScheduler")
-                                                                              TaskScheduler taskScheduler,
-                                                                              PostgresqlJobStore jobStore,
-                                                                              ScaffoldJobProperties properties,
-                                                                              PostgresqlJobWorker worker) {
+                                                                               @Qualifier("postgresqlJobTaskScheduler")
+                                                                               TaskScheduler taskScheduler,
+                                                                               PostgresqlJobStore jobStore,
+                                                                               ScaffoldJobProperties properties,
+                                                                               PostgresqlJobWorker worker) {
         return new PostgresqlJobNotificationListener(dataSourceProvider, taskScheduler, jobStore, properties, worker::wakeup);
     }
 

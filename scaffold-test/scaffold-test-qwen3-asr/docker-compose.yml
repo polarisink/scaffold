@@ -20,8 +20,8 @@ x-qwen3-asr-external-model: &qwen3-asr-external-model
 
 services:
   qwen3-asr-cpu-external:
-    <<: [*qwen3-asr-common, *qwen3-asr-external-model]
-    profiles: [cpu-external]
+    <<: [ *qwen3-asr-common, *qwen3-asr-external-model ]
+    profiles: [ cpu-external ]
     image: ${QWEN3_ASR_CPU_EXTERNAL_IMAGE:-scaffold-qwen3-asr:cpu-external}
     environment:
       <<: *qwen3-asr-environment
@@ -30,7 +30,7 @@ services:
 
   qwen3-asr-cpu-embedded:
     <<: *qwen3-asr-common
-    profiles: [cpu-embedded]
+    profiles: [ cpu-embedded ]
     image: ${QWEN3_ASR_CPU_EMBEDDED_IMAGE:-scaffold-qwen3-asr:cpu-embedded}
     environment:
       <<: *qwen3-asr-environment
@@ -38,8 +38,8 @@ services:
       QWEN3_ASR_DTYPE: float32
 
   qwen3-asr-gpu-external:
-    <<: [*qwen3-asr-common, *qwen3-asr-external-model]
-    profiles: [gpu-external]
+    <<: [ *qwen3-asr-common, *qwen3-asr-external-model ]
+    profiles: [ gpu-external ]
     image: ${QWEN3_ASR_GPU_EXTERNAL_IMAGE:-scaffold-qwen3-asr:gpu-external}
     environment:
       <<: *qwen3-asr-environment
@@ -49,7 +49,7 @@ services:
 
   qwen3-asr-gpu-embedded:
     <<: *qwen3-asr-common
-    profiles: [gpu-embedded]
+    profiles: [ gpu-embedded ]
     image: ${QWEN3_ASR_GPU_EMBEDDED_IMAGE:-scaffold-qwen3-asr:gpu-embedded}
     environment:
       <<: *qwen3-asr-environment

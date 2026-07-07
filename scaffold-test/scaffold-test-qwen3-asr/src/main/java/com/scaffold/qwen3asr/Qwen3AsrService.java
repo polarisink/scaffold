@@ -9,7 +9,9 @@ import java.nio.file.Path;
 import java.util.Locale;
 import java.util.UUID;
 
-/** 负责请求校验、上传文件生命周期管理，并将推理委托给常驻 Worker。 */
+/**
+ * 负责请求校验、上传文件生命周期管理，并将推理委托给常驻 Worker。
+ */
 @Service
 public class Qwen3AsrService {
 

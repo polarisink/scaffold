@@ -1,1 +1,1 @@
-com.scaffold.postgresql.cache.starter.PostgresqlCacheAutoConfiguration
+com.scaffold.postgresql.starter.PostgresqlCacheAutoConfiguration

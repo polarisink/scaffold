@@ -37,7 +37,7 @@ public class PdfService implements ApplicationRunner, DisposableBean {
 
             // 2. 等待网络空闲（如果 HTML 中包含远程图片或 JS 加载的图表）
             page.waitForLoadState(LoadState.NETWORKIDLE);
-            //有些网页 CSS 是分 screen 和 print 的，PDF 默认使用 print。如果要 PDF 看起来和网页一模一样，可以设置
+            // 有些网页 CSS 是分 screen 和 print 的，PDF 默认使用 print。如果要 PDF 看起来和网页一模一样，可以设置
             page.emulateMedia(new Page.EmulateMediaOptions().setMedia(Media.SCREEN));
             // 3. 配置打印参数
             Page.PdfOptions options = new Page.PdfOptions()

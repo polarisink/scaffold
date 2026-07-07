@@ -17,33 +17,33 @@ import java.util.List;
 @Structure.FieldOrder({"Num", "mark", "CWFlag", "toa", "ampp", "pw", "fre", "fmin", "fmax", "fre_cent", "BW", "delt_TOA", "delt_TOA1", "angle", "angle_max", "Sig_Part"})
 public class SigPack extends Structure {
     public int Num;
-    //标志位     上位机不显示
+    // 标志位     上位机不显示
     public byte[] mark;
-    //连续波标志  0-否，1-是  上位机不显示
+    // 连续波标志  0-否，1-是  上位机不显示
     public byte[] CWFlag;
-    //到达时间 每153.75个代表1us，此处上位机显示使用时可以不按实际值计算，可用脉冲序号递增横坐标等间隔规划
+    // 到达时间 每153.75个代表1us，此处上位机显示使用时可以不按实际值计算，可用脉冲序号递增横坐标等间隔规划
     public long[] toa;
-    //幅度
+    // 幅度
     public int[] ampp;
-    //脉宽
+    // 脉宽
     public int[] pw;
-    //中频
+    // 中频
     public int[] fre;
-    //最小频率
+    // 最小频率
     public int[] fmin;
-    //最大频率
+    // 最大频率
     public int[] fmax;
-    //中心频率
+    // 中心频率
     public int[] fre_cent;
-    //带宽
+    // 带宽
     public int[] BW;
-    //这个不用
+    // 这个不用
     public int[] delt_TOA;
-    //用这个时间
+    // 用这个时间
     public int[] delt_TOA1;
-    //方位角
+    // 方位角
     public short[] angle;
-    //脉冲PDW标志位，上位机不显示
+    // 脉冲PDW标志位，上位机不显示
     public short angle_max;
     public SigPart Sig_Part;
 
@@ -66,7 +66,7 @@ public class SigPack extends Structure {
     }
 
     public static void main(String[] args) {
-        //21 4748 3647
+        // 21 4748 3647
         System.out.println(NumberUtil.decimalFormat("#.###", 12345.1234567));
 
     }

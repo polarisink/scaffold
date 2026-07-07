@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-//用于多实例部署
+// 用于多实例部署
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @RequiredArgsConstructor
 public class UdpVerticle extends VerticleBase implements IServer {
@@ -38,7 +38,7 @@ public class UdpVerticle extends VerticleBase implements IServer {
     @Override
     public Future<?> start() {
         DatagramSocketOptions options = new DatagramSocketOptions()
-                //端口和地址复用
+                // 端口和地址复用
                 .setReuseAddress(true).setReusePort(true); // 必须开启，否则多实例部署会报错
 
         // 1. 创建 UDP Socket
@@ -55,19 +55,19 @@ public class UdpVerticle extends VerticleBase implements IServer {
 
         // 3. 绑定端口
         return socket.listen(netProperties.getUdpPort(), netProperties.getUdpHost())
-                //成功之后的逻辑处理
+                // 成功之后的逻辑处理
                 .onSuccess(s -> {
-                    //打印成功日志
+                    // 打印成功日志
                     log.info("{}启动成功，端口：{}", serverName(), s.localAddress().port());
-                    //状态修改
+                    // 状态修改
                     running = true;
-                    //启动成功之后事件监听，用于udp消息的发送
+                    // 启动成功之后事件监听，用于udp消息的发送
                     vertx.eventBus().<UdpMsgVo>consumer(UDP_MSG_EVENT, event -> {
                         UdpMsgVo vo = event.body();
                         socket.send(vo.buffer(), vo.port(), vo.host())
-                                //成功
+                                // 成功
                                 .onSuccess(v -> log.info("发送{}成功", vo.name()))
-                                //失败
+                                // 失败
                                 .onFailure(err -> log.error("发送{}失败: {}", vo.name(), err.getMessage()));
                     });
                 }).onFailure(err -> log.error("{}启动失败： {}", serverName(), err.getMessage()));

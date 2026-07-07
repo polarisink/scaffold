@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JnaService {
     public void parsePdwData(ByteBuf pdwBuf) {
-        //处理pdw数据
-        //到指定长度了，可以进行解析了
+        // 处理pdw数据
+        // 到指定长度了，可以进行解析了
         PdwDataAll pdwDataAll = new PdwDataAll();
         pdwDataAll.load(pdwBuf);
         // 将 Java 结构体的更新同步回 Native Memory，供 DLL 访问

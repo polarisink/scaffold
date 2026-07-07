@@ -63,9 +63,9 @@ public class MainVerticle extends VerticleBase {
         for (int i = 0; i < cfg.instances; i++) {
             // 每一个实例都拥有独立的 DeploymentOptions 和 Config
             DeploymentOptions opt = new DeploymentOptions()
-                    //虚拟线程开启
+                    // 虚拟线程开启
                     .setThreadingModel(ThreadingModel.VIRTUAL_THREAD)
-                    //设置实例id
+                    // 设置实例id
                     .setConfig(new JsonObject().put("instanceId", i).put("serverName", cfg.name).put("port", cfg.port).put("host", cfg.host));
 
             // 执行部署

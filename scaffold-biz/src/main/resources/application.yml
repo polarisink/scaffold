@@ -20,6 +20,8 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQLDialect
+  freemarker:
+    check-template-location: false
   sql:
     init:
       mode: always
@@ -61,3 +63,12 @@ security:
 
 swagger:
   enabled: true
+
+scaffold:
+  web:
+    response:
+      raw-body-path-patterns:
+        - /actuator
+        - /actuator/**
+        - /codegen/configs/*/download
+        - /codegen/tables/*/download

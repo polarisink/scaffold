@@ -24,10 +24,6 @@
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-starter-orm</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-observability</artifactId>
-        </dependency>
         <!--
         如果不需要数据库服务就不需要这个
         如果只需要数据库不需要用户系统就引入scaffold-starter-orm
@@ -37,6 +33,10 @@
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-module-rbac-security-servlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-module-codegen</artifactId>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

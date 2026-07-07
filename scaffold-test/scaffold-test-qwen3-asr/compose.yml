@@ -18,7 +18,7 @@ x-qwen3-asr-common: &qwen3-asr-common
 services:
   qwen3-asr-cpu:
     <<: *qwen3-asr-common
-    profiles: [cpu]
+    profiles: [ cpu ]
     image: scaffold-qwen3-asr:cpu
     build:
       context: ../..
@@ -36,7 +36,7 @@ services:
 
   qwen3-asr-gpu:
     <<: *qwen3-asr-common
-    profiles: [gpu]
+    profiles: [ gpu ]
     image: scaffold-qwen3-asr:gpu
     build:
       context: ../..

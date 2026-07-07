@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "net")
 public class NetProperties {
-    //多网卡时绑定网卡
+    // 多网卡时绑定网卡
     private Integer wsPort = 8076;
     private String wsHost = "0.0.0.0";
     private Integer udpPort = 8077;

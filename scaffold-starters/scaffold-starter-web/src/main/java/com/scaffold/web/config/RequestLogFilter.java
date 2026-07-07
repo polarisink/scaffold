@@ -55,7 +55,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
         }
     }
 
-    private  void writeLog(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response,
+    private void writeLog(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response,
                           long consume, int maxPayloadLength) {
         Object requestBody = payload(request.getContentAsByteArray(), request.getContentType(),
                 request.getCharacterEncoding(), maxPayloadLength);
@@ -64,15 +64,15 @@ public class RequestLogFilter extends OncePerRequestFilter {
         long slowThreshold = webProperties.getRequestLog().getSlowThresholdMillis();
 
         log.atLevel(consume <= slowThreshold ? Level.INFO : Level.WARN).log("""
-                \n************************************************************************
-                * Request URI:      {} {}
-                * Ip:               {}
-                * Request Body:     {}
-                * Time Consume:     {} ms
-                * Response Status:  {}
-                * Response Body:    {}
-                ************************************************************************
-                """, request.getMethod(), request.getRequestURI(), ServletUtils.getClientIP(request),
+                        \n************************************************************************
+                        * Request URI:      {} {}
+                        * Ip:               {}
+                        * Request Body:     {}
+                        * Time Consume:     {} ms
+                        * Response Status:  {}
+                        * Response Body:    {}
+                        ************************************************************************
+                        """, request.getMethod(), request.getRequestURI(), ServletUtils.getClientIP(request),
                 requestBody, consume, response.getStatus(), responseBody);
     }
 

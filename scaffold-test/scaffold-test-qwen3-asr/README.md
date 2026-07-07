@@ -1,16 +1,18 @@
 # scaffold-test-qwen3-asr
 
-Qwen3-ASR 离线本地语音识别 HTTP 服务。Spring Boot 默认仅监听 `127.0.0.1:8093`，首次转写时启动 Python worker 并加载模型，后续请求复用同一个模型进程。
+Qwen3-ASR 离线本地语音识别 HTTP 服务。Spring Boot 默认仅监听 `127.0.0.1:8093`，首次转写时启动 Python worker
+并加载模型，后续请求复用同一个模型进程。
 
 ## HTTP 接口
 
-| 方法 | 路径 | 用途 |
-| --- | --- | --- |
-| `GET` | `/qwen3-asr/health` | 服务及模型加载状态 |
-| `POST` | `/qwen3-asr/transcribe` | 通过 `multipart/form-data` 上传音频 |
-| `POST` | `/qwen3-asr/transcribe-path` | 转写服务所在机器上的音频文件 |
+| 方法     | 路径                           | 用途                            |
+|--------|------------------------------|-------------------------------|
+| `GET`  | `/qwen3-asr/health`          | 服务及模型加载状态                     |
+| `POST` | `/qwen3-asr/transcribe`      | 通过 `multipart/form-data` 上传音频 |
+| `POST` | `/qwen3-asr/transcribe-path` | 转写服务所在机器上的音频文件                |
 
-服务启动后可访问 Knife4j 接口文档 `http://127.0.0.1:8093/doc.html`，直接选择音频文件并执行转写请求。OpenAPI JSON 地址为 `http://127.0.0.1:8093/v3/api-docs`。
+服务启动后可访问 Knife4j 接口文档
+`http://127.0.0.1:8093/doc.html`，直接选择音频文件并执行转写请求。OpenAPI JSON 地址为 `http://127.0.0.1:8093/v3/api-docs`。
 
 ### 支持的音频格式
 
@@ -23,7 +25,8 @@ Qwen3-ASR 离线本地语音识别 HTTP 服务。Spring Boot 默认仅监听 `12
 - `M4A/AAC`
 - `WebM/Opus`
 
-音频由 Qwen3-ASR 内部的 `librosa`、`soundfile` 及 Docker 镜像中的 FFmpeg 解码。其他格式可能也能被解码，但不属于当前验证和保证范围。单个上传文件最大为 `512MB`。
+音频由 Qwen3-ASR 内部的 `librosa`、`soundfile` 及 Docker 镜像中的 FFmpeg 解码。其他格式可能也能被解码，但不属于当前验证和保证范围。单个上传文件最大为
+`512MB`。
 
 本地推理请求会串行执行，避免并发推理抢占显存。上传的临时音频会在请求结束后自动删除。
 
@@ -35,7 +38,8 @@ Qwen3-ASR 离线本地语音识别 HTTP 服务。Spring Boot 默认仅监听 `12
 - macOS M4：自动使用 `mps` 和 `float16`
 - 无可用 GPU：自动使用 `cpu` 和 `float32`
 
-本模块不调用云 API。Java 服务会启动本机 Python 进程，Python 脚本会设置 `HF_HUB_OFFLINE=1`、`TRANSFORMERS_OFFLINE=1`、`HF_DATASETS_OFFLINE=1`，所以模型必须提前下载到本地目录。
+本模块不调用云 API。Java 服务会启动本机 Python 进程，Python 脚本会设置 `HF_HUB_OFFLINE=1`、`TRANSFORMERS_OFFLINE=1`、
+`HF_DATASETS_OFFLINE=1`，所以模型必须提前下载到本地目录。
 
 ## 准备本地模型
 
@@ -61,7 +65,8 @@ mkdir -p wheelhouse
 python -m pip download -d wheelhouse qwen-asr
 ```
 
-如果 Win10 需要 CUDA 版 PyTorch，建议在联网机器按本机 CUDA 版本单独准备 PyTorch wheel，再一起拷贝到离线机器。macOS M4 通常直接使用 PyTorch 的 macOS arm64 wheel。
+如果 Win10 需要 CUDA 版 PyTorch，建议在联网机器按本机 CUDA 版本单独准备 PyTorch wheel，再一起拷贝到离线机器。macOS M4
+通常直接使用 PyTorch 的 macOS arm64 wheel。
 
 离线机器安装：
 
@@ -179,21 +184,23 @@ curl http://127.0.0.1:8093/qwen3-asr/health
 
 模块提供两个镜像目标，两者均支持 `linux/amd64`（x64）和 `linux/arm64`：
 
-| 目标 | PyTorch | 默认设备 | 适用环境 |
-| --- | --- | --- | --- |
-| `cpu` | CPU wheel | `cpu` / `float32` | x64、Apple Silicon Docker、ARM Linux |
-| `gpu` | CUDA 12.9 wheel | `cuda:0` / `float16` | x64 或 ARM64 NVIDIA Linux 服务器 |
+| 目标    | PyTorch         | 默认设备                 | 适用环境                               |
+|-------|-----------------|----------------------|------------------------------------|
+| `cpu` | CPU wheel       | `cpu` / `float32`    | x64、Apple Silicon Docker、ARM Linux |
+| `gpu` | CUDA 12.9 wheel | `cuda:0` / `float16` | x64 或 ARM64 NVIDIA Linux 服务器       |
 
-GPU 版需要 NVIDIA 驱动和 NVIDIA Container Toolkit。ARM64 GPU 使用 NVIDIA SBSA CUDA 镜像，不能直接用于 Jetson；Jetson 需要匹配具体 JetPack/L4T 版本重新制作运行时。Docker Desktop on macOS 无法把 MPS 暴露给 Linux 容器，应使用 ARM64 CPU 版。
+GPU 版需要 NVIDIA 驱动和 NVIDIA Container Toolkit。ARM64 GPU 使用 NVIDIA SBSA CUDA 镜像，不能直接用于 Jetson；Jetson 需要匹配具体
+JetPack/L4T 版本重新制作运行时。Docker Desktop on macOS 无法把 MPS 暴露给 Linux 容器，应使用 ARM64 CPU 版。
 
 ### 模型打包模式
 
-| 模式 | 构建参数 | 镜像内容 | 运行方式 |
-| --- | --- | --- | --- |
+| 模式       | 构建参数                | 镜像内容        | 运行方式      |
+|----------|---------------------|-------------|-----------|
 | 外置模型（默认） | `EMBED_MODEL=false` | 仅运行环境，不包含权重 | 挂载宿主机模型目录 |
-| 内置模型 | `EMBED_MODEL=true` | 包含指定模型权重 | 无需模型卷 |
+| 内置模型     | `EMBED_MODEL=true`  | 包含指定模型权重    | 无需模型卷     |
 
-内置模型通过 BuildKit named context 接收模型目录，因此模型可以位于仓库外。指定目录必须直接包含 `config.json` 和 `model*.safetensors`。
+内置模型通过 BuildKit named context 接收模型目录，因此模型可以位于仓库外。指定目录必须直接包含 `config.json` 和
+`model*.safetensors`。
 
 ### 构建脚本
 
@@ -230,12 +237,12 @@ cd scaffold-test/scaffold-test-qwen3-asr
 
 `docker-compose.yml` 是纯运行时文件，不会重新构建镜像。它提供四个 profile，并且一次只应启动一个：
 
-| Profile | 默认镜像 | 模型来源 |
-| --- | --- | --- |
+| Profile        | 默认镜像                              | 模型来源    |
+|----------------|-----------------------------------|---------|
 | `cpu-external` | `scaffold-qwen3-asr:cpu-external` | 宿主机只读挂载 |
-| `cpu-embedded` | `scaffold-qwen3-asr:cpu-embedded` | 镜像内部 |
+| `cpu-embedded` | `scaffold-qwen3-asr:cpu-embedded` | 镜像内部    |
 | `gpu-external` | `scaffold-qwen3-asr:gpu-external` | 宿主机只读挂载 |
-| `gpu-embedded` | `scaffold-qwen3-asr:gpu-embedded` | 镜像内部 |
+| `gpu-embedded` | `scaffold-qwen3-asr:gpu-embedded` | 镜像内部    |
 
 运行 CPU 外置模型镜像：
 
@@ -354,7 +361,6 @@ curl -F audio=@/data/audio/test.wav \
 ```
 
 接口文档地址为 `http://127.0.0.1:8093/doc.html`。
-
 
 ## 参考
 

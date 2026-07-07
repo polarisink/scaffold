@@ -44,8 +44,8 @@
         <module>scaffold-starters</module>
         <module>scaffold-core</module>
         <module>scaffold-biz</module>
-        <module>scaffold-module-rbac</module>
         <module>scaffold-dependencies</module>
+        <module>scaffold-module</module>
     </modules>
 
     <profiles>

@@ -1,10 +1,6 @@
 package com.scaffold.file.starter;
 
-import com.scaffold.file.FileAccessWebConfiguration;
-import com.scaffold.file.FileController;
-import com.scaffold.file.FileStorageProperties;
-import com.scaffold.file.FileUploadAutoConfiguration;
-import com.scaffold.file.FileUploadService;
+import com.scaffold.file.*;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

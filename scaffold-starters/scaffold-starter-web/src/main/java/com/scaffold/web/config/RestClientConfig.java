@@ -1,7 +1,6 @@
 package com.scaffold.web.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -32,14 +31,14 @@ public class RestClientConfig {
 
     public RestClient.Builder builder(ObjectMapper objectMapper, ClientHttpRequestInterceptor interceptor) {
         return RestClient.builder()
-                //消息转换器
+                // 消息转换器
                 .messageConverters(converters -> {
                     converters.removeIf(c -> c.getClass().getName().equals(MappingJackson2HttpMessageConverter.class.getName()));
                     MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
                     converter.setObjectMapper(objectMapper);
                     converters.addFirst(converter);
                 })
-                //拦截器
+                // 拦截器
                 .requestInterceptors(interceptors -> interceptors.add(interceptor));
     }
 }

@@ -18,7 +18,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-/** 使用 Spring 资源协议定位区域 DEM 文件。 */
+/**
+ * 使用 Spring 资源协议定位区域 DEM 文件。
+ */
 public final class SpringResourceDemSourceResolver implements DemSourceResolver, AutoCloseable {
 
     private final GeoRegionIndex regions;

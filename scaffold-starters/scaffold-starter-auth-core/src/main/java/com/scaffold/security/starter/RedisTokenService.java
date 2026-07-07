@@ -5,7 +5,7 @@ import com.scaffold.security.config.TokenService;
 
 import java.time.Duration;
 
-public class RedisTokenService implements TokenService{
+public class RedisTokenService implements TokenService {
 
     private final long ttlMinutes;
 

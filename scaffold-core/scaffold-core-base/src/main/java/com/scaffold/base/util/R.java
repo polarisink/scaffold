@@ -37,8 +37,8 @@ public class R<T> implements Serializable {
     /**
      * 构造器
      *
-     * @param data 数据
-     * @param code 代码
+     * @param data    数据
+     * @param code    代码
      * @param message 提示信息
      */
     private R(T data, Integer code, String message) {
@@ -57,7 +57,7 @@ public class R<T> implements Serializable {
     /**
      * 成功
      *
-     * @param data 数据
+     * @param data    数据
      * @param message 提示信息
      * @return {@link R}<{@link T}>
      */
@@ -76,8 +76,8 @@ public class R<T> implements Serializable {
     }
 
     /**
-     * @param data 数据
-     * @param code 代码
+     * @param data    数据
+     * @param code    代码
      * @param message 提示信息
      * @return {@link R}<{@link T}>
      */

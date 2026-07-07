@@ -44,7 +44,9 @@ public final class WordCountJob {
         return DEFAULT_TEXT;
     }
 
-    /** 将每行文本规范化为 (word, 1)。 */
+    /**
+     * 将每行文本规范化为 (word, 1)。
+     */
     static final class Tokenizer implements FlatMapFunction<String, Tuple2<String, Integer>> {
 
         @Override

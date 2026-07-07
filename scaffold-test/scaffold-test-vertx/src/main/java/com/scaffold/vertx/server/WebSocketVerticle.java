@@ -75,7 +75,7 @@ public class WebSocketVerticle extends VerticleBase {
 
         // 1. 创建服务器实例（此时还未开始监听）
         server = vertx.createHttpServer(new HttpServerOptions()
-                //端口复用
+                // 端口复用
                 .setReusePort(true).setReuseAddress(true)
                 // 传输层超时设长一点，业务层自己管心跳
                 .setIdleTimeout(120));
@@ -85,7 +85,7 @@ public class WebSocketVerticle extends VerticleBase {
 
         // 3. 执行端口绑定，并利用回调开启后续任务
         return server.listen(config().getInteger("port"), config().getString("host"))
-                //成功回调
+                // 成功回调
                 .onSuccess(s -> {
 
                     // --- 关键：只有成功后才执行以下初始化 ---
@@ -96,10 +96,10 @@ public class WebSocketVerticle extends VerticleBase {
                     // 启动心跳检测定时器
                     startHeartbeatTimer();
 
-                    //打印成功日志
+                    // 打印成功日志
                     log.info("{} 启动成功，端口： {}", getName(), server.actualPort());
                 })
-                //失败打印原因
+                // 失败打印原因
                 .onFailure(e -> log.error("{} 启动失败", getName(), e));
     }
 
@@ -110,7 +110,7 @@ public class WebSocketVerticle extends VerticleBase {
         server.webSocketHandler(ws -> {
             String userId = ws.query().split("=")[1]; // 假设 URL 是 /chat?user=123
             if (userId == null) {
-                //todo 如何退出
+                // todo 如何退出
                 return;
             }
 
@@ -213,11 +213,11 @@ public class WebSocketVerticle extends VerticleBase {
 
     @Override
     public Future<?> stop() throws Exception {
-        //停止定时器
+        // 停止定时器
         if (heartbeatTimerId != null) {
             vertx.cancelTimer(heartbeatTimerId);
         }
-        //停止所有消费者
+        // 停止所有消费者
         consumerList.forEach(MessageConsumer::unregister);
         return server != null ? server.close() : Future.succeededFuture();
     }
