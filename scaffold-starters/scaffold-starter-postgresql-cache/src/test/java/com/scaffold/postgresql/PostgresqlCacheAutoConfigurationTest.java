@@ -5,28 +5,33 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.cache.CacheManager;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class PostgresqlCacheAutoConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(PostgresqlCacheAutoConfiguration.class))
-            .withBean(JdbcTemplate.class, () -> mock(JdbcTemplate.class));
+            .withBean(JdbcTemplate.class, () -> jdbcTemplate("PostgreSQL"));
 
     @Test
-    void providesPostgresqlStoreWithoutTakingOwnershipOfCacheManager() {
+    void providesPostgresqlStoreAndCacheManager() {
         contextRunner.run(context -> {
             assertThat(context).hasSingleBean(PostgresqlCacheStore.class);
-            assertThat(context).doesNotHaveBean(CacheManager.class);
-            assertThat(context).doesNotHaveBean(PostgresqlCacheCleaner.class);
+            assertThat(context).hasSingleBean(CacheManager.class);
+            assertThat(context.getBean(CacheManager.class)).isInstanceOf(PostgresqlCacheManager.class);
+            assertThat(context).hasSingleBean(PostgresqlCacheCleaner.class);
         });
     }
 
@@ -40,7 +45,7 @@ class PostgresqlCacheAutoConfigurationTest {
     @Test
     void prefersNamedPostgresqlJdbcTemplateWhenAvailable() {
         contextRunner
-                .withBean("postgresqlJdbcTemplate", JdbcTemplate.class, () -> mock(JdbcTemplate.class))
+                .withBean("postgresqlJdbcTemplate", JdbcTemplate.class, () -> jdbcTemplate("PostgreSQL"))
                 .run(context -> {
                     PostgresqlCacheStore cacheStore = context.getBean(PostgresqlCacheStore.class);
                     assertThat(ReflectionTestUtils.getField(cacheStore, "jdbcTemplate"))
@@ -51,7 +56,7 @@ class PostgresqlCacheAutoConfigurationTest {
     @Test
     void failsFastWhenMultipleJdbcTemplatesExistWithoutNamedPostgresqlJdbcTemplate() {
         contextRunner
-                .withBean("mysqlJdbcTemplate", JdbcTemplate.class, () -> mock(JdbcTemplate.class))
+                .withBean("mysqlJdbcTemplate", JdbcTemplate.class, () -> jdbcTemplate("MySQL"))
                 .run(context -> {
                     assertThat(context).hasFailed();
                     assertThat(context.getStartupFailure())
@@ -60,10 +65,35 @@ class PostgresqlCacheAutoConfigurationTest {
     }
 
     @Test
-    void usesPostgresqlCacheOnlyWhenApplicationProvidesItsCacheManager() {
+    void failsFastWhenSingleJdbcTemplateIsNotPostgresql() {
+        new ApplicationContextRunner()
+                .withConfiguration(AutoConfigurations.of(PostgresqlCacheAutoConfiguration.class))
+                .withBean(JdbcTemplate.class, () -> jdbcTemplate("MySQL"))
+                .run(context -> {
+                    assertThat(context).hasFailed();
+                    assertThat(context.getStartupFailure())
+                            .hasMessageContaining("PostgreSQL cache requires a PostgreSQL JdbcTemplate");
+                });
+    }
+
+    @Test
+    void backsOffWhenApplicationProvidesCacheManager() {
+        CacheManager cacheManager = mock(CacheManager.class);
+        contextRunner
+                .withBean(CacheManager.class, () -> cacheManager)
+                .run(context -> {
+                    assertThat(context).hasSingleBean(PostgresqlCacheStore.class);
+                    assertThat(context).hasSingleBean(CacheManager.class);
+                    assertThat(context.getBean(CacheManager.class)).isSameAs(cacheManager);
+                    assertThat(context).doesNotHaveBean(PostgresqlCacheManager.class);
+                    assertThat(context).doesNotHaveBean(PostgresqlCacheCleaner.class);
+                });
+    }
+
+    @Test
+    void usesPostgresqlPropertiesForAutoCacheManager() {
         contextRunner
                 .withPropertyValues("scaffold.cache.postgresql.default-ttl=1h")
-                .withUserConfiguration(PostgresqlCacheConfiguration.class)
                 .run(context -> {
                     assertThat(context).hasSingleBean(CacheManager.class);
                     assertThat(context.getBean(CacheManager.class)).isInstanceOf(PostgresqlCacheManager.class);
@@ -73,13 +103,20 @@ class PostgresqlCacheAutoConfigurationTest {
                 });
     }
 
-    @Configuration(proxyBeanMethods = false)
-    static class PostgresqlCacheConfiguration {
-
-        @Bean
-        PostgresqlCacheManager cacheManager(PostgresqlCacheStore cacheStore,
-                                            PostgresqlCacheProperties properties) {
-            return new PostgresqlCacheManager(cacheStore, properties);
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static JdbcTemplate jdbcTemplate(String databaseProductName) {
+        JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
+        try {
+            Connection connection = mock(Connection.class);
+            DatabaseMetaData metaData = mock(DatabaseMetaData.class);
+            when(connection.getMetaData()).thenReturn(metaData);
+            when(metaData.getDatabaseProductName()).thenReturn(databaseProductName);
+            when(jdbcTemplate.execute(any(ConnectionCallback.class))).thenAnswer(invocation ->
+                    ((ConnectionCallback) invocation.getArgument(0)).doInConnection(connection)
+            );
+        } catch (SQLException ex) {
+            throw new IllegalStateException(ex);
         }
+        return jdbcTemplate;
     }
 }

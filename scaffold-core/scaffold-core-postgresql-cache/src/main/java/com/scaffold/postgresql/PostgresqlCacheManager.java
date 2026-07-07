@@ -2,7 +2,6 @@ package com.scaffold.postgresql;
 
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -13,17 +12,25 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 动态创建 PostgreSQL Cache 的 CacheManager。
  */
-@Component
 public class PostgresqlCacheManager implements CacheManager {
 
     private final PostgresqlCacheStore cacheStore;
     private final PostgresqlCacheProperties properties;
+    private final PostgresqlCacheSerializer serializer;
     private final String tableName;
     private final Map<String, Cache> caches = new ConcurrentHashMap<>();
 
-    public PostgresqlCacheManager(PostgresqlCacheStore cacheStore, PostgresqlCacheProperties properties) {
+    public PostgresqlCacheManager(PostgresqlCacheStore cacheStore,
+                                  PostgresqlCacheProperties properties) {
+        this(cacheStore, properties, new PostgresqlCacheSerializer(new com.fasterxml.jackson.databind.ObjectMapper()));
+    }
+
+    public PostgresqlCacheManager(PostgresqlCacheStore cacheStore,
+                                  PostgresqlCacheProperties properties,
+                                  PostgresqlCacheSerializer serializer) {
         this.cacheStore = cacheStore;
         this.properties = properties;
+        this.serializer = serializer;
         this.tableName = cacheStore.validateTableName(properties.getTableName());
         initializeSchema();
         cleanupOnStartup();
@@ -41,7 +48,7 @@ public class PostgresqlCacheManager implements CacheManager {
 
     private Cache createCache(String name) {
         Duration ttl = properties.getDefaultTtl();
-        return new PostgresqlCache(name, cacheStore, tableName, ttl, true);
+        return new PostgresqlCache(name, cacheStore, tableName, ttl, true, serializer);
     }
 
     private void initializeSchema() {

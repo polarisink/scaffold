@@ -1,20 +1,30 @@
 package com.scaffold.postgresql;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.util.Assert;
 
-@AutoConfiguration
+import java.util.Locale;
+
+@EnableCaching
+@AutoConfiguration(after = JdbcTemplateAutoConfiguration.class, before = CacheAutoConfiguration.class)
 @ConditionalOnClass(name = "org.postgresql.Driver")
 @EnableConfigurationProperties(PostgresqlCacheProperties.class)
 public class PostgresqlCacheAutoConfiguration {
@@ -22,8 +32,8 @@ public class PostgresqlCacheAutoConfiguration {
     @Bean
     @ConditionalOnBean(name = "postgresqlJdbcTemplate")
     @ConditionalOnMissingBean(PostgresqlCacheStore.class)
-    public PostgresqlCacheStore postgresqlCacheStore(
-            @Qualifier("postgresqlJdbcTemplate") JdbcTemplate jdbcTemplate) {
+    public PostgresqlCacheStore postgresqlCacheStore(@Qualifier("postgresqlJdbcTemplate") JdbcTemplate jdbcTemplate) {
+        validatePostgresqlJdbcTemplate(jdbcTemplate);
         return new PostgresqlCacheStore(jdbcTemplate);
     }
 
@@ -37,7 +47,30 @@ public class PostgresqlCacheAutoConfiguration {
         Assert.state(jdbcTemplateNames.length == 1,
                 "Multiple JdbcTemplate beans found. Define a bean named 'postgresqlJdbcTemplate' "
                         + "or provide a PostgresqlCacheStore bean for PostgreSQL cache.");
-        return new PostgresqlCacheStore(beanFactory.getBean(jdbcTemplateNames[0], JdbcTemplate.class));
+        JdbcTemplate jdbcTemplate = beanFactory.getBean(jdbcTemplateNames[0], JdbcTemplate.class);
+        validatePostgresqlJdbcTemplate(jdbcTemplate);
+        return new PostgresqlCacheStore(jdbcTemplate);
+    }
+
+    @Bean
+    @ConditionalOnBean(PostgresqlCacheStore.class)
+    @ConditionalOnMissingBean(CacheManager.class)
+    public PostgresqlCacheManager postgresqlCacheManager(PostgresqlCacheStore cacheStore,
+                                                         PostgresqlCacheProperties properties,
+                                                         PostgresqlCacheSerializer serializer) {
+        return new PostgresqlCacheManager(cacheStore, properties, serializer);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public PostgresqlCacheSerializer postgresqlCacheSerializer(
+            @Qualifier("redisObjectMapper") ObjectProvider<ObjectMapper> redisObjectMapperProvider,
+            ObjectProvider<ObjectMapper> objectMapperProvider) {
+        ObjectMapper objectMapper = redisObjectMapperProvider.getIfAvailable();
+        if (objectMapper == null) {
+            objectMapper = objectMapperProvider.getIfAvailable(ObjectMapper::new);
+        }
+        return new PostgresqlCacheSerializer(objectMapper);
     }
 
     @Bean
@@ -59,5 +92,15 @@ public class PostgresqlCacheAutoConfiguration {
             @Qualifier("postgresqlCacheTaskScheduler") TaskScheduler taskScheduler,
             PostgresqlCacheProperties properties) {
         return new PostgresqlCacheCleaner(cacheStore, taskScheduler, properties);
+    }
+
+    private void validatePostgresqlJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        String databaseProductName = jdbcTemplate.execute((ConnectionCallback<String>) connection ->
+                connection.getMetaData().getDatabaseProductName()
+        );
+        Assert.state(databaseProductName != null
+                        && databaseProductName.toLowerCase(Locale.ROOT).contains("postgresql"),
+                "PostgreSQL cache requires a PostgreSQL JdbcTemplate, but database product is: "
+                        + databaseProductName);
     }
 }

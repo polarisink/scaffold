@@ -2,8 +2,6 @@ package com.scaffold.postgresql;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.support.AbstractValueAdaptingCache;
-import org.springframework.core.serializer.support.DeserializingConverter;
-import org.springframework.core.serializer.support.SerializingConverter;
 import org.springframework.lang.Nullable;
 
 import java.sql.Timestamp;
@@ -22,19 +20,20 @@ public class PostgresqlCache extends AbstractValueAdaptingCache {
     private final PostgresqlCacheStore cacheStore;
     private final String tableName;
     private final Duration defaultTtl;
-    private final SerializingConverter serializer = new SerializingConverter();
-    private final DeserializingConverter deserializer = new DeserializingConverter();
+    private final PostgresqlCacheSerializer serializer;
 
     public PostgresqlCache(String name,
                            PostgresqlCacheStore cacheStore,
                            String tableName,
                            Duration defaultTtl,
-                           boolean allowNullValues) {
+                           boolean allowNullValues,
+                           PostgresqlCacheSerializer serializer) {
         super(allowNullValues);
         this.name = name;
         this.cacheStore = cacheStore;
         this.tableName = tableName;
         this.defaultTtl = defaultTtl;
+        this.serializer = serializer;
     }
 
     @Override
@@ -127,10 +126,10 @@ public class PostgresqlCache extends AbstractValueAdaptingCache {
     }
 
     private byte[] serialize(Object value) {
-        return serializer.convert(value);
+        return serializer.serialize(value);
     }
 
     private Object deserialize(byte[] bytes) {
-        return deserializer.convert(bytes);
+        return serializer.deserialize(bytes);
     }
 }

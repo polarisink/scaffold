@@ -1,8 +1,9 @@
 # PostgreSQL Cache Starter
 
-该 starter 提供 PostgreSQL Cache 的配置属性、`PostgresqlCacheStore` 和过期数据清理基础设施，
-但不会自动创建 `CacheManager`。因此 Caffeine 和 Redis 仍可由 Spring Boot 的
-`spring.cache.type` 正常选择。
+该 starter 提供 PostgreSQL Cache 的配置属性、`PostgresqlCacheStore`、`PostgresqlCacheManager`
+和过期数据清理基础设施。引入 starter 后会自动启用 Spring Cache，并在没有其它 `CacheManager`
+时自动创建 PostgreSQL 缓存管理器。
+缓存值使用 Jackson 序列化；如果容器中存在 `redisObjectMapper`，会优先复用该 ObjectMapper 的缓存类型信息配置。
 
 ## Caffeine
 
@@ -39,8 +40,8 @@ spring:
     <artifactId>scaffold-starter-postgresql-cache</artifactId>
 </dependency>
 <dependency>
-<groupId>org.postgresql</groupId>
-<artifactId>postgresql</artifactId>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
 </dependency>
 ```
 
@@ -59,26 +60,11 @@ scaffold:
       cleanup-interval: 5m
 ```
 
-由应用显式创建缓存管理器：
+此时不需要设置 `spring.cache.type`，也不需要手动声明 `PostgresqlCacheManager`。
+如果应用已经声明了其它 `CacheManager`，starter 会自动退让。
 
-```java
-
-@Configuration(proxyBeanMethods = false)
-@EnableCaching
-class CacheConfiguration {
-
-    @Bean
-    PostgresqlCacheManager cacheManager(PostgresqlCacheStore cacheStore,
-                                        PostgresqlCacheProperties properties) {
-        return new PostgresqlCacheManager(cacheStore, properties);
-    }
-}
-```
-
-Bean 方法应返回具体的 `PostgresqlCacheManager` 类型，以便 starter 仅在 PostgreSQL 缓存启用时启动定时清理。
-此时不需要设置 `spring.cache.type`；用户声明的 `CacheManager` 会使 Spring Boot 自动配置退让。
-
-starter 会校验 classpath 中存在 `org.postgresql.Driver` 后才装配 PostgreSQL cache 相关 Bean。
+starter 会校验 classpath 中存在 `org.postgresql.Driver` 后才装配 PostgreSQL cache 相关 Bean，
+并在创建 `PostgresqlCacheStore` 时通过 JDBC 元数据确认当前 `JdbcTemplate` 连接的是 PostgreSQL。
 当容器中存在多个 `JdbcTemplate` 且没有名为 `postgresqlJdbcTemplate` 的 Bean 时，starter 会启动失败并提示显式指定
 PostgreSQL 缓存使用的 `JdbcTemplate`。
 
@@ -97,7 +83,7 @@ class PostgresqlCacheDataSourceConfiguration {
 }
 ```
 
-也可以直接声明 `PostgresqlCacheStore`，starter 会自动退让：
+也可以直接声明 `PostgresqlCacheStore` 或 `CacheManager`，starter 会自动退让：
 
 ```java
 
