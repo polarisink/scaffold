@@ -12,7 +12,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "test_gen")
 public class TestGen extends BaseAuditable {
-    @Column(columnDefinition = "varchar(60) not null comment '名字'",unique = true)
+    @Column(columnDefinition = "varchar(60) not null comment '名字'", unique = true)
     private String name;
 
     @Column(columnDefinition = "int not null comment '名字'")

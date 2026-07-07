@@ -61,11 +61,11 @@ public class PostgresqlCacheStore {
         String validatedTableName = validateTableName(tableName);
         jdbcTemplate.update(
                 """
-                    INSERT INTO %s (cache_name, cache_key, cache_value, expires_at, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) 
-                    ON CONFLICT (cache_name, cache_key) DO UPDATE SET cache_value = EXCLUDED.cache_value, 
-                    expires_at = EXCLUDED.expires_at, updated_at = CURRENT_TIMESTAMP
-                """
+                            INSERT INTO %s (cache_name, cache_key, cache_value, expires_at, created_at, updated_at) 
+                            VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) 
+                            ON CONFLICT (cache_name, cache_key) DO UPDATE SET cache_value = EXCLUDED.cache_value, 
+                            expires_at = EXCLUDED.expires_at, updated_at = CURRENT_TIMESTAMP
+                        """
                         .formatted(validatedTableName),
                 cacheName,
                 cacheKey,
@@ -78,9 +78,9 @@ public class PostgresqlCacheStore {
         String validatedTableName = validateTableName(tableName);
         return jdbcTemplate.update(
                 """
-                    INSERT INTO %s (cache_name, cache_key, cache_value, expires_at, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) ON CONFLICT (cache_name, cache_key) DO NOTHING
-                """.formatted(validatedTableName),
+                            INSERT INTO %s (cache_name, cache_key, cache_value, expires_at, created_at, updated_at) 
+                            VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) ON CONFLICT (cache_name, cache_key) DO NOTHING
+                        """.formatted(validatedTableName),
                 cacheName,
                 cacheKey,
                 cacheValue,

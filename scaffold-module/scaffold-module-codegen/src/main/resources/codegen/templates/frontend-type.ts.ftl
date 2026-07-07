@@ -1,6 +1,6 @@
 export interface ${className} {
 <#list columns as column>
-  ${column.propertyName}?: ${column.tsType};
+    ${column.propertyName}?: ${column.tsType};
 </#list>
 }
 

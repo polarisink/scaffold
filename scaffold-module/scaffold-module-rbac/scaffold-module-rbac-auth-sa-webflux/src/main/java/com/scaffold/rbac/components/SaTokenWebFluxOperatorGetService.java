@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SaTokenWebFluxOperatorGetService implements IOperatorGetService {
     private final RbacProperties rbacProperties;
+
     @Override
     public Operator getUser() {
         if (!StpUtil.isLogin()) {

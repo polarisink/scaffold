@@ -7,12 +7,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
 <#list entityImports as item>
-import ${item};
+    import ${item};
 </#list>
 
 /**
- * ${table.tableComment!table.tableName}
- */
+* ${table.tableComment!table.tableName}
+*/
 @Data
 @TableName("${table.tableName}")
 @Table(name = "${table.tableName}")

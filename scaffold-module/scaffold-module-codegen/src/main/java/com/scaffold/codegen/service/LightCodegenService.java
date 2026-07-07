@@ -15,12 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -154,7 +149,7 @@ public class LightCodegenService {
         Map<String, Object> model = buildModel(table);
         List<CodegenTemplate> templates = builtinTemplates(table);
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ZipOutputStream zip = new ZipOutputStream(bos, StandardCharsets.UTF_8)) {
+             ZipOutputStream zip = new ZipOutputStream(bos, StandardCharsets.UTF_8)) {
             for (CodegenTemplate item : templates) {
                 String path = renderString("path-" + item.name(), item.path(), model);
                 String content = renderTemplateFile(item.templatePath(), model);
@@ -538,7 +533,8 @@ public class LightCodegenService {
             case Types.DECIMAL, Types.NUMERIC, Types.DOUBLE, Types.FLOAT, Types.REAL -> "java.math.BigDecimal";
             case Types.BOOLEAN, Types.BIT -> "Boolean";
             case Types.DATE -> "java.time.LocalDate";
-            case Types.TIMESTAMP, Types.TIMESTAMP_WITH_TIMEZONE, Types.TIME, Types.TIME_WITH_TIMEZONE -> "java.time.LocalDateTime";
+            case Types.TIMESTAMP, Types.TIMESTAMP_WITH_TIMEZONE, Types.TIME, Types.TIME_WITH_TIMEZONE ->
+                    "java.time.LocalDateTime";
             default -> "String";
         };
     }

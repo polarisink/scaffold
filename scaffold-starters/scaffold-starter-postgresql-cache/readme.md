@@ -38,6 +38,10 @@ spring:
     <groupId>com.scaffold</groupId>
     <artifactId>scaffold-starter-postgresql-cache</artifactId>
 </dependency>
+<dependency>
+<groupId>org.postgresql</groupId>
+<artifactId>postgresql</artifactId>
+</dependency>
 ```
 
 配置 PostgreSQL 缓存参数：
@@ -73,3 +77,32 @@ class CacheConfiguration {
 
 Bean 方法应返回具体的 `PostgresqlCacheManager` 类型，以便 starter 仅在 PostgreSQL 缓存启用时启动定时清理。
 此时不需要设置 `spring.cache.type`；用户声明的 `CacheManager` 会使 Spring Boot 自动配置退让。
+
+starter 会校验 classpath 中存在 `org.postgresql.Driver` 后才装配 PostgreSQL cache 相关 Bean。
+当容器中存在多个 `JdbcTemplate` 且没有名为 `postgresqlJdbcTemplate` 的 Bean 时，starter 会启动失败并提示显式指定
+PostgreSQL 缓存使用的 `JdbcTemplate`。
+
+如果应用同时配置 MySQL 和 PostgreSQL 数据源，且 MySQL 是主数据源，可为 PostgreSQL 缓存数据源声明名为
+`postgresqlJdbcTemplate` 的 Bean，starter 会优先使用它创建 `PostgresqlCacheStore`：
+
+```java
+
+@Configuration(proxyBeanMethods = false)
+class PostgresqlCacheDataSourceConfiguration {
+
+    @Bean
+    JdbcTemplate postgresqlJdbcTemplate(@Qualifier("postgresqlDataSource") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+}
+```
+
+也可以直接声明 `PostgresqlCacheStore`，starter 会自动退让：
+
+```java
+
+@Bean
+PostgresqlCacheStore postgresqlCacheStore(@Qualifier("postgresqlJdbcTemplate") JdbcTemplate jdbcTemplate) {
+    return new PostgresqlCacheStore(jdbcTemplate);
+}
+```

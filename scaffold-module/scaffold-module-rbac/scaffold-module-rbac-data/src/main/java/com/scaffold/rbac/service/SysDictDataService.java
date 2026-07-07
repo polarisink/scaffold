@@ -2,7 +2,6 @@ package com.scaffold.rbac.service;
 
 import com.mzt.logapi.starter.annotation.LogRecord;
 import com.scaffold.base.util.PageResponse;
-import com.scaffold.rbac.contant.RbacLogConst;
 import com.scaffold.rbac.contant.RbacResultEnum;
 import com.scaffold.rbac.entity.SysDictData;
 import com.scaffold.rbac.mapper.SysDictDataMapper;

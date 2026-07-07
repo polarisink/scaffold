@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SecurityWebFluxOperatorGetService implements IOperatorGetService {
     private final RbacProperties rbacProperties;
+
     @Override
     public Operator getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

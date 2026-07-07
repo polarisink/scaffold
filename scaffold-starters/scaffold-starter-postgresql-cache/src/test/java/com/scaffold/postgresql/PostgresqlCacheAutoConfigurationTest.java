@@ -1,16 +1,14 @@
-package com.scaffold.postgresql.starter;
+package com.scaffold.postgresql;
 
-import com.scaffold.postgresql.PostgresqlCacheCleaner;
-import com.scaffold.postgresql.PostgresqlCacheManager;
-import com.scaffold.postgresql.PostgresqlCacheProperties;
-import com.scaffold.postgresql.PostgresqlCacheStore;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.Duration;
 
@@ -30,6 +28,35 @@ class PostgresqlCacheAutoConfigurationTest {
             assertThat(context).doesNotHaveBean(CacheManager.class);
             assertThat(context).doesNotHaveBean(PostgresqlCacheCleaner.class);
         });
+    }
+
+    @Test
+    void backsOffWhenPostgresqlDriverIsMissing() {
+        contextRunner
+                .withClassLoader(new FilteredClassLoader("org.postgresql"))
+                .run(context -> assertThat(context).doesNotHaveBean(PostgresqlCacheStore.class));
+    }
+
+    @Test
+    void prefersNamedPostgresqlJdbcTemplateWhenAvailable() {
+        contextRunner
+                .withBean("postgresqlJdbcTemplate", JdbcTemplate.class, () -> mock(JdbcTemplate.class))
+                .run(context -> {
+                    PostgresqlCacheStore cacheStore = context.getBean(PostgresqlCacheStore.class);
+                    assertThat(ReflectionTestUtils.getField(cacheStore, "jdbcTemplate"))
+                            .isSameAs(context.getBean("postgresqlJdbcTemplate", JdbcTemplate.class));
+                });
+    }
+
+    @Test
+    void failsFastWhenMultipleJdbcTemplatesExistWithoutNamedPostgresqlJdbcTemplate() {
+        contextRunner
+                .withBean("mysqlJdbcTemplate", JdbcTemplate.class, () -> mock(JdbcTemplate.class))
+                .run(context -> {
+                    assertThat(context).hasFailed();
+                    assertThat(context.getStartupFailure())
+                            .hasMessageContaining("Define a bean named 'postgresqlJdbcTemplate'");
+                });
     }
 
     @Test
