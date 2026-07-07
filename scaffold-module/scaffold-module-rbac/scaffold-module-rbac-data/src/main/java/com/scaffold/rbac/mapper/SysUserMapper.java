@@ -12,6 +12,7 @@ import com.scaffold.rbac.vo.user.SysUserPageVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * (SysUser)表Mapper接口
@@ -41,6 +42,13 @@ public interface SysUserMapper extends MyBaseMapper<SysUser> {
      */
     default SysUser findByUsername(String username) {
         return selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username).last("limit 1"));
+    }
+
+    default Optional<SysUser> findOptionalByUsername(String username) {
+        return selectList(Wrappers.<SysUser>lambdaQuery()
+                        .eq(SysUser::getUsername, username))
+                .stream()
+                .findFirst();
     }
 
     /**

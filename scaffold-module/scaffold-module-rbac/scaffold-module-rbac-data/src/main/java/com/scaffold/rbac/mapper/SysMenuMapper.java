@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -109,6 +110,20 @@ public interface SysMenuMapper extends MyBaseMapper<SysMenu> {
      */
     default boolean existsByMenuName(String menuName) {
         return exists(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getMenuName, menuName));
+    }
+
+    default Optional<SysMenu> findByPath(String path) {
+        return selectList(Wrappers.<SysMenu>lambdaQuery()
+                        .eq(SysMenu::getPath, path))
+                .stream()
+                .findFirst();
+    }
+
+    default List<Long> selectAllMenuId() {
+        return selectList(Wrappers.<SysMenu>lambdaQuery().select(SysMenu::getId))
+                .stream()
+                .map(SysMenu::getId)
+                .toList();
     }
 
     /**

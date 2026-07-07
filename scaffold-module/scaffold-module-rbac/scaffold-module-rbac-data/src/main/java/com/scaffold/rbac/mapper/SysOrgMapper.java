@@ -5,6 +5,8 @@ import com.scaffold.orm.MyBaseMapper;
 import com.scaffold.rbac.entity.SysOrg;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Optional;
+
 @Mapper
 public interface SysOrgMapper extends MyBaseMapper<SysOrg> {
 
@@ -14,6 +16,13 @@ public interface SysOrgMapper extends MyBaseMapper<SysOrg> {
 
     default boolean existsByOrgCode(String orgCode) {
         return exists(Wrappers.<SysOrg>lambdaQuery().eq(SysOrg::getOrgCode, orgCode));
+    }
+
+    default Optional<SysOrg> findByOrgCode(String orgCode) {
+        return selectList(Wrappers.<SysOrg>lambdaQuery()
+                        .eq(SysOrg::getOrgCode, orgCode))
+                .stream()
+                .findFirst();
     }
 
     default boolean existsByParentId(Long parentId) {

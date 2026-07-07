@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 角色菜单表(SysRoleMenu)表Mapper接口
@@ -59,5 +61,14 @@ public interface SysRoleMenuMapper extends MyBaseMapper<SysRoleMenu> {
                 .map(SysRoleMenu::getMenuId)
                 .sorted()
                 .toList();
+    }
+
+    default Set<Long> selectMenuIdSetByRoleId(Long roleId) {
+        return selectList(Wrappers.<SysRoleMenu>lambdaQuery()
+                .eq(SysRoleMenu::getRoleId, roleId)
+                .select(SysRoleMenu::getMenuId))
+                .stream()
+                .map(SysRoleMenu::getMenuId)
+                .collect(Collectors.toSet());
     }
 }

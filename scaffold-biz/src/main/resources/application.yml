@@ -10,21 +10,18 @@ spring:
   cache:
     type: caffeine
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/scaffold?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: 123456
+    driver-class-name: ${SCAFFOLD_DATASOURCE_DRIVER:com.mysql.cj.jdbc.Driver}
+    url: ${SCAFFOLD_DATASOURCE_URL:jdbc:mysql://localhost:3306/scaffold?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${SCAFFOLD_DATASOURCE_USERNAME:root}
+    password: ${SCAFFOLD_DATASOURCE_PASSWORD:123456}
   jpa:
-    # 先由 Hibernate 更新表结构，再执行 data.sql 初始化基础数据。
-    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQLDialect
   freemarker:
     check-template-location: false
   sql:
     init:
-      mode: always
+      mode: never
       encoding: UTF-8
 
 file-storage:

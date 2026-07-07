@@ -1,0 +1,187 @@
+{
+  "org": {
+    "parentId": 0,
+    "orgName": "总部",
+    "orgCode": "HEADQUARTERS",
+    "sort": 0
+  },
+  "adminRole": {
+    "roleName": "管理员",
+    "roleCode": "admin",
+    "description": "拥有全部后台路由权限的系统管理员"
+  },
+  "adminUser": {
+    "username": "admin",
+    "rawPassword": "admin"
+  },
+  "menus": [
+    {
+      "menuName": "仪表盘",
+      "path": "/dashboard",
+      "menuType": 0,
+      "menuIconUrl": "lucide:layout-dashboard",
+      "sortNo": -1
+    },
+    {
+      "menuName": "系统管理",
+      "path": "/system",
+      "menuType": 0,
+      "menuIconUrl": "lucide:settings-2",
+      "sortNo": 10
+    },
+    {
+      "parentPath": "/dashboard",
+      "menuName": "分析页",
+      "path": "/dashboard/analytics",
+      "menuType": 1,
+      "menuUrl": "dashboard:analytics:view",
+      "menuIconUrl": "lucide:area-chart",
+      "sortNo": 0
+    },
+    {
+      "parentPath": "/dashboard",
+      "menuName": "工作台",
+      "path": "/dashboard/workspace",
+      "menuType": 1,
+      "menuUrl": "dashboard:workspace:view",
+      "menuIconUrl": "carbon:workspace",
+      "sortNo": 10
+    },
+    {
+      "parentPath": "/system",
+      "menuName": "用户管理",
+      "path": "/system/user",
+      "menuType": 1,
+      "menuUrl": "system:user:view",
+      "menuIconUrl": "lucide:users",
+      "sortNo": 0
+    },
+    {
+      "parentPath": "/system",
+      "menuName": "角色管理",
+      "path": "/system/role",
+      "menuType": 1,
+      "menuUrl": "system:role:view",
+      "menuIconUrl": "lucide:badge-check",
+      "sortNo": 10
+    },
+    {
+      "parentPath": "/system",
+      "menuName": "组织管理",
+      "path": "/system/org",
+      "menuType": 1,
+      "menuUrl": "system:org:view",
+      "menuIconUrl": "lucide:network",
+      "sortNo": 20
+    },
+    {
+      "parentPath": "/system",
+      "menuName": "系统配置",
+      "path": "/system/config",
+      "menuType": 1,
+      "menuUrl": "system:config:view",
+      "menuIconUrl": "lucide:sliders-horizontal",
+      "sortNo": 30
+    },
+    {
+      "parentPath": "/system",
+      "menuName": "字典管理",
+      "path": "/system/dict",
+      "menuType": 1,
+      "menuUrl": "system:dict:view",
+      "menuIconUrl": "lucide:book-key",
+      "sortNo": 35
+    },
+    {
+      "parentPath": "/system",
+      "menuName": "菜单管理",
+      "path": "/system/menu",
+      "menuType": 1,
+      "menuUrl": "system:menu:view",
+      "menuIconUrl": "lucide:list-tree",
+      "sortNo": 40
+    },
+    {
+      "parentPath": "/system",
+      "menuName": "日志管理",
+      "path": "/system/log",
+      "menuType": 0,
+      "menuIconUrl": "lucide:scroll-text",
+      "sortNo": 50
+    },
+    {
+      "parentPath": "/system/log",
+      "menuName": "操作日志",
+      "path": "/system/log/operation",
+      "menuType": 1,
+      "menuUrl": "system:log:operation:view",
+      "menuIconUrl": "lucide:clipboard-list",
+      "sortNo": 0
+    },
+    {
+      "parentPath": "/system/log",
+      "menuName": "登录日志",
+      "path": "/system/log/login",
+      "menuType": 1,
+      "menuUrl": "system:log:login:view",
+      "menuIconUrl": "lucide:log-in",
+      "sortNo": 10
+    },
+    {
+      "menuName": "开发工具",
+      "path": "/tool",
+      "menuType": 0,
+      "menuIconUrl": "lucide:wrench",
+      "sortNo": 20
+    },
+    {
+      "parentPath": "/tool",
+      "menuName": "代码生成器",
+      "path": "/tool/codegen",
+      "menuType": 1,
+      "menuUrl": "tool:codegen:view",
+      "menuIconUrl": "lucide:blocks",
+      "sortNo": 0
+    },
+    {
+      "parentPath": "/tool/codegen",
+      "menuName": "新建生成配置",
+      "path": "/tool/codegen/create",
+      "menuType": 2,
+      "menuUrl": "tool:codegen:create",
+      "sortNo": 0
+    },
+    {
+      "parentPath": "/tool/codegen",
+      "menuName": "导入数据库表",
+      "path": "/tool/codegen/import",
+      "menuType": 2,
+      "menuUrl": "tool:codegen:import",
+      "sortNo": 10
+    },
+    {
+      "parentPath": "/tool/codegen",
+      "menuName": "修改生成配置",
+      "path": "/tool/codegen/update",
+      "menuType": 2,
+      "menuUrl": "tool:codegen:update",
+      "sortNo": 20
+    },
+    {
+      "parentPath": "/tool/codegen",
+      "menuName": "删除生成配置",
+      "path": "/tool/codegen/delete",
+      "menuType": 2,
+      "menuUrl": "tool:codegen:delete",
+      "sortNo": 30
+    },
+    {
+      "parentPath": "/tool/codegen",
+      "menuName": "下载生成代码",
+      "path": "/tool/codegen/download",
+      "menuType": 2,
+      "menuUrl": "tool:codegen:download",
+      "sortNo": 40
+    }
+  ]
+}

@@ -74,6 +74,12 @@ public interface SysUserRoleMapper extends MyBaseMapper<SysUserRole> {
         return exists(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getRoleId, roleId));
     }
 
+    default boolean existsByUserIdAndRoleId(Long userId, Long roleId) {
+        return exists(Wrappers.<SysUserRole>lambdaQuery()
+                .eq(SysUserRole::getUserId, userId)
+                .eq(SysUserRole::getRoleId, roleId));
+    }
+
     /*
      *//**
      * 通过用户id和角色id集合删除

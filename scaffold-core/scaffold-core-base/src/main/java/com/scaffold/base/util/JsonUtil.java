@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
 import java.net.URL;
 
 /**
@@ -64,6 +65,10 @@ public class JsonUtil {
      * @return 对象
      */
     public static <T> T read(String json, Class<T> clazz) {
+        return execute(() -> mapper().readValue(json, clazz), "readValue error");
+    }
+
+    public static <T> T read(InputStream json, Class<T> clazz) {
         return execute(() -> mapper().readValue(json, clazz), "readValue error");
     }
 

@@ -12,6 +12,8 @@ import com.scaffold.rbac.entity.SysRole;
 import com.scaffold.rbac.vo.role.SysRolePageVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Optional;
+
 /**
  * 角色(SysRole)表Mapper接口
  *
@@ -26,6 +28,13 @@ public interface SysRoleMapper extends MyBaseMapper<SysRole> {
 
     default boolean existsByRoleCode(String roleCode) {
         return exists(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, roleCode));
+    }
+
+    default Optional<SysRole> findByRoleCode(String roleCode) {
+        return selectList(Wrappers.<SysRole>lambdaQuery()
+                        .eq(SysRole::getRoleCode, roleCode))
+                .stream()
+                .findFirst();
     }
 
     default PageResponse<SysRole> page(SysRolePageVO vo) {
