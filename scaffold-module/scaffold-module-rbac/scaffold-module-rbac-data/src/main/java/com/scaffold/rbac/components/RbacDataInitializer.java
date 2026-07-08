@@ -4,6 +4,7 @@ import com.scaffold.base.util.JsonUtil;
 import com.scaffold.rbac.entity.*;
 import com.scaffold.rbac.mapper.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RbacDataInitializer implements ApplicationRunner {
@@ -33,9 +35,12 @@ public class RbacDataInitializer implements ApplicationRunner {
     private final SysMenuMapper sysMenuMapper;
     private final SysRoleMapper sysRoleMapper;
     private final SysUserMapper sysUserMapper;
+    private final SysRoleMapper roleMapper;
+    private final SysUserMapper userMapper;
     private final SysUserRoleMapper sysUserRoleMapper;
     private final SysRoleMenuMapper sysRoleMenuMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RbacCache rbacCache;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -48,6 +53,23 @@ public class RbacDataInitializer implements ApplicationRunner {
         SysUser adminUser = initAdminUser(headquarters, seedData.adminUser());
         initAdminUserRole(adminUser, adminRole);
         initAdminRoleMenus(adminRole);
+        initCache();
+    }
+
+    private void initCache() {
+        try {
+            // 检查是否有这两个角色，没有就新增，这两个角色没有菜单
+            // 缓存菜单树
+            rbacCache.menuTree();
+            rbacCache.orgTree();
+            // 缓存角色
+            roleMapper.selectList(null).forEach(r -> rbacCache.roleWrapper(r.getId()));
+            // 只给可用用户加载缓存
+            userMapper.selectAllEnabledUserId().forEach(rbacCache::userTree);
+            log.info("rbac cache init success...");
+        } catch (Exception e) {
+            log.error("rbac cache init error", e);
+        }
     }
 
     private RbacSeedData loadSeedData() throws IOException {

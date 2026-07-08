@@ -1,6 +1,5 @@
 package com.scaffold.rbac.controller;
 
-import com.scaffold.base.util.R;
 import com.scaffold.rbac.entity.SysMenu;
 import com.scaffold.rbac.service.SysMenuService;
 import com.scaffold.rbac.vo.menu.SysMenuCreateVO;
@@ -47,8 +46,8 @@ public class SysMenuController {
      */
     @PostMapping
     @Operation(summary = "保存", description = "传入sysMenu")
-    public R<Long> save(@RequestBody @Valid SysMenuCreateVO createVO) {
-        return R.success(sysMenuService.save(createVO));
+    public Long save(@RequestBody @Valid SysMenuCreateVO createVO) {
+        return sysMenuService.save(createVO);
     }
 
     /**

@@ -142,46 +142,6 @@
       "menuUrl": "tool:codegen:view",
       "menuIconUrl": "lucide:blocks",
       "sortNo": 0
-    },
-    {
-      "parentPath": "/tool/codegen",
-      "menuName": "新建生成配置",
-      "path": "/tool/codegen/create",
-      "menuType": 2,
-      "menuUrl": "tool:codegen:create",
-      "sortNo": 0
-    },
-    {
-      "parentPath": "/tool/codegen",
-      "menuName": "导入数据库表",
-      "path": "/tool/codegen/import",
-      "menuType": 2,
-      "menuUrl": "tool:codegen:import",
-      "sortNo": 10
-    },
-    {
-      "parentPath": "/tool/codegen",
-      "menuName": "修改生成配置",
-      "path": "/tool/codegen/update",
-      "menuType": 2,
-      "menuUrl": "tool:codegen:update",
-      "sortNo": 20
-    },
-    {
-      "parentPath": "/tool/codegen",
-      "menuName": "删除生成配置",
-      "path": "/tool/codegen/delete",
-      "menuType": 2,
-      "menuUrl": "tool:codegen:delete",
-      "sortNo": 30
-    },
-    {
-      "parentPath": "/tool/codegen",
-      "menuName": "下载生成代码",
-      "path": "/tool/codegen/download",
-      "menuType": 2,
-      "menuUrl": "tool:codegen:download",
-      "sortNo": 40
     }
   ]
 }
