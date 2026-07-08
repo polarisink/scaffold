@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,5 +49,7 @@ public class SecurityProperties {
     @Setter
     public static class Token {
         private String jwtSecret = "adf1efcs123reqwefwewqdsafrtrgeew";
+        private Duration cacheTtl = Duration.ofMinutes(30);
+        private long cacheMaximumSize = 10000;
     }
 }

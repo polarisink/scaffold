@@ -1,6 +1,7 @@
 package com.scaffold.security.starter;
 
-import com.scaffold.security.config.TokenService;
+import com.scaffold.security.config.TokenStore;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
@@ -8,22 +9,18 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.Assert;
 
-public class SpringCacheTokenService implements TokenService {
+@RequiredArgsConstructor
+public class SpringCacheTokenStore implements TokenStore {
 
     private final CacheManager cacheManager;
 
-    public SpringCacheTokenService(CacheManager cacheManager) {
-        this.cacheManager = cacheManager;
+    @Override
+    @CachePut(cacheNames = TOKEN_CACHE_NAME, key = "#userId")
+    public void set(String userId, String token) {
     }
 
     @Override
-    @CachePut(cacheNames = TOKEN_CACHE_NAME, key = "#root.target.tokenPrefix(#userId)")
-    public String set(String userId, String token) {
-        return token;
-    }
-
-    @Override
-    @Cacheable(cacheNames = TOKEN_CACHE_NAME, key = "#root.target.tokenPrefix(#userId)", unless = "#result == null")
+    @Cacheable(cacheNames = TOKEN_CACHE_NAME, key = "#userId", unless = "#result == null")
     public String get(String userId) {
         return null;
     }
@@ -32,11 +29,11 @@ public class SpringCacheTokenService implements TokenService {
     public boolean has(String userId) {
         Cache cache = cacheManager.getCache(TOKEN_CACHE_NAME);
         Assert.notNull(cache, "Token cache not found: " + TOKEN_CACHE_NAME);
-        return cache.get(tokenPrefix(userId)) != null;
+        return cache.get(userId) != null;
     }
 
     @Override
-    @CacheEvict(cacheNames = TOKEN_CACHE_NAME, key = "#root.target.tokenPrefix(#userId)")
+    @CacheEvict(cacheNames = TOKEN_CACHE_NAME, key = "#userId")
     public void del(String userId) {
     }
 }

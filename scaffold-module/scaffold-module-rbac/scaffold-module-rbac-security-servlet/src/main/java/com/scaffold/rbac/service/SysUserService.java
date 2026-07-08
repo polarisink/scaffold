@@ -15,7 +15,7 @@ import com.scaffold.rbac.mapper.SysOrgMapper;
 import com.scaffold.rbac.mapper.SysUserMapper;
 import com.scaffold.rbac.mapper.SysUserRoleMapper;
 import com.scaffold.rbac.vo.user.*;
-import com.scaffold.security.config.TokenService;
+import com.scaffold.security.config.TokenStore;
 import com.scaffold.security.vo.LoginUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -36,7 +36,7 @@ public class SysUserService implements ISysUserService {
     private final SysUserRoleMapper sysUserRoleMapper;
     private final RbacCache rbacCache;
     private final AuthenticationManager authenticationManager;
-    private final TokenService tokenService;
+    private final TokenStore tokenStore;
     private final SysOrgMapper sysOrgMapper;
 
     @Transactional(readOnly = true)
@@ -114,14 +114,14 @@ public class SysUserService implements ISysUserService {
         SysUser user = sysUserMapper.selectById(userId);
         user.setPassword(PasswordFactory.encode(vo.newPasswd()));
         sysUserMapper.updateById(user);
-        tokenService.del(userId.toString());
+        tokenStore.del(userId.toString());
     }
 
     public void resetPasswd(Long userId) {
         SysUser user = sysUserMapper.selectById(userId);
         user.setPassword(PasswordFactory.reset(user.getUsername()));
         sysUserMapper.updateById(user);
-        tokenService.del(userId.toString());
+        tokenStore.del(userId.toString());
     }
 
     public void ban(Long userId) {
@@ -129,6 +129,6 @@ public class SysUserService implements ISysUserService {
         SysUser user = sysUserMapper.selectById(userId);
         user.setStatus(!user.getStatus());
         sysUserMapper.updateById(user);
-        tokenService.del(userId.toString());
+        tokenStore.del(userId.toString());
     }
 }

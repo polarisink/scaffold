@@ -8,9 +8,9 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 30s
   cache:
-    type: caffeine
+    type: redis
     caffeine:
-      spec: maximumSize=10000,expireAfterWrite=30m
+      spec: maximumSize=10000,expireAfterWrite=10m
   datasource:
     driver-class-name: ${SCAFFOLD_DATASOURCE_DRIVER:com.mysql.cj.jdbc.Driver}
     url: ${SCAFFOLD_DATASOURCE_URL:jdbc:mysql://localhost:3306/scaffold?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true}
@@ -21,11 +21,6 @@ spring:
       ddl-auto: update
   freemarker:
     check-template-location: false
-  sql:
-    init:
-      mode: never
-      encoding: UTF-8
-
 file-storage:
   enabled: true
   type: local
@@ -43,6 +38,9 @@ file-storage:
 #    bucket-name: scaffold
 
 security:
+  token:
+    cache-ttl: 30m
+    cache-maximum-size: 10000
   cors:
     enabled: true
     allowed-origin-patterns:

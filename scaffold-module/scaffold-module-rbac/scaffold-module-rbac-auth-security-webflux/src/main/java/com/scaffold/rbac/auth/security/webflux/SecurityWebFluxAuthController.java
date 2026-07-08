@@ -5,7 +5,7 @@ import com.scaffold.rbac.auth.RbacAccountService;
 import com.scaffold.rbac.auth.RbacLoginUser;
 import com.scaffold.rbac.service.RbacLogRecordService;
 import com.scaffold.rbac.vo.auth.LoginVo;
-import com.scaffold.security.config.TokenService;
+import com.scaffold.security.config.TokenStore;
 import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.vo.PayloadDTO;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import reactor.core.scheduler.Schedulers;
 @RequestMapping("/auth")
 public class SecurityWebFluxAuthController {
     private final RbacAccountService accountService;
-    private final TokenService tokenService;
+    private final TokenStore tokenStore;
     private final JwtUtil jwtUtil;
     private final RbacLogRecordService logRecordService;
 
@@ -32,7 +32,7 @@ public class SecurityWebFluxAuthController {
                         RbacLoginUser user = accountService.login(request.username(), request.password());
                         String token = jwtUtil.generateToken(
                                 PayloadDTO.of(user.userId(), user.username(), user.roleCodeList()));
-                        tokenService.set(user.userId().toString(), token);
+                        tokenStore.set(user.userId().toString(), token);
                         logRecordService.recordLogin(user.userId(), user.username(),
                                 RbacLogRecordService.ACTION_LOGIN, true, "登录成功",
                                 clientIp(exchange), userAgent(exchange));
@@ -55,7 +55,7 @@ public class SecurityWebFluxAuthController {
                     Long userId = Long.valueOf(context.getAuthentication().getPrincipal().toString());
                     String username = context.getAuthentication().getCredentials().toString();
                     return Mono.fromRunnable(() -> {
-                                tokenService.del(userId.toString());
+                                tokenStore.del(userId.toString());
                                 logRecordService.recordLogin(userId, username,
                                         RbacLogRecordService.ACTION_LOGOUT, true, "退出成功",
                                         clientIp(exchange), userAgent(exchange));
@@ -71,7 +71,7 @@ public class SecurityWebFluxAuthController {
                 .flatMap(context -> Mono.fromCallable(() -> {
                     Long userId = Long.valueOf(context.getAuthentication().getPrincipal().toString());
                     String username = context.getAuthentication().getCredentials().toString();
-                    String token = tokenService.get(userId.toString());
+                    String token = tokenStore.get(userId.toString());
                     return R.success(new SecurityWebFluxTokenInfo(HttpHeaders.AUTHORIZATION, token, userId, username));
                 }).subscribeOn(Schedulers.boundedElastic()));
     }

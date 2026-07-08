@@ -1,6 +1,6 @@
 package com.scaffold.security.webflux;
 
-import com.scaffold.security.config.TokenService;
+import com.scaffold.security.config.TokenStore;
 import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.vo.PayloadDTO;
 import com.scaffold.security.vo.SecurityProperties;
@@ -46,7 +46,7 @@ public class SpringSecurityWebFluxAutoConfiguration {
     }
 
     @Bean
-    public WebFilter tokenWebFilter(SecurityProperties securityProperties, TokenService tokenService, JwtUtil jwtUtil) {
+    public WebFilter tokenWebFilter(SecurityProperties securityProperties, TokenStore tokenStore, JwtUtil jwtUtil) {
         PathMatcher pathMatcher = new AntPathMatcher();
         return (exchange, chain) -> {
             String path = exchange.getRequest().getURI().getPath();
@@ -60,7 +60,7 @@ public class SpringSecurityWebFluxAutoConfiguration {
                 return unauthorized(exchange);
             }
             PayloadDTO dto = jwtUtil.resolveToken(token);
-            if (tokenService.get(dto.getUserId().toString()) == null) {
+            if (tokenStore.get(dto.getUserId().toString()) == null) {
                 return unauthorized(exchange);
             }
             List<SimpleGrantedAuthority> authorities = dto.getAuthorities().stream()

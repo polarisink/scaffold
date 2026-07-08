@@ -129,8 +129,8 @@ scaffold-test-cloud/
 - Swagger 默认关闭
 - CORS 默认仅放行本地开发地址
 - RBAC 默认不启用，需要显式引入对应业务模块
-- 认证 token store 使用 Spring Cache，缓存后端通过 `spring.cache.type` 选择，过期时间通过对应缓存实现配置
-- Spring Security JWT 密钥由 `security.token.jwt.secret` 配置，建议通过至少 32 字节的 `SCAFFOLD_JWT_SECRET` 环境变量提供
+- 认证 token store 使用 Spring Cache，缓存后端通过 `spring.cache.type` 选择；Caffeine 下 `security_token` 可通过 `security.token.cache-ttl` 单独配置过期时间
+- Spring Security JWT 密钥由 `security.token.jwt-secret` 配置，建议通过至少 32 字节的 `SCAFFOLD_JWT_SECRET` 环境变量提供
 
 推荐组合：
 

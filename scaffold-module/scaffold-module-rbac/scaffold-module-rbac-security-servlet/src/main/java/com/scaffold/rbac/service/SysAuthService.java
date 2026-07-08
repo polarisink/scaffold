@@ -2,7 +2,7 @@ package com.scaffold.rbac.service;
 
 import com.scaffold.base.exception.BaseException;
 import com.scaffold.rbac.vo.auth.LoginVo;
-import com.scaffold.security.config.TokenService;
+import com.scaffold.security.config.TokenStore;
 import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.vo.LoginUser;
 import com.scaffold.security.vo.PayloadDTO;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SysAuthService implements ISysAuthService {
     private final AuthenticationManager authenticationManager;
-    private final TokenService tokenService;
+    private final TokenStore tokenStore;
     private final JwtUtil jwtUtil;
     private final RbacLogRecordService logRecordService;
 
@@ -36,7 +36,7 @@ public class SysAuthService implements ISysAuthService {
             PayloadDTO dto = PayloadDTO.of(loginUser.getUserId(), loginUser.getUsername(), roleCodeList);
             Long userId = dto.getUserId();
             String token = jwtUtil.generateToken(dto);
-            tokenService.set(userId.toString(), token);
+            tokenStore.set(userId.toString(), token);
             logRecordService.recordLogin(userId, dto.getUsername(), RbacLogRecordService.ACTION_LOGIN,
                     true, "登录成功", null, null);
             return token;
@@ -69,7 +69,7 @@ public class SysAuthService implements ISysAuthService {
         Long userId = LoginUser.userId();
         String username = LoginUser.username();
         if (userId != null) {
-            tokenService.del(userId.toString());
+            tokenStore.del(userId.toString());
             logRecordService.recordLogin(userId, username, RbacLogRecordService.ACTION_LOGOUT,
                     true, "退出成功", null, null);
         }

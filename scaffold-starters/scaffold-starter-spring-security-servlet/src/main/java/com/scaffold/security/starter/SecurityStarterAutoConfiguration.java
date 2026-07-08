@@ -2,7 +2,7 @@ package com.scaffold.security.starter;
 
 import com.scaffold.security.config.SecurityConfig;
 import com.scaffold.security.config.TokenAuthenticationFilter;
-import com.scaffold.security.config.TokenService;
+import com.scaffold.security.config.TokenStore;
 import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.vo.SecurityProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -34,9 +34,9 @@ public class SecurityStarterAutoConfiguration {
     @ConditionalOnMissingBean
     public TokenAuthenticationFilter tokenAuthenticationFilter(
             PathMatcher pathMatcher,
-            TokenService tokenService,
+            TokenStore tokenStore,
             SecurityProperties securityProperties,
             JwtUtil jwtUtil) {
-        return new TokenAuthenticationFilter(pathMatcher, tokenService, securityProperties, jwtUtil);
+        return new TokenAuthenticationFilter(pathMatcher, tokenStore, securityProperties, jwtUtil);
     }
 }

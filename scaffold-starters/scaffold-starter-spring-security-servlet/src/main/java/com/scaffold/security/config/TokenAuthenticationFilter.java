@@ -29,7 +29,7 @@ import static com.scaffold.security.util.JwtUtil.getRealToken;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final PathMatcher pathMatcher;
-    private final TokenService tokenService;
+    private final TokenStore tokenStore;
     private final SecurityProperties securityProperties;
     private final JwtUtil jwtUtil;
 
@@ -62,7 +62,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             writeUnauthorized(response, AuthCodeEnum.TOKEN_INVALID);
             return;
         }
-        if (tokenService.get(dto.getUserId().toString()) == null) {
+        if (tokenStore.get(dto.getUserId().toString()) == null) {
             log.error("{} unauthorized: token is expired", url);
             writeUnauthorized(response, AuthCodeEnum.TOKEN_EXPIRED);
             return;

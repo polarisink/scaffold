@@ -1,7 +1,7 @@
 package com.scaffold.security.starter;
 
 import com.scaffold.security.config.TokenAuthenticationFilter;
-import com.scaffold.security.config.TokenService;
+import com.scaffold.security.config.TokenStore;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -36,9 +36,9 @@ class SecurityStarterAutoConfigurationTest {
     @Test
     void shouldUseSpringCacheTokenStoreByDefault() {
         contextRunner.run(context -> {
-            assertThat(context).hasSingleBean(TokenService.class);
-            assertThat(AopUtils.getTargetClass(context.getBean(TokenService.class)))
-                    .isEqualTo(SpringCacheTokenService.class);
+            assertThat(context).hasSingleBean(TokenStore.class);
+            assertThat(AopUtils.getTargetClass(context.getBean(TokenStore.class)))
+                    .isEqualTo(SpringCacheTokenStore.class);
             assertThat(context).hasSingleBean(TokenAuthenticationFilter.class);
         });
     }
@@ -49,9 +49,9 @@ class SecurityStarterAutoConfigurationTest {
                 .withClassLoader(new FilteredClassLoader("org.redisson"))
                 .withPropertyValues("security.token.store-type=redis")
                 .run(context -> {
-                    assertThat(context).hasSingleBean(TokenService.class);
-                    assertThat(AopUtils.getTargetClass(context.getBean(TokenService.class)))
-                            .isEqualTo(SpringCacheTokenService.class);
+                    assertThat(context).hasSingleBean(TokenStore.class);
+                    assertThat(AopUtils.getTargetClass(context.getBean(TokenStore.class)))
+                            .isEqualTo(SpringCacheTokenStore.class);
                 });
     }
 

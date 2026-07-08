@@ -67,11 +67,11 @@ class SecurityConfigTest {
 
     @Test
     void returnsUnauthorizedWhenStoredTokenHasExpired() throws Exception {
-        TokenService tokenService = mock(TokenService.class);
+        TokenStore tokenStore = mock(TokenStore.class);
         JwtUtil jwtUtil = new JwtUtil("0123456789abcdef0123456789abcdef");
         String token = jwtUtil.generateToken(PayloadDTO.of(1L, "tester", List.of("USER")));
         TokenAuthenticationFilter filter = new TokenAuthenticationFilter(
-                new AntPathMatcher(), tokenService, new SecurityProperties(), jwtUtil);
+                new AntPathMatcher(), tokenStore, new SecurityProperties(), jwtUtil);
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/user/context");
         request.addHeader("Authorization", "Bearer " + token);
         MockHttpServletResponse response = new MockHttpServletResponse();
