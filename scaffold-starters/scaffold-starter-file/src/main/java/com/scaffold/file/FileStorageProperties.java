@@ -13,9 +13,13 @@ public class FileStorageProperties implements InitializingBean {
 
     public static final String FILE_STORAGE_PREFIX = "scaffold.file-storage";
 
+    //是否启用
     private Boolean enabled = false;
+    //存储类型
     private StorageType type = StorageType.LOCAL;
+    //本地存储配置
     private Local local = new Local();
+    //s3配置
     private S3 s3 = new S3();
 
     @Override
