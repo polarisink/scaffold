@@ -12,8 +12,9 @@ public interface TokenStore {
      *
      * @param userId 优化id
      * @param token  token
+     * @return token
      */
-    void set(String userId, String token);
+    String set(String userId, String token);
 
     /**
      * 获取token

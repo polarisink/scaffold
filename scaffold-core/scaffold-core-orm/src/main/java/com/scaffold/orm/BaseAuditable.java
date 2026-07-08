@@ -35,27 +35,23 @@ public class BaseAuditable {
      * 修改时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @Column(columnDefinition = "datetime comment '更新时间'")
     protected LocalDateTime gmtModified;
     /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    @Column(columnDefinition = "datetime comment '创建时间'")
     protected LocalDateTime gmtCreated;
 
     /**
      * 创造者id
      */
     @TableField(fill = FieldFill.INSERT)
-    @Column(columnDefinition = "bigint(11) comment '创建者id'")
     protected Long createdBy;
 
     /**
      * 修改者id
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @Column(columnDefinition = "bigint(11) comment '修改者id'")
     protected Long modifiedBy;
 
     /**
@@ -63,6 +59,6 @@ public class BaseAuditable {
      */
     @JsonIgnore
     @TableLogic(value = "0", delval = "1")
-    @Column(columnDefinition = "int not null default 0 comment '逻辑删除'")
+    @Column(nullable = false)
     private Integer deleted = 0;
 }

@@ -16,7 +16,8 @@ public class SpringCacheTokenStore implements TokenStore {
 
     @Override
     @CachePut(cacheNames = TOKEN_CACHE_NAME, key = "#userId")
-    public void set(String userId, String token) {
+    public String set(String userId, String token) {
+        return token;
     }
 
     @Override

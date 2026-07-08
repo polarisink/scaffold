@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 import java.io.Serializable;
 
@@ -24,17 +25,19 @@ public class SysRole extends BaseAuditable implements Serializable {
     /**
      * 角色名
      */
-    @Column(columnDefinition = "varchar(64) comment '角色名称'")
+    @Column(length = 64)
+    @Comment("角色名称")
     private String roleName;
     /**
      * 角色编码
      */
-    @Column(columnDefinition = "varchar(64) comment '角色编码'")
+    @Column(length = 64)
+    @Comment("角色编码")
     private String roleCode;
     /**
      * 描述
      */
-    @Column(columnDefinition = "varchar(255) comment '角色描述'")
+    @Comment("角色描述")
     private String description;
 
     public SysRole(String roleName, String roleCode) {

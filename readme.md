@@ -65,7 +65,7 @@ scaffold-starters/
 
 - `SecurityProperties`
 - JWT 工具和 payload 模型
-- `TokenService`
+- `TokenStore`
 - 基于 Spring Cache 的 token store
 - 默认 `PasswordEncoder`
 - 通用认证错误码
@@ -129,8 +129,8 @@ scaffold-test-cloud/
 - Swagger 默认关闭
 - CORS 默认仅放行本地开发地址
 - RBAC 默认不启用，需要显式引入对应业务模块
-- 认证 token store 使用 Spring Cache，缓存后端通过 `spring.cache.type` 选择；Caffeine 下 `security_token` 可通过 `security.token.cache-ttl` 单独配置过期时间
-- Spring Security JWT 密钥由 `security.token.jwt-secret` 配置，建议通过至少 32 字节的 `SCAFFOLD_JWT_SECRET` 环境变量提供
+- 认证 token store 使用 Spring Cache，缓存后端通过 `spring.cache.type` 选择；Caffeine 下 `security_token` 可通过 `scaffold.security.token.cache-ttl` 单独配置过期时间
+- Spring Security JWT 密钥由 `scaffold.security.token.jwt-secret` 配置，建议通过至少 32 字节的 `SCAFFOLD_JWT_SECRET` 环境变量提供
 
 推荐组合：
 
@@ -183,7 +183,7 @@ scaffold-test-cloud/
 ## 质量保障
 
 - 默认 CI 校验正式交付链路
-- `examples` 和 `examples-cloud` profile 用于示例模块冒烟验证
+- `examples` 和 `examples-cloud` profile 用于示例模块验证
 - 认证 starter 拆分后，应重点检查依赖树，避免意外同时引入 `spring-webmvc` 与 `spring-webflux`
 
 ## 维护文档

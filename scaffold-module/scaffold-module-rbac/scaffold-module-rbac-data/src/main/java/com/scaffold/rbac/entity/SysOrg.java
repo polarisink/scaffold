@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.Data;
+import org.hibernate.annotations.Comment;
 
 import java.util.List;
 
@@ -20,13 +21,16 @@ import java.util.List;
 @Entity
 @TableName("sys_org")
 public class SysOrg extends BaseAuditable implements ITree<SysOrg, Long> {
-    @Column(columnDefinition = "bigint not null comment  '上级部门id'")
+    @Column(nullable = false)
+    @Comment("上级部门id")
     private Long parentId;
-    @Column(columnDefinition = "varchar(50) not null comment '部门名字'")
+    @Column(nullable = false, length = 50)
+    @Comment("部门名字")
     private String orgName;
-    @Column(columnDefinition = "int comment '部门排序（同级生效）'")
+    @Comment("部门排序（同级生效）")
     private Integer sort;
-    @Column(columnDefinition = "varchar(50) comment '部门编码'")
+    @Column(length = 50)
+    @Comment("部门编码")
     private String orgCode;
     @Transient
     @TableField(exist = false)

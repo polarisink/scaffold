@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 import java.io.Serializable;
 
@@ -24,12 +25,12 @@ public class SysRoleMenu extends BaseAuditable implements Serializable {
     /**
      * 角色id
      */
-    @Column(columnDefinition = "bigint comment '角色ID'")
+    @Comment("角色ID")
     private Long roleId;
     /**
      * 菜单id
      */
-    @Column(columnDefinition = "bigint comment '菜单ID'")
+    @Comment("菜单ID")
     private Long menuId;
 
     public SysRoleMenu(Long roleId, Long menuId) {

@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
 import lombok.Data;
+import org.hibernate.annotations.Comment;
 
 import java.io.Serializable;
 import java.util.List;
@@ -26,35 +27,36 @@ public class SysMenu extends BaseAuditable implements Serializable, ITree<SysMen
     /**
      * 父菜单ID
      */
-    @Column(columnDefinition = "bigint comment '父菜单ID'")
+    @Comment("父菜单ID")
     private Long parentId;
     /**
      * 菜单名称
      */
-    @Column(columnDefinition = "varchar(64) comment '菜单名称'")
+    @Column(length = 64)
+    @Comment("菜单名称")
     private String menuName;
 
-    @Column(columnDefinition = "varchar(255) comment '路由路径'")
+    @Comment("路由路径")
     private String path;
     /**
      * 菜单类型
      */
-    @Column(columnDefinition = "int comment '菜单类型'")
+    @Comment("菜单类型")
     private Integer menuType;
     /**
      * 菜单URL
      */
-    @Column(columnDefinition = "varchar(255) comment '菜单URL'")
+    @Comment("菜单URL")
     private String menuUrl;
     /**
      * 菜单图标URL
      */
-    @Column(columnDefinition = "varchar(255) comment '菜单图标URL'")
+    @Comment("菜单图标URL")
     private String menuIconUrl;
     /**
      * 排序号
      */
-    @Column(columnDefinition = "int comment '排序号'")
+    @Comment("排序号")
     private Integer sortNo;
 
     @Transient

@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Comment;
 
 @Getter
 @Setter
@@ -13,55 +14,71 @@ import lombok.Setter;
 @Table(name = "gen_table")
 public class GenTableEntity extends BaseAuditable {
 
-    @Column(columnDefinition = "varchar(128) not null comment '数据库表名'")
+    @Column(nullable = false, length = 128)
+    @Comment("数据库表名")
     private String tableName;
 
-    @Column(columnDefinition = "varchar(255) comment '表注释'")
+    @Comment("表注释")
     private String tableComment;
 
-    @Column(columnDefinition = "varchar(128) not null comment 'Java 类名'")
+    @Column(nullable = false, length = 128)
+    @Comment("Java 类名")
     private String className;
 
-    @Column(columnDefinition = "varchar(64) not null comment '业务模块名'")
+    @Column(nullable = false, length = 64)
+    @Comment("业务模块名")
     private String moduleName;
 
-    @Column(columnDefinition = "varchar(128) not null comment '业务名'")
+    @Column(nullable = false, length = 128)
+    @Comment("业务名")
     private String businessName;
 
-    @Column(columnDefinition = "varchar(255) not null comment 'Java 包名'")
+    @Column(nullable = false)
+    @Comment("Java 包名")
     private String packageName;
 
-    @Column(columnDefinition = "varchar(64) not null comment '作者'")
+    @Column(nullable = false, length = 64)
+    @Comment("作者")
     private String author;
 
-    @Column(columnDefinition = "varchar(32) not null comment '数据库类型'")
+    @Column(nullable = false, length = 32)
+    @Comment("数据库类型")
     private String databaseType;
 
-    @Column(columnDefinition = "varchar(128) comment '数据库 schema'")
+    @Column(length = 128)
+    @Comment("数据库 schema")
     private String schemaName;
 
-    @Column(columnDefinition = "varchar(255) not null comment '前端源码目录'")
+    @Column(nullable = false)
+    @Comment("前端源码目录")
     private String frontendPath;
 
-    @Column(columnDefinition = "varchar(255) not null comment '后端源码目录'")
+    @Column(nullable = false)
+    @Comment("后端源码目录")
     private String backendPath;
 
-    @Column(columnDefinition = "varchar(128) not null comment '菜单名称'")
+    @Column(nullable = false, length = 128)
+    @Comment("菜单名称")
     private String menuName;
 
-    @Column(columnDefinition = "varchar(255) not null comment '菜单路由'")
+    @Column(nullable = false)
+    @Comment("菜单路由")
     private String menuPath;
 
-    @Column(columnDefinition = "varchar(128) not null comment '权限前缀'")
+    @Column(nullable = false, length = 128)
+    @Comment("权限前缀")
     private String permissionPrefix;
 
-    @Column(columnDefinition = "varchar(64) not null default 'admin' comment '默认角色编码'")
+    @Column(nullable = false, length = 64)
+    @Comment("默认角色编码")
     private String defaultRoleCode = "admin";
 
-    @Column(columnDefinition = "bit(1) not null default b'0' comment '兼容旧版：是否生成建表 SQL'")
+    @Column(nullable = false)
+    @Comment("兼容旧版：是否生成建表 SQL")
     private Boolean generateTable = false;
 
-    @Column(columnDefinition = "bit(1) not null default b'0' comment '兼容旧版：是否生成菜单权限 SQL'")
+    @Column(nullable = false)
+    @Comment("兼容旧版：是否生成菜单权限 SQL")
     private Boolean generateMenu = false;
 
 }

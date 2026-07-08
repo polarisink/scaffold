@@ -17,10 +17,10 @@ class JwtUtilTest {
     void shouldRejectMissingOrShortSecret() {
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> new JwtUtil(null))
-                .withMessage("security.token.jwt-secret 不能为空");
+                .withMessage("scaffold.security.token.jwt-secret 不能为空");
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> new JwtUtil("too-short"))
-                .withMessage("security.token.jwt-secret 长度不能少于 32 字节");
+                .withMessage("scaffold.security.token.jwt-secret 长度不能少于 32 字节");
     }
 
     @Test

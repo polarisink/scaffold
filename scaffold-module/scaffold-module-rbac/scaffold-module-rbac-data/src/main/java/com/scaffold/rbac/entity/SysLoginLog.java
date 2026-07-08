@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Data;
+import org.hibernate.annotations.Comment;
 
 @Data
 @Entity
@@ -17,18 +18,24 @@ import lombok.Data;
 @TableName("sys_login_log")
 public class SysLoginLog extends BaseAuditable {
 
-    @Column(columnDefinition = "bigint comment '用户ID'")
+    @Comment("用户ID")
     private Long userId;
-    @Column(columnDefinition = "varchar(64) comment '登录账号'")
+    @Column(length = 64)
+    @Comment("登录账号")
     private String username;
-    @Column(columnDefinition = "varchar(20) not null comment '认证动作'")
+    @Column(nullable = false, length = 20)
+    @Comment("认证动作")
     private String action;
-    @Column(columnDefinition = "varchar(64) comment '客户端IP'")
+    @Column(length = 64)
+    @Comment("客户端IP")
     private String ip;
-    @Column(columnDefinition = "varchar(500) comment '浏览器User-Agent'")
+    @Column(length = 500)
+    @Comment("浏览器User-Agent")
     private String userAgent;
-    @Column(columnDefinition = "bool not null default true comment '是否成功'")
+    @Column(nullable = false)
+    @Comment("是否成功")
     private Boolean status = true;
-    @Column(columnDefinition = "varchar(500) comment '结果消息'")
+    @Column(length = 500)
+    @Comment("结果消息")
     private String message;
 }

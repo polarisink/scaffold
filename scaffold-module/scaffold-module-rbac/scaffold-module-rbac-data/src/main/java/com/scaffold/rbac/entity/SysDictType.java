@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
+import org.hibernate.annotations.Comment;
 
 /**
  * 字典类型表。
@@ -16,15 +17,18 @@ import lombok.Data;
 @TableName("sys_dict_type")
 public class SysDictType extends BaseAuditable {
 
-    @Column(columnDefinition = "varchar(100) not null comment '字典名称'")
+    @Column(nullable = false, length = 100)
+    @Comment("字典名称")
     private String dictName;
 
-    @Column(columnDefinition = "varchar(100) not null comment '字典类型'", unique = true)
+    @Column(nullable = false, length = 100, unique = true)
+    @Comment("字典类型")
     private String dictType;
 
-    @Column(columnDefinition = "bool not null default true comment '是否启用'")
+    @Column(nullable = false)
+    @Comment("是否启用")
     private Boolean status = true;
 
-    @Column(columnDefinition = "varchar(255) comment '备注'")
+    @Comment("备注")
     private String remark;
 }

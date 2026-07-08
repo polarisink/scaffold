@@ -11,7 +11,7 @@ import static com.scaffold.file.FileStorageProperties.FILE_STORAGE_PREFIX;
 @ConfigurationProperties(prefix = FILE_STORAGE_PREFIX)
 public class FileStorageProperties implements InitializingBean {
 
-    public static final String FILE_STORAGE_PREFIX = "file-storage";
+    public static final String FILE_STORAGE_PREFIX = "scaffold.file-storage";
 
     private Boolean enabled = false;
     private StorageType type = StorageType.LOCAL;

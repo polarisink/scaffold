@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SecurityStarterAutoConfigurationTest {
 
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
-            .withPropertyValues("security.token.jwt-secret=0123456789abcdef0123456789abcdef")
+            .withPropertyValues("scaffold.security.token.jwt-secret=0123456789abcdef0123456789abcdef")
             .withUserConfiguration(TestSecuritySupport.class)
             .withConfiguration(AutoConfigurations.of(
                     SecurityAutoConfiguration.class,
@@ -47,7 +47,7 @@ class SecurityStarterAutoConfigurationTest {
     void shouldUseSpringCacheTokenStoreWhenLegacyRedisStoreRequested() {
         contextRunner
                 .withClassLoader(new FilteredClassLoader("org.redisson"))
-                .withPropertyValues("security.token.store-type=redis")
+                .withPropertyValues("scaffold.security.token.store-type=redis")
                 .run(context -> {
                     assertThat(context).hasSingleBean(TokenStore.class);
                     assertThat(AopUtils.getTargetClass(context.getBean(TokenStore.class)))

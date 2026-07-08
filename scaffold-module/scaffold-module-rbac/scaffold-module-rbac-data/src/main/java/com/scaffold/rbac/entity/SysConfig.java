@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
+import org.hibernate.annotations.Comment;
 
 /**
  * 参数配置表 sys_config
@@ -21,31 +22,35 @@ public class SysConfig extends BaseAuditable {
     /**
      * 参数名称
      */
-    @Column(columnDefinition = "varchar(255) not null comment '参数名字'", unique = true)
+    @Column(nullable = false, unique = true)
+    @Comment("参数名字")
     private String configName;
 
     /**
      * 参数键名
      */
-    @Column(columnDefinition = "varchar(255) not null comment '参数键名'", unique = true)
+    @Column(nullable = false, unique = true)
+    @Comment("参数键名")
     private String configKey;
 
     /**
      * 参数键值
      */
-    @Column(columnDefinition = "varchar(255) not null comment '参数键值'")
+    @Column(nullable = false)
+    @Comment("参数键值")
     private String configValue;
 
     /**
      * 是否是系统内置
      */
-    @Column(columnDefinition = "bool not null comment '是否是系统内置'")
+    @Column(nullable = false)
+    @Comment("是否是系统内置")
     private Boolean sysFlag = false;
 
     /**
      * 备注
      */
-    @Column(columnDefinition = "varchar(255) comment '备注'")
+    @Comment("备注")
     private String remark;
 
 

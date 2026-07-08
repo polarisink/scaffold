@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 import java.io.Serializable;
 
@@ -24,12 +25,12 @@ public class SysUserRole extends BaseAuditable implements Serializable {
     /**
      * 用户id
      */
-    @Column(columnDefinition = "bigint comment '用户ID'")
+    @Comment("用户ID")
     private Long userId;
     /**
      * 角色id
      */
-    @Column(columnDefinition = "bigint comment '角色ID'")
+    @Comment("角色ID")
     private Long roleId;
 
 

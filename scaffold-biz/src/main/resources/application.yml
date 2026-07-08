@@ -11,55 +11,34 @@ spring:
     type: redis
     caffeine:
       spec: maximumSize=10000,expireAfterWrite=10m
+  freemarker:
+    check-template-location: false
   datasource:
-    driver-class-name: ${SCAFFOLD_DATASOURCE_DRIVER:com.mysql.cj.jdbc.Driver}
-    url: ${SCAFFOLD_DATASOURCE_URL:jdbc:mysql://localhost:3306/scaffold?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true}
-    username: ${SCAFFOLD_DATASOURCE_USERNAME:root}
+#    driver-class-name: ${SCAFFOLD_DATASOURCE_DRIVER:com.mysql.cj.jdbc.Driver}
+#    url: ${SCAFFOLD_DATASOURCE_URL:jdbc:mysql://localhost:3306/scaffold?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true}
+#    username: ${SCAFFOLD_DATASOURCE_USERNAME:root}
+#    password: ${SCAFFOLD_DATASOURCE_PASSWORD:123456}
+    url: ${SCAFFOLD_DATASOURCE_URL:jdbc:postgresql://localhost:5432/aries?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${SCAFFOLD_DATASOURCE_USERNAME:aries}
     password: ${SCAFFOLD_DATASOURCE_PASSWORD:123456}
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
-  freemarker:
-    check-template-location: false
-file-storage:
-  enabled: true
-  type: local
-  local:
-    base-path: /Users/aries/Documents/www
-#    base-path: ${SCAFFOLD_FILE_STORAGE_BASE_PATH:./.data/files}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        transaction:
+          coordinator_class: jdbc
+          jta:
+            platform: ""
 
-#file-storage:
-#  enabled: true
-#  type: s3
-#  s3:
-#    endpoint: http://127.0.0.1:9000
-#    access-key: minioadmin
-#    secret-key: minioadmin
-#    bucket-name: scaffold
-
-security:
-  token:
-    cache-ttl: 30m
-    cache-maximum-size: 10000
-  cors:
-    enabled: true
-    allowed-origin-patterns:
-      - "http://localhost:*"
-      - "http://127.0.0.1:*"
-    allowed-methods:
-      - GET
-      - POST
-      - PUT
-      - DELETE
-      - PATCH
-      - OPTIONS
-    allowed-headers:
-      - "*"
-
+# 文档
 swagger:
   enabled: true
 
 scaffold:
+  # web配置
   web:
     response:
       raw-body-path-patterns:
@@ -67,3 +46,37 @@ scaffold:
         - /actuator/**
         - /codegen/configs/*/download
         - /codegen/tables/*/download
+  # 权限配置
+  security:
+    token:
+      cache-ttl: 30m
+      cache-maximum-size: 10000
+    cors:
+      enabled: true
+      allowed-origin-patterns:
+        - "http://localhost:*"
+        - "http://127.0.0.1:*"
+      allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - PATCH
+        - OPTIONS
+      allowed-headers:
+        - "*"
+  # 文件存储
+  file-storage:
+    enabled: true
+    type: local
+    local:
+      base-path: /Users/aries/Documents/www
+#       base-path: ${SCAFFOLD_FILE_STORAGE_BASE_PATH:./.data/files}
+#  file-storage:
+#    enabled: true
+#    type: s3
+#    s3:
+#      endpoint: http://127.0.0.1:9000
+#      access-key: minioadmin
+#      secret-key: minioadmin
+#      bucket-name: scaffold
