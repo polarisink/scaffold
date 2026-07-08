@@ -9,7 +9,7 @@
 - **Spring Cloud**: 2025.0.0
 - **Spring Cloud Alibaba**: 2025.0.0.0
 - **MyBatis Plus**: 3.5.12
-- **MySQL**: 8.0.23
+- **MySQL**: 8.0.28
 - **Redis**: Redisson
 - **认证**: Spring Security / Sa-Token，均按 Servlet 与 WebFlux 分开装配
 - **接口文档**: Knife4j OpenAPI3
@@ -66,7 +66,7 @@ scaffold-starters/
 - `SecurityProperties`
 - JWT 工具和 payload 模型
 - `TokenService`
-- memory / redis token store
+- 基于 Spring Cache 的 token store
 - 默认 `PasswordEncoder`
 - 通用认证错误码
 
@@ -129,7 +129,7 @@ scaffold-test-cloud/
 - Swagger 默认关闭
 - CORS 默认仅放行本地开发地址
 - RBAC 默认不启用，需要显式引入对应业务模块
-- 认证 token store 默认是 `memory`，可通过 `security.token.store-type=redis` 切换为 Redis
+- 认证 token store 使用 Spring Cache，缓存后端通过 `spring.cache.type` 选择，过期时间通过对应缓存实现配置
 - Spring Security JWT 密钥由 `security.token.jwt.secret` 配置，建议通过至少 32 字节的 `SCAFFOLD_JWT_SECRET` 环境变量提供
 
 推荐组合：

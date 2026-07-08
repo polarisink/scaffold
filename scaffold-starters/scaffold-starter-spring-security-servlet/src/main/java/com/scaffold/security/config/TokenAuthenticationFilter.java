@@ -62,7 +62,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             writeUnauthorized(response, AuthCodeEnum.TOKEN_INVALID);
             return;
         }
-        if (!tokenService.has(dto.getUserId().toString())) {
+        if (tokenService.get(dto.getUserId().toString()) == null) {
             log.error("{} unauthorized: token is expired", url);
             writeUnauthorized(response, AuthCodeEnum.TOKEN_EXPIRED);
             return;

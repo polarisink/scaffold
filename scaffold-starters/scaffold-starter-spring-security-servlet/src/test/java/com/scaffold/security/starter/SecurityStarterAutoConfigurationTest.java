@@ -3,8 +3,9 @@ package com.scaffold.security.starter;
 import com.scaffold.security.config.TokenAuthenticationFilter;
 import com.scaffold.security.config.TokenService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
@@ -27,28 +28,30 @@ class SecurityStarterAutoConfigurationTest {
                     SecurityAutoConfiguration.class,
                     WebMvcAutoConfiguration.class,
                     UserDetailsServiceAutoConfiguration.class,
+                    CacheAutoConfiguration.class,
                     AuthCoreAutoConfiguration.class,
                     SecurityStarterAutoConfiguration.class
             ));
 
     @Test
-    void shouldUseInMemoryTokenStoreByDefault() {
+    void shouldUseSpringCacheTokenStoreByDefault() {
         contextRunner.run(context -> {
             assertThat(context).hasSingleBean(TokenService.class);
-            assertThat(context.getBean(TokenService.class)).isInstanceOf(InMemoryTokenService.class);
+            assertThat(AopUtils.getTargetClass(context.getBean(TokenService.class)))
+                    .isEqualTo(SpringCacheTokenService.class);
             assertThat(context).hasSingleBean(TokenAuthenticationFilter.class);
         });
     }
 
     @Test
-    void shouldFailWhenRedisStoreRequestedWithoutRedisson() {
+    void shouldUseSpringCacheTokenStoreWhenLegacyRedisStoreRequested() {
         contextRunner
                 .withClassLoader(new FilteredClassLoader("org.redisson"))
                 .withPropertyValues("security.token.store-type=redis")
                 .run(context -> {
-                    assertThat(context).hasFailed();
-                    assertThat(context.getStartupFailure())
-                            .hasRootCauseInstanceOf(NoSuchBeanDefinitionException.class);
+                    assertThat(context).hasSingleBean(TokenService.class);
+                    assertThat(AopUtils.getTargetClass(context.getBean(TokenService.class)))
+                            .isEqualTo(SpringCacheTokenService.class);
                 });
     }
 

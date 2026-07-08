@@ -47,7 +47,6 @@ public class SecurityProperties {
     @Getter
     @Setter
     public static class Token {
-        private long ttlMinutes = 30;
         private String jwtSecret = "adf1efcs123reqwefwewqdsafrtrgeew";
     }
 }

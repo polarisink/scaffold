@@ -5,6 +5,8 @@ package com.scaffold.security.config;
  */
 public interface TokenService {
 
+    String TOKEN_CACHE_NAME = "security_token";
+
     /**
      * token前缀
      *
@@ -21,7 +23,7 @@ public interface TokenService {
      * @param userId 优化id
      * @param token  token
      */
-    void set(String userId, String token);
+    String set(String userId, String token);
 
     /**
      * 获取token
