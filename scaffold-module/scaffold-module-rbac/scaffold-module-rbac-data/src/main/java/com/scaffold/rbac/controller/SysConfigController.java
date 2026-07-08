@@ -1,7 +1,6 @@
 package com.scaffold.rbac.controller;
 
 import com.scaffold.base.util.PageResponse;
-import com.scaffold.base.util.R;
 import com.scaffold.rbac.entity.SysConfig;
 import com.scaffold.rbac.service.SysConfigService;
 import com.scaffold.rbac.vo.config.SysConfigCreateVO;
@@ -35,8 +34,8 @@ public class SysConfigController {
 
     @PostMapping
     @Operation(summary = "新增配置")
-    public R<Long> save(@RequestBody @Valid SysConfigCreateVO createVO) {
-        return R.success(sysConfigService.save(createVO));
+    public Long save(@RequestBody @Valid SysConfigCreateVO createVO) {
+        return sysConfigService.save(createVO);
     }
 
     @PutMapping

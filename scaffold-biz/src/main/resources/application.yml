@@ -8,7 +8,8 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 30s
   cache:
-    type: redis
+    # 最小演示使用caffeine内存缓存更方便
+    type: caffeine
     caffeine:
       spec: maximumSize=10000,expireAfterWrite=10m
   freemarker:
@@ -18,22 +19,24 @@ spring:
 #    url: ${SCAFFOLD_DATASOURCE_URL:jdbc:mysql://localhost:3306/scaffold?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true}
 #    username: ${SCAFFOLD_DATASOURCE_USERNAME:root}
 #    password: ${SCAFFOLD_DATASOURCE_PASSWORD:123456}
-    url: ${SCAFFOLD_DATASOURCE_URL:jdbc:postgresql://localhost:5432/aries?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true}
-    username: ${SCAFFOLD_DATASOURCE_USERNAME:aries}
+    # 演示模式使用h2数据库，
+    url: ${SCAFFOLD_DATASOURCE_URL:jdbc:h2:file:~/scaffold-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE}
+    username: ${SCAFFOLD_DATASOURCE_USERNAME:root}
     password: ${SCAFFOLD_DATASOURCE_PASSWORD:123456}
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: org.h2.Driver
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.H2Dialect
         transaction:
           coordinator_class: jdbc
           jta:
             platform: ""
+    database-platform: org.hibernate.dialect.H2Dialect
 
-# 文档
+# 文档默
 swagger:
   enabled: true
 
@@ -65,7 +68,7 @@ scaffold:
         - OPTIONS
       allowed-headers:
         - "*"
-  # 文件存储
+  # 文件存储，演示模式默认使用本地存储方式
   file-storage:
     enabled: true
     type: local

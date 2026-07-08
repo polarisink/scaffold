@@ -1,6 +1,5 @@
 package com.scaffold.codegen.controller;
 
-import com.scaffold.base.util.R;
 import com.scaffold.codegen.model.DatabaseTable;
 import com.scaffold.codegen.model.GenTable;
 import com.scaffold.codegen.service.LightCodegenService;
@@ -33,8 +32,8 @@ public class LightCodegenController {
     }
 
     @PostMapping({"/configs", "/tables"})
-    public R<Long> create(@RequestBody GenTable table) {
-        return R.success(codegenService.create(table));
+    public Long create(@RequestBody GenTable table) {
+        return codegenService.create(table);
     }
 
     @PutMapping({"/configs/{id}", "/tables/{id}"})
@@ -53,8 +52,8 @@ public class LightCodegenController {
     }
 
     @PostMapping("/database/import")
-    public R<Long> importTable(@RequestParam String tableName, @RequestParam(required = false) String schema) {
-        return R.success(codegenService.importTable(tableName, schema));
+    public Long importTable(@RequestParam String tableName, @RequestParam(required = false) String schema) {
+        return codegenService.importTable(tableName, schema);
     }
 
     @GetMapping({"/configs/{id}/download", "/tables/{id}/download"})

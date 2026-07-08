@@ -1,7 +1,6 @@
 package com.scaffold.rbac.controller;
 
 import com.scaffold.base.util.PageResponse;
-import com.scaffold.base.util.R;
 import com.scaffold.rbac.entity.SysDictData;
 import com.scaffold.rbac.service.SysDictDataService;
 import com.scaffold.rbac.vo.dict.SysDictDataCreateVO;
@@ -37,8 +36,8 @@ public class SysDictDataController {
 
     @PostMapping
     @Operation(summary = "新增字典数据")
-    public R<Long> save(@RequestBody @Valid SysDictDataCreateVO createVO) {
-        return R.success(dictDataService.save(createVO));
+    public Long save(@RequestBody @Valid SysDictDataCreateVO createVO) {
+        return dictDataService.save(createVO);
     }
 
     @PutMapping
