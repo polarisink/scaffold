@@ -12,14 +12,17 @@
     <artifactId>scaffold-biz</artifactId>
 
     <dependencies>
+        <!--需要web服务就使用starter-file-->
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-starter-web</artifactId>
         </dependency>
+        <!--需要文件上传就使用starter-file-->
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-starter-file</artifactId>
         </dependency>
+        <!--需要使用数据库就使用starter-orm-->
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-starter-orm</artifactId>
@@ -34,14 +37,16 @@
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-module-rbac-security-servlet</artifactId>
         </dependency>
+        <!--需要postgresql作为缓存使用这个，需要需要caffeine或redis缓存引入spring官方cache-starter-->
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-starter-postgresql-cache</artifactId>
         </dependency>
-        <dependency>
+        <!--需要代码生成器就引用这个模块-->
+       <!-- <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-module-codegen</artifactId>
-        </dependency>
+        </dependency>-->
        <!-- <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

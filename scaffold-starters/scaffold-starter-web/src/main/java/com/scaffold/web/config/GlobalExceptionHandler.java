@@ -145,7 +145,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
     @ExceptionHandler(NoResourceFoundException.class)
     public R<Void> handleNoResourceFoundException(NoResourceFoundException e) {
         log.error("resource not found: {}", e.getResourcePath());
-        return R.failed(GLOBAL_ERROR_CODE, serverErrorMessage());
+        return R.failed(GLOBAL_ERROR_CODE, "资源不存在");
     }
 
     /**
