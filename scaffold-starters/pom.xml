@@ -16,9 +16,7 @@
         <module>scaffold-starter-auth-core</module>
         <module>scaffold-starter-orm</module>
         <module>scaffold-starter-spring-security-servlet</module>
-        <module>scaffold-starter-spring-security-webflux</module>
         <module>scaffold-starter-sa-token-servlet</module>
-        <module>scaffold-starter-sa-token-webflux</module>
         <module>scaffold-starter-swagger</module>
         <module>scaffold-starter-web</module>
         <module>scaffold-starter-postgresql-cache</module>

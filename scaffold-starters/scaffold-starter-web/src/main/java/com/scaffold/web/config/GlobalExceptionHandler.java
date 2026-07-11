@@ -194,6 +194,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
             return R.success();
         }
         if (body instanceof String) {
+            response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
             return JsonUtil.toJson(R.success(body));
         }
         if (body instanceof R) {

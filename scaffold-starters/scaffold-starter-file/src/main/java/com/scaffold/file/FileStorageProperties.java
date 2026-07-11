@@ -17,6 +17,8 @@ public class FileStorageProperties implements InitializingBean {
     private Boolean enabled = false;
     //存储类型
     private StorageType type = StorageType.LOCAL;
+    // 文件公开访问前缀；本地存储为空时会从 local.accessPath 推导
+    private String accessPrefix;
     //本地存储配置
     private Local local = new Local();
     //s3配置

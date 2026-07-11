@@ -25,9 +25,9 @@ class FileStarterAutoConfigurationTest {
     void shouldExposeLocalUploadBeansWhenStorageEnabled() {
         contextRunner
                 .withPropertyValues(
-                        "file-storage.enabled=true",
-                        "file-storage.type=local",
-                        "file-storage.local.base-path=target/test-uploads"
+                        "scaffold.file-storage.enabled=true",
+                        "scaffold.file-storage.type=local",
+                        "scaffold.file-storage.local.base-path=target/test-uploads"
                 )
                 .run(context -> {
                     assertThat(context).hasSingleBean(FileUploadService.class);

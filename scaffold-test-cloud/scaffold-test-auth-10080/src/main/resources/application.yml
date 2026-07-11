@@ -1,8 +1,6 @@
 spring:
   application:
     name: cloud-auth-10080
-  main:
-    web-application-type: reactive
   cloud:
     nacos:
       discovery:

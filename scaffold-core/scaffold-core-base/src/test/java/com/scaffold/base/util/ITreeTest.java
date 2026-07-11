@@ -24,11 +24,12 @@ class ITreeTest {
     }
 
     @Test
-    void shouldReturnImmutableEmptyListWhenRootMissing() {
+    void shouldReturnMutableEmptyListWhenRootMissing() {
         List<TestNode> tree = ITree.toTree(99L, List.of(new TestNode(1L, 0L)), Comparator.comparing(TestNode::getId));
 
         assertThat(tree).isEmpty();
-        assertThatThrownBy(() -> tree.add(new TestNode(2L, 0L))).isInstanceOf(UnsupportedOperationException.class);
+        tree.add(new TestNode(2L, 0L));
+        assertThat(tree).hasSize(1);
     }
 
     @Test

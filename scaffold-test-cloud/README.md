@@ -6,7 +6,7 @@
 
 | 模块                                   | 用途                                          | 端口      |
 |--------------------------------------|---------------------------------------------|---------|
-| `scaffold-test-auth-10080`           | 基于 RBAC 公共数据层与 Sa-Token WebFlux 的认证服务       | `10080` |
+| `scaffold-test-auth-10080`           | 基于 RBAC 公共数据层与 Sa-Token Web MVC 的认证服务       | `10080` |
 | `scaffold-test-provider-10081`       | 注册到 Nacos 的 HTTP 服务提供者                      | `10081` |
 | `scaffold-test-consumer-10082`       | 通过 Spring Cloud LoadBalancer 调用 HTTP 服务的消费者 | `10082` |
 | `scaffold-test-order-10083`          | 参与 Seata 全局事务的订单服务                          | `10083` |
@@ -73,7 +73,7 @@ curl 'http://localhost:10082/api/provider-echo?message=hello'
 
 ## Gateway 示例
 
-启动 HTTP Provider 和 Consumer 后，再启动
+启动 Auth、HTTP Provider 和 Consumer 后，再启动
 `scaffold-test-gateway-10000`。
 
 ```bash
@@ -82,6 +82,10 @@ curl 'http://localhost:10000/consumer/api/provider-echo?message=hello'
 ```
 
 网关使用 `lb://` 路由，并在转发前移除 `/provider` 或 `/consumer` 的首段路径。
+默认启用全局鉴权：`/auth/login`、OpenAPI 文档、Actuator 等白名单路径放行，其它
+请求会携带 `Authorization` 调用 Auth 服务的 `/auth/token-info` 校验 token；校验
+成功后继续转发，并向下游注入 `X-User-Id`。本地调试可设置
+`GATEWAY_AUTH_ENABLED=false` 暂时关闭网关鉴权。
 
 Gateway 还会通过 Nacos 自动发现并聚合 Auth、Provider、Consumer 和 Order 的
 OpenAPI 3 文档。启动这些服务和 Gateway 后，统一访问：
@@ -96,9 +100,9 @@ Knife4j 页面左上角可以切换微服务分组，无需分别打开各服务
 
 ## Auth 示例
 
-`scaffold-test-auth-10080` 是薄启动模块，依赖 `scaffold-module-rbac-auth-sa-webflux`。
+`scaffold-test-auth-10080` 依赖 `scaffold-module-rbac-sa-token-servlet`。
 该模块复用 `scaffold-module-rbac-data` 中的用户、角色、关联表和 MyBatis Mapper，
-并通过 `scaffold-starter-sa-token-webflux` 提供 WebFlux 登录能力。Gateway 已将
+并通过 `scaffold-starter-sa-token-servlet` 提供 Web MVC 登录能力。Gateway 已将
 `/auth/**` 路由到 `cloud-auth-10080`。
 
 默认读取 `training` 库，可通过环境变量覆盖：
@@ -117,11 +121,13 @@ curl -X POST 'http://localhost:10000/auth/login' \
   -d '{"username":"admin","password":"123456"}'
 ```
 
-响应中的 `tokenValue` 可作为后续请求的 Bearer token：
+响应中的 token 字符串可作为后续请求的 Bearer token。
+
+访问业务路由时携带 token：
 
 ```bash
-curl 'http://localhost:10000/auth/token-info' \
-  -H 'Authorization: Bearer <tokenValue>'
+curl 'http://localhost:10000/provider/api/echo?message=hello' \
+  -H 'Authorization: Bearer <token>'
 ```
 
 ## Sentinel 示例

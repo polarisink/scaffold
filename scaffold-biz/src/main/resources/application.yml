@@ -39,6 +39,9 @@ spring:
 # 文档默
 swagger:
   enabled: true
+  external-docs:
+    description: SpringBoot基础框架
+    url: ${SCAFFOLD_SWAGGER_EXTERNAL_DOCS_URL:}
 
 scaffold:
   # web配置
@@ -72,8 +75,10 @@ scaffold:
   file-storage:
     enabled: true
     type: local
+    # 文件公开访问前缀；local 不配置时会根据 local.access-path 推导，S3/CDN 可显式配置
+    access-prefix: ${SCAFFOLD_FILE_ACCESS_PREFIX:}
     local:
-      base-path: /Users/aries/Documents/www
+      base-path: ./www
 #       base-path: ${SCAFFOLD_FILE_STORAGE_BASE_PATH:./.data/files}
 #  file-storage:
 #    enabled: true

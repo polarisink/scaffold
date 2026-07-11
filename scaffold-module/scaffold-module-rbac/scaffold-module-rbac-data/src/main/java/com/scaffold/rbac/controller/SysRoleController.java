@@ -60,8 +60,8 @@ public class SysRoleController {
      */
     @PostMapping
     @Operation(summary = "保存", description = "传入sysRole")
-    public void save(@RequestBody @Valid SysRoleCreateVO createVO) {
-        sysRoleService.save(createVO);
+    public Long save(@RequestBody @Valid SysRoleCreateVO createVO) {
+       return sysRoleService.save(createVO);
     }
 
     /**

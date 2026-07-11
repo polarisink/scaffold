@@ -1,7 +1,6 @@
 package com.scaffold.rbac.controller;
 
 import com.scaffold.base.util.PageResponse;
-import com.scaffold.base.util.R;
 import com.scaffold.rbac.entity.SysUser;
 import com.scaffold.rbac.service.ISysUserService;
 import com.scaffold.rbac.vo.user.*;
@@ -46,8 +45,8 @@ public class SysUserController {
      */
     @PostMapping
     @Operation(summary = "保存", description = "新增用户，传入用户信息及所属角色")
-    public R<Long> save(@RequestBody @Valid SysUserCreateVO createVO) {
-        return R.success(sysUserService.save(createVO));
+    public Long save(@RequestBody @Valid SysUserCreateVO createVO) {
+        return sysUserService.save(createVO);
     }
 
     /**

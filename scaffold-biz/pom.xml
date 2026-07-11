@@ -35,14 +35,10 @@
         -->
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-module-rbac-security-servlet</artifactId>
+            <artifactId>scaffold-module-rbac-sa-token-servlet</artifactId>
         </dependency>
         <!--需要postgresql作为缓存使用这个，需要需要caffeine或redis缓存引入spring官方cache-starter-->
         <!--需要代码生成器就引用这个模块-->
-       <!-- <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>-->
         <!--默认使用h2数据库，使用文件方式，这样方便演示-->
         <dependency>
             <groupId>com.h2database</groupId>

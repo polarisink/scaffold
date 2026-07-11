@@ -19,6 +19,10 @@
             <artifactId>scaffold-cloud-common-dependencies</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-core-base</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
         </dependency>

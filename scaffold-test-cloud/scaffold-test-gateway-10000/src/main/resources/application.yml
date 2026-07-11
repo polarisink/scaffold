@@ -44,6 +44,23 @@ spring:
 server:
   port: 10000
 
+scaffold:
+  gateway:
+    auth:
+      enabled: ${GATEWAY_AUTH_ENABLED:true}
+      auth-check-uri: lb://cloud-auth-10080/auth/token-info
+      ignore-path-patterns:
+        - /auth/login
+        - /auth/v3/api-docs/**
+        - /actuator/**
+        - /favicon.ico
+        - /error
+        - /doc.html
+        - /webjars/**
+        - /v3/api-docs/**
+        - /swagger-ui/**
+        - /*/v3/api-docs/**
+
 knife4j:
   gateway:
     # 生产环境可通过 KNIFE4J_GATEWAY_ENABLED=false 关闭聚合文档。

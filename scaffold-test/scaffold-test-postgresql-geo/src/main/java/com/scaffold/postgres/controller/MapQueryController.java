@@ -27,36 +27,36 @@ public class MapQueryController {
     }
 
     @PostMapping("/places")
-    public R<MapPlaceResponse> createPlace(@Valid @RequestBody CreatePlaceRequest request) {
-        return R.success(mapQueryService.createPlace(request));
+    public MapPlaceResponse createPlace(@Valid @RequestBody CreatePlaceRequest request) {
+        return mapQueryService.createPlace(request);
     }
 
     @GetMapping("/places/nearby")
-    public R<List<MapPlaceResponse>> findNearbyPlaces(
+    public List<MapPlaceResponse> findNearbyPlaces(
             @RequestParam @DecimalMin("-180.0") @DecimalMax("180.0") double lon,
             @RequestParam @DecimalMin("-90.0") @DecimalMax("90.0") double lat,
             @RequestParam(defaultValue = "1000") @Min(1) @Max(100000) double radiusMeters) {
-        return R.success(mapQueryService.findNearbyPlaces(lon, lat, radiusMeters));
+        return mapQueryService.findNearbyPlaces(lon, lat, radiusMeters);
     }
 
     @GetMapping("/places/{id}")
-    public R<MapPlaceResponse> findPlace(@PathVariable("id") Long id) {
-        return R.success(mapQueryService.findPlace(id));
+    public MapPlaceResponse findPlace(@PathVariable("id") Long id) {
+        return mapQueryService.findPlace(id);
     }
 
     @GetMapping("/regions/contains")
-    public R<List<MapRegionResponse>> findRegionsContainingPoint(
+    public List<MapRegionResponse> findRegionsContainingPoint(
             @RequestParam @DecimalMin("-180.0") @DecimalMax("180.0") double lon,
             @RequestParam @DecimalMin("-90.0") @DecimalMax("90.0") double lat) {
-        return R.success(mapQueryService.findRegionsContainingPoint(lon, lat));
+        return mapQueryService.findRegionsContainingPoint(lon, lat);
     }
 
     @GetMapping("/regions/intersects")
-    public R<List<MapRegionResponse>> findRegionsInViewport(
+    public List<MapRegionResponse> findRegionsInViewport(
             @RequestParam @DecimalMin("-180.0") @DecimalMax("180.0") double minLon,
             @RequestParam @DecimalMin("-90.0") @DecimalMax("90.0") double minLat,
             @RequestParam @DecimalMin("-180.0") @DecimalMax("180.0") double maxLon,
             @RequestParam @DecimalMin("-90.0") @DecimalMax("90.0") double maxLat) {
-        return R.success(mapQueryService.findRegionsInViewport(minLon, minLat, maxLon, maxLat));
+        return mapQueryService.findRegionsInViewport(minLon, minLat, maxLon, maxLat);
     }
 }

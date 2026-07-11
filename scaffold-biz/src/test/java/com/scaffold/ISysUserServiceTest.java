@@ -8,14 +8,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-@SpringBootTest
+@SpringBootTest(properties = {
+        "spring.datasource.url=jdbc:h2:mem:scaffold-biz-user-service;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
+        "spring.datasource.username=sa",
+        "spring.datasource.password="
+})
 class ISysUserServiceTest {
     @Autowired
     ISysUserService sysUserService;
 
     @Test
     void save() {
-        SysUserCreateVO vo = new SysUserCreateVO("admin", "admin", 1L, List.of(1L));
+        SysUserCreateVO vo = new SysUserCreateVO("test-user", "admin", 1L, List.of(1L));
         sysUserService.save(vo);
     }
 }

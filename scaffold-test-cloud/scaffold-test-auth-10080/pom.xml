@@ -11,25 +11,20 @@
     </parent>
 
     <artifactId>scaffold-test-auth-10080</artifactId>
-    <description>Spring Cloud WebFlux Sa-Token 认证服务</description>
+    <description>Spring Cloud Web Sa-Token 认证服务</description>
 
     <dependencies>
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-cloud-common-dependencies</artifactId>
         </dependency>
-        <!--这里可以使用scaffold-module-rbac-auth-sa-webflux或scaffold-module-rbac-auth-security-webflux-->
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-module-rbac-auth-sa-webflux</artifactId>
+            <artifactId>scaffold-module-rbac-sa-token-servlet</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webflux-api</artifactId>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

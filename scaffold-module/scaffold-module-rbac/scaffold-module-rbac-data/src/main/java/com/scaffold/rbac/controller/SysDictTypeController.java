@@ -1,7 +1,6 @@
 package com.scaffold.rbac.controller;
 
 import com.scaffold.base.util.PageResponse;
-import com.scaffold.base.util.R;
 import com.scaffold.rbac.entity.SysDictType;
 import com.scaffold.rbac.service.SysDictTypeService;
 import com.scaffold.rbac.vo.dict.SysDictTypeCreateVO;
@@ -37,8 +36,8 @@ public class SysDictTypeController {
 
     @PostMapping
     @Operation(summary = "新增字典类型")
-    public R<Long> save(@RequestBody @Valid SysDictTypeCreateVO createVO) {
-        return R.success(dictTypeService.save(createVO));
+    public Long save(@RequestBody @Valid SysDictTypeCreateVO createVO) {
+        return dictTypeService.save(createVO);
     }
 
     @PutMapping

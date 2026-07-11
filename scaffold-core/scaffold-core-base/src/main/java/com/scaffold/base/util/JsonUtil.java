@@ -138,6 +138,10 @@ public class JsonUtil {
         return execute(() -> mapper().readTree(bytes), "readTree error");
     }
 
+    public static JsonNode valueToTree(Object o){
+        return execute(()-> mapper().valueToTree(o),"valueToTree error");
+    }
+
 
     /**
      * 从typeReference转对象

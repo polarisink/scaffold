@@ -24,16 +24,20 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI springShopOpenAPI() {
         SwaggerProperties.Contact contact = properties.getContact();
-        return new OpenAPI()
+        OpenAPI openAPI = new OpenAPI()
                 .info(new Info().title(properties.getTitle())
                         .description(properties.getDescription())
                         .version(properties.getVersion())
                         .contact(new Contact().name(contact.getName()).email(contact.getEmail()).url(contact.getUrl())))
-                .externalDocs(new ExternalDocumentation()
-                        .description("SpringBoot基础框架")
-                        .url("http://127.0.0.1:8088"))
                 .addSecurityItem(new SecurityRequirement().addList(HttpHeaders.AUTHORIZATION))
                 .components(new Components().addSecuritySchemes(HttpHeaders.AUTHORIZATION, new SecurityScheme()
                         .name(HttpHeaders.AUTHORIZATION).type(SecurityScheme.Type.HTTP).scheme("bearer")));
+        SwaggerProperties.ExternalDocs externalDocs = properties.getExternalDocs();
+        if (externalDocs.getUrl() != null && !externalDocs.getUrl().isBlank()) {
+            openAPI.externalDocs(new ExternalDocumentation()
+                    .description(externalDocs.getDescription())
+                    .url(externalDocs.getUrl()));
+        }
+        return openAPI;
     }
 }

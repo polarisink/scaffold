@@ -68,7 +68,13 @@ public class RbacLogRecordService implements ILogRecordService {
                 entity.setResult(record.getBizNo());
             }
             Map<CodeVariableType, Object> codeVariable = record.getCodeVariable();
-            entity.setMethod(codeVariable.get(CodeVariableType.ClassName) + "." + codeVariable.get(CodeVariableType.MethodName));
+            if (codeVariable != null) {
+                Object className = codeVariable.get(CodeVariableType.ClassName);
+                Object methodName = codeVariable.get(CodeVariableType.MethodName);
+                if (className != null || methodName != null) {
+                    entity.setMethod(StrUtil.format("{}.{}", className, methodName));
+                }
+            }
             if (record.getCreateTime() != null) {
                 entity.setGmtCreated(LocalDateTime.ofInstant(record.getCreateTime().toInstant(), ZoneId.systemDefault()));
             }

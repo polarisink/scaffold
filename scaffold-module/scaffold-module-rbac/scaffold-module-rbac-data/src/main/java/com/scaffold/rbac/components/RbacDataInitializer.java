@@ -19,6 +19,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * todo 不同数据库平台可能还有其他不同数据，因此还是使用sql文件进行rbac数据初始化，包括以下类型：
+ *  1、h2
+ *  2、mysql
+ *  3、postgreSql
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

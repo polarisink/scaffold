@@ -14,7 +14,7 @@ public class FileStarterAutoConfiguration {
 
     @Bean
     @ConditionalOnBean(FileUploadService.class)
-    public FileController fileController(FileUploadService fileUploadService) {
-        return new FileController(fileUploadService);
+    public FileController fileController(FileUploadService fileUploadService, FileStorageProperties properties) {
+        return new FileController(fileUploadService, properties);
     }
 }

@@ -131,17 +131,7 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-spring-security-webflux</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-starter-sa-token-servlet</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-sa-token-webflux</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
@@ -182,16 +172,6 @@
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-module-rbac-sa-token-servlet</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-module-rbac-auth-security-webflux</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-module-rbac-auth-sa-webflux</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>

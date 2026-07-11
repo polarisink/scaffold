@@ -1,6 +1,5 @@
 package com.scaffold.rbac.controller;
 
-import com.scaffold.base.util.R;
 import com.scaffold.rbac.entity.SysOrg;
 import com.scaffold.rbac.service.SysOrgService;
 import com.scaffold.rbac.vo.org.SysOrgCreateVO;
@@ -29,8 +28,8 @@ public class SysOrgController {
 
     @PostMapping
     @Operation(summary = "新增组织")
-    public R<Long> save(@RequestBody @Valid SysOrgCreateVO createVO) {
-        return R.success(sysOrgService.save(createVO));
+    public Long save(@RequestBody @Valid SysOrgCreateVO createVO) {
+        return sysOrgService.save(createVO);
     }
 
     @PutMapping

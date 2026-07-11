@@ -29,6 +29,7 @@ public class SwaggerProperties {
     private String termsOfServiceUrl = "";
     private String host = "";
     private Contact contact = new Contact();
+    private ExternalDocs externalDocs = new ExternalDocs();
     private Authorization authorization = new Authorization();
 
     @Setter
@@ -37,6 +38,13 @@ public class SwaggerProperties {
         private String name = "";
         private String url = "";
         private String email = "";
+    }
+
+    @Getter
+    @Setter
+    public static class ExternalDocs {
+        private String description = "";
+        private String url = "";
     }
 
     @Getter
