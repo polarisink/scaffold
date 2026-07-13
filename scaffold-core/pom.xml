@@ -11,6 +11,7 @@
     <artifactId>scaffold-core</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>scaffold-core-auth</module>
         <module>scaffold-core-base</module>
         <module>scaffold-core-redis</module>
         <module>scaffold-core-postgresql-cache</module>

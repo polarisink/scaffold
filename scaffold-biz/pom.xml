@@ -15,17 +15,17 @@
         <!--需要web服务就使用starter-file-->
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-web</artifactId>
+            <artifactId>scaffold-web-starter</artifactId>
         </dependency>
         <!--需要文件上传就使用starter-file-->
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-file</artifactId>
+            <artifactId>scaffold-file-starter</artifactId>
         </dependency>
         <!--需要使用数据库就使用starter-orm-->
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-orm</artifactId>
+            <artifactId>scaffold-orm-starter</artifactId>
         </dependency>
         <!--
         如果不需要数据库服务就不需要这个

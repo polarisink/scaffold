@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-web</artifactId>
+            <artifactId>scaffold-web-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

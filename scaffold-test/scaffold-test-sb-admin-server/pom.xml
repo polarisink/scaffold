@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-web</artifactId>
+            <artifactId>scaffold-web-starter</artifactId>
         </dependency>
     </dependencies>
 

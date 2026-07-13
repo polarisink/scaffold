@@ -7,6 +7,7 @@ import com.scaffold.remote.RemoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "远程调用")
@@ -28,20 +30,11 @@ class ProviderClientController {
     }
 
     public R<Map<String, String>> providerEchoBlocked(String message, BlockException exception) {
-        Map<String, String> map = Map.of(
-                "message", message,
-                "sentinel", "blocked",
-                "reason", exception.getClass().getSimpleName(),
-                "timestamp", Instant.now().toString());
-        return R.success(map);
+        return R.failed("请求过于频繁");
     }
 
     public R<Map<String, String>> providerEchoFallback(String message, Throwable throwable) {
-        Map<String, String> map = Map.of(
-                "message", message,
-                "sentinel", "fallback",
-                "reason", throwable.getClass().getSimpleName(),
-                "timestamp", Instant.now().toString());
-        return R.success(map);
+        log.error("echo调用失败", throwable);
+        return R.failed("Provider 服务暂时不可用");
     }
 }

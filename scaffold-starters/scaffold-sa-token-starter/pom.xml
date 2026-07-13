@@ -9,12 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>scaffold-starter-sa-token-servlet</artifactId>
+    <artifactId>scaffold-sa-token-starter</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-auth-core</artifactId>
+            <artifactId>scaffold-core-auth</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.dev33</groupId>

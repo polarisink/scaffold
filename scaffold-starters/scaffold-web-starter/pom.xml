@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>scaffold-starter-web</artifactId>
+    <artifactId>scaffold-web-starter</artifactId>
 
 
     <dependencies>

@@ -106,52 +106,52 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-geo</artifactId>
+                <artifactId>scaffold-geo-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-web</artifactId>
+                <artifactId>scaffold-web-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-swagger</artifactId>
+                <artifactId>scaffold-openapi-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-auth-core</artifactId>
+                <artifactId>scaffold-core-auth</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-spring-security-servlet</artifactId>
+                <artifactId>scaffold-spring-security-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-sa-token-servlet</artifactId>
+                <artifactId>scaffold-sa-token-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-orm</artifactId>
+                <artifactId>scaffold-orm-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-file</artifactId>
+                <artifactId>scaffold-file-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-postgresql-cache</artifactId>
+                <artifactId>scaffold-postgresql-cache-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-starter-postgresql-job</artifactId>
+                <artifactId>scaffold-postgresql-job-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>

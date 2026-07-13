@@ -26,19 +26,19 @@
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-web</artifactId>
+            <artifactId>scaffold-web-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-swagger</artifactId>
+            <artifactId>scaffold-openapi-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-orm</artifactId>
+            <artifactId>scaffold-orm-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-spring-security-servlet</artifactId>
+            <artifactId>scaffold-spring-security-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>

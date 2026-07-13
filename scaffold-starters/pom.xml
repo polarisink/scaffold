@@ -12,15 +12,14 @@
     <artifactId>scaffold-starters</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>scaffold-starter-file</module>
-        <module>scaffold-starter-auth-core</module>
-        <module>scaffold-starter-orm</module>
-        <module>scaffold-starter-spring-security-servlet</module>
-        <module>scaffold-starter-sa-token-servlet</module>
-        <module>scaffold-starter-swagger</module>
-        <module>scaffold-starter-web</module>
-        <module>scaffold-starter-postgresql-cache</module>
-        <module>scaffold-starter-postgresql-job</module>
-        <module>scaffold-starter-geo</module>
+        <module>scaffold-file-starter</module>
+        <module>scaffold-orm-starter</module>
+        <module>scaffold-spring-security-starter</module>
+        <module>scaffold-sa-token-starter</module>
+        <module>scaffold-openapi-starter</module>
+        <module>scaffold-web-starter</module>
+        <module>scaffold-postgresql-cache-starter</module>
+        <module>scaffold-postgresql-job-starter</module>
+        <module>scaffold-geo-starter</module>
     </modules>
 </project>

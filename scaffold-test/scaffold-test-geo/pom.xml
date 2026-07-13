@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-starter-geo</artifactId>
+            <artifactId>scaffold-geo-starter</artifactId>
         </dependency>
     </dependencies>
 
