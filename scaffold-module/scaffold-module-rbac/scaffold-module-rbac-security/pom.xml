@@ -9,7 +9,7 @@
         <version>${rversion}</version>
     </parent>
 
-    <artifactId>scaffold-module-rbac-security-servlet</artifactId>
+    <artifactId>scaffold-module-rbac-security</artifactId>
     <name>Scaffold RBAC Spring Security Servlet Module</name>
     <description>基于 Spring Security Servlet 的完整 RBAC 业务模块</description>
 

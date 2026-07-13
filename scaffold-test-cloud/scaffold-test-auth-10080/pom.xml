@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-module-rbac-sa-token-servlet</artifactId>
+            <artifactId>scaffold-module-rbac-sa-token</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

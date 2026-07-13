@@ -1,4 +1,22 @@
-# 数据模块
+# scaffold-core-orm
 
-- 有mybatis-plus和jpa
-- 实体类基类
+ORM 底层公共实现，提供 MyBatis Plus 基础设施和持久化审计模型。
+
+## 主要能力
+
+- `BaseAuditable`：审计字段实体基类。
+- `DefaultMetaObjectHandler`：MyBatis Plus 审计字段自动填充。
+- `MyBaseMapper`：项目通用 Mapper 基类。
+- `MyBatisPlusConfig`：MyBatis Plus 公共配置。
+- `MysqlInjector`：自定义 SQL 注入扩展。
+
+Spring Boot 业务应用应使用 [`scaffold-orm-starter`](../../scaffold-starters/scaffold-orm-starter/README.md)。本模块适合框架扩展或只复用底层类型的场景。
+
+```xml
+<dependency>
+    <groupId>com.scaffold</groupId>
+    <artifactId>scaffold-core-orm</artifactId>
+</dependency>
+```
+
+数据库驱动仍需由最终应用根据实际数据库显式提供。

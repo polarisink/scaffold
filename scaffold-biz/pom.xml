@@ -29,13 +29,13 @@
         </dependency>
         <!--
         如果不需要数据库服务就不需要这个
-        如果只需要数据库不需要用户系统就引入scaffold-starter-orm
+        如果只需要数据库不需要用户系统就引入scaffold-orm-starter
         如果需要 Spring Security Servlet 权限系统就引入 scaffold-module-rbac-security-servlet
         如果需要 Sa-Token Servlet 权限系统就引入 scaffold-module-rbac-sa-token-servlet
         -->
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-module-rbac-sa-token-servlet</artifactId>
+            <artifactId>scaffold-module-rbac-sa-token</artifactId>
         </dependency>
         <!--需要postgresql作为缓存使用这个，需要需要caffeine或redis缓存引入spring官方cache-starter-->
         <!--需要代码生成器就引用这个模块-->

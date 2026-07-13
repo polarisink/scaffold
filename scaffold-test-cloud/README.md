@@ -102,7 +102,7 @@ Knife4j 页面左上角可以切换微服务分组，无需分别打开各服务
 
 `scaffold-test-auth-10080` 依赖 `scaffold-module-rbac-sa-token-servlet`。
 该模块复用 `scaffold-module-rbac-data` 中的用户、角色、关联表和 MyBatis Mapper，
-并通过 `scaffold-starter-sa-token-servlet` 提供 Web MVC 登录能力。Gateway 已将
+并通过 `scaffold-sa-token-starter` 提供 Web MVC 登录能力。Gateway 已将
 `/auth/**` 路由到 `cloud-auth-10080`。
 
 默认读取 `training` 库，可通过环境变量覆盖：
@@ -165,7 +165,7 @@ done
 
 该示例以 `scaffold-test-consumer-10082` 为全局事务发起方，并让 Provider、Consumer、
 Order 分别写入 `scaffold_provider`、`scaffold_consumer`、`scaffold_order` 数据库。
-三个模块都引入 `scaffold-starter-orm`，使用 JPA Entity 和 `JpaRepository` 完成
+三个模块都引入 `scaffold-orm-starter`，使用 JPA Entity 和 `JpaRepository` 完成
 业务表建表及 CRUD；三个库还各有一张 AT 模式所需的 `undo_log` 表。
 
 先创建数据库和 `undo_log`：

@@ -12,4 +12,14 @@
 
 模块内所有双坐标 API 均使用“纬度、经度”语义，并优先接收 `GeoCoordinate`。
 
-Spring Boot 应用通常不直接依赖本模块，请使用 `scaffold-starter-geo`。
+Spring Boot 应用通常不直接依赖本模块，请使用
+[`scaffold-geo-starter`](../../scaffold-starters/scaffold-geo-starter/README.md)。直接使用纯 Java API 时可引入：
+
+```xml
+<dependency>
+    <groupId>com.scaffold</groupId>
+    <artifactId>scaffold-core-geo</artifactId>
+</dependency>
+```
+
+GeoTIFF 数据不会随模块提供，调用方需要自行准备与区域规则匹配的 DEM 文件。

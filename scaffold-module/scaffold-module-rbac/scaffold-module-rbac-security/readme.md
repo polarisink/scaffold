@@ -26,7 +26,7 @@ scaffold-module/
 Spring Security Servlet 版本，依赖：
 
 - `scaffold-module-rbac-data`
-- `scaffold-starter-spring-security-servlet`
+- `scaffold-spring-security-starter`
 
 适合普通 Spring Boot MVC 项目使用。
 
@@ -35,7 +35,7 @@ Spring Security Servlet 版本，依赖：
 Sa-Token Servlet 版本，依赖：
 
 - `scaffold-module-rbac-data`
-- `scaffold-starter-sa-token-servlet`
+- `scaffold-sa-token-starter`
 
 适合希望使用 Sa-Token 的 Spring Boot MVC 项目。
 

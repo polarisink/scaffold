@@ -9,7 +9,7 @@
         <version>${rversion}</version>
     </parent>
 
-    <artifactId>scaffold-module-rbac-sa-token-servlet</artifactId>
+    <artifactId>scaffold-module-rbac-sa-token</artifactId>
     <name>Scaffold RBAC Sa-Token Servlet Module</name>
     <description>基于 Sa-Token Servlet 的完整 RBAC 业务模块</description>
 
@@ -37,6 +37,10 @@
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-sa-token-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot3-starter</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -1,7 +1,18 @@
-# scaffold-starter-geo
+# scaffold-geo-starter
 
 `scaffold-core-geo` 的 Spring Boot 自动配置模块。引入后无需手动创建 `ResourceLoader`、区域索引或
 GeoTIFF 读取器，应用直接注入 `ElevationProvider` 即可。
+
+## 接入
+
+```xml
+<dependency>
+    <groupId>com.scaffold</groupId>
+    <artifactId>scaffold-geo-starter</artifactId>
+</dependency>
+```
+
+组件默认启用；暂时不需要地形能力时设置 `scaffold.geo.enabled=false`。
 
 ## 配置
 
@@ -46,6 +57,9 @@ public class TerrainService {
 ```
 
 GeoTIFF 查询失败返回 `OptionalDouble.empty()`，由调用方明确决定回退策略。
+
+Starter 只内置区域边界 CSV，不包含 DEM GeoTIFF 数据。调用方需要将 DEM 文件放入
+`dem-base-location` 指定的位置。
 
 ## 地形通视
 
