@@ -37,7 +37,7 @@
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-module-rbac-sa-token</artifactId>
         </dependency>
-        <!--需要postgresql作为缓存使用这个，需要需要caffeine或redis缓存引入spring官方cache-starter-->
+        <!--需要 Caffeine、Redis、PostgreSQL 单级/二级缓存时引入 scaffold-cache-starter-->
         <!--需要代码生成器就引用这个模块-->
         <!--默认使用h2数据库，使用文件方式，这样方便演示-->
         <dependency>

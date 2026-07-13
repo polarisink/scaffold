@@ -11,7 +11,6 @@
 | [`scaffold-core-auth`](scaffold-core-auth/README.md) | JWT、TokenStore 和认证公共配置 | 两种认证 Starter |
 | [`scaffold-core-orm`](scaffold-core-orm/README.md) | MyBatis Plus 与审计实体基础实现 | `scaffold-orm-starter` |
 | [`scaffold-core-redis`](scaffold-core-redis/README.md) | Redisson、Redis Stream、Pub/Sub 与工具类 | 按需直接引入 |
-| [`scaffold-core-postgresql-cache`](scaffold-core-postgresql-cache/README.md) | PostgreSQL Spring Cache 实现 | `scaffold-postgresql-cache-starter` |
 | [`scaffold-core-websocket`](scaffold-core-websocket/README.md) | Netty Socket.IO 服务端基础设施 | 按需直接引入 |
 | [`scaffold-core-geo`](scaffold-core-geo/README.md) | 地理计算、DEM 高程与地形分析 | `scaffold-geo-starter` |
 

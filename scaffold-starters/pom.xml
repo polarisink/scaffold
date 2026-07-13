@@ -18,8 +18,7 @@
         <module>scaffold-sa-token-starter</module>
         <module>scaffold-openapi-starter</module>
         <module>scaffold-web-starter</module>
-        <module>scaffold-postgresql-cache-starter</module>
-        <module>scaffold-postgresql-job-starter</module>
+        <module>scaffold-cache-starter</module>
         <module>scaffold-geo-starter</module>
     </modules>
 </project>

@@ -82,6 +82,14 @@ public class JacksonConfig {
      */
     @Bean("redisObjectMapper")
     public ObjectMapper redisObjectMapper() {
+        return createRedisObjectMapper();
+    }
+
+    /**
+     * Creates the standard cache ObjectMapper without requiring this configuration
+     * class to be registered in the application context.
+     */
+    public static ObjectMapper createRedisObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(getJavaTimeModule());
         // 缓存类型,上面配置不生效，使用下面的

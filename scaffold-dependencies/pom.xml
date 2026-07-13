@@ -91,11 +91,6 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-core-postgresql-cache</artifactId>
-                <version>${rversion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-websocket</artifactId>
                 <version>${rversion}</version>
             </dependency>
@@ -146,7 +141,7 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-postgresql-cache-starter</artifactId>
+                <artifactId>scaffold-cache-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>

@@ -32,7 +32,7 @@
         <module>scaffold-test-bizlog</module>
         <module>scaffold-test-sqlite</module>
         <module>scaffold-test-postgresql-geo</module>
-        <module>scaffold-test-postgresql-cache</module>
+        <module>scaffold-test-cache</module>
         <module>scaffold-test-qwen3-asr</module>
         <module>scaffold-test-flink</module>
         <module>scaffold-test-geo</module>

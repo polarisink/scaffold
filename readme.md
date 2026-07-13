@@ -49,7 +49,7 @@ scaffold-starters/
 ├── scaffold-orm-starter
 ├── scaffold-file-starter
 ├── scaffold-geo-starter
-├── scaffold-postgresql-cache-starter
+├── scaffold-cache-starter
 └── scaffold-postgresql-job-starter
 ```
 
