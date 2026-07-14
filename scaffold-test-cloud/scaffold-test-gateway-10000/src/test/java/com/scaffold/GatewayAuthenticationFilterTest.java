@@ -90,7 +90,7 @@ class GatewayAuthenticationFilterTest {
                             .body(body)
                             .build());
                 });
-        return new GatewayAuthenticationFilter(new GatewayAuthProperties(), builder, new ObjectMapper());
+        return new GatewayAuthenticationFilter(new GatewayAuthProperties(null, null, null), builder, new ObjectMapper());
     }
 
     private static GatewayFilterChain chain(GatewayFilterChain chain) {

@@ -9,12 +9,12 @@ spring:
     multipart:
       max-file-size: 512MB
       max-request-size: 512MB
-
-swagger:
-  enabled: true
-  title: Qwen3-ASR HTTP API
-  description: 本地音频转写服务接口
-  version: v1.0
+scaffold:
+  swagger:
+    enabled: true
+    title: Qwen3-ASR HTTP API
+    description: 本地音频转写服务接口
+    version: v1.0
 
 qwen3-asr:
   # 未配置时自动查找模块内的 .venv、推理脚本和 Qwen3-ASR-0.6B 模型。

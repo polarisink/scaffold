@@ -1,16 +1,10 @@
 package com.scaffold;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Getter
-@Setter
 @ConfigurationProperties(prefix = "scaffold.gateway.auth")
-public class GatewayAuthProperties {
-    private boolean enabled = true;
-    private String authCheckUri = "lb://cloud-auth-10080/auth/token-info";
-    private String[] ignorePathPatterns = {
+public record GatewayAuthProperties(Boolean enabled, String authCheckUri, String[] ignorePathPatterns) {
+    private static final String[] DEFAULT_IGNORE_PATH_PATTERNS = {
             "/auth/login",
             "/auth/v3/api-docs/**",
             "/actuator/**",
@@ -22,4 +16,11 @@ public class GatewayAuthProperties {
             "/swagger-ui/**",
             "/*/v3/api-docs/**"
     };
+    public GatewayAuthProperties {
+        enabled = enabled == null ? true : enabled;
+        authCheckUri = authCheckUri == null ? "lb://cloud-auth-10080/auth/token-info" : authCheckUri;
+        ignorePathPatterns = ignorePathPatterns == null ? DEFAULT_IGNORE_PATH_PATTERNS.clone() : ignorePathPatterns.clone();
+    }
+    public boolean isEnabled(){ return enabled; } public String getAuthCheckUri(){ return authCheckUri; }
+    public String[] getIgnorePathPatterns(){ return ignorePathPatterns.clone(); }
 }

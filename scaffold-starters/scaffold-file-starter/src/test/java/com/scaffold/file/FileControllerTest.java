@@ -11,9 +11,10 @@ class FileControllerTest {
 
     @Test
     void shouldReturnLocalAccessPrefixFromAccessPath() {
-        FileStorageProperties properties = new FileStorageProperties();
-        properties.setType(FileStorageProperties.StorageType.LOCAL);
-        properties.getLocal().setAccessPath("/assets/**");
+        FileStorageProperties.Local local = new FileStorageProperties.Local();
+        local.setAccessPath("/assets/**");
+        FileStorageProperties properties = new FileStorageProperties(
+                false, FileStorageProperties.StorageType.LOCAL, null, local, null);
         FileUploadService fileUploadService = mock(FileUploadService.class);
         when(fileUploadService.getStorageType()).thenReturn("LocalFS");
         FileController controller = new FileController(fileUploadService, properties);
@@ -26,9 +27,14 @@ class FileControllerTest {
 
     @Test
     void shouldPreferConfiguredAccessPrefix() {
-        FileStorageProperties properties = new FileStorageProperties();
-        properties.setType(FileStorageProperties.StorageType.S3);
-        properties.setAccessPrefix("https://cdn.example.com/scaffold");
+        FileStorageProperties.S3 s3 = new FileStorageProperties.S3();
+        s3.setEndpoint("https://s3.example.com");
+        s3.setAccessKey("access-key");
+        s3.setSecretKey("secret-key");
+        s3.setBucketName("bucket");
+        FileStorageProperties properties = new FileStorageProperties(
+                false, FileStorageProperties.StorageType.S3,
+                "https://cdn.example.com/scaffold", null, s3);
         FileUploadService fileUploadService = mock(FileUploadService.class);
         when(fileUploadService.getStorageType()).thenReturn("s3");
         FileController controller = new FileController(fileUploadService, properties);

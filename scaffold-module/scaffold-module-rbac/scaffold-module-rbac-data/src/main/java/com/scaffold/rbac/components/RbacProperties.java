@@ -1,10 +1,8 @@
 package com.scaffold.rbac.components;
 
 import com.scaffold.base.constant.GlobalConstant;
-import lombok.Data;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.util.Assert;
 
 /**
@@ -29,38 +27,37 @@ enum ResetStrategy {
 /**
  * rbac配置
  */
-@Data
-@Configuration
 @ConfigurationProperties(prefix = "scaffold.rbac")
-public class RbacProperties implements InitializingBean {
+public record RbacProperties(
+        @DefaultValue("USERNAME") ResetStrategy reset,
+        @DefaultValue(GlobalConstant.DEFAULT_DATE_FORMAT) String pattern,
+        @DefaultValue("") String separator,
+        @DefaultValue("true") Boolean usernameBehind,
+        @DefaultValue("anonymous") String anonymousUsername) {
     /**
      * 重置策略
      */
-    private ResetStrategy reset = ResetStrategy.USERNAME;
     /**
      * 时间戳类型
      */
-    private String pattern = GlobalConstant.DEFAULT_DATE_FORMAT;
     /**
      * 间隔符
      */
-    private String separator = "";
     /**
      * 用户名是否在前面
      */
-    private Boolean usernameBehind = true;
 
     /**
      * 匿名用户用户名
      */
-    private String anonymousUsername = "anonymous";
-
-    @Override
-    public void afterPropertiesSet() {
+    public RbacProperties {
         // 如果不是用户名，就要校验时间戳
         if (reset != ResetStrategy.USERNAME) {
             String regex = "^[yMdHmsS\\-/:\\s]+$";
             Assert.state(pattern != null && pattern.matches(regex), "不合法的时间格式");
         }
     }
+    public ResetStrategy getReset(){ return reset; } public String getPattern(){ return pattern; }
+    public String getSeparator(){ return separator; } public Boolean getUsernameBehind(){ return usernameBehind; }
+    public String getAnonymousUsername(){ return anonymousUsername; }
 }

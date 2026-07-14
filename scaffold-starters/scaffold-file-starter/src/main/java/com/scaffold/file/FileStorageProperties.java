@@ -1,31 +1,22 @@
 package com.scaffold.file;
 
 import lombok.Data;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
 import static com.scaffold.file.FileStorageProperties.FILE_STORAGE_PREFIX;
 
-@Data
 @ConfigurationProperties(prefix = FILE_STORAGE_PREFIX)
-public class FileStorageProperties implements InitializingBean {
+public record FileStorageProperties(Boolean enabled, StorageType type, String accessPrefix,
+                                    Local local, S3 s3) {
 
     public static final String FILE_STORAGE_PREFIX = "scaffold.file-storage";
 
-    //是否启用
-    private Boolean enabled = false;
-    //存储类型
-    private StorageType type = StorageType.LOCAL;
-    // 文件公开访问前缀；本地存储为空时会从 local.accessPath 推导
-    private String accessPrefix;
-    //本地存储配置
-    private Local local = new Local();
-    //s3配置
-    private S3 s3 = new S3();
-
-    @Override
-    public void afterPropertiesSet() {
+    public FileStorageProperties {
+        enabled = enabled != null && enabled;
+        type = type == null ? StorageType.LOCAL : type;
+        local = local == null ? new Local() : local;
+        s3 = s3 == null ? new S3() : s3;
         switch (type) {
             case LOCAL -> {
             }
@@ -37,6 +28,12 @@ public class FileStorageProperties implements InitializingBean {
             }
         }
     }
+
+    public Boolean getEnabled() { return enabled; }
+    public StorageType getType() { return type; }
+    public String getAccessPrefix() { return accessPrefix; }
+    public Local getLocal() { return local; }
+    public S3 getS3() { return s3; }
 
     public enum StorageType {
         LOCAL, S3,

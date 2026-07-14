@@ -7,25 +7,21 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 @ConfigurationProperties(prefix = "scaffold.web")
-public class WebProperties {
+public record WebProperties(Cors cors, Response response, RequestLog requestLog) {
 
     /**
      * MVC CORS 配置。默认关闭，避免 starter 在未显式配置时放开跨域访问。
      */
-    private Cors cors = new Cors();
+    public WebProperties {
+        cors = cors == null ? new Cors() : cors;
+        response = response == null ? new Response() : response;
+        requestLog = requestLog == null ? new RequestLog() : requestLog;
+    }
 
-    /**
-     * 统一响应包装和异常响应配置。
-     */
-    private Response response = new Response();
-
-    /**
-     * HTTP 请求日志配置。
-     */
-    private RequestLog requestLog = new RequestLog();
+    public Cors getCors() { return cors; }
+    public Response getResponse() { return response; }
+    public RequestLog getRequestLog() { return requestLog; }
 
     /**
      * CORS 跨域配置。

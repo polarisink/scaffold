@@ -3,6 +3,7 @@ package com.scaffold.vertx;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 /**
  * 1. 发送消息的方法
@@ -43,6 +44,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 如果你是在分布式环境下使用，记得配置 ClusterManager（如 Hazelcast 或 Ignite），这样这些方法就能跨 JVM 工作了
  */
 @SpringBootApplication
+@ConfigurationPropertiesScan
 @RequiredArgsConstructor
 public class SpringVertxApplication {
 

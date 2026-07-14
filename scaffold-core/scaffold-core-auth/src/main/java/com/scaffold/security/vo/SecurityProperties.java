@@ -8,10 +8,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 @ConfigurationProperties(prefix = "scaffold.security")
-public class SecurityProperties {
+public record SecurityProperties(String[] ignoreList, Cors cors, Token token) {
     /**
      * 默认跳过认证过滤的路径。
      */
@@ -25,17 +23,11 @@ public class SecurityProperties {
     /**
      * 追加的认证忽略路径。配置后会与默认忽略路径合并，而不是覆盖默认值。
      */
-    private String[] ignoreList;
+    public SecurityProperties {
+        cors = cors == null ? new Cors() : cors;
+        token = token == null ? new Token() : token;
+    }
 
-    /**
-     * Spring Security 场景下的 CORS 配置。默认关闭，避免未显式配置时放开跨域访问。
-     */
-    private Cors cors = new Cors();
-
-    /**
-     * JWT 与 token 缓存配置。
-     */
-    private Token token = new Token();
 
     public String[] getIgnoreList() {
         if (ignoreList == null || ignoreList.length == 0) {
@@ -46,6 +38,9 @@ public class SecurityProperties {
         System.arraycopy(this.ignoreList, 0, res, DEFAULT_IGNORE_LIST.length, this.ignoreList.length);
         return res;
     }
+
+    public Cors getCors() { return cors; }
+    public Token getToken() { return token; }
 
     @Getter
     @Setter

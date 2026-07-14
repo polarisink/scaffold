@@ -7,17 +7,19 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
 import java.time.Duration;
 
-@Getter
-@Setter
 @ConfigurationProperties("scaffold.cache")
-public class ScaffoldCacheProperties {
+public record ScaffoldCacheProperties(Mode mode, Provider provider, Provider secondary,
+                                      Caffeine caffeine, Redis redis, Postgresql postgresql) {
 
-    private Mode mode = Mode.SINGLE;
-    private Provider provider = Provider.CAFFEINE;
-    private Provider secondary = Provider.REDIS;
-    private final Caffeine caffeine = new Caffeine();
-    private final Redis redis = new Redis();
-    private final Postgresql postgresql = new Postgresql();
+    public ScaffoldCacheProperties {
+        mode = mode == null ? Mode.SINGLE : mode;
+        provider = provider == null ? Provider.CAFFEINE : provider;
+        secondary = secondary == null ? Provider.REDIS : secondary;
+        caffeine = caffeine == null ? new Caffeine() : caffeine;
+        redis = redis == null ? new Redis() : redis;
+        postgresql = postgresql == null ? new Postgresql() : postgresql;
+    }
+
 
     public enum Mode { SINGLE, TWO_LEVEL }
 
@@ -41,7 +43,7 @@ public class ScaffoldCacheProperties {
     @Getter
     @Setter
     public static class Postgresql {
-        private final DataSourceProperties datasource = new DataSourceProperties();
+        private DataSourceProperties datasource = new DataSourceProperties();
         private String tableName = "scaffold_spring_cache";
         private Duration defaultTtl = Duration.ofDays(3);
         private boolean unlogged = true;

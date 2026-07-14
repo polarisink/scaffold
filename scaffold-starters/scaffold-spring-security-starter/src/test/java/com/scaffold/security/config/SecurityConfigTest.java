@@ -37,7 +37,7 @@ class SecurityConfigTest {
 
     @Test
     void onlyLoginEndpointIsIgnoredByDefault() {
-        SecurityProperties properties = new SecurityProperties();
+        SecurityProperties properties = new SecurityProperties(null, null, null);
 
         assertThat(properties.getIgnoreList())
                 .contains("/auth/login")
@@ -49,7 +49,7 @@ class SecurityConfigTest {
         SecurityConfig securityConfig = new SecurityConfig(
                 mock(UserDetailsService.class),
                 mock(TokenAuthenticationFilter.class),
-                new SecurityProperties());
+                new SecurityProperties(null, null, null));
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         securityConfig.authenticationEntryPoint().commence(
@@ -71,7 +71,7 @@ class SecurityConfigTest {
         JwtUtil jwtUtil = new JwtUtil("0123456789abcdef0123456789abcdef");
         String token = jwtUtil.generateToken(PayloadDTO.of(1L, "tester", List.of("USER")));
         TokenAuthenticationFilter filter = new TokenAuthenticationFilter(
-                new AntPathMatcher(), tokenStore, new SecurityProperties(), jwtUtil);
+                new AntPathMatcher(), tokenStore, new SecurityProperties(null, null, null), jwtUtil);
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/user/context");
         request.addHeader("Authorization", "Bearer " + token);
         MockHttpServletResponse response = new MockHttpServletResponse();

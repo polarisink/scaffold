@@ -1,23 +1,19 @@
 package com.scaffold.vertx.server;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 /**
  * 网络配置
  */
-@Data
-@Configuration
 @ConfigurationProperties(prefix = "net")
-public class NetProperties {
-    // 多网卡时绑定网卡
-    private Integer wsPort = 8076;
-    private String wsHost = "0.0.0.0";
-    private Integer udpPort = 8077;
-    private String udpHost = "0.0.0.0";
-    private Integer tcpPort = 8078;
-    private String tcpHost = "0.0.0.0";
-    private Integer httpPort = 8079;
-    private String httpHost = "0.0.0.0";
+public record NetProperties(
+        @DefaultValue("8076") Integer wsPort, @DefaultValue("0.0.0.0") String wsHost,
+        @DefaultValue("8077") Integer udpPort, @DefaultValue("0.0.0.0") String udpHost,
+        @DefaultValue("8078") Integer tcpPort, @DefaultValue("0.0.0.0") String tcpHost,
+        @DefaultValue("8079") Integer httpPort, @DefaultValue("0.0.0.0") String httpHost) {
+    public Integer getWsPort(){ return wsPort; } public String getWsHost(){ return wsHost; }
+    public Integer getUdpPort(){ return udpPort; } public String getUdpHost(){ return udpHost; }
+    public Integer getTcpPort(){ return tcpPort; } public String getTcpHost(){ return tcpHost; }
+    public Integer getHttpPort(){ return httpPort; } public String getHttpHost(){ return httpHost; }
 }

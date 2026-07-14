@@ -58,7 +58,7 @@ public class ScaffoldCacheAutoConfiguration {
     @ConditionalOnMissingBean(name = "caffeineCacheManager")
     public CaffeineCacheManager caffeineCacheManager(ScaffoldCacheProperties properties) {
         CaffeineCacheManager manager = new CaffeineCacheManager();
-        manager.setCacheSpecification(properties.getCaffeine().getSpec());
+        manager.setCacheSpecification(properties.caffeine().getSpec());
         return manager;
     }
 
@@ -67,7 +67,7 @@ public class ScaffoldCacheAutoConfiguration {
     @ConditionalOnMissingBean(name = "redisCacheManager")
     public RedisCacheManager redisCacheManager(RedisConnectionFactory connectionFactory,
                                                ScaffoldCacheProperties properties) {
-        ScaffoldCacheProperties.Redis redis = properties.getRedis();
+        ScaffoldCacheProperties.Redis redis = properties.redis();
         RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
         configuration = configuration
                 .serializeKeysWith(RedisSerializationContext.SerializationPair
@@ -96,7 +96,7 @@ public class ScaffoldCacheAutoConfiguration {
     @ConditionalOnProperty(prefix = "scaffold.cache.postgresql.datasource", name = "url")
     @ConditionalOnMissingBean(name = "postgresqlCacheDataSource")
     public DataSource postgresqlCacheDataSource(ScaffoldCacheProperties properties) {
-        return properties.getPostgresql().getDatasource().initializeDataSourceBuilder().build();
+        return properties.postgresql().getDatasource().initializeDataSourceBuilder().build();
     }
 
     @Bean("postgresqlJdbcTemplate")
@@ -145,7 +145,7 @@ public class ScaffoldCacheAutoConfiguration {
     public PostgresqlCacheManager postgresqlCacheManager(PostgresqlCacheStore cacheStore,
                                                          ScaffoldCacheProperties properties,
                                                          PostgresqlCacheSerializer serializer) {
-        return new PostgresqlCacheManager(cacheStore, properties.getPostgresql(), serializer);
+        return new PostgresqlCacheManager(cacheStore, properties.postgresql(), serializer);
     }
 
     @Bean
@@ -165,13 +165,13 @@ public class ScaffoldCacheAutoConfiguration {
             @Qualifier("caffeineCacheManager") CacheManager caffeine,
             @Qualifier("redisCacheManager") ObjectProvider<CacheManager> redis,
             @Qualifier("postgresqlCacheManager") ObjectProvider<CacheManager> postgresql) {
-        if (properties.getMode() == ScaffoldCacheProperties.Mode.TWO_LEVEL) {
-            Assert.state(properties.getSecondary() != ScaffoldCacheProperties.Provider.CAFFEINE,
+        if (properties.mode() == ScaffoldCacheProperties.Mode.TWO_LEVEL) {
+            Assert.state(properties.secondary() != ScaffoldCacheProperties.Provider.CAFFEINE,
                     "scaffold.cache.secondary must be REDIS or POSTGRESQL in two-level mode");
             return new TwoLevelCacheManager(caffeine,
-                    provider(properties.getSecondary(), caffeine, redis, postgresql));
+                    provider(properties.secondary(), caffeine, redis, postgresql));
         }
-        return provider(properties.getProvider(), caffeine, redis, postgresql);
+        return provider(properties.provider(), caffeine, redis, postgresql);
     }
 
     @Bean("postgresqlCacheTaskScheduler")
@@ -192,7 +192,7 @@ public class ScaffoldCacheAutoConfiguration {
             PostgresqlCacheStore store,
             @Qualifier("postgresqlCacheTaskScheduler") TaskScheduler scheduler,
             ScaffoldCacheProperties properties) {
-        return new PostgresqlCacheCleaner(store, scheduler, properties.getPostgresql());
+        return new PostgresqlCacheCleaner(store, scheduler, properties.postgresql());
     }
 
     private CacheManager provider(ScaffoldCacheProperties.Provider provider,

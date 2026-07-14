@@ -20,9 +20,10 @@ spring:
 server:
   port: 10083
 
-swagger:
-  enabled: true
-  title: 订单服务接口文档
+scaffold:
+  swagger:
+    enabled: true
+    title: 订单服务接口文档
 
 seata:
   application-id: ${spring.application.name}

@@ -36,14 +36,13 @@ spring:
             platform: ""
     database-platform: org.hibernate.dialect.H2Dialect
 
-# 文档默
-swagger:
-  enabled: true
-  external-docs:
-    description: SpringBoot基础框架
-    url: ${SCAFFOLD_SWAGGER_EXTERNAL_DOCS_URL:}
-
 scaffold:
+  # 文档默
+  swagger:
+    enabled: true
+    external-docs:
+      description: SpringBoot基础框架
+      url: ${SCAFFOLD_SWAGGER_EXTERNAL_DOCS_URL:}
   # web配置
   web:
     response:

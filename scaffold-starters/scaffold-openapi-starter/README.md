@@ -12,18 +12,19 @@
 ```
 
 ```yaml
-swagger:
-  enabled: true
-  title: Scaffold API
-  description: 后台管理接口
-  version: v1.0
-  group-name: default
-  base-package: com.example
-  base-path: [/**]
-  exclude-path: [/error]
-  contact:
-    name: maintainer
-    email: maintainer@example.com
+scaffold:
+  swagger:
+    enabled: true
+    title: Scaffold API
+    description: 后台管理接口
+    version: v1.0
+    group-name: default
+    base-package: com.example
+    base-path: [/**]
+    exclude-path: [/error]
+    contact:
+      name: maintainer
+      email: maintainer@example.com
 ```
 
 `swagger.enabled` 默认是 `false`。启用后可通过 `/doc.html` 访问 Knife4j，通过 `/v3/api-docs` 获取 OpenAPI JSON。

@@ -177,7 +177,7 @@ class ScaffoldCacheAutoConfigurationTest {
                             .isInstanceOf(DataSource.class);
                     assertThat(context).hasBean("postgresqlJdbcTemplate");
                     assertThat(context.getBean(ScaffoldCacheProperties.class)
-                            .getPostgresql().getDatasource().getUrl())
+                            .postgresql().getDatasource().getUrl())
                             .isEqualTo("jdbc:postgresql://localhost/cache");
                 });
     }

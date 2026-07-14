@@ -20,9 +20,10 @@ spring:
 server:
   port: 10081
 
-swagger:
-  enabled: true
-  title: 生产者服务接口文档
+scaffold:
+  swagger:
+    enabled: true
+    title: 生产者服务接口文档
 seata:
   application-id: ${spring.application.name}
   tx-service-group: scaffold-seata-tx-group

@@ -31,7 +31,7 @@ class S3FileServiceTest {
     @Test
     void shouldKeepOriginalFilenameAndRemoveClientPath() {
         S3Client s3Client = mock(S3Client.class);
-        FileStorageProperties properties = new FileStorageProperties();
+        FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);
         properties.getS3().setBucketName("test-bucket");
         S3FileService service = new S3FileService(properties, s3Client);
         byte[] content = "content".getBytes(StandardCharsets.UTF_8);
@@ -63,7 +63,7 @@ class S3FileServiceTest {
         server.start();
 
         try {
-            FileStorageProperties properties = new FileStorageProperties();
+            FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);
             FileStorageProperties.S3 s3 = properties.getS3();
             s3.setEndpoint("http://127.0.0.1:" + server.getAddress().getPort());
             s3.setAccessKey("access-key");
@@ -89,7 +89,7 @@ class S3FileServiceTest {
         Files.writeString(nestedFolder.resolve("ignored.tmp"), "ignored");
 
         S3Client s3Client = mock(S3Client.class);
-        FileStorageProperties properties = new FileStorageProperties();
+        FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);
         properties.getS3().setBucketName("test-bucket");
         S3FileService service = new S3FileService(properties, s3Client);
 
