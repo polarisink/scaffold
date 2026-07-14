@@ -1,42 +1,49 @@
 package com.scaffold.sse;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.List;
 
-@CrossOrigin
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/sse")
 public class ApiController {
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello world";
+    private final SseConnectionManager connectionManager;
+
+    public ApiController(SseConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
     }
 
-    @PostMapping(value = "/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter streamData(HttpServletRequest request) {
-        SseEmitter emitter = new SseEmitter();
-        executor.execute(() -> {
-            try {
-                // 模拟流式推送（发送5条消息，间隔1秒）
-                for (int i = 1; i <= 5; i++) {
-                    String data = String.format("ip: %s get data: %s", request.getRemoteHost(), LocalDateTime.now());
-                    emitter.send(data);
-                    Thread.sleep(1000); // 模拟延迟
-                }
-                emitter.complete();
-            } catch (IOException | InterruptedException e) {
-                emitter.completeWithError(e);
-            }
-        });
-        return emitter;
+    /** 实际项目中 userId 应从登录上下文获取，不应信任前端传入值。 */
+    @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter connect(@RequestParam String userId,
+                              @RequestParam(defaultValue = "") List<String> roomId) {
+        return connectionManager.connect(userId, roomId);
     }
+
+    @PostMapping("/users/{userId}/messages")
+    public SseSendResult sendToUser(@PathVariable String userId, @RequestBody PushMessage message) {
+        return connectionManager.sendToUser(userId, message.event(), message.data());
+    }
+
+    @PostMapping("/rooms/{roomId}/messages")
+    public SseSendResult sendToRoom(@PathVariable String roomId, @RequestBody PushMessage message) {
+        return connectionManager.sendToRoom(roomId, message.event(), message.data());
+    }
+
+    @GetMapping("/stats")
+    public OnlineStats stats() {
+        return new OnlineStats(connectionManager.onlineUserCount(), connectionManager.onlineConnectionCount());
+    }
+
+    public record PushMessage(String event, Object data) {}
+    public record OnlineStats(int users, int connections) {}
 }
