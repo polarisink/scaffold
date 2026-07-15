@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(properties = "swagger.enabled=true")
+@SpringBootTest(properties = "scaffold.swagger.enabled=true")
 class SwaggerApiDocsIntegrationTest {
 
     private final MockMvc mockMvc;

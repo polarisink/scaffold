@@ -72,11 +72,11 @@ scaffold-starters/
 
 ## RBAC 模块
 
-RBAC 已拆成公共数据库层和两套认证实现：
+RBAC 已拆成公共管理 module 和两套认证实现：
 
 ```text
 scaffold-module/scaffold-module-rbac/
-├── scaffold-module-rbac-data          # entity、mapper、数据库登录校验服务
+├── scaffold-module-rbac-data          # 数据模型、公共管理用例与登录校验
 ├── scaffold-module-rbac-security      # Spring Security Servlet 完整 RBAC
 └── scaffold-module-rbac-sa-token      # Sa-Token Servlet 完整 RBAC
 ```
@@ -87,7 +87,7 @@ scaffold-module/scaffold-module-rbac/
 - 使用 Sa-Token 体系：引入 `scaffold-module-rbac-sa-token`
 - 只复用用户、角色、菜单数据库访问：引入 `scaffold-module-rbac-data`
 
-所有 RBAC 认证模块都复用 `scaffold-module-rbac-data`，避免数据库层重复实现。Servlet 版本提供完整后台管理接口，包含 `/auth`、
+所有 RBAC 认证模块都复用 `scaffold-module-rbac-data` 中唯一的用户管理实现；认证模块只适配当前用户与会话失效机制。Servlet 版本提供完整后台管理接口，包含 `/auth`、
 `/user`、`/role`、`/menu`、`/org`。
 
 ## Cloud 示例
@@ -134,7 +134,7 @@ pnpm dev:naive
 
 开发服务器默认监听 `http://localhost:5888`，`/api` 请求会代理到 `http://localhost:8082`。建议先启动后端，再启动管理端。
 
-默认策略：
+默认业务项目策略（由 `scaffold-biz/application.yml` 显式启用）：
 
 - 文件存储默认使用项目目录下的 `./www`
 - Swagger 默认开启
@@ -142,6 +142,8 @@ pnpm dev:naive
 - 默认业务项目启用 Sa-Token RBAC；可在 `scaffold-biz/pom.xml` 中替换为 Spring Security 实现，或移除 RBAC 模块
 - 认证 token store 使用 Spring Cache，缓存后端通过 `spring.cache.type` 选择；Caffeine 下 `security_token` 可通过 `scaffold.security.token.cache-ttl` 单独配置过期时间
 - Spring Security JWT 密钥由 `scaffold.security.token.jwt-secret` 配置，建议通过至少 32 字节的 `SCAFFOLD_JWT_SECRET` 环境变量提供
+
+各 starter 自身采用保守默认值：文件存储和 Swagger 均默认关闭，只有应用显式配置后才启用。
 
 推荐组合：
 

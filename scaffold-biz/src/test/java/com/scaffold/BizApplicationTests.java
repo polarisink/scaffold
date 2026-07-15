@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
         "spring.datasource.url=jdbc:h2:mem:scaffold-biz-context;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
         "spring.datasource.username=sa",
         "spring.datasource.password=",
-        "swagger.enabled=false"
+        "scaffold.swagger.enabled=false"
 })
 class BizApplicationTests {
 

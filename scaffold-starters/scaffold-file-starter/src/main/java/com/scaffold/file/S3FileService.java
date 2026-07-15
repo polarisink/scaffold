@@ -148,7 +148,7 @@ public class S3FileService implements FileUploadService {
 
     @Override
     public StorageType getStorageType() {
-        return StorageType.LOCAL;
+        return StorageType.S3;
     }
 
     private static String extractOriginalFilename(String originalFilename) {

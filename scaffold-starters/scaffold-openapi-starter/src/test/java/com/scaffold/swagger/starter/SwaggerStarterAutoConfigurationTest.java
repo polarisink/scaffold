@@ -24,9 +24,9 @@ class SwaggerStarterAutoConfigurationTest {
     void shouldCreateOpenApiBeanWhenEnabled() {
         contextRunner
                 .withPropertyValues(
-                        "swagger.enabled=true",
-                        "swagger.title=Scaffold API",
-                        "swagger.contact.name=Scaffold Team"
+                        "scaffold.swagger.enabled=true",
+                        "scaffold.swagger.title=Scaffold API",
+                        "scaffold.swagger.contact.name=Scaffold Team"
                 )
                 .run(context -> {
                     assertThat(context).hasSingleBean(OpenAPI.class);

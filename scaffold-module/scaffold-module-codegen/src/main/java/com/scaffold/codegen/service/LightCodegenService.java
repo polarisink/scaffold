@@ -7,21 +7,14 @@ import com.scaffold.codegen.model.GenColumn;
 import com.scaffold.codegen.model.GenTable;
 import com.scaffold.codegen.repository.GenColumnRepository;
 import com.scaffold.codegen.repository.GenTableRepository;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateExceptionHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 @Service
 public class LightCodegenService {
@@ -32,19 +25,16 @@ public class LightCodegenService {
     private final GenTableRepository tableRepository;
     private final GenColumnRepository columnRepository;
     private final DataSource dataSource;
-    private final Configuration freemarker;
+    private final CodeArchiveGenerator archiveGenerator;
 
     public LightCodegenService(GenTableRepository tableRepository,
                                GenColumnRepository columnRepository,
-                               DataSource dataSource) {
+                               DataSource dataSource,
+                               CodeArchiveGenerator archiveGenerator) {
         this.tableRepository = tableRepository;
         this.columnRepository = columnRepository;
         this.dataSource = dataSource;
-        this.freemarker = new Configuration(Configuration.VERSION_2_3_32);
-        this.freemarker.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        this.freemarker.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-        this.freemarker.setLogTemplateExceptions(false);
-        this.freemarker.setWrapUncheckedExceptions(true);
+        this.archiveGenerator = archiveGenerator;
     }
 
     public List<GenTable> listTables() {
@@ -145,23 +135,7 @@ public class LightCodegenService {
     }
 
     public byte[] download(Long id) {
-        GenTable table = getTable(id);
-        Map<String, Object> model = buildModel(table);
-        List<CodegenTemplate> templates = builtinTemplates(table);
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-             ZipOutputStream zip = new ZipOutputStream(bos, StandardCharsets.UTF_8)) {
-            for (CodegenTemplate item : templates) {
-                String path = renderString("path-" + item.name(), item.path(), model);
-                String content = renderTemplateFile(item.templatePath(), model);
-                zip.putNextEntry(new ZipEntry(path));
-                zip.write(content.getBytes(StandardCharsets.UTF_8));
-                zip.closeEntry();
-            }
-            zip.finish();
-            return bos.toByteArray();
-        } catch (Exception e) {
-            throw new IllegalStateException("生成 ZIP 失败", e);
-        }
+        return archiveGenerator.generate(getTable(id));
     }
 
     private GenTable buildTableFromMetadata(Connection connection, String tableName, String schema) throws SQLException {
@@ -380,110 +354,6 @@ public class LightCodegenService {
         column.setSortNo(column.getSortNo() == null ? index : column.getSortNo());
     }
 
-    private Map<String, Object> buildModel(GenTable table) {
-        GenColumn pk = table.getColumns().stream().filter(c -> Boolean.TRUE.equals(c.getPrimaryKey())).findFirst()
-                .orElseGet(() -> table.getColumns().isEmpty() ? null : table.getColumns().get(0));
-        List<GenColumn> businessColumns = table.getColumns().stream()
-                .filter(column -> !isBaseAuditableColumn(column))
-                .toList();
-        List<GenColumn> uniqueColumns = businessColumns.stream()
-                .filter(column -> Boolean.TRUE.equals(column.getUniqueKey()))
-                .toList();
-        Set<String> imports = new TreeSet<>();
-        for (GenColumn column : table.getColumns()) {
-            if (column.getJavaType() != null && column.getJavaType().contains(".")) {
-                imports.add(column.getJavaType());
-            }
-        }
-        Set<String> entityImports = new TreeSet<>();
-        for (GenColumn column : businessColumns) {
-            if (column.getJavaType() != null && column.getJavaType().contains(".")) {
-                entityImports.add(column.getJavaType());
-            }
-        }
-        Set<String> queryImports = new TreeSet<>();
-        Set<String> createImports = new TreeSet<>();
-        for (GenColumn column : table.getColumns()) {
-            if (Boolean.TRUE.equals(column.getQueryable())
-                    && column.getJavaType() != null
-                    && column.getJavaType().contains(".")) {
-                queryImports.add(column.getJavaType());
-            }
-            if (Boolean.TRUE.equals(column.getFormVisible())
-                    && column.getJavaType() != null
-                    && column.getJavaType().contains(".")) {
-                createImports.add(column.getJavaType());
-            }
-        }
-        Map<String, Object> model = new HashMap<>();
-        model.put("table", table);
-        model.put("columns", table.getColumns());
-        model.put("businessColumns", businessColumns);
-        model.put("uniqueColumns", uniqueColumns);
-        model.put("hasUniqueColumns", !uniqueColumns.isEmpty());
-        model.put("pk", pk);
-        model.put("imports", imports);
-        model.put("entityImports", entityImports);
-        model.put("queryImports", queryImports);
-        model.put("createImports", createImports);
-        model.put("packagePath", table.getPackageName().replace('.', '/'));
-        model.put("className", table.getClassName());
-        model.put("lowerClassName", lowerFirst(table.getClassName()));
-        model.put("moduleName", table.getModuleName());
-        model.put("businessName", table.getBusinessName());
-        model.put("javaBusinessName", toJavaPackageSegment(table.getBusinessName()));
-        model.put("apiPrefix", "/" + table.getModuleName() + "/" + table.getBusinessName());
-        model.put("author", table.getAuthor());
-        model.put("now", LocalDateTime.now().toString());
-        return model;
-    }
-
-    private boolean isBaseAuditableColumn(GenColumn column) {
-        String columnName = column.getColumnName();
-        String propertyName = column.getPropertyName();
-        return Set.of("id", "gmt_modified", "gmt_created", "created_by", "modified_by", "deleted").contains(columnName)
-                || Set.of("id", "gmtModified", "gmtCreated", "createdBy", "modifiedBy", "deleted").contains(propertyName);
-    }
-
-    private List<CodegenTemplate> builtinTemplates(GenTable table) {
-        List<CodegenTemplate> list = new ArrayList<>();
-        String javaBase = "${table.backendPath}/${packagePath}/${javaBusinessName}";
-        list.add(new CodegenTemplate("entity", javaBase + "/${className}.java", "codegen/templates/entity.java.ftl"));
-        list.add(new CodegenTemplate("query", javaBase + "/${className}QueryDTO.java", "codegen/templates/query-dto.java.ftl"));
-        list.add(new CodegenTemplate("create", javaBase + "/${className}CreateDTO.java", "codegen/templates/create-dto.java.ftl"));
-        list.add(new CodegenTemplate("mapper", javaBase + "/${className}Mapper.java", "codegen/templates/mapper.java.ftl"));
-        list.add(new CodegenTemplate("service", javaBase + "/${className}Service.java", "codegen/templates/service.java.ftl"));
-        list.add(new CodegenTemplate("controller", javaBase + "/${className}Controller.java", "codegen/templates/controller.java.ftl"));
-        String frontBase = "${table.frontendPath}/views/${moduleName}/${businessName}";
-        list.add(new CodegenTemplate("frontend-api", "${table.frontendPath}/api/${moduleName}/${businessName}.ts", "codegen/templates/frontend-api.ts.ftl"));
-        list.add(new CodegenTemplate("frontend-type", "${table.frontendPath}/api/${moduleName}/${businessName}.model.ts", "codegen/templates/frontend-type.ts.ftl"));
-        list.add(new CodegenTemplate("frontend-page", frontBase + "/index.vue", "codegen/templates/frontend-page-naive.vue.ftl"));
-        list.add(new CodegenTemplate("frontend-page-ele", frontBase + "/index.ele.vue", "codegen/templates/frontend-page-ele.vue.ftl"));
-        list.add(new CodegenTemplate("frontend-page-antd", frontBase + "/index.antd.vue", "codegen/templates/frontend-page-antd.vue.ftl"));
-        return list;
-    }
-
-    private String renderString(String name, String source, Map<String, Object> model) throws Exception {
-        Template template = new Template(name, new StringReader(source), freemarker);
-        StringWriter writer = new StringWriter();
-        template.process(model, writer);
-        return writer.toString();
-    }
-
-    private String renderTemplateFile(String templatePath, Map<String, Object> model) throws Exception {
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream(templatePath)) {
-            if (input == null) {
-                throw new IllegalStateException("模板文件不存在：" + templatePath);
-            }
-            try (Reader reader = new InputStreamReader(input, StandardCharsets.UTF_8)) {
-                Template template = new Template(templatePath, reader, freemarker);
-                StringWriter writer = new StringWriter();
-                template.process(model, writer);
-                return writer.toString();
-            }
-        }
-    }
-
     private String tableComment(String fallback) {
         return StringUtils.hasText(fallback) ? fallback : "";
     }
@@ -603,22 +473,6 @@ public class LightCodegenService {
         return value.toLowerCase(Locale.ROOT).replace('_', '-');
     }
 
-    private String lowerFirst(String value) {
-        return value == null || value.isEmpty() ? value : Character.toLowerCase(value.charAt(0)) + value.substring(1);
-    }
-
-    private String toJavaPackageSegment(String value) {
-        String source = StringUtils.hasText(value) ? value : "generated";
-        String segment = source.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9_]", "");
-        if (!StringUtils.hasText(segment)) {
-            return "generated";
-        }
-        if (!Character.isJavaIdentifierStart(segment.charAt(0))) {
-            return "x" + segment;
-        }
-        return segment;
-    }
-
     private String defaultIfBlank(String value, String defaultValue) {
         return StringUtils.hasText(value) ? value : defaultValue;
     }
@@ -630,6 +484,4 @@ public class LightCodegenService {
         return value;
     }
 
-    private record CodegenTemplate(String name, String path, String templatePath) {
-    }
 }

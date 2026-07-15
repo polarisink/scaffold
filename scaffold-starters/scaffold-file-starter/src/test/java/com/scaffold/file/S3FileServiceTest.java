@@ -35,6 +35,14 @@ class S3FileServiceTest {
     Path tempDir;
 
     @Test
+    void shouldReportS3StorageType() {
+        FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);
+        S3FileService service = new S3FileService(properties, mock(S3Client.class));
+
+        assertThat(service.getStorageType()).isEqualTo(StorageType.S3);
+    }
+
+    @Test
     void shouldKeepOriginalFilenameAndRemoveClientPath() {
         S3Client s3Client = mock(S3Client.class);
         FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);

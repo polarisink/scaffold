@@ -1,6 +1,6 @@
 package com.scaffold;
 
-import com.scaffold.rbac.service.ISysUserService;
+import com.scaffold.rbac.service.SysUserService;
 import com.scaffold.rbac.vo.user.SysUserCreateVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.List;
 })
 class ISysUserServiceTest {
     @Autowired
-    ISysUserService sysUserService;
+    SysUserService sysUserService;
 
     @Test
     void save() {

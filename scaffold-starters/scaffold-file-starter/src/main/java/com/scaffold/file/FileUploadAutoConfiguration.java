@@ -13,7 +13,7 @@ import static com.scaffold.file.FileStorageProperties.FILE_STORAGE_PREFIX;
 @Configuration
 @EnableConfigurationProperties(FileStorageProperties.class)
 @ConditionalOnMissingBean(FileUploadService.class)
-@ConditionalOnProperty(prefix = FILE_STORAGE_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = FILE_STORAGE_PREFIX, name = "enabled", havingValue = "true")
 public class FileUploadAutoConfiguration {
 
     private final FileStorageProperties properties;

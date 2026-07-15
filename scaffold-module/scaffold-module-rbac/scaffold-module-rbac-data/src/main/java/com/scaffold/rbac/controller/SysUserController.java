@@ -2,7 +2,7 @@ package com.scaffold.rbac.controller;
 
 import com.scaffold.base.util.PageResponse;
 import com.scaffold.rbac.entity.SysUser;
-import com.scaffold.rbac.service.ISysUserService;
+import com.scaffold.rbac.service.SysUserService;
 import com.scaffold.rbac.vo.user.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "用户", description = "接口")
 public class SysUserController {
 
-    private final ISysUserService sysUserService;
+    private final SysUserService sysUserService;
 
 
     /**
