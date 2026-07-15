@@ -1,14 +1,19 @@
 package com.scaffold.file;
 
+import com.scaffold.file.vo.FileDownload;
 import com.scaffold.file.vo.FolderUploadFileResult;
 import com.scaffold.file.vo.FolderUploadRequest;
 import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
+import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 import java.io.ByteArrayInputStream;
 import java.net.InetSocketAddress;
@@ -21,6 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 class S3FileServiceTest {
@@ -124,5 +130,41 @@ class S3FileServiceTest {
         assertThat(contentLengthByKey)
                 .containsEntry("backup/root.txt", Files.size(tempDir.resolve("root.txt")))
                 .containsEntry("backup/docs/guide.txt", Files.size(nestedFolder.resolve("guide.txt")));
+    }
+
+    @Test
+    void shouldReturnDownloadMetadata() throws Exception {
+        S3Client s3Client = mock(S3Client.class);
+        @SuppressWarnings("unchecked")
+        ResponseInputStream<GetObjectResponse> inputStream = mock(ResponseInputStream.class);
+        when(inputStream.response()).thenReturn(GetObjectResponse.builder()
+                .contentType("application/pdf")
+                .contentLength(42L)
+                .build());
+        when(s3Client.getObject(any(GetObjectRequest.class))).thenReturn(inputStream);
+        FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);
+        properties.getS3().setBucketName("test-bucket");
+        S3FileService service = new S3FileService(properties, s3Client);
+
+        FileDownload download = service.download("reports/annual.pdf").orElseThrow();
+
+        assertThat(download.inputStream()).isSameAs(inputStream);
+        assertThat(download.filename()).isEqualTo("annual.pdf");
+        assertThat(download.contentType()).isEqualTo("application/pdf");
+        assertThat(download.contentLength()).isEqualTo(42L);
+    }
+
+    @Test
+    void shouldThrowStorageExceptionWhenS3ReadFails() {
+        S3Client s3Client = mock(S3Client.class);
+        when(s3Client.getObject(any(GetObjectRequest.class)))
+                .thenThrow(SdkClientException.create("connection failed"));
+        FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);
+        properties.getS3().setBucketName("test-bucket");
+        S3FileService service = new S3FileService(properties, s3Client);
+
+        assertThatThrownBy(() -> service.download("report.pdf"))
+                .isInstanceOf(FileStorageException.class)
+                .hasMessageContaining("report.pdf");
     }
 }

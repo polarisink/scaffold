@@ -1,10 +1,12 @@
 package com.scaffold.file;
 
+import com.scaffold.file.vo.FileDownload;
 import com.scaffold.file.vo.FolderUploadFileResult;
 import com.scaffold.file.vo.FolderUploadRequest;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.regions.Region;
@@ -106,19 +108,26 @@ public class S3FileService implements FileUploadService {
     }
 
     @Override
-    public Optional<InputStream> download(String fileKey) {
+    public Optional<FileDownload> download(String fileKey) {
         try {
             GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                     .bucket(s3Config.getBucketName())
                     .key(fileKey)
                     .build();
-            return Optional.of(s3Client.getObject(getObjectRequest));
+            ResponseInputStream<GetObjectResponse> inputStream = s3Client.getObject(getObjectRequest);
+            GetObjectResponse response = inputStream.response();
+            long contentLength = response.contentLength() == null ? -1 : response.contentLength();
+            return Optional.of(new FileDownload(
+                    inputStream,
+                    extractOriginalFilename(fileKey),
+                    response.contentType(),
+                    contentLength));
         } catch (NoSuchKeyException e) {
             log.warn("文件下载失败，未找到文件: {}", fileKey);
             return Optional.empty();
         } catch (Exception e) {
             log.error("文件下载失败: {}", fileKey, e);
-            return Optional.empty();
+            throw new FileStorageException("文件读取失败: " + fileKey, e);
         }
     }
 
@@ -138,8 +147,8 @@ public class S3FileService implements FileUploadService {
     }
 
     @Override
-    public String getStorageType() {
-        return "s3";
+    public StorageType getStorageType() {
+        return StorageType.LOCAL;
     }
 
     private static String extractOriginalFilename(String originalFilename) {

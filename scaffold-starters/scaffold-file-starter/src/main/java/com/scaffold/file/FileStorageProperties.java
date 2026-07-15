@@ -35,9 +35,7 @@ public record FileStorageProperties(Boolean enabled, StorageType type, String ac
     public Local getLocal() { return local; }
     public S3 getS3() { return s3; }
 
-    public enum StorageType {
-        LOCAL, S3,
-    }
+
 
     @Data
     public static class Local {

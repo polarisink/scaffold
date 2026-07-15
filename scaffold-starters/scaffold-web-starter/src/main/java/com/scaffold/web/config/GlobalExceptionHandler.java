@@ -9,8 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.util.AntPathMatcher;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -163,6 +167,19 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
     }
 
     /**
+     * 保留控制器主动声明的 HTTP 状态码。
+     *
+     * @param e HTTP 状态异常
+     * @return 带原始 HTTP 状态码的统一错误结果
+     */
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<R<Void>> handleResponseStatusException(ResponseStatusException e) {
+        HttpStatusCode status = e.getStatusCode();
+        String message = CharSequenceUtil.isBlank(e.getReason()) ? status.toString() : e.getReason();
+        return ResponseEntity.status(status).body(R.failed(status.value(), message));
+    }
+
+    /**
      * 异常基类处理
      *
      * @param e 异常
@@ -181,6 +198,9 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+        if (ResourceHttpMessageConverter.class.isAssignableFrom(converterType)) {
+            return false;
+        }
         String declaringClassName = returnType.getDeclaringClass().getName();
         return webProperties.getResponse().getIgnoredClassNamePrefixes().stream().noneMatch(declaringClassName::startsWith);
     }

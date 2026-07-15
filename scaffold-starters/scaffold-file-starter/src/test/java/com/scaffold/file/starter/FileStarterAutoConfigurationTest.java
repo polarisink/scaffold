@@ -1,6 +1,6 @@
 package com.scaffold.file.starter;
 
-import com.scaffold.file.FileController;
+import com.scaffold.file.FileStorageController;
 import com.scaffold.file.FileUploadService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -17,7 +17,7 @@ class FileStarterAutoConfigurationTest {
     void shouldNotExposeUploadBeansWhenStorageDisabled() {
         contextRunner.run(context -> {
             assertThat(context).doesNotHaveBean(FileUploadService.class);
-            assertThat(context).doesNotHaveBean(FileController.class);
+            assertThat(context).doesNotHaveBean(FileStorageController.class);
         });
     }
 
@@ -31,7 +31,7 @@ class FileStarterAutoConfigurationTest {
                 )
                 .run(context -> {
                     assertThat(context).hasSingleBean(FileUploadService.class);
-                    assertThat(context).hasSingleBean(FileController.class);
+                    assertThat(context).hasSingleBean(FileStorageController.class);
                 });
     }
 }

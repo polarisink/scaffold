@@ -1,14 +1,14 @@
 package com.scaffold.file;
 
+import com.scaffold.file.vo.FileDownload;
 import com.scaffold.file.vo.FolderUploadFileResult;
 import com.scaffold.file.vo.FolderUploadRequest;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -79,22 +79,33 @@ public class LocalFileService implements FileUploadService {
     }
 
     @Override
-    public Optional<InputStream> download(String fileKey) {
-        Path filePath = baseDirPath.resolve(fileKey);
-        if (Files.exists(filePath) && Files.isReadable(filePath)) {
-            try {
-                return Optional.of(new FileInputStream(filePath.toFile()));
-            } catch (FileNotFoundException e) {
-                log.warn("文件下载失败，未找到文件: {}", fileKey);
-            }
+    public Optional<FileDownload> download(String fileKey) {
+        Path filePath = resolveStoragePath(fileKey);
+        if (!Files.isRegularFile(filePath)) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        try {
+            String contentType = Files.probeContentType(filePath);
+            long contentLength = Files.size(filePath);
+            InputStream inputStream = Files.newInputStream(filePath);
+            return Optional.of(new FileDownload(
+                    inputStream,
+                    filePath.getFileName().toString(),
+                    contentType,
+                    contentLength));
+        } catch (NoSuchFileException e) {
+            log.warn("文件下载失败，未找到文件: {}", fileKey);
+            return Optional.empty();
+        } catch (IOException e) {
+            log.error("本地文件读取失败: {}", fileKey, e);
+            throw new FileStorageException("文件读取失败: " + fileKey, e);
+        }
     }
 
     @Override
     public boolean delete(String fileKey) {
         try {
-            return Files.deleteIfExists(baseDirPath.resolve(fileKey));
+            return Files.deleteIfExists(resolveStoragePath(fileKey));
         } catch (IOException e) {
             log.error("本地文件删除失败: {}", fileKey, e);
             return false;
@@ -102,8 +113,8 @@ public class LocalFileService implements FileUploadService {
     }
 
     @Override
-    public String getStorageType() {
-        return "LocalFS";
+    public StorageType getStorageType() {
+        return StorageType.LOCAL;
     }
 
     private static String generateFileKey(String originalFilename) {
@@ -113,5 +124,16 @@ public class LocalFileService implements FileUploadService {
             ext = originalFilename.substring(lastDot);
         }
         return UUID.randomUUID().toString().replace("-", "") + ext;
+    }
+
+    private Path resolveStoragePath(String fileKey) {
+        if (fileKey == null || fileKey.isBlank()) {
+            throw new IllegalArgumentException("文件存储路径不能为空");
+        }
+        Path filePath = baseDirPath.resolve(fileKey).toAbsolutePath().normalize();
+        if (!filePath.startsWith(baseDirPath)) {
+            throw new IllegalArgumentException("文件存储路径非法: " + fileKey);
+        }
+        return filePath;
     }
 }

@@ -71,19 +71,19 @@ scaffold:
       allowed-headers:
         - "*"
   # 文件存储，演示模式默认使用本地存储方式
-  file-storage:
-    enabled: true
-    type: local
-    # 文件公开访问前缀；local 不配置时会根据 local.access-path 推导，S3/CDN 可显式配置
-    access-prefix: ${SCAFFOLD_FILE_ACCESS_PREFIX:}
-    local:
-      base-path: ./www
-#       base-path: ${SCAFFOLD_FILE_STORAGE_BASE_PATH:./.data/files}
 #  file-storage:
 #    enabled: true
-#    type: s3
-#    s3:
-#      endpoint: http://127.0.0.1:9000
-#      access-key: minioadmin
-#      secret-key: minioadmin
-#      bucket-name: scaffold
+#    type: local
+#    # 文件公开访问前缀；local 不配置时会根据 local.access-path 推导，S3/CDN 可显式配置
+#    access-prefix: ${SCAFFOLD_FILE_ACCESS_PREFIX:}
+#    local:
+#      base-path: ./www
+#       base-path: ${SCAFFOLD_FILE_STORAGE_BASE_PATH:./.data/files}
+  file-storage:
+    enabled: true
+    type: s3
+    s3:
+      endpoint: http://127.0.0.1:9000
+      access-key: minioadmin
+      secret-key: minioadmin
+      bucket-name: scaffold

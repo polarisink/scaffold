@@ -17,7 +17,7 @@ public class FileAccessWebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        if (properties.getType() == FileStorageProperties.StorageType.LOCAL) {
+        if (properties.getType() == StorageType.LOCAL) {
             FileStorageProperties.Local local = properties.getLocal();
             String basePath = local.getBasePath();
             String location = "file:" + (basePath.endsWith("/") ? basePath : basePath + "/");
