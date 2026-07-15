@@ -19,10 +19,14 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.scaffold.base.constant.GlobalConstant.ROOT_PARENT_ID_STR;
 import static com.scaffold.rbac.contant.RbacCacheConst.*;
@@ -89,6 +93,13 @@ public class RbacCache {
         return tree;
     }
 
+    /**
+     * 清除菜单树缓存
+     */
+    @CacheEvict(cacheNames = RbacCacheConst.MENU_TREE_CACHE, key = ROOT_PARENT_ID_STR)
+    public void clearMenuCache() {
+    }
+
     @Cacheable(cacheNames = RbacCacheConst.ORG_TREE_CACHE, key = ROOT_PARENT_ID_STR)
     public List<SysOrg> orgTree() {
         List<SysOrg> orgList = sysOrgMapper.selectList(null);
@@ -126,5 +137,45 @@ public class RbacCache {
     @CacheEvict(cacheNames = RbacCacheConst.ROLE_TREE_CACHE, key = "#roleId")
     public void roleClear(Long roleId) {
         log.info("clear role tree cache success: 【{}】", roleId);
+    }
+
+    /**
+     * 获取用户角色编码列表
+     *
+     * @param userId 用户id
+     * @return 角色编码列表
+     */
+    @Cacheable(cacheNames = USER_ROLES_CACHE, key = "#userId")
+    public List<String> selectRoleCodeList(Long userId) {
+        List<Long> roleIdList = sysUserRoleMapper.selectRoleIdByUserId(userId);
+        if (CollectionUtils.isEmpty(roleIdList)) {
+            return new ArrayList<>();
+        }
+        return sysRoleMapper.selectByIds(roleIdList)
+                .stream()
+                .map(SysRole::getRoleCode)
+                .filter(StringUtils::hasText)
+                .map(String::trim)
+                .distinct()
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    /**
+     * 查询用户可访问的菜单权限标识。
+     * 当前数据模型以菜单 URL 作为权限标识，目录节点不参与鉴权。
+     */
+    @Cacheable(cacheNames = USER_PERMISSIONS_CACHE, key = "#userId")
+    public List<String> selectPermissionCodeList(Long userId) {
+        List<SysMenu> menuList = sysMenuMapper.findMenuCollByUserId(userId);
+        if (CollectionUtils.isEmpty(menuList)) {
+            return new ArrayList<>();
+        }
+        return menuList.stream()
+                .filter(menu -> Integer.valueOf(1).equals(menu.getMenuType()))
+                .map(SysMenu::getMenuUrl)
+                .filter(StringUtils::hasText)
+                .map(String::trim)
+                .distinct()
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

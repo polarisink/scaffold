@@ -1,5 +1,6 @@
 package com.scaffold.rbac.auth;
 
+import com.scaffold.rbac.components.RbacCache;
 import com.scaffold.rbac.entity.SysMenu;
 import com.scaffold.rbac.entity.SysRole;
 import com.scaffold.rbac.mapper.SysMenuMapper;
@@ -22,8 +23,8 @@ class RbacAccountServiceTest {
     private final SysRoleMapper roleMapper = mock(SysRoleMapper.class);
     private final SysMenuMapper menuMapper = mock(SysMenuMapper.class);
     private final PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
-    private final RbacAccountService accountService = new RbacAccountService(
-            userMapper, userRoleMapper, roleMapper, menuMapper, passwordEncoder);
+    private final RbacCache rbacCache = mock(RbacCache.class);
+    private final RbacAccountService accountService = new RbacAccountService(userMapper, passwordEncoder,rbacCache);
 
     @Test
     void shouldReturnDistinctNonBlankMenuPermissions() {
@@ -49,7 +50,7 @@ class RbacAccountServiceTest {
         when(roleMapper.selectByIds(List.of(1L, 2L)))
                 .thenReturn(List.of(admin, duplicate, operator, blank));
 
-        assertThat(accountService.selectRoleCodeList(7L))
+        assertThat(rbacCache.selectRoleCodeList(7L))
                 .containsExactly("admin", "operator");
     }
 
