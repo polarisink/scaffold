@@ -4,9 +4,7 @@
 
 ## 准备数据库
 
-```sql
-CREATE DATABASE scaffold_geo;
-```
+默认配置连接 `aries` 数据库。如需沿用默认值，先创建该数据库和用户；也可以修改 `application.yml` 使用已有数据库。
 
 应用启动时会执行 `schema.sql` 和 `data.sql`：
 
@@ -27,9 +25,9 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 默认连接：
 
 ```yaml
-spring.datasource.url: jdbc:postgresql://localhost:5432/scaffold_geo
-spring.datasource.username: postgres
-spring.datasource.password: postgres
+spring.datasource.url: jdbc:postgresql://localhost:5432/aries
+spring.datasource.username: aries
+spring.datasource.password: 123456
 ```
 
 启动：

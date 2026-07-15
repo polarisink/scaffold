@@ -1,1 +1,18 @@
-# [测试调用whisper进行离线大模型语音识别](https://mp.weixin.qq.com/s?__biz=Mzg5MzIxNjEzOQ==&mid=2247495836&idx=1&sn=73ca22312eb6f6ef014cd28eb73767f5&chksm=c11891f4f762771c223bca23e25f310cfd07757a90f525848418fa7ecb593c54ca21c65757b1&mpshare=1&scene=24&srcid=0111bUSYPihBxVqR7pZthg8j&sharer_shareinfo=68f0c8a0671006f7c22fe8372d8cd0e1&sharer_shareinfo_first=68f0c8a0671006f7c22fe8372d8cd0e1#rd)
+# SQLite RCS 数据示例
+
+演示对任意 SQLite 文件按路径动态创建和复用 `JdbcTemplate`，读写 `data_tb` 中的雷达散射截面（RCS）数据，并将 BLOB 按小端序解析为 `float[361][181]`。
+
+核心方法：
+
+- `selectByPath`：读取完整记录和 RCS BLOB
+- `selectSummaryByPath`：不加载大字段的摘要查询
+- `addOrUpdate`：自动建库建表并按 ID upsert
+- `deleteByPath`：必须带至少一个条件，防止误删全表
+
+该模块没有 REST 接口。建议通过测试验证：
+
+```bash
+./mvnw -pl scaffold-test/scaffold-test-sqlite -am -Pexamples test
+```
+
+数据库文件路径会规范化并按文件缓存 Hikari 数据源，Spring 容器关闭时统一释放。完整 RCS BLOB 固定需要 `361 × 181 × 4` 字节；尺寸不符会被拒绝。

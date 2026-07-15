@@ -20,5 +20,6 @@
         <module>scaffold-web-starter</module>
         <module>scaffold-cache-starter</module>
         <module>scaffold-geo-starter</module>
+        <module>scaffold-sse-starter</module>
     </modules>
 </project>

@@ -1,6 +1,5 @@
 package com.scaffold.postgres.controller;
 
-import com.scaffold.base.util.R;
 import com.scaffold.postgres.dto.CreatePlaceRequest;
 import com.scaffold.postgres.dto.MapPlaceResponse;
 import com.scaffold.postgres.dto.MapRegionResponse;

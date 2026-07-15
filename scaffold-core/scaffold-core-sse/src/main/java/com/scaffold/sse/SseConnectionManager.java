@@ -1,9 +1,6 @@
 package com.scaffold.sse;
 
-import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -21,7 +18,6 @@ import java.util.UUID;
  * 因此未来切换 Redis 或 Kafka 时，不需要修改该门面和业务调用方。</p>
  */
 @Slf4j
-@Component
 public class SseConnectionManager {
 
     /** 默认连接超时时间：30 分钟。 */
@@ -31,16 +27,19 @@ public class SseConnectionManager {
     private final SseLocalDispatcher localDispatcher;
     private final SseMessageBroker messageBroker;
     private final int queueCapacity;
+    private final long connectionTimeout;
 
     SseConnectionManager(SseConnectionRepository repository,
                          SseLocalDispatcher localDispatcher,
                          SseMessageBroker messageBroker,
-                         @Value("${scaffold.sse.queue-capacity:100}") int queueCapacity) {
+                         int queueCapacity,
+                         long connectionTimeout) {
         Assert.isTrue(queueCapacity > 0, "scaffold.sse.queue-capacity must be greater than 0");
         this.repository = repository;
         this.localDispatcher = localDispatcher;
         this.messageBroker = messageBroker;
         this.queueCapacity = queueCapacity;
+        this.connectionTimeout = connectionTimeout;
     }
 
     /**
@@ -50,7 +49,33 @@ public class SseConnectionManager {
      * @param roomIds 初始加入的房间 ID，可以为空
      */
     public SseEmitter connect(String userId, Collection<String> roomIds) {
-        return connect(userId, roomIds, DEFAULT_TIMEOUT);
+        return connect(userId, roomIds, connectionTimeout);
+    }
+
+    /**
+     * 主动断开属于指定用户的单个物理连接。
+     *
+     * <p>{@code userId} 应从服务端可信登录上下文取得，不应直接信任客户端提交值。
+     * 同时校验用户和连接 ID，可防止一个用户关闭其他用户的连接。该操作是幂等的：</p>
+     *
+     * @param userId 当前登录用户 ID
+     * @param connectionId 建立连接时通过 {@code connected} 事件返回的连接 ID
+     * @return 找到且成功移除该用户的连接时返回 {@code true}，否则返回 {@code false}
+     */
+    public boolean disconnect(String userId, String connectionId) {
+        Assert.hasText(userId, "userId must not be blank");
+        Assert.hasText(connectionId, "connectionId must not be blank");
+
+        SseConnection connection = repository.findById(connectionId);
+        if (connection == null || !userId.equals(connection.userId())) {
+            return false;
+        }
+        SseConnection removed = repository.remove(connectionId);
+        if (removed == null) {
+            return false;
+        }
+        removed.emitter().complete();
+        return true;
     }
 
     /** 包级重载用于测试自定义超时时间。 */
@@ -60,9 +85,7 @@ public class SseConnectionManager {
         String connectionId = UUID.randomUUID().toString();
         Set<String> normalizedRooms = normalizeRooms(roomIds);
         SseEmitter emitter = createEmitter(timeout);
-        SseConnection connection = new SseConnection(
-                connectionId, userId, normalizedRooms, emitter, queueCapacity, localDispatcher::write);
-
+        SseConnection connection = new SseConnection(connectionId, userId, normalizedRooms, emitter, queueCapacity, localDispatcher::write);
         repository.save(connection);
         bindLifecycleCallbacks(connection);
         connection.start();
@@ -119,7 +142,6 @@ public class SseConnectionManager {
     }
 
     /** 应用停止时关闭当前节点全部长连接和虚拟发送线程。 */
-    @PreDestroy
     public void shutdown() {
         for (SseConnection connection : repository.findAll()) {
             SseConnection removed = repository.remove(connection.id());

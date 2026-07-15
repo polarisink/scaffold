@@ -1,7 +1,6 @@
 package com.scaffold.sse;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Set;
@@ -10,7 +9,6 @@ import java.util.concurrent.ConcurrentMap;
 
 /** 基于并发 Map 的本节点连接仓库，同时维护用户和房间二级索引。 */
 @Slf4j
-@Component
 final class InMemorySseConnectionRepository implements SseConnectionRepository {
 
     private final ConcurrentMap<String, SseConnection> connections = new ConcurrentHashMap<>();
@@ -27,12 +25,19 @@ final class InMemorySseConnectionRepository implements SseConnectionRepository {
     @Override
     public SseConnection remove(String connectionId) {
         SseConnection connection = connections.remove(connectionId);
-        if (connection == null) return null;
+        if (connection == null) {
+            return null;
+        }
         removeIndex(userConnections, connection.userId(), connectionId);
         connection.roomIds().forEach(roomId -> removeIndex(roomConnections, roomId, connectionId));
         connection.shutdown();
         log.info("SSE disconnected: connectionId={}, userId={}", connectionId, connection.userId());
         return connection;
+    }
+
+    @Override
+    public SseConnection findById(String connectionId) {
+        return connections.get(connectionId);
     }
 
     @Override

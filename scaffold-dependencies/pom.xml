@@ -96,6 +96,11 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-core-sse</artifactId>
+                <version>${rversion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-core-geo</artifactId>
                 <version>${rversion}</version>
             </dependency>
@@ -142,6 +147,11 @@
             <dependency>
                 <groupId>com.scaffold</groupId>
                 <artifactId>scaffold-cache-starter</artifactId>
+                <version>${rversion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.scaffold</groupId>
+                <artifactId>scaffold-sse-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>

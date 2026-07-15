@@ -1,0 +1,4 @@
+com.scaffold.sse.SseAutoConfiguration
+com.scaffold.sse.SseLocalBrokerConfiguration
+com.scaffold.sse.SseRedisBrokerConfiguration
+com.scaffold.sse.SseKafkaBrokerConfiguration

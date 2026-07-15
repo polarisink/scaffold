@@ -54,6 +54,33 @@ class SseConnectionManagerTest {
     }
 
     @Test
+    void disconnectsConnectionOwnedByTheUser() {
+        TestManager manager = new TestManager();
+        RecordingEmitter emitter = (RecordingEmitter) manager.connect("user-1", List.of("room-a"));
+        await(() -> emitter.connectedMessage != null);
+
+        boolean disconnected = manager.disconnect("user-1", emitter.connectedMessage.connectionId());
+
+        assertThat(disconnected).isTrue();
+        assertThat(manager.onlineConnectionCount()).isZero();
+        assertThat(manager.onlineUserCount()).isZero();
+        assertThat(manager.sendToRoom("room-a", "chat", "ignored").enqueuedConnections()).isZero();
+    }
+
+    @Test
+    void doesNotDisconnectConnectionOwnedByAnotherUser() {
+        TestManager manager = new TestManager();
+        RecordingEmitter emitter = (RecordingEmitter) manager.connect("user-1", List.of("room-a"));
+        await(() -> emitter.connectedMessage != null);
+
+        boolean disconnected = manager.disconnect("user-2", emitter.connectedMessage.connectionId());
+
+        assertThat(disconnected).isFalse();
+        assertThat(manager.onlineConnectionCount()).isOne();
+        assertThat(manager.onlineUserCount()).isOne();
+    }
+
+    @Test
     void removesBrokenConnectionWithoutAffectingHealthyConnections() {
         TestManager manager = new TestManager();
         manager.connect("user-1", List.of("room-a"));
@@ -93,7 +120,7 @@ class SseConnectionManagerTest {
         }
 
         private TestManager(SseConnectionRepository repository, SseLocalDispatcher dispatcher) {
-            super(repository, dispatcher, new LocalSseMessageBroker(dispatcher), 10);
+            super(repository, dispatcher, new LocalSseMessageBroker(dispatcher), 10, DEFAULT_TIMEOUT);
         }
 
         @Override
@@ -107,6 +134,7 @@ class SseConnectionManagerTest {
     private static final class RecordingEmitter extends SseEmitter {
         private volatile int sendCount;
         private volatile boolean fail;
+        private volatile SseConnectedMessage connectedMessage;
         private Runnable completionCallback;
 
         private RecordingEmitter(long timeout) {
@@ -116,6 +144,12 @@ class SseConnectionManagerTest {
         @Override
         public synchronized void send(SseEventBuilder builder) throws IOException {
             if (fail) throw new IOException("client disconnected");
+            builder.build().stream()
+                    .map(org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter.DataWithMediaType::getData)
+                    .filter(SseConnectedMessage.class::isInstance)
+                    .map(SseConnectedMessage.class::cast)
+                    .findFirst()
+                    .ifPresent(message -> connectedMessage = message);
             sendCount++;
         }
 
@@ -145,7 +179,7 @@ class SseConnectionManagerTest {
         }
 
         private BlockingManager(SseConnectionRepository repository, SseLocalDispatcher dispatcher) {
-            super(repository, dispatcher, new LocalSseMessageBroker(dispatcher), 1);
+            super(repository, dispatcher, new LocalSseMessageBroker(dispatcher), 1, DEFAULT_TIMEOUT);
         }
 
         @Override
@@ -195,4 +229,5 @@ class SseConnectionManagerTest {
         }
         assertThat(condition.getAsBoolean()).isTrue();
     }
+
 }

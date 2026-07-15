@@ -8,6 +8,12 @@
 
 ## 本地运行
 
+运行单元测试：
+
+```bash
+./mvnw -pl scaffold-test/scaffold-test-flink -am -Pexamples test
+```
+
 在 IDE 中直接运行 `WordCountJob.main()` 时，Flink 依赖会加入本地运行时类路径。
 构建产物是提交给 Flink 集群的普通作业 JAR，不是包含 Flink 运行时的 fat JAR，
 因此不要使用 `java -jar` 直接启动该 JAR。

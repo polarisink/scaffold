@@ -1,5 +1,22 @@
 # SPI 测试使用
 
+本模块用四组独立示例说明 Java SPI 在支付插件、日志门面、文件转换器和数据库驱动中的应用。实现均为演示代码，不会连接真实支付平台、日志框架或数据库。
+
+先编译，再在 IDE 中分别运行以下 `main`：
+
+- `PaymentPluginSystem`
+- `LoggingFacadeSystem`
+- `FileConverterSystem`
+- `DatabaseDriverSystem`
+
+```bash
+./mvnw -pl scaffold-test/scaffold-test-spi -am -Pexamples package
+```
+
+`META-INF/services/com.scaffold.spi.PaymentService` 展示标准 JDK SPI 注册文件；其他示例侧重展示插件系统的结构。嵌套实现类若要通过 `ServiceLoader` 加载，服务文件中必须使用其二进制类名（包含 `$`）。
+
+## 使用注意事项
+
 - 第一，配置文件位置。SPI配置文件必须放在META-INF/services目录下，文件名必须是接口的全限定名。配置文件内容为实现类的全限定名，每行一个实现类。
 
 - 第二，无参构造函数。所有服务实现类必须提供公共的无参构造函数，否则ServiceLoader无法实例化。如果需要初始化参数，可以在实例化后通过setter方法设置。

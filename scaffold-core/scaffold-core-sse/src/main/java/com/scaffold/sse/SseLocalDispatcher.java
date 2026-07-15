@@ -1,7 +1,5 @@
 package com.scaffold.sse;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -11,14 +9,12 @@ import java.util.Collection;
  * 将消息非阻塞地投递到当前节点的连接队列，并执行最终网络写入。
  * Broker 消费者应调用本类，而不是再次调用 Broker，避免消息循环发布。
  */
-@Component
 public final class SseLocalDispatcher {
 
     private final SseConnectionRepository repository;
     private final int queueCapacity;
 
-    SseLocalDispatcher(SseConnectionRepository repository,
-                       @Value("${scaffold.sse.queue-capacity:100}") int queueCapacity) {
+    SseLocalDispatcher(SseConnectionRepository repository, int queueCapacity) {
         this.repository = repository;
         this.queueCapacity = queueCapacity;
     }
@@ -40,9 +36,11 @@ public final class SseLocalDispatcher {
         enqueue(repository.findAll(), SseOutboundEvent.heartbeat());
     }
 
-    /** 将连接建立事件等节点内部消息投递到单个连接。 */
-    boolean dispatchToConnection(SseConnection connection, SseOutboundEvent event) {
-        return enqueue(java.util.List.of(connection), event) == 1;
+    /**
+     * 将连接建立事件等节点内部消息投递到单个连接。
+     */
+    void dispatchToConnection(SseConnection connection, SseOutboundEvent event) {
+        enqueue(java.util.List.of(connection), event);
     }
 
     void write(SseConnection connection, SseOutboundEvent event) {

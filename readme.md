@@ -2,7 +2,7 @@
 
 面向小团队的前后端分离脚手架。后端采用 Spring Boot 多模块架构，管理端基于 Vue Vben Admin，目标是提供一套默认可运行、按需装配、可持续演进的项目基础盘。
 
-## 当前基线
+## 当前技术栈
 
 - **Java**: 21
 - **Spring Boot**: 3.5.15
@@ -13,6 +13,7 @@
 - **Redis**: Redisson
 - **认证**: Spring Security / Sa-Token，按技术栈独立装配
 - **接口文档**: Knife4j OpenAPI3
+- **文件存储** 本地存储（便于快速开发）、s3存储（通用标准）
 - **管理端**: Vue 3 + Vite + TypeScript + Naive UI
 - **前端包管理器**: pnpm 11
 
@@ -38,19 +39,19 @@ scaffold/
 
 ## Starter 结构
 
-认证 starter 按认证技术栈拆分，避免一个 starter 同时带入 Spring Security、Sa-Token 多套运行时。
+认证 starter 按认证技术栈拆分，避免一个 starter 同时带入 Spring Security、Sa-Token 多套运行时。具体说明参考[starters说明](scaffold-starters/README.md)
 
 ```text
 scaffold-starters/
-├── scaffold-spring-security-starter
-├── scaffold-sa-token-starter
-├── scaffold-web-starter
-├── scaffold-openapi-starter
-├── scaffold-orm-starter
-├── scaffold-file-starter
-├── scaffold-geo-starter
-├── scaffold-cache-starter
-└── scaffold-postgresql-job-starter
+├── scaffold-spring-security-starter    # spring-security的starter
+├── scaffold-sa-token-starter           # sa-token的starter
+├── scaffold-web-starter                # web服务引用此依赖
+├── scaffold-openapi-starter            # openapi && knife4j的starter
+├── scaffold-orm-starter                # 提供数据库及orm对应的starter（需要自己引入数据库驱动）
+├── scaffold-file-starter               # 文件存储（本地及s3两种）starter
+├── scaffold-geo-starter                # 地形资源相关starter
+├── scaffold-cache-starter              # 缓存（caffeine、redis、postgresql类型）starter
+├── scaffold-sse-starter                # sse进行服务端推送的starter
 ```
 
 认证选择：
@@ -87,7 +88,7 @@ scaffold-module/scaffold-module-rbac/
 - 只复用用户、角色、菜单数据库访问：引入 `scaffold-module-rbac-data`
 
 所有 RBAC 认证模块都复用 `scaffold-module-rbac-data`，避免数据库层重复实现。Servlet 版本提供完整后台管理接口，包含 `/auth`、
-`/user`、`/role`、`/menu`。
+`/user`、`/role`、`/menu`、`/org`。
 
 ## Cloud 示例
 

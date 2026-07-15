@@ -1,6 +1,6 @@
 # SSE 业务推送示例
 
-启动 `SseApplication` 后访问 <http://localhost:8080/>，页面会以 `user-1` 身份连接并加入 `room-a`。
+启动 `SseApplication` 后访问 <http://localhost:8100/>，页面会以 `user-1` 身份连接并加入 `room-a`。
 
 连接接口必须使用 GET（浏览器 `EventSource` 的要求）：
 
@@ -11,7 +11,7 @@ GET /api/sse/connect?userId=user-1&roomId=room-a&roomId=room-b
 向指定用户的所有在线终端发送消息：
 
 ```bash
-curl -X POST http://localhost:8080/api/sse/users/user-1/messages \
+curl -X POST http://localhost:8100/api/sse/users/user-1/messages \
   -H 'Content-Type: application/json' \
   -d '{"event":"notice","data":{"title":"订单已支付","orderId":"10001"}}'
 ```
@@ -19,7 +19,7 @@ curl -X POST http://localhost:8080/api/sse/users/user-1/messages \
 向房间内所有在线连接广播消息：
 
 ```bash
-curl -X POST http://localhost:8080/api/sse/rooms/room-a/messages \
+curl -X POST http://localhost:8100/api/sse/rooms/room-a/messages \
   -H 'Content-Type: application/json' \
   -d '{"event":"chat","data":{"sender":"system","content":"房间消息"}}'
 ```
@@ -30,6 +30,14 @@ curl -X POST http://localhost:8080/api/sse/rooms/room-a/messages \
 connectionManager.sendToUser(userId, "order-status", orderStatus);
 connectionManager.sendToRoom(roomId, "room-message", roomMessage);
 ```
+
+客户端从 `connected` 事件中取得 `connectionId` 后，可主动断开当前用户的指定连接：
+
+```text
+DELETE /api/sse/connections/{connectionId}?userId=user-1
+```
+
+业务代码对应调用 `connectionManager.disconnect(userId, connectionId)`。生产环境的 `userId` 必须来自可信登录上下文；管理器会校验连接归属，不能用该接口断开其他用户的连接。
 
 每条连接拥有独立的有界发送队列和虚拟发送线程，业务线程调用推送方法时只进行非阻塞入队，不会等待客户端网络写入。默认每连接最多积压 100 条消息：
 
@@ -42,31 +50,11 @@ scaffold.sse.heartbeat-interval=25000
 
 示例为了便于测试从请求参数读取 `userId`。生产环境必须从 Spring Security 登录上下文或可信 Token 中取得用户 ID，避免冒充其他用户。当前管理器存储的是本机内存连接；集群部署时，各节点应通过 Redis Pub/Sub、RocketMQ 或 Kafka 分发业务消息，再由持有目标 SSE 连接的节点完成推送。
 
-## 扩展 Redis 或 Kafka
+核心能力已经迁移到 `scaffold-sse-starter`。本测试项目只保留应用入口、业务 Controller、测试页面和集成测试。Redis、Kafka 的切换配置参见 Starter README。
 
-业务代码统一依赖 `SseMessageBroker`。默认配置 `scaffold.sse.broker=local` 并装配 `LocalSseMessageBroker`。后续接入消息中间件时，将配置改为 `kafka` 或 `redis`，并声明自己的 Bean：
+运行与测试：
 
-```properties
-scaffold.sse.broker=kafka
+```bash
+./mvnw -pl scaffold-test/scaffold-test-sse -am -Pexamples spring-boot:run
+./mvnw -pl scaffold-test/scaffold-test-sse -am -Pexamples test
 ```
-
-```java
-@Bean
-SseMessageBroker kafkaSseMessageBroker(KafkaTemplate<String, SseMessage> kafkaTemplate) {
-    return message -> {
-        kafkaTemplate.send("scaffold-sse", message.messageId(), message);
-        return SseSendResult.accepted(message.messageId());
-    };
-}
-```
-
-每个节点的 Kafka 或 Redis 消费者收到消息后调用本节点投递器，不能再次调用 Broker，否则会形成消息循环：
-
-```java
-@KafkaListener(topics = "scaffold-sse")
-public void consume(SseMessage message) {
-    localDispatcher.dispatch(message);
-}
-```
-
-`SseEmitter` 与 TCP 连接仍由各节点的 `SseConnectionRepository` 保存在本机内存中，不能保存到 Redis 或 Kafka。

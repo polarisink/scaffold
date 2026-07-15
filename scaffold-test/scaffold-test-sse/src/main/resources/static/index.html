@@ -95,7 +95,7 @@
 </main>
 <script>
     const $ = id => document.getElementById(id);
-    const state = { source: null, statsTimer: null, listenedEvents: new Set() };
+    const state = { source: null, connectionId: null, statsTimer: null, listenedEvents: new Set() };
     const knownEvents = ['connected', 'notice', 'chat', 'order-status', 'room-message'];
 
     function setStatus(type, text) {
@@ -128,12 +128,33 @@
         container.prepend(item);
     }
 
-    function disconnect(log = true) {
+    function closeLocalConnection() {
         state.source?.close();
         state.source = null;
+        state.connectionId = null;
         state.listenedEvents.clear();
         setStatus('', '未连接');
-        if (log) appendEvent('disconnected', '客户端主动关闭连接', 'system');
+    }
+
+    async function disconnect() {
+        const connectionId = state.connectionId;
+        const userId = $('userId').value.trim();
+        try {
+            if (connectionId && userId) {
+                const response = await fetch(`/api/sse/connections/${encodeURIComponent(connectionId)}?userId=${encodeURIComponent(userId)}`, {
+                    method: 'DELETE'
+                });
+                if (!response.ok) throw new Error(`${response.status} ${await response.text()}`);
+                const result = await response.json();
+                appendEvent('disconnected', result.disconnected ? '服务端已主动断开连接' : '连接已不存在或不属于当前用户', 'system');
+            } else {
+                appendEvent('disconnected', '客户端已关闭连接', 'system');
+            }
+        } catch (error) {
+            appendEvent('disconnect-error', `服务端断开失败：${error.message}`, 'error');
+        } finally {
+            closeLocalConnection();
+        }
     }
 
     function listenEvent(name) {
@@ -143,7 +164,7 @@
     }
 
     function connect() {
-        disconnect(false);
+        closeLocalConnection();
         const userId = $('userId').value.trim();
         if (!userId) return appendEvent('validation-error', '请输入用户 ID', 'error');
         const params = new URLSearchParams({ userId });
@@ -156,6 +177,10 @@
         state.source = source;
         source.onopen = () => { if (state.source === source) setStatus('connected', `已连接 · ${userId}`); };
         source.onmessage = event => appendEvent('message', parseData(event.data));
+        source.addEventListener('connected', event => {
+            const message = parseData(event.data);
+            state.connectionId = message.connectionId;
+        });
         [...knownEvents, $('eventName').value.trim()].forEach(listenEvent);
         source.onerror = () => {
             if (state.source !== source) return;
@@ -205,7 +230,7 @@
     }
 
     $('connectButton').addEventListener('click', connect);
-    $('disconnectButton').addEventListener('click', () => disconnect(true));
+    $('disconnectButton').addEventListener('click', disconnect);
     $('sendButton').addEventListener('click', sendMessage);
     $('clearButton').addEventListener('click', () => { $('events').innerHTML = '<div class="empty">事件记录已清空</div>'; });
     $('targetType').addEventListener('change', event => {

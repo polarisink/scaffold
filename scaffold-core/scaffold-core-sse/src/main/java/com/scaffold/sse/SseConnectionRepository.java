@@ -9,6 +9,8 @@ interface SseConnectionRepository {
 
     SseConnection remove(String connectionId);
 
+    SseConnection findById(String connectionId);
+
     Collection<SseConnection> findByUserId(String userId);
 
     Collection<SseConnection> findByRoomId(String roomId);
