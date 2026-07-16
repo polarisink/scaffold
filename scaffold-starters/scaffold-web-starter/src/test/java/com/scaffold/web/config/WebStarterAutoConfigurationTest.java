@@ -3,6 +3,8 @@ package com.scaffold.web.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.autoconfigure.http.codec.CodecsAutoConfiguration;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 
@@ -23,6 +25,20 @@ class WebStarterAutoConfigurationTest {
             assertThat(context).hasSingleBean(FilterRegistrationBean.class);
             assertThat(context).hasSingleBean(ObjectMapper.class);
         });
+    }
+
+    @Test
+    void shouldExposeSingleObjectMapperWithBootJacksonAndReactiveCodecs() {
+        new WebApplicationContextRunner()
+                .withConfiguration(AutoConfigurations.of(
+                        WebStarterAutoConfiguration.class,
+                        JacksonAutoConfiguration.class,
+                        CodecsAutoConfiguration.class))
+                .run(context -> {
+                    assertThat(context).hasNotFailed();
+                    assertThat(context).hasSingleBean(ObjectMapper.class);
+                    assertThat(context).hasBean("objectMapper");
+                });
     }
 
     @Test

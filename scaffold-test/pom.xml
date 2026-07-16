@@ -37,6 +37,7 @@
         <module>scaffold-test-flink</module>
         <module>scaffold-test-geo</module>
         <module>scaffold-test-yauaa</module>
+        <module>scaffold-test-ai</module>
     </modules>
 
 </project>

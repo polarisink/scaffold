@@ -207,6 +207,11 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        // SSE is already a framed streaming protocol. Wrapping individual chunks in
+        // the common JSON response envelope corrupts the event stream.
+        if (MediaType.TEXT_EVENT_STREAM.isCompatibleWith(selectedContentType)) {
+            return body;
+        }
         if (shouldWriteRawBody(request.getURI().getPath())) {
             return body;
         }

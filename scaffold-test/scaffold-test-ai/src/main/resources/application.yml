@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: scaffold-test-ai
+  ai:
+    model:
+      chat: deepseek
+      embedding: none
+    deepseek:
+      api-key: ${DEEPSEEK_API_KEY}
+      base-url: https://api.deepseek.com
+      chat:
+        options:
+          model: deepseek-chat
+          temperature: 0.7
+
+server:
+  port: 8101
+scaffold:
+  ai:
+    system-prompt: 你是 Scaffold AI Starter 的演示助手。
+    advisor-logging-enabled: false
+    security:
+      enabled: false

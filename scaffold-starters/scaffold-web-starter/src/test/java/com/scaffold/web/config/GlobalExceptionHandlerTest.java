@@ -58,6 +58,16 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void doesNotWrapServerSentEventStream() throws Exception {
+        mockMvc.perform(get("/test/events"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM))
+                .andExpect(content().string("data:first\n\n"))
+                .andExpect(content().string(org.hamcrest.Matchers.not(
+                        org.hamcrest.Matchers.containsString("\"code\""))));
+    }
+
+    @Test
     void usesConfiguredServerErrorMessage() throws Exception {
         mockMvc.perform(get("/test/error"))
                 .andExpect(status().isOk())
@@ -97,6 +107,11 @@ class GlobalExceptionHandlerTest {
         @GetMapping("/test/error")
         TestPayload error() {
             throw new IllegalArgumentException("hidden");
+        }
+
+        @GetMapping(value = "/test/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+        String events() {
+            return "data:first\n\n";
         }
 
         @GetMapping("/test/download")
