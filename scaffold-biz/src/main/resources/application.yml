@@ -20,7 +20,7 @@ spring:
 #    username: ${SCAFFOLD_DATASOURCE_USERNAME:root}
 #    password: ${SCAFFOLD_DATASOURCE_PASSWORD:123456}
     # 演示模式使用h2数据库，
-    url: ${SCAFFOLD_DATASOURCE_URL:jdbc:h2:file:~/scaffold-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE}
+    url: ${SCAFFOLD_DATASOURCE_URL:jdbc:h2:file:${user.home}/scaffold/scaffold-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE}
     username: ${SCAFFOLD_DATASOURCE_USERNAME:root}
     password: ${SCAFFOLD_DATASOURCE_PASSWORD:123456}
     driver-class-name: org.h2.Driver
@@ -75,5 +75,5 @@ scaffold:
     enabled: true
     type: local
     local:
-      base-path: ${SCAFFOLD_FILE_STORAGE_BASE_PATH:./www}
+      base-path: ${SCAFFOLD_FILE_STORAGE_BASE_PATH:${user.home}/scaffold/storage}
       access-path: /files/**
