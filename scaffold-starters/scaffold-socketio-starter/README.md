@@ -6,7 +6,7 @@
 ## 主要能力
 
 - `WebSocketAutoConfiguration`：Socket.IO 服务端自动配置。
-- `WebSocketProperties`：类型安全的 `scaffold.websocket` 配置。
+- `WebSocketProperties`：类型安全的 `scaffold.socketio` 配置。
 - `SocketAuthListener`：默认放行的连接认证实现，可由业务 Bean 覆盖。
 - `WsManager`：连接管理与消息推送辅助方法。
 

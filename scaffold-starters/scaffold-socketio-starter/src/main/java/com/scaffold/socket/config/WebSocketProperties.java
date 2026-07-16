@@ -4,7 +4,7 @@ import com.corundumstudio.socketio.Transport;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /** Socket.IO server settings. */
-@ConfigurationProperties("scaffold.websocket")
+@ConfigurationProperties("scaffold.socketio")
 public record WebSocketProperties(
         String host,
         Integer port,

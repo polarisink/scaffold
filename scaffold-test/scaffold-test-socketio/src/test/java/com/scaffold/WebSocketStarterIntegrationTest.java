@@ -32,7 +32,7 @@ class WebSocketStarterIntegrationTest {
 
     @DynamicPropertySource
     static void socketIoProperties(DynamicPropertyRegistry registry) {
-        registry.add("scaffold.websocket.port", () -> SOCKET_IO_PORT);
+        registry.add("scaffold.socketio.port", () -> SOCKET_IO_PORT);
     }
 
     @Autowired

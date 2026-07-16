@@ -4,18 +4,18 @@ Starter 是业务应用的推荐接入层，负责聚合依赖、注册 Spring B
 
 ## 选择指南
 
-| Starter | 用途 | 关键前缀                           |
-| --- | --- |--------------------------------|
-| [`scaffold-web-starter`](scaffold-web-starter/README.md) | Spring MVC、统一响应、异常、链路日志 | `scaffold.web`                 |
-| [`scaffold-orm-starter`](scaffold-orm-starter/README.md) | JPA 与 MyBatis Plus | Spring 标准配置                    |
+| Starter                                                                          | 用途 | 关键前缀                           |
+|----------------------------------------------------------------------------------| --- |--------------------------------|
+| [`scaffold-web-starter`](scaffold-web-starter/README.md)                         | Spring MVC、统一响应、异常、链路日志 | `scaffold.web`                 |
+| [`scaffold-orm-starter`](scaffold-orm-starter/README.md)                         | JPA 与 MyBatis Plus | Spring 标准配置                    |
 | [`scaffold-spring-security-starter`](scaffold-spring-security-starter/README.md) | Spring Security 无状态认证 | `scaffold.security`            |
-| [`scaffold-sa-token-starter`](scaffold-sa-token-starter/README.md) | Sa-Token MVC 认证 | `scaffold.security`、`sa-token` |
-| [`scaffold-openapi-starter`](scaffold-openapi-starter/README.md) | Knife4j OpenAPI 3 文档 | `scaffold.swagger`             |
-| [`scaffold-file-starter`](scaffold-file-starter/README.md) | 本地或 S3 文件存储 | `scaffold.file-storage`        |
-| [`scaffold-cache-starter`](scaffold-cache-starter/README.md) | Caffeine、Redis、PostgreSQL 单级/二级缓存 | `scaffold.cache`               |
-| [`scaffold-redis-messaging-starter`](scaffold-redis-messaging-starter/README.md) | Redis Stream 与 Pub/Sub 消息监听 | `scaffold.redis.messaging` |
-| [`scaffold-geo-starter`](scaffold-geo-starter/README.md) | DEM 高程与地形分析 | `scaffold.geo`                 |
-| [`scaffold-websocket-starter`](scaffold-websocket-starter/README.md) | Netty Socket.IO 服务端 | `scaffold.websocket` |
+| [`scaffold-sa-token-starter`](scaffold-sa-token-starter/README.md)               | Sa-Token MVC 认证 | `scaffold.security`、`sa-token` |
+| [`scaffold-openapi-starter`](scaffold-openapi-starter/README.md)                 | Knife4j OpenAPI 3 文档 | `scaffold.swagger`             |
+| [`scaffold-file-starter`](scaffold-file-starter/README.md)                       | 本地或 S3 文件存储 | `scaffold.file-storage`        |
+| [`scaffold-cache-starter`](scaffold-cache-starter/README.md)                     | Caffeine、Redis、PostgreSQL 单级/二级缓存 | `scaffold.cache`               |
+| [`scaffold-redis-messaging-starter`](scaffold-redis-messaging-starter/README.md) | Redis Stream 与 Pub/Sub 消息监听 | `scaffold.redis.messaging`     |
+| [`scaffold-geo-starter`](scaffold-geo-starter/README.md)                         | DEM 高程与地形分析 | `scaffold.geo`                 |
+| [`scaffold-socketio-starter`](scaffold-websocket-starter/README.md)              | Netty Socket.IO 服务端 | `scaffold.socketio`            |
 
 ## 常见组合
 

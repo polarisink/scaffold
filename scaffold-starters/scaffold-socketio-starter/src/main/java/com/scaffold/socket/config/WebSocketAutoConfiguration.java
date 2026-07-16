@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 /** Auto-configures an embedded Netty Socket.IO server. */
 @AutoConfiguration
 @ConditionalOnClass(SocketIOServer.class)
-@ConditionalOnProperty(prefix = "scaffold.websocket", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "scaffold.socketio", name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(WebSocketProperties.class)
 public class WebSocketAutoConfiguration {
 

@@ -15,7 +15,7 @@ class WebSocketAutoConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(WebSocketAutoConfiguration.class))
-            .withPropertyValues("scaffold.websocket.port=0");
+            .withPropertyValues("scaffold.socketio.port=0");
 
     @Test
     void configuresSocketIoServerFromProperties() {
@@ -47,7 +47,7 @@ class WebSocketAutoConfigurationTest {
 
     @Test
     void canDisableWebSocketServer() {
-        contextRunner.withPropertyValues("scaffold.websocket.enabled=false")
+        contextRunner.withPropertyValues("scaffold.socketio.enabled=false")
                 .run(context -> {
                     assertThat(context).doesNotHaveBean(SocketIOServer.class);
                     assertThat(context).doesNotHaveBean(WsManager.class);

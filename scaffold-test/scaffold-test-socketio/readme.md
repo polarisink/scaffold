@@ -14,7 +14,7 @@
 <http://localhost:8081/socket-test.html>
 
 页面再连接独立的 Socket.IO 端口 `8101`。Socket.IO 服务配置来自
-`scaffold-socketio-starter` 的 `scaffold.websocket` 配置。
+`scaffold-socketio-starter` 的 `scaffold.socketio` 配置。
 
 IDEA 中重启时应先停止旧的 `WebSocketApplication` 进程，并关闭运行配置的
 `Allow multiple instances`。如果报 `Address already in use`，可使用以下命令确认占用 `8101`
