@@ -12,16 +12,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-core-base</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alicp.jetcache</groupId>
-            <artifactId>jetcache-starter-redis</artifactId>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>org.redisson</groupId>

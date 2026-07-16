@@ -5,7 +5,7 @@ JPA 与 MyBatis Plus 的统一接入 Starter，同时传递引入 `scaffold-core
 ## 主要能力
 
 - Spring Data JPA 与 MyBatis Plus 运行时依赖。
-- 自动导入 `MyBatisPlusConfig`。
+- 注册 MyBatis Plus 分页插件、全局配置、SQL Injector 等默认 Bean，均允许应用自定义 Bean 覆盖。
 - 没有自定义 `MetaObjectHandler` 时注册 `DefaultMetaObjectHandler`。
 - `PageUtils` 将 JPA `Page` 或 MyBatis Plus `IPage` 转换为统一 `PageResponse`。
 

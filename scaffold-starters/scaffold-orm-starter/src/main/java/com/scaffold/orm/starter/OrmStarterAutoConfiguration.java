@@ -2,14 +2,13 @@ package com.scaffold.orm.starter;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.scaffold.orm.DefaultMetaObjectHandler;
-import com.scaffold.orm.MyBatisPlusConfig;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @AutoConfiguration
-@Import(MyBatisPlusConfig.class)
+@Import(MyBatisPlusAutoConfiguration.class)
 public class OrmStarterAutoConfiguration {
 
     @Bean

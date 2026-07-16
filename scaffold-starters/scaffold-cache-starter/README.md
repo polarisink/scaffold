@@ -44,12 +44,13 @@ scaffold:
 ## PostgreSQL 缓存
 
 Starter 会根据 `scaffold.cache.postgresql.datasource.*` 自动创建专用的 HikariCP 数据源和
-`postgresqlJdbcTemplate`，无需在应用中声明数据源配置类。也可以自定义同名 Bean 或
-`PostgresqlCacheStore` 覆盖默认实现。没有配置专用数据源时，回退使用系统中唯一或标记为
-`@Primary` 的 `JdbcTemplate`。
+`postgresqlJdbcTemplate`，无需在应用中声明数据源配置类。PostgreSQL 缓存始终使用该专用
+数据源，不会复用 `spring.datasource` 或系统中的 `JdbcTemplate`。因此业务数据库可以是
+MySQL、Oracle 或其他数据库，也可以排除 `DataSourceAutoConfiguration`。
 
-所有数据源都会通过 JDBC 元数据校验是否为 PostgreSQL。如果系统数据源实际是 MySQL、Oracle
-等数据库，应用会在启动时失败，此时应显式配置 PostgreSQL 缓存数据源：
+应用也可以提供名为 `postgresqlCacheDataSource` 的自定义数据源 Bean，或直接提供
+`PostgresqlCacheStore` 覆盖默认实现。选中 PostgreSQL 缓存但没有提供专用数据源或 Store 时，
+应用会启动失败并给出明确提示。
 
 PostgreSQL JDBC 驱动不会由 Starter 传递引入，使用方需要显式添加：
 
@@ -81,5 +82,5 @@ scaffold:
       cleanup-interval: 5m
 ```
 
-专用 PostgreSQL 数据源的优先级高于系统内置数据源。若选中 PostgreSQL 但没有可用
-数据源/Store，应用会启动失败并给出明确提示。
+`postgresqlCacheDataSource` 和 `postgresqlJdbcTemplate` 均为非默认候选，不会参与 JPA、
+MyBatis 等业务组件的默认数据源选择。

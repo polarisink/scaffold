@@ -17,9 +17,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.scaffold.base.constant.GlobalConstant;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,7 +30,6 @@ import java.time.format.DateTimeFormatter;
  * @author aries
  * @date 2022/07/28
  */
-@Configuration
 public class JacksonConfig {
 
     /**
@@ -58,8 +54,6 @@ public class JacksonConfig {
      *
      * @return ObjectMapper
      */
-    @Bean
-    @Primary
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         JavaTimeModule javaTimeModule = getJavaTimeModule();
@@ -80,7 +74,6 @@ public class JacksonConfig {
     /**
      * 给redis使用的objectMapper，缓存需要保存字段的全类名,不能使用通用的objectMapper
      */
-    @Bean("redisObjectMapper")
     public ObjectMapper redisObjectMapper() {
         return createRedisObjectMapper();
     }

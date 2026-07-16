@@ -1,5 +1,6 @@
 package com.scaffold.web.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
@@ -20,6 +21,7 @@ class WebStarterAutoConfigurationTest {
             assertThat(context).hasSingleBean(WebProperties.class);
             assertThat(context).hasSingleBean(RequestLogFilter.class);
             assertThat(context).hasSingleBean(FilterRegistrationBean.class);
+            assertThat(context).hasSingleBean(ObjectMapper.class);
         });
     }
 

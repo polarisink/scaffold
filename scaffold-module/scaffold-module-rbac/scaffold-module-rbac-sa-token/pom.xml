@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-core-redis</artifactId>
+            <artifactId>scaffold-cache-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>

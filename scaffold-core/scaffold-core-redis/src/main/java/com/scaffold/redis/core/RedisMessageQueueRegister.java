@@ -17,7 +17,6 @@ import org.springframework.data.redis.connection.stream.ObjectRecord;
 import org.springframework.data.redis.connection.stream.ReadOffset;
 import org.springframework.data.redis.connection.stream.StreamOffset;
 import org.springframework.data.redis.stream.StreamMessageListenerContainer;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,7 +27,6 @@ import java.util.Map;
  * @author lqsgo
  */
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class RedisMessageQueueRegister implements ApplicationRunner {
 

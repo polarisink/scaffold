@@ -8,8 +8,6 @@ import org.redisson.api.options.KeysScanOptions;
 import org.redisson.api.stream.StreamAddArgs;
 import org.redisson.api.stream.StreamCreateGroupArgs;
 import org.redisson.client.codec.StringCodec;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
@@ -20,8 +18,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Slf4j
-@Component
-@ConditionalOnProperty(prefix = "spring.data.redis", name = "host")
 public final class RedisUtils {
 
     private static final RedissonClient redisson = SpringUtil.getBean(RedissonClient.class);

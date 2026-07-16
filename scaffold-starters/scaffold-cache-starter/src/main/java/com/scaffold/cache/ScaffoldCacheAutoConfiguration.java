@@ -7,20 +7,19 @@ import com.scaffold.postgresql.PostgresqlCacheManager;
 import com.scaffold.postgresql.PostgresqlCacheSerializer;
 import com.scaffold.postgresql.PostgresqlCacheStore;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.interceptor.CacheErrorHandler;
+import org.springframework.cache.interceptor.SimpleCacheErrorHandler;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -30,7 +29,9 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.jdbc.core.ConnectionCallback;
+import org.springframework.data.redis.serializer.SerializationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -38,14 +39,13 @@ import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
 import java.time.Duration;
-import java.util.Locale;
 
 @EnableCaching
-@AutoConfiguration(
-        after = {DataSourceAutoConfiguration.class, JdbcTemplateAutoConfiguration.class},
-        before = CacheAutoConfiguration.class)
+@AutoConfiguration(before = CacheAutoConfiguration.class)
 @EnableConfigurationProperties(ScaffoldCacheProperties.class)
 public class ScaffoldCacheAutoConfiguration {
+
+    private static final Logger log = LoggerFactory.getLogger(ScaffoldCacheAutoConfiguration.class);
 
     private static final String POSTGRESQL_SELECTED = """
             (\
@@ -60,6 +60,29 @@ public class ScaffoldCacheAutoConfiguration {
         CaffeineCacheManager manager = new CaffeineCacheManager();
         manager.setCacheSpecification(properties.caffeine().getSpec());
         return manager;
+    }
+
+    @Bean("redisObjectMapper")
+    @ConditionalOnMissingBean(name = "redisObjectMapper")
+    public ObjectMapper redisObjectMapper() {
+        return JacksonConfig.createRedisObjectMapper();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(CacheErrorHandler.class)
+    public CacheErrorHandler cacheErrorHandler() {
+        return new SimpleCacheErrorHandler() {
+            @Override
+            public void handleCacheGetError(RuntimeException exception, Cache cache, Object key) {
+                if (isSerializationError(exception)) {
+                    log.warn("Cache value deserialize failed, evict stale entry. cache={}, key={}",
+                            cache.getName(), key);
+                    cache.evictIfPresent(key);
+                    return;
+                }
+                super.handleCacheGetError(exception, cache, key);
+            }
+        };
     }
 
     @Bean("redisCacheManager")
@@ -91,7 +114,7 @@ public class ScaffoldCacheAutoConfiguration {
                 .build();
     }
 
-    @Bean(name = "postgresqlCacheDataSource", destroyMethod = "close")
+    @Bean(name = "postgresqlCacheDataSource", destroyMethod = "close", defaultCandidate = false)
     @ConditionalOnExpression(POSTGRESQL_SELECTED)
     @ConditionalOnProperty(prefix = "scaffold.cache.postgresql.datasource", name = "url")
     @ConditionalOnMissingBean(name = "postgresqlCacheDataSource")
@@ -99,7 +122,7 @@ public class ScaffoldCacheAutoConfiguration {
         return properties.postgresql().getDatasource().initializeDataSourceBuilder().build();
     }
 
-    @Bean("postgresqlJdbcTemplate")
+    @Bean(name = "postgresqlJdbcTemplate", defaultCandidate = false)
     @ConditionalOnExpression(POSTGRESQL_SELECTED)
     @ConditionalOnBean(name = "postgresqlCacheDataSource")
     @ConditionalOnMissingBean(name = "postgresqlJdbcTemplate")
@@ -114,27 +137,6 @@ public class ScaffoldCacheAutoConfiguration {
     @ConditionalOnMissingBean(PostgresqlCacheStore.class)
     public PostgresqlCacheStore postgresqlCacheStore(
             @Qualifier("postgresqlJdbcTemplate") JdbcTemplate jdbcTemplate) {
-        validatePostgresqlJdbcTemplate(jdbcTemplate);
-        return new PostgresqlCacheStore(jdbcTemplate);
-    }
-
-    @Bean
-    @ConditionalOnExpression(POSTGRESQL_SELECTED)
-    @ConditionalOnBean(JdbcTemplate.class)
-    @ConditionalOnMissingBean(value = PostgresqlCacheStore.class, name = "postgresqlJdbcTemplate")
-    public PostgresqlCacheStore defaultPostgresqlCacheStore(
-            ObjectProvider<JdbcTemplate> jdbcTemplates,
-            ListableBeanFactory beanFactory) {
-        JdbcTemplate jdbcTemplate = jdbcTemplates.getIfUnique();
-        if (jdbcTemplate == null) {
-            String[] names = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
-                    beanFactory, JdbcTemplate.class, false, false);
-            throw new IllegalStateException("PostgreSQL cache found multiple JdbcTemplate beans "
-                    + String.join(", ", names)
-                    + ". Mark the system JdbcTemplate as @Primary, define 'postgresqlJdbcTemplate', "
-                    + "or provide a PostgresqlCacheStore bean.");
-        }
-        validatePostgresqlJdbcTemplate(jdbcTemplate);
         return new PostgresqlCacheStore(jdbcTemplate);
     }
 
@@ -203,7 +205,8 @@ public class ScaffoldCacheAutoConfiguration {
             case CAFFEINE -> caffeine;
             case REDIS -> required(redis, "RedisConnectionFactory", provider);
             case POSTGRESQL -> required(postgresql,
-                    "a system JdbcTemplate, 'postgresqlJdbcTemplate', or PostgresqlCacheStore bean", provider);
+                    "scaffold.cache.postgresql.datasource, 'postgresqlCacheDataSource', "
+                            + "or PostgresqlCacheStore", provider);
         };
     }
 
@@ -215,10 +218,14 @@ public class ScaffoldCacheAutoConfiguration {
         return value;
     }
 
-    private void validatePostgresqlJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        String product = jdbcTemplate.execute((ConnectionCallback<String>) connection ->
-                connection.getMetaData().getDatabaseProductName());
-        Assert.state(product != null && product.toLowerCase(Locale.ROOT).contains("postgresql"),
-                "PostgreSQL cache requires a PostgreSQL JdbcTemplate, but database product is: " + product);
+    private boolean isSerializationError(Throwable exception) {
+        Throwable current = exception;
+        while (current != null) {
+            if (current instanceof SerializationException) {
+                return true;
+            }
+            current = current.getCause();
+        }
+        return false;
     }
 }

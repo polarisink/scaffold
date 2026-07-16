@@ -10,7 +10,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.scaffold.base.exception.BaseException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -23,7 +22,6 @@ import java.net.URL;
  */
 @Slf4j
 @Component
-@DependsOn("jacksonConfig")
 public class JsonUtil {
     private static final ObjectMapper DEFAULT_MAPPER = createDefaultMapper();
     @Getter

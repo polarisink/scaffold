@@ -4,12 +4,12 @@ import com.scaffold.postgresql.PostgresqlCacheManager;
 import com.scaffold.postgresql.PostgresqlCacheStore;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
-import org.springframework.jdbc.core.ConnectionCallback;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -20,7 +20,6 @@ import javax.sql.DataSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class ScaffoldCacheAutoConfigurationTest {
@@ -48,12 +47,13 @@ class ScaffoldCacheAutoConfigurationTest {
     }
 
     @Test
-    void failsFastWhenPostgresqlIsSelectedWithoutExplicitStore() {
+    void failsFastWhenPostgresqlIsSelectedWithoutDedicatedDatasource() {
         contextRunner
                 .withPropertyValues("scaffold.cache.provider=postgresql")
                 .run(context -> {
                     assertThat(context).hasFailed();
-                    assertThat(context.getStartupFailure()).hasMessageContaining("postgresqlJdbcTemplate");
+                    assertThat(context.getStartupFailure())
+                            .hasMessageContaining("scaffold.cache.postgresql.datasource");
                 });
     }
 
@@ -75,61 +75,21 @@ class ScaffoldCacheAutoConfigurationTest {
     }
 
     @Test
-    void usesSystemJdbcTemplateWhenItIsPostgresql() {
+    void requiresDedicatedDatasourceEvenWhenSystemJdbcTemplateIsPostgresql() {
         contextRunner
-                .withBean(JdbcTemplate.class, () -> jdbcTemplate("PostgreSQL"))
-                .withPropertyValues(
-                        "scaffold.cache.provider=postgresql",
-                        "scaffold.cache.postgresql.initialize-schema=false",
-                        "scaffold.cache.postgresql.cleanup-on-startup=false",
-                        "scaffold.cache.postgresql.scheduled-cleanup=false")
-                .run(context -> {
-                    assertThat(context).hasNotFailed();
-                    assertThat(context).hasSingleBean(PostgresqlCacheStore.class);
-                    assertThat(context.getBean("cacheManager", CacheManager.class))
-                            .isInstanceOf(PostgresqlCacheManager.class);
-                });
-    }
-
-    @Test
-    void usesJdbcTemplateCreatedBySpringBootForSystemDatasource() {
-        new ApplicationContextRunner()
-                .withConfiguration(AutoConfigurations.of(
-                        ScaffoldCacheAutoConfiguration.class,
-                        DataSourceAutoConfiguration.class,
-                        JdbcTemplateAutoConfiguration.class))
-                .withBean(DataSource.class, () -> dataSource("PostgreSQL"))
-                .withPropertyValues(
-                        "scaffold.cache.provider=postgresql",
-                        "scaffold.cache.postgresql.initialize-schema=false",
-                        "scaffold.cache.postgresql.cleanup-on-startup=false",
-                        "scaffold.cache.postgresql.scheduled-cleanup=false")
-                .run(context -> {
-                    assertThat(context).hasNotFailed();
-                    assertThat(context).hasSingleBean(JdbcTemplate.class);
-                    assertThat(context).hasSingleBean(PostgresqlCacheStore.class);
-                    assertThat(context.getBean("cacheManager", CacheManager.class))
-                            .isInstanceOf(PostgresqlCacheManager.class);
-                });
-    }
-
-    @Test
-    void rejectsSystemJdbcTemplateForAnotherDatabase() {
-        contextRunner
-                .withBean(JdbcTemplate.class, () -> jdbcTemplate("MySQL"))
+                .withBean(JdbcTemplate.class, () -> mock(JdbcTemplate.class))
                 .withPropertyValues("scaffold.cache.provider=postgresql")
                 .run(context -> {
                     assertThat(context).hasFailed();
                     assertThat(context.getStartupFailure())
-                            .hasMessageContaining("requires a PostgreSQL JdbcTemplate")
-                            .hasMessageContaining("MySQL");
+                            .hasMessageContaining("scaffold.cache.postgresql.datasource");
                 });
     }
 
     @Test
-    void doesNotValidateSystemDatabaseWhenPostgresqlIsNotSelected() {
+    void ignoresSystemJdbcTemplateWhenPostgresqlIsNotSelected() {
         contextRunner
-                .withBean(JdbcTemplate.class, () -> jdbcTemplate("MySQL"))
+                .withBean(JdbcTemplate.class, () -> mock(JdbcTemplate.class))
                 .run(context -> {
                     assertThat(context).hasNotFailed();
                     assertThat(context).doesNotHaveBean(PostgresqlCacheStore.class);
@@ -139,12 +99,10 @@ class ScaffoldCacheAutoConfigurationTest {
     }
 
     @Test
-    void namedPostgresqlJdbcTemplateTakesPriorityOverSystemTemplate() {
-        JdbcTemplate system = jdbcTemplate("MySQL");
-        JdbcTemplate external = jdbcTemplate("PostgreSQL");
+    void usesApplicationProvidedDedicatedPostgresqlDatasource() {
+        DataSource dedicated = dataSource("PostgreSQL");
         contextRunner
-                .withBean("systemJdbcTemplate", JdbcTemplate.class, () -> system)
-                .withBean("postgresqlJdbcTemplate", JdbcTemplate.class, () -> external)
+                .withBean("postgresqlCacheDataSource", DataSource.class, () -> dedicated)
                 .withPropertyValues(
                         "scaffold.cache.provider=postgresql",
                         "scaffold.cache.postgresql.initialize-schema=false",
@@ -152,8 +110,10 @@ class ScaffoldCacheAutoConfigurationTest {
                         "scaffold.cache.postgresql.scheduled-cleanup=false")
                 .run(context -> {
                     assertThat(context).hasNotFailed();
+                    assertThat(context.getBean("postgresqlCacheDataSource")).isSameAs(dedicated);
                     PostgresqlCacheStore store = context.getBean(PostgresqlCacheStore.class);
-                    assertThat(ReflectionTestUtils.getField(store, "jdbcTemplate")).isSameAs(external);
+                    JdbcTemplate jdbcTemplate = (JdbcTemplate) ReflectionTestUtils.getField(store, "jdbcTemplate");
+                    assertThat(jdbcTemplate.getDataSource()).isSameAs(dedicated);
                 });
     }
 
@@ -182,20 +142,37 @@ class ScaffoldCacheAutoConfigurationTest {
                 });
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private static JdbcTemplate jdbcTemplate(String productName) {
-        JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
-        try {
-            Connection connection = mock(Connection.class);
-            DatabaseMetaData metadata = mock(DatabaseMetaData.class);
-            when(connection.getMetaData()).thenReturn(metadata);
-            when(metadata.getDatabaseProductName()).thenReturn(productName);
-            when(jdbcTemplate.execute(any(ConnectionCallback.class))).thenAnswer(invocation ->
-                    ((ConnectionCallback) invocation.getArgument(0)).doInConnection(connection));
-        } catch (SQLException exception) {
-            throw new IllegalStateException(exception);
+    @Test
+    void dedicatedPostgresqlDatasourceDoesNotCompeteWithBusinessDatasource() {
+        DataSource businessDataSource = dataSource("MySQL");
+        contextRunner
+                .withUserConfiguration(BusinessDataSourceConfiguration.class)
+                .withBean("businessDataSource", DataSource.class, () -> businessDataSource)
+                .withBean(PostgresqlCacheStore.class, () -> mock(PostgresqlCacheStore.class))
+                .withPropertyValues(
+                        "scaffold.cache.provider=postgresql",
+                        "scaffold.cache.postgresql.datasource.url=jdbc:postgresql://localhost/cache",
+                        "scaffold.cache.postgresql.datasource.driver-class-name=org.postgresql.Driver",
+                        "scaffold.cache.postgresql.initialize-schema=false",
+                        "scaffold.cache.postgresql.cleanup-on-startup=false",
+                        "scaffold.cache.postgresql.scheduled-cleanup=false")
+                .run(context -> {
+                    assertThat(context).hasNotFailed();
+                    assertThat(context).hasBean("postgresqlCacheDataSource");
+                    assertThat(context).hasBean("businessDataSourceConsumer");
+                    assertThat(context.getBean("businessDataSourceConsumer"))
+                            .isSameAs(businessDataSource);
+                });
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    static class BusinessDataSourceConfiguration {
+
+        @Bean
+        @ConditionalOnSingleCandidate(DataSource.class)
+        DataSource businessDataSourceConsumer(DataSource dataSource) {
+            return dataSource;
         }
-        return jdbcTemplate;
     }
 
     private static DataSource dataSource(String productName) {

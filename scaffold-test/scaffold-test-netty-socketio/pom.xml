@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-core-redis</artifactId>
+            <artifactId>scaffold-redis-messaging-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>

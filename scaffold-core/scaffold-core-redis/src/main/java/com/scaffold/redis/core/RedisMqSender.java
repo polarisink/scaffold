@@ -4,7 +4,6 @@ import com.scaffold.base.util.JsonUtil;
 import com.scaffold.redis.domain.RedisMessage;
 import com.scaffold.redis.utils.RedisUtils;
 import jakarta.annotation.Nonnull;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
  *
  * @author lqsgo
  */
-@Component
 public class RedisMqSender {
 
     /**

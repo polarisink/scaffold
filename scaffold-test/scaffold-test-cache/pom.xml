@@ -22,10 +22,10 @@
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-web-starter</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-orm-starter</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>

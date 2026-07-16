@@ -1,5 +1,7 @@
 package com.scaffold.web.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scaffold.base.config.JacksonConfig;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -8,12 +10,20 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 
 @AutoConfiguration
 @Import({WebConfig.class, GlobalExceptionHandler.class})
 @EnableConfigurationProperties(WebProperties.class)
 public class WebStarterAutoConfiguration {
+
+    @Bean
+    @Primary
+    @ConditionalOnMissingBean(name = "objectMapper")
+    public ObjectMapper objectMapper() {
+        return new JacksonConfig().objectMapper();
+    }
 
     @Bean
     @ConditionalOnMissingBean
