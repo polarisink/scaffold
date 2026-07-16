@@ -30,6 +30,8 @@ scaffold/
 - 负责业务领域能力
 - 不绕开 starter 直接拼装底层技术栈
 - 需要明确接入依赖、缓存、表结构和配置项
+- 应用依赖具体 module，starter 不反向依赖 module
+- 移除可选 module 不应破坏默认应用的基础启动链路
 
 ## Starter 默认策略
 
@@ -45,3 +47,4 @@ scaffold/
 - 优先新增 starter，而不是让业务模块直接依赖杂散 core
 - 能用条件装配解决的问题，不依赖启动类显式硬编码
 - 每次新增基础能力时，同步补自动装配测试和文档
+- 全局 BOM 版本覆盖必须记录影响范围；当前 Netty 4.1 覆盖需要与 Socket.IO、Gateway、WebFlux、Vert.x、Dubbo、Redisson 等组件一起验证
