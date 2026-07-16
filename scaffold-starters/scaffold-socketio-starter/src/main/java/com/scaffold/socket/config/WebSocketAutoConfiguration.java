@@ -2,7 +2,8 @@ package com.scaffold.socket.config;
 
 import com.corundumstudio.socketio.AuthorizationListener;
 import com.corundumstudio.socketio.SocketIOServer;
-import com.scaffold.socket.auth.SocketAuthListener;
+import com.corundumstudio.socketio.annotation.SpringAnnotationScanner;
+import com.corundumstudio.socketio.handler.SuccessAuthorizationListener;
 import com.scaffold.socket.util.WsManager;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -21,7 +22,7 @@ public class WebSocketAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     AuthorizationListener socketAuthorizationListener() {
-        return new SocketAuthListener();
+        return new SuccessAuthorizationListener();
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")
@@ -43,8 +44,8 @@ public class WebSocketAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    static SocketIoAnnotationBeanPostProcessor socketIoAnnotationBeanPostProcessor(SocketIOServer server) {
-        return new SocketIoAnnotationBeanPostProcessor(server);
+    static SpringAnnotationScanner springAnnotationScanner(SocketIOServer server) {
+        return new SpringAnnotationScanner(server);
     }
 
     @Bean

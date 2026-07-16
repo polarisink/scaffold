@@ -8,6 +8,8 @@ import com.corundumstudio.socketio.annotation.OnEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 /**
  * socket处理拦截器
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class WsServer {
 
+    private final AtomicInteger connectInvocationCount = new AtomicInteger();
+
     /**
      * 客户端连上socket服务器时执行此事件
      *
@@ -26,6 +30,7 @@ public class WsServer {
      */
     @OnConnect
     public void onConnect(SocketIOClient client) {
+        connectInvocationCount.incrementAndGet();
         String clientId = client.getHandshakeData().getSingleUrlParam("clientId");
         if (clientId == null || clientId.isBlank()) {
             log.warn("Rejecting Socket.IO connection without clientId: {}", client.getSessionId());
@@ -60,6 +65,10 @@ public class WsServer {
         if (request.isAckRequested()) {
             request.sendAckData("ok");
         }
+    }
+
+    int connectInvocationCount() {
+        return connectInvocationCount.get();
     }
 
 }

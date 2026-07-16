@@ -46,8 +46,10 @@
         <swagger-annotations.version>2.2.47</swagger-annotations.version>
         <easy-query.version>2.0.63</easy-query.version>
         <nimbus-jose-jwt.version>10.0.2</nimbus-jose-jwt.version>
-        <netty-all.version>4.2.6.Final</netty-all.version>
-        <netty-socketio.version>2.0.11</netty-socketio.version>
+        <!-- netty-socketio 2.0.14 is built against the Netty 4.1 line. -->
+        <netty.version>4.1.130.Final</netty.version>
+        <netty-all.version>${netty.version}</netty-all.version>
+        <netty-socketio.version>2.0.14</netty-socketio.version>
         <retrofit.version>2.11.0</retrofit.version>
         <concept-download.version>2.1.0</concept-download.version>
         <poi.version>5.4.1</poi.version>
@@ -73,6 +75,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!--项目模块版本-->
             <dependency>
                 <groupId>com.scaffold</groupId>
