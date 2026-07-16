@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -18,6 +19,7 @@ import java.util.Arrays;
 
 @AutoConfiguration
 @RequiredArgsConstructor
+@Import(SaTokenExceptionHandler.class)
 @EnableConfigurationProperties(SecurityProperties.class)
 public class SaTokenServletAutoConfiguration implements WebMvcConfigurer {
     private final SecurityProperties securityProperties;

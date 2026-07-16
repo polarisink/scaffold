@@ -1,5 +1,6 @@
 package com.scaffold.rbac.service;
 
+import com.mzt.logapi.context.LogRecordContext;
 import com.scaffold.base.exception.BaseException;
 import com.scaffold.rbac.vo.auth.LoginVo;
 import com.scaffold.security.config.TokenStore;
@@ -23,7 +24,6 @@ public class SysAuthService implements ISysAuthService {
     private final AuthenticationManager authenticationManager;
     private final TokenStore tokenStore;
     private final JwtUtil jwtUtil;
-    private final RbacLogRecordService logRecordService;
 
     @Override
     public String login(LoginVo vo) {
@@ -37,12 +37,9 @@ public class SysAuthService implements ISysAuthService {
             Long userId = dto.getUserId();
             String token = jwtUtil.generateToken(dto);
             tokenStore.set(userId.toString(), token);
-            logRecordService.recordLogin(userId, dto.getUsername(), RbacLogRecordService.ACTION_LOGIN,
-                    true, "登录成功", null, null);
+            LogRecordContext.putVariable("userId", userId);
             return token;
         } catch (RuntimeException exception) {
-            logRecordService.recordLogin(null, vo.username(), RbacLogRecordService.ACTION_LOGIN,
-                    false, exception.getMessage(), null, null);
             throw exception;
         }
     }
@@ -69,9 +66,9 @@ public class SysAuthService implements ISysAuthService {
         Long userId = LoginUser.userId();
         String username = LoginUser.username();
         if (userId != null) {
+            LogRecordContext.putVariable("userId", userId);
+            LogRecordContext.putVariable("username", username);
             tokenStore.del(userId.toString());
-            logRecordService.recordLogin(userId, username, RbacLogRecordService.ACTION_LOGOUT,
-                    true, "退出成功", null, null);
         }
     }
 }

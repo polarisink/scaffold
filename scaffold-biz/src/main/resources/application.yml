@@ -36,6 +36,10 @@ spring:
             platform: ""
     database-platform: org.hibernate.dialect.H2Dialect
 
+sa-token:
+  token-name: Authorization
+  token-prefix: Bearer
+
 scaffold:
   # 文档默
   swagger:

@@ -23,15 +23,15 @@
             <artifactId>scaffold-file-starter</artifactId>
         </dependency>
         <!--需要使用数据库就使用starter-orm-->
-        <dependency>
+        <!--<dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-orm-starter</artifactId>
-        </dependency>
+        </dependency>-->
         <!--
         如果不需要数据库服务就不需要这个
         如果只需要数据库不需要用户系统就引入scaffold-orm-starter
-        如果需要 Spring Security Servlet 权限系统就引入 scaffold-module-rbac-security-servlet
-        如果需要 Sa-Token Servlet 权限系统就引入 scaffold-module-rbac-sa-token-servlet
+        如果需要 Spring Security Servlet 权限系统就引入 scaffold-module-rbac-security
+        如果需要 Sa-Token Servlet 权限系统就引入 scaffold-module-rbac-sa-token
         -->
         <dependency>
             <groupId>com.scaffold</groupId>

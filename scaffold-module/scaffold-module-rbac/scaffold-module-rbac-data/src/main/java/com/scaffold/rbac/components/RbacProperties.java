@@ -33,23 +33,8 @@ public record RbacProperties(
         @DefaultValue(GlobalConstant.DEFAULT_DATE_FORMAT) String pattern,
         @DefaultValue("") String separator,
         @DefaultValue("true") Boolean usernameBehind,
-        @DefaultValue("anonymous") String anonymousUsername) {
-    /**
-     * 重置策略
-     */
-    /**
-     * 时间戳类型
-     */
-    /**
-     * 间隔符
-     */
-    /**
-     * 用户名是否在前面
-     */
-
-    /**
-     * 匿名用户用户名
-     */
+        @DefaultValue("anonymous") String anonymousUsername,
+        @DefaultValue("true") Boolean logEnabled) {
     public RbacProperties {
         // 如果不是用户名，就要校验时间戳
         if (reset != ResetStrategy.USERNAME) {
@@ -60,4 +45,5 @@ public record RbacProperties(
     public ResetStrategy getReset(){ return reset; } public String getPattern(){ return pattern; }
     public String getSeparator(){ return separator; } public Boolean getUsernameBehind(){ return usernameBehind; }
     public String getAnonymousUsername(){ return anonymousUsername; }
+    public Boolean getLogEnabled(){ return logEnabled; }
 }

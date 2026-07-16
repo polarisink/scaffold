@@ -7,6 +7,8 @@ import com.mzt.logapi.beans.Operator;
 import com.mzt.logapi.service.ILogRecordService;
 import com.mzt.logapi.service.IOperatorGetService;
 import com.scaffold.base.util.ServletUtils;
+import com.scaffold.rbac.components.RbacProperties;
+import com.scaffold.rbac.contant.RbacLogConst;
 import com.scaffold.rbac.entity.SysLoginLog;
 import com.scaffold.rbac.entity.SysOperateLog;
 import com.scaffold.rbac.mapper.SysLoginLogMapper;
@@ -15,8 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,20 +26,27 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Primary
-@Service
 @RequiredArgsConstructor
 public class RbacLogRecordService implements ILogRecordService {
-
-    public static final String ACTION_LOGIN = "LOGIN";
-    public static final String ACTION_LOGOUT = "LOGOUT";
 
     private final SysOperateLogMapper operateLogMapper;
     private final SysLoginLogMapper loginLogMapper;
     private final ObjectProvider<IOperatorGetService> operatorServiceProvider;
+    private final RbacProperties properties;
 
     private static String shortText(String value, int length) {
         return value == null ? null : StrUtil.sub(value, 0, length);
+    }
+
+    private static Long parseUserId(String value) {
+        if (StrUtil.isBlank(value)) {
+            return null;
+        }
+        try {
+            return Long.valueOf(value);
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
     }
 
     /**
@@ -48,7 +55,14 @@ public class RbacLogRecordService implements ILogRecordService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void record(LogRecord record) {
+        if (!Boolean.TRUE.equals(properties.logEnabled())) {
+            return;
+        }
         try {
+            if (RbacLogConst.AUTH.equals(record.getType())) {
+                saveLoginLog(record);
+                return;
+            }
             boolean fail = record.isFail();
             SysOperateLog entity = new SysOperateLog();
             entity.setTitle(shortText(record.getType(), 100));
@@ -85,22 +99,17 @@ public class RbacLogRecordService implements ILogRecordService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void recordLogin(Long userId, String username, String action, boolean success, String message, String ip, String userAgent) {
-        try {
-            HttpServletRequest request = ServletUtils.getRequest();
-            SysLoginLog entity = new SysLoginLog();
-            entity.setUserId(userId);
-            entity.setUsername(shortText(username, 64));
-            entity.setAction(shortText(action, 20));
-            entity.setStatus(success);
-            entity.setMessage(shortText(message, 500));
-            entity.setIp(shortText(StrUtil.blankToDefault(ip, request == null ? null : ServletUtils.getClientIP(request)), 64));
-            entity.setUserAgent(shortText(StrUtil.blankToDefault(userAgent, request == null ? null : request.getHeader("User-Agent")), 500));
-            loginLogMapper.insert(entity);
-        } catch (Exception exception) {
-            log.error("保存登录日志失败", exception);
-        }
+    private void saveLoginLog(LogRecord record) {
+        HttpServletRequest request = ServletUtils.getRequest();
+        SysLoginLog entity = new SysLoginLog();
+        entity.setUserId(parseUserId(record.getBizNo()));
+        entity.setUsername(shortText(resolveOperator(record.getOperator()), 64));
+        entity.setAction(shortText(record.getSubType(), 20));
+        entity.setStatus(!record.isFail());
+        entity.setMessage(shortText(record.getAction(), 500));
+        entity.setIp(shortText(request == null ? null : ServletUtils.getClientIP(request), 64));
+        entity.setUserAgent(shortText(request == null ? null : request.getHeader("User-Agent"), 500));
+        loginLogMapper.insert(entity);
     }
 
     @Override
