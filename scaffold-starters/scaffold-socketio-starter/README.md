@@ -30,3 +30,14 @@ scaffold:
 `enabled` 默认为 `true`。若要自定义连接认证，在应用中声明一个
 `AuthorizationListener` Bean 即可替换默认实现。完整示例见
 `scaffold-test/scaffold-test-socketio`。
+
+## Netty 版本兼容性
+
+`netty-socketio 2.0.14` 基于 Netty 4.1 构建。当前 `scaffold-dependencies` 将 Netty
+全局固定为 `4.1.130.Final`，这会同时覆盖 Spring Boot 为所有应用管理的 Netty
+版本。
+
+后续升级或排查 Spring Cloud Gateway、WebFlux/Reactor Netty、Vert.x、Dubbo、
+Redisson 等组件时，需要优先检查该全局约束。长期建议是在 Socket.IO 服务端支持
+Spring Boot 当前 Netty 主版本后统一升级，或将 Netty 4.1 覆盖移入 Socket.IO 专用应用/BOM，
+避免影响其他 Spring 应用。

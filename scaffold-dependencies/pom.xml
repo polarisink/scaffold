@@ -46,7 +46,15 @@
         <swagger-annotations.version>2.2.47</swagger-annotations.version>
         <easy-query.version>2.0.63</easy-query.version>
         <nimbus-jose-jwt.version>10.0.2</nimbus-jose-jwt.version>
-        <!-- netty-socketio 2.0.14 is built against the Netty 4.1 line. -->
+        <!--
+            Netty 版本兼容性警告：
+            netty-socketio 2.0.14 基于 Netty 4.1 构建，因此当前将 Netty 全局固定为
+            4.1.130.Final。该配置会覆盖 Spring Boot 为所有引入此 BOM 的应用所管理的
+            Netty 版本。升级或排查 Spring Cloud Gateway、WebFlux/Reactor Netty、Vert.x、
+            Dubbo、Redisson 及其他基于 Netty 的组件前，应优先检查该全局约束。
+            当 netty-socketio 可被隔离，或升级到兼容 Spring Boot 当前 Netty 主版本的版本后，
+            建议将该覆盖迁移到 Socket.IO 专用应用或专用 BOM 中。
+        -->
         <netty.version>4.1.130.Final</netty.version>
         <netty-all.version>${netty.version}</netty-all.version>
         <netty-socketio.version>2.0.14</netty-socketio.version>
