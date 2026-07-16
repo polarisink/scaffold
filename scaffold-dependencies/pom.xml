@@ -91,7 +91,7 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-core-websocket</artifactId>
+                <artifactId>scaffold-socketio-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>
@@ -126,7 +126,7 @@
             </dependency>
             <dependency>
                 <groupId>com.scaffold</groupId>
-                <artifactId>scaffold-spring-security-starter</artifactId>
+                <artifactId>scaffold-security-starter</artifactId>
                 <version>${rversion}</version>
             </dependency>
             <dependency>

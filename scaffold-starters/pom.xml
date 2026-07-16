@@ -14,7 +14,7 @@
     <modules>
         <module>scaffold-file-starter</module>
         <module>scaffold-orm-starter</module>
-        <module>scaffold-spring-security-starter</module>
+        <module>scaffold-security-starter</module>
         <module>scaffold-sa-token-starter</module>
         <module>scaffold-openapi-starter</module>
         <module>scaffold-web-starter</module>
@@ -22,5 +22,6 @@
         <module>scaffold-redis-messaging-starter</module>
         <module>scaffold-geo-starter</module>
         <module>scaffold-sse-starter</module>
+        <module>scaffold-socketio-starter</module>
     </modules>
 </project>

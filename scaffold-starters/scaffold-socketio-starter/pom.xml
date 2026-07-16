@@ -3,20 +3,31 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
+        <artifactId>scaffold-starters</artifactId>
         <groupId>com.scaffold</groupId>
-        <artifactId>scaffold-test</artifactId>
         <version>${rversion}</version>
     </parent>
-    <artifactId>scaffold-test-sse</artifactId>
+    <artifactId>scaffold-socketio-starter</artifactId>
+    <name>scaffold-socketio-starter</name>
+    <description>Netty Socket.IO Spring Boot Starter</description>
 
     <dependencies>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-sse-starter</artifactId>
+            <artifactId>scaffold-core-base</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-web-starter</artifactId>
+            <groupId>com.corundumstudio.socketio</groupId>
+            <artifactId>netty-socketio</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -24,14 +35,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

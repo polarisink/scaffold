@@ -1,5 +1,6 @@
 package com.scaffold.audio;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 public class MeetingRecordController {
-    @Autowired
-    private MeetingRecordService meetingRecordService;
+    private final MeetingRecordService meetingRecordService;
 
     /**
      * 上传音频文件生成会议记录

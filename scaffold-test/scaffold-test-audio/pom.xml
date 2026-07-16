@@ -22,9 +22,5 @@
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-web-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-core-orm</artifactId>
-        </dependency>
     </dependencies>
 </project>

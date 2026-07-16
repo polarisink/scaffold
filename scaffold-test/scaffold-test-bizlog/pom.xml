@@ -12,15 +12,11 @@
     <dependencies>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-core-base</artifactId>
+            <artifactId>scaffold-web-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.mouzt</groupId>
             <artifactId>bizlog-sdk</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-openapi-starter</artifactId>
         </dependency>
     </dependencies>
 

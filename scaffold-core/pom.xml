@@ -15,7 +15,6 @@
         <module>scaffold-core-base</module>
         <module>scaffold-core-redis</module>
         <module>scaffold-core-orm</module>
-        <module>scaffold-core-websocket</module>
         <module>scaffold-core-geo</module>
         <module>scaffold-core-sse</module>
     </modules>

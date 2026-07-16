@@ -24,7 +24,7 @@
 | `scaffold-test-geo` | Geo Starter 依赖验证 | 依赖骨架 |
 | `scaffold-test-http-interface` | Retrofit、RestClient、WebClient 对比 | `8888` |
 | `scaffold-test-langchain4j` | LangChain4j Starter 最小启动工程 | `8082` |
-| `scaffold-test-netty-socketio` | Socket.IO 与 Redis 消息 | Web `8081` |
+| `scaffold-test-socketio` | Socket.IO 连接、房间与事件 | Web `8081` / Socket.IO `8101` |
 | `scaffold-test-playwright` | HTML 转 PDF | `8080` |
 | `scaffold-test-postgresql-geo` | PostgreSQL/PostGIS 空间查询 | `8096` |
 | `scaffold-test-qwen3-asr` | Qwen3-ASR 离线语音识别 | `127.0.0.1:8093` |

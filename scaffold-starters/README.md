@@ -15,6 +15,7 @@ Starter 是业务应用的推荐接入层，负责聚合依赖、注册 Spring B
 | [`scaffold-cache-starter`](scaffold-cache-starter/README.md) | Caffeine、Redis、PostgreSQL 单级/二级缓存 | `scaffold.cache`               |
 | [`scaffold-redis-messaging-starter`](scaffold-redis-messaging-starter/README.md) | Redis Stream 与 Pub/Sub 消息监听 | `scaffold.redis.messaging` |
 | [`scaffold-geo-starter`](scaffold-geo-starter/README.md) | DEM 高程与地形分析 | `scaffold.geo`                 |
+| [`scaffold-websocket-starter`](scaffold-websocket-starter/README.md) | Netty Socket.IO 服务端 | `scaffold.websocket` |
 
 ## 常见组合
 

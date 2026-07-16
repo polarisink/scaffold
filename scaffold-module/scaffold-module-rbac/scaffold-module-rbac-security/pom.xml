@@ -38,7 +38,7 @@
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
-            <artifactId>scaffold-spring-security-starter</artifactId>
+            <artifactId>scaffold-security-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.scaffold</groupId>
