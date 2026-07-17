@@ -11,9 +11,9 @@ spring:
     check-template-location: false
   datasource:
     # 演示模式使用h2数据库，
-    url: ${SCAFFOLD_DATASOURCE_URL:jdbc:h2:file:${user.home}/scaffold/scaffold-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE}
-    username: ${SCAFFOLD_DATASOURCE_USERNAME:root}
-    password: ${SCAFFOLD_DATASOURCE_PASSWORD:123456}
+    url: jdbc:h2:file:${user.home}/scaffold/db/scaffold-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+    username: root
+    password: 123456
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
@@ -34,22 +34,21 @@ sa-token:
 scaffold:
   cache:
     mode: single
-    type: postgresql
+    type: caffeine
     caffeine:
       spec: maximumSize=10000,expireAfterWrite=30m
-    postgresql:
-      datasource:
-        url: jdbc:postgresql://localhost:5432/aries
-        username: aries
-        password: 123456
-        driver-class-name: org.postgresql.Driver
-      table-name: scaffold_cache
-      default-ttl: 3d
-      initialize-schema: true
-      cleanup-on-startup: true
-      scheduled-cleanup: true
-      cleanup-interval: 5m
-
+#    postgresql:
+#      datasource:
+#        url: jdbc:postgresql://localhost:5432/aries
+#        username: aries
+#        password: 123456
+#        driver-class-name: org.postgresql.Driver
+#      table-name: scaffold_cache
+#      default-ttl: 3d
+#      initialize-schema: true
+#      cleanup-on-startup: true
+#      scheduled-cleanup: true
+#      cleanup-interval: 5m
 
   # 文档默
   swagger:
