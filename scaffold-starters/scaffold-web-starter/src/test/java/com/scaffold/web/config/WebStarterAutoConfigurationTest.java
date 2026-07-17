@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.http.codec.CodecsAutoConfiguration
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,6 +41,27 @@ class WebStarterAutoConfigurationTest {
                     assertThat(context).hasSingleBean(ObjectMapper.class);
                     assertThat(context).hasBean("objectMapper");
                 });
+    }
+
+    @Test
+    void shouldStillCreatePrimaryWebObjectMapperWhenSpecializedMapperExists() {
+        contextRunner.withUserConfiguration(SpecializedMapperConfiguration.class)
+                .run(context -> {
+                    assertThat(context).hasNotFailed();
+                    assertThat(context).hasBean("objectMapper");
+                    assertThat(context).hasBean("redisObjectMapper");
+                    assertThat(context.getBean(ObjectMapper.class))
+                            .isSameAs(context.getBean("objectMapper", ObjectMapper.class));
+                });
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    static class SpecializedMapperConfiguration {
+
+        @Bean("redisObjectMapper")
+        ObjectMapper redisObjectMapper() {
+            return new ObjectMapper();
+        }
     }
 
     @Test

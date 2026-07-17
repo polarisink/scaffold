@@ -6,6 +6,7 @@ Starter 是业务应用的推荐接入层，负责聚合依赖、注册 Spring B
 
 | Starter                                                                          | 用途 | 关键前缀                           |
 |----------------------------------------------------------------------------------| --- |--------------------------------|
+| [`scaffold-ai-starter`](scaffold-ai-starter/README.md)                           | Spring AI 同步/流式聊天、会话记忆与 Tool Calling | `scaffold.ai`、`spring.ai`     |
 | [`scaffold-web-starter`](scaffold-web-starter/README.md)                         | Spring MVC、统一响应、异常、链路日志 | `scaffold.web`                 |
 | [`scaffold-orm-starter`](scaffold-orm-starter/README.md)                         | JPA 与 MyBatis Plus | Spring 标准配置                    |
 | [`scaffold-security-starter`](scaffold-security-starter/README.md)               | Spring Security 无状态认证 | `scaffold.security`            |
@@ -20,6 +21,7 @@ Starter 是业务应用的推荐接入层，负责聚合依赖、注册 Spring B
 ## 常见组合
 
 - 普通 MVC API：`scaffold-web-starter`
+- AI 对话应用：`scaffold-ai-starter` + 一个 Spring AI 模型 Starter
 - 数据库 API：Web + ORM
 - Spring Security 后台：ORM + `scaffold-module-rbac-security`
 - Sa-Token 后台：ORM + `scaffold-module-rbac-sa-token`

@@ -7,6 +7,7 @@
 - **后端**：Java 21、Spring Boot 3.5.15、Spring Cloud 2025.0.0、Spring Cloud Alibaba 2025.0.0.0
 - **数据访问**：MyBatis Plus 3.5.12、JPA、MySQL 8、H2
 - **缓存与消息**：Caffeine、Redisson、Redis Stream、Redis Pub/Sub
+- **AI 能力**：Spring AI、同步/流式聊天、会话记忆、Tool Calling
 - **认证与权限**：Spring Security、Sa-Token、可选 RBAC 模块
 - **接口与存储**：Knife4j OpenAPI 3、本地文件、S3
 - **管理端**：Vue 3、Vite、TypeScript、Naive UI、pnpm 11
@@ -100,6 +101,7 @@ scaffold-module/scaffold-module-rbac/
 
 | Starter | 能力 |
 | --- | --- |
+| `scaffold-ai-starter` | Spring AI 同步/流式聊天、会话记忆与 Tool Calling |
 | `scaffold-web-starter` | Spring MVC、统一响应、异常处理、链路日志 |
 | `scaffold-orm-starter` | JPA、MyBatis Plus；数据库驱动由应用选择 |
 | `scaffold-security-starter` | Spring Security 无状态认证 |
@@ -151,6 +153,7 @@ scaffold-module/scaffold-module-rbac/
 - [项目路线图](docs/roadmap.md)
 - [Core 模块索引](scaffold-core/README.md)
 - [Starter 选择与接入](scaffold-starters/README.md)
+- [AI Starter](scaffold-starters/scaffold-ai-starter/README.md)
 - [代码生成模块](scaffold-module/scaffold-module-codegen/README.md)
 - [RBAC（Spring Security）模块](scaffold-module/scaffold-module-rbac/scaffold-module-rbac-security/readme.md)
 - [Cloud 示例](scaffold-test-cloud/README.md)

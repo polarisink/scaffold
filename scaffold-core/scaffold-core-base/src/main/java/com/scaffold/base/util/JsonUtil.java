@@ -178,7 +178,7 @@ public class JsonUtil {
     private static ObjectMapper resolveMapper(String beanName) {
         try {
             if (beanName == null) {
-                return SpringUtil.getBean(ObjectMapper.class);
+                return SpringUtil.getBean("objectMapper", ObjectMapper.class);
             }
             return SpringUtil.getBean(beanName, ObjectMapper.class);
         } catch (Exception e) {
@@ -206,8 +206,8 @@ public class JsonUtil {
         try {
             return function.apply();
         } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new BaseException(exMsg);
+            log.error(exMsg, e);
+            throw new BaseException(exMsg, e);
         }
     }
 

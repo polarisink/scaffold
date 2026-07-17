@@ -1,4 +1,4 @@
-# ai-starter
+# scaffold-ai-starter
 
 从 MateCloud `mate-ai-starter` 提取并适配 Spring Boot 3.5 / Spring AI 1.1 的 AI Starter。
 
@@ -8,7 +8,7 @@
 ```xml
 <dependency>
     <groupId>com.scaffold</groupId>
-    <artifactId>ai-starter</artifactId>
+    <artifactId>scaffold-ai-starter</artifactId>
 </dependency>
 ```
 

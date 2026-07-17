@@ -21,7 +21,7 @@ public class WebStarterAutoConfiguration {
 
     @Bean
     @Primary
-    @ConditionalOnMissingBean(ObjectMapper.class)
+    @ConditionalOnMissingBean(name = "objectMapper")
     public ObjectMapper objectMapper() {
         return new JacksonConfig().objectMapper();
     }
