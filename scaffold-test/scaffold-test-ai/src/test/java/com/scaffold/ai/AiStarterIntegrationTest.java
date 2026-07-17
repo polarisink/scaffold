@@ -1,4 +1,4 @@
-package com.scaffold.ai.demo;
+package com.scaffold.ai;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
