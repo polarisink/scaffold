@@ -1,7 +1,7 @@
 package com.scaffold.web.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scaffold.base.config.JacksonConfig;
+import com.scaffold.base.util.JsonUtil;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -23,7 +23,7 @@ public class WebStarterAutoConfiguration {
     @Primary
     @ConditionalOnMissingBean(name = "objectMapper")
     public ObjectMapper objectMapper() {
-        return new JacksonConfig().objectMapper();
+        return JsonUtil.objectMapper();
     }
 
     @Bean

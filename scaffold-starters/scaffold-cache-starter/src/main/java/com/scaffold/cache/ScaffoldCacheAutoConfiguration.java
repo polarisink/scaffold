@@ -1,7 +1,7 @@
 package com.scaffold.cache;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scaffold.base.config.JacksonConfig;
+import com.scaffold.base.util.JsonUtil;
 import com.scaffold.postgresql.PostgresqlCacheCleaner;
 import com.scaffold.postgresql.PostgresqlCacheManager;
 import com.scaffold.postgresql.PostgresqlCacheSerializer;
@@ -65,7 +65,7 @@ public class ScaffoldCacheAutoConfiguration {
     @Bean("redisObjectMapper")
     @ConditionalOnMissingBean(name = "redisObjectMapper")
     public ObjectMapper redisObjectMapper() {
-        return JacksonConfig.createRedisObjectMapper();
+        return JsonUtil.createRedisObjectMapper();
     }
 
     @Bean
@@ -155,7 +155,7 @@ public class ScaffoldCacheAutoConfiguration {
     public PostgresqlCacheSerializer postgresqlCacheSerializer(
             @Qualifier("redisObjectMapper") ObjectProvider<ObjectMapper> redisObjectMapperProvider) {
         ObjectMapper objectMapper = redisObjectMapperProvider.getIfAvailable(
-                JacksonConfig::createRedisObjectMapper);
+                JsonUtil::createRedisObjectMapper);
         return new PostgresqlCacheSerializer(objectMapper);
     }
 
