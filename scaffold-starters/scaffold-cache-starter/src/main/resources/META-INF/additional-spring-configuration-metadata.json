@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "scaffold.cache.postgresql.datasource.url",
+      "type": "java.lang.String",
+      "description": "JDBC URL of the dedicated PostgreSQL cache datasource."
+    },
+    {
+      "name": "scaffold.cache.postgresql.datasource.username",
+      "type": "java.lang.String",
+      "description": "Login username of the dedicated PostgreSQL cache datasource."
+    },
+    {
+      "name": "scaffold.cache.postgresql.datasource.password",
+      "type": "java.lang.String",
+      "description": "Login password of the dedicated PostgreSQL cache datasource."
+    },
+    {
+      "name": "scaffold.cache.postgresql.datasource.driver-class-name",
+      "type": "java.lang.String",
+      "description": "JDBC driver class of the dedicated PostgreSQL cache datasource."
+    }
+  ]
+}

@@ -17,7 +17,7 @@
 scaffold:
   cache:
     mode: single
-    provider: caffeine # caffeine、redis、postgresql
+    type: caffeine # caffeine、redis、postgresql
     caffeine:
       spec: maximumSize=10000,expireAfterWrite=30m
     redis:
@@ -66,7 +66,7 @@ PostgreSQL JDBC 驱动不会由 Starter 传递引入，使用方需要显式添�
 scaffold:
   cache:
     mode: single
-    provider: postgresql
+    type: postgresql
     postgresql:
       datasource:
         url: jdbc:postgresql://localhost:5432/cache

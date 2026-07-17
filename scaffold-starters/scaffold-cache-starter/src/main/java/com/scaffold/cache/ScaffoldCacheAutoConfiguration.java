@@ -50,7 +50,7 @@ public class ScaffoldCacheAutoConfiguration {
     private static final String POSTGRESQL_SELECTED = """
             (\
             '${scaffold.cache.mode:single}'.toLowerCase() == 'single' && \
-            '${scaffold.cache.provider:caffeine}'.toLowerCase() == 'postgresql') || (\
+            '${scaffold.cache.type:caffeine}'.toLowerCase() == 'postgresql') || (\
             '${scaffold.cache.mode:single}'.toLowerCase() == 'two-level' && \
             '${scaffold.cache.secondary:redis}'.toLowerCase() == 'postgresql')""";
 
@@ -173,7 +173,7 @@ public class ScaffoldCacheAutoConfiguration {
             return new TwoLevelCacheManager(caffeine,
                     provider(properties.secondary(), caffeine, redis, postgresql));
         }
-        return provider(properties.provider(), caffeine, redis, postgresql);
+        return provider(properties.type(), caffeine, redis, postgresql);
     }
 
     @Bean("postgresqlCacheTaskScheduler")

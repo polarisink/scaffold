@@ -7,18 +7,9 @@ spring:
     name: scaffold-biz
   lifecycle:
     timeout-per-shutdown-phase: 30s
-  cache:
-    # 最小演示使用caffeine内存缓存更方便
-    type: caffeine
-    caffeine:
-      spec: maximumSize=10000,expireAfterWrite=10m
   freemarker:
     check-template-location: false
   datasource:
-#    driver-class-name: ${SCAFFOLD_DATASOURCE_DRIVER:com.mysql.cj.jdbc.Driver}
-#    url: ${SCAFFOLD_DATASOURCE_URL:jdbc:mysql://localhost:3306/scaffold?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true}
-#    username: ${SCAFFOLD_DATASOURCE_USERNAME:root}
-#    password: ${SCAFFOLD_DATASOURCE_PASSWORD:123456}
     # 演示模式使用h2数据库，
     url: ${SCAFFOLD_DATASOURCE_URL:jdbc:h2:file:${user.home}/scaffold/scaffold-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE}
     username: ${SCAFFOLD_DATASOURCE_USERNAME:root}
@@ -41,6 +32,25 @@ sa-token:
   token-prefix: Bearer
 
 scaffold:
+  cache:
+    mode: single
+    type: postgresql
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=30m
+    postgresql:
+      datasource:
+        url: jdbc:postgresql://localhost:5432/aries
+        username: aries
+        password: 123456
+        driver-class-name: org.postgresql.Driver
+      table-name: scaffold_cache
+      default-ttl: 3d
+      initialize-schema: true
+      cleanup-on-startup: true
+      scheduled-cleanup: true
+      cleanup-interval: 5m
+
+
   # 文档默
   swagger:
     enabled: true

@@ -8,12 +8,12 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import java.time.Duration;
 
 @ConfigurationProperties("scaffold.cache")
-public record ScaffoldCacheProperties(Mode mode, Provider provider, Provider secondary,
+public record ScaffoldCacheProperties(Mode mode, Provider type, Provider secondary,
                                       Caffeine caffeine, Redis redis, Postgresql postgresql) {
 
     public ScaffoldCacheProperties {
         mode = mode == null ? Mode.SINGLE : mode;
-        provider = provider == null ? Provider.CAFFEINE : provider;
+        type = type == null ? Provider.CAFFEINE : type;
         secondary = secondary == null ? Provider.REDIS : secondary;
         caffeine = caffeine == null ? new Caffeine() : caffeine;
         redis = redis == null ? new Redis() : redis;

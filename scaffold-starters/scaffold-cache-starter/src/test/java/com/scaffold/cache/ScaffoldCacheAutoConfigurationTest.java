@@ -39,7 +39,7 @@ class ScaffoldCacheAutoConfigurationTest {
     @Test
     void failsFastWhenRedisIsSelectedWithoutConnectionFactory() {
         contextRunner
-                .withPropertyValues("scaffold.cache.provider=redis")
+                .withPropertyValues("scaffold.cache.type=redis")
                 .run(context -> {
                     assertThat(context).hasFailed();
                     assertThat(context.getStartupFailure()).hasMessageContaining("RedisConnectionFactory");
@@ -49,7 +49,7 @@ class ScaffoldCacheAutoConfigurationTest {
     @Test
     void failsFastWhenPostgresqlIsSelectedWithoutDedicatedDatasource() {
         contextRunner
-                .withPropertyValues("scaffold.cache.provider=postgresql")
+                .withPropertyValues("scaffold.cache.type=postgresql")
                 .run(context -> {
                     assertThat(context).hasFailed();
                     assertThat(context.getStartupFailure())
@@ -78,7 +78,7 @@ class ScaffoldCacheAutoConfigurationTest {
     void requiresDedicatedDatasourceEvenWhenSystemJdbcTemplateIsPostgresql() {
         contextRunner
                 .withBean(JdbcTemplate.class, () -> mock(JdbcTemplate.class))
-                .withPropertyValues("scaffold.cache.provider=postgresql")
+                .withPropertyValues("scaffold.cache.type=postgresql")
                 .run(context -> {
                     assertThat(context).hasFailed();
                     assertThat(context.getStartupFailure())
@@ -104,7 +104,7 @@ class ScaffoldCacheAutoConfigurationTest {
         contextRunner
                 .withBean("postgresqlCacheDataSource", DataSource.class, () -> dedicated)
                 .withPropertyValues(
-                        "scaffold.cache.provider=postgresql",
+                        "scaffold.cache.type=postgresql",
                         "scaffold.cache.postgresql.initialize-schema=false",
                         "scaffold.cache.postgresql.cleanup-on-startup=false",
                         "scaffold.cache.postgresql.scheduled-cleanup=false")
@@ -122,7 +122,7 @@ class ScaffoldCacheAutoConfigurationTest {
         contextRunner
                 .withBean(PostgresqlCacheStore.class, () -> mock(PostgresqlCacheStore.class))
                 .withPropertyValues(
-                        "scaffold.cache.provider=postgresql",
+                        "scaffold.cache.type=postgresql",
                         "scaffold.cache.postgresql.datasource.url=jdbc:postgresql://localhost/cache",
                         "scaffold.cache.postgresql.datasource.username=cache_user",
                         "scaffold.cache.postgresql.datasource.password=secret",
@@ -150,7 +150,7 @@ class ScaffoldCacheAutoConfigurationTest {
                 .withBean("businessDataSource", DataSource.class, () -> businessDataSource)
                 .withBean(PostgresqlCacheStore.class, () -> mock(PostgresqlCacheStore.class))
                 .withPropertyValues(
-                        "scaffold.cache.provider=postgresql",
+                        "scaffold.cache.type=postgresql",
                         "scaffold.cache.postgresql.datasource.url=jdbc:postgresql://localhost/cache",
                         "scaffold.cache.postgresql.datasource.driver-class-name=org.postgresql.Driver",
                         "scaffold.cache.postgresql.initialize-schema=false",

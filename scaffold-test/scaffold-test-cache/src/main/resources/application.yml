@@ -13,13 +13,13 @@ spring:
 scaffold:
   cache:
     mode: single
-    provider: postgresql
+    type: postgresql
     postgresql:
-#      datasource:
-#        url: jdbc:postgresql://localhost:5432/aries
-#        username: aries
-#        password: 123456
-#        driver-class-name: org.postgresql.Driver
+      datasource:
+        url: jdbc:postgresql://localhost:5432/aries
+        username: aries
+        password: 123456
+        driver-class-name: org.postgresql.Driver
       table-name: scaffold_spring_cache
       default-ttl: 3d
       initialize-schema: true
