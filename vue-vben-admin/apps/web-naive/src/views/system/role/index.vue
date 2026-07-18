@@ -28,6 +28,7 @@ import {
   getRolePage,
   updateRole,
 } from '#/api';
+import { normalizeTreeIds, toNumberId, toNumberIds } from '#/utils/id';
 
 defineOptions({ name: 'SystemRole' });
 
@@ -92,7 +93,10 @@ async function load() {
   loading.value = true;
   try {
     const result = await getRolePage(query);
-    rows.value = result.records;
+    rows.value = result.records.map((role) => ({
+      ...role,
+      id: toNumberId(role.id) ?? role.id,
+    }));
     total.value = result.total;
   } finally {
     loading.value = false;
@@ -131,7 +135,7 @@ async function openEdit(row: SysRole) {
   detailLoading.value = true;
   try {
     const detail = await getRoleDetail(row.id);
-    form.menuIdList = detail.list;
+    form.menuIdList = toNumberIds(detail.list);
   } finally {
     detailLoading.value = false;
   }
@@ -139,11 +143,15 @@ async function openEdit(row: SysRole) {
 
 async function submit() {
   await formRef.value?.validate();
+  const payload = {
+    ...form,
+    menuIdList: toNumberIds(form.menuIdList),
+  };
   saving.value = true;
   try {
     await (editingId.value
-      ? updateRole({ ...form, id: editingId.value })
-      : createRole(form));
+      ? updateRole({ ...payload, id: editingId.value })
+      : createRole(payload));
     message.success(`角色${editingId.value ? '更新' : '创建'}成功`);
     showModal.value = false;
     await load();
@@ -169,7 +177,7 @@ function confirmDelete(row: SysRole) {
 onMounted(async () => {
   await Promise.all([
     load(),
-    getMenuTree().then((tree) => (menuTree.value = tree)),
+    getMenuTree().then((tree) => (menuTree.value = normalizeTreeIds(tree))),
   ]);
 });
 </script>

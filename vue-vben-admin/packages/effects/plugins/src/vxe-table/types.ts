@@ -12,8 +12,6 @@ import type { ClassType, DeepPartial } from '@vben/types';
 
 import type { BaseFormComponentType, VbenFormProps } from '@vben-core/form-ui';
 
-import type { VxeGridApi } from './api';
-
 import { useVbenForm } from '@vben-core/form-ui';
 
 export interface VxePaginationInfo {
@@ -175,7 +173,22 @@ export type ExtendedVxeGridApi<
   D extends Record<string, any> = any,
   F extends BaseFormComponentType = BaseFormComponentType,
   P extends Record<string, any> = Record<never, never>,
-> = VxeGridApi<D, F, P> & {
+> = {
+  clearViewedRows: () => void;
+  getViewedKeys: () => Set<number | string>;
+  grid: {
+    getData: () => D[];
+  } & Record<string, any>;
+  isRowViewed: (record: D) => boolean;
+  markKeysAsViewed: (keys: Array<number | string>) => void;
+  markRowAsViewed: (record: D) => void;
+  removeViewedKeys: (keys: Array<number | string>) => void;
+  setState: (
+    stateOrFn:
+      | ((prev: VxeGridProps<D, F, P>) => Partial<VxeGridProps<D, F, P>>)
+      | Partial<VxeGridProps<D, F, P>>,
+  ) => void;
+  [key: string]: any;
   useStore: <S = NoInfer<VxeGridProps<D, F, P>>>(
     selector?: (state: NoInfer<VxeGridProps<D, F, P>>) => S,
   ) => Readonly<Ref<S>>;

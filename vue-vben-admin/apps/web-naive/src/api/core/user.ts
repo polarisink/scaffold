@@ -18,9 +18,17 @@ export interface RbacUser {
   gmtCreated?: string;
   gmtModified?: string;
   id: number;
-  orgId: string;
+  orgId: number;
   status: boolean;
   username: string;
+}
+
+export interface RbacOrg {
+  id: number;
+  orgCode: string;
+  orgName: string;
+  parentId: number;
+  sort?: number;
 }
 
 export interface RbacRole {
@@ -32,6 +40,7 @@ export interface RbacRole {
 
 export interface RbacUserContext {
   menus: RbacMenu[];
+  org?: RbacOrg;
   roles: RbacRole[];
   user: RbacUser;
 }
@@ -51,10 +60,10 @@ export function clearCachedUserContext() {
  * 获取用户信息
  */
 export async function getUserInfoApi() {
-  const { roles, user } = await getCachedUserContext();
+  const { org, roles, user } = await getCachedUserContext();
   return {
     avatar: '',
-    desc: `组织：${user.orgId}`,
+    desc: `组织：${org?.orgName || '未分配'}`,
     homePath: '/dashboard/analytics',
     realName: user.username,
     roles: roles.map((role) => role.roleCode),

@@ -12,6 +12,7 @@ import type { SetupContext } from 'vue';
 
 import type { VbenFormProps } from '@vben-core/form-ui';
 
+import type { VxeGridApi } from './api';
 import type { ExtendedVxeGridApi, VxeGridProps } from './types';
 
 import {
@@ -353,7 +354,7 @@ async function init() {
   }
   props.api?.setState?.({ gridOptions: defaultGridOptions });
   // form 由 vben-form 代替，所以需要保证query相关事件可以拿到参数
-  extendProxyOptions(props.api, defaultGridOptions, () =>
+  extendProxyOptions(props.api as unknown as VxeGridApi, defaultGridOptions, () =>
     formApi.getLatestSubmissionValues(),
   );
 }

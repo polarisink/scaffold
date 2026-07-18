@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DataTableColumns, FormInst, FormRules } from 'naive-ui';
-import type { SysRole, SysUser } from '#/api';
+import type { SysOrg, SysRole, SysUser } from '#/api';
 
 import { computed, h, onMounted, reactive, ref } from 'vue';
 
@@ -18,6 +18,7 @@ import {
   NSelect,
   NSpace,
   NTag,
+  NTreeSelect,
 } from 'naive-ui';
 
 import { dialog, message } from '#/adapter/naive';
@@ -25,12 +26,14 @@ import {
   createUser,
   deleteUser,
   getRolePage,
+  getOrgTree,
   getUserDetail,
   getUserPage,
   resetUserPassword,
   toggleUserStatus,
   updateUser,
 } from '#/api';
+import { normalizeTreeIds, toNumberId, toNumberIds } from '#/utils/id';
 
 defineOptions({ name: 'SystemUser' });
 
@@ -41,18 +44,28 @@ const detailLoading = ref(false);
 const formRef = ref<FormInst | null>(null);
 const rows = ref<SysUser[]>([]);
 const roles = ref<SysRole[]>([]);
+const orgTree = ref<SysOrg[]>([]);
 const query = reactive({ pageNo: 1, pageSize: 10, username: '' });
 const total = ref(0);
 const editingId = ref<number>();
-const form = reactive({
-  orgId: '',
+const form = reactive<{
+  orgId: null | number;
+  password: string;
+  roleIdList: number[];
+  username: string;
+}>({
+  orgId: null,
   password: '',
-  positionId: '',
-  roleIdList: [],
+  roleIdList: [] as number[],
   username: '',
 });
 const rules: FormRules = {
-  orgId: { message: '请输入组织 ID', required: true, trigger: 'blur' },
+  orgId: {
+    message: '请选择所属部门',
+    required: true,
+    trigger: 'change',
+    type: 'number',
+  },
   password: { message: '请输入初始密码', required: true, trigger: 'blur' },
   roleIdList: {
     message: '请至少选择一个角色',
@@ -68,6 +81,32 @@ const roleOptions = computed(() =>
     value: role.id,
   })),
 );
+const orgNameMap = computed(() => {
+  const result = new Map<number, string>();
+  const visit = (nodes: SysOrg[]) => {
+    nodes.forEach((node) => {
+      result.set(node.id, node.orgName);
+      visit(node.children || []);
+    });
+  };
+  visit(orgTree.value);
+  return result;
+});
+
+function normalizeRole(role: SysRole): SysRole {
+  return {
+    ...role,
+    id: toNumberId(role.id) ?? role.id,
+  };
+}
+
+function normalizeUser(user: SysUser): SysUser {
+  return {
+    ...user,
+    id: toNumberId(user.id) ?? user.id,
+    orgId: toNumberId(user.orgId) ?? user.orgId,
+  };
+}
 
 function confirmAction(options: {
   content: string;
@@ -89,7 +128,12 @@ function confirmAction(options: {
 
 const columns: DataTableColumns<SysUser> = [
   { key: 'username', minWidth: 140, title: '用户名' },
-  { key: 'orgId', minWidth: 140, title: '组织 ID' },
+  {
+    key: 'orgId',
+    minWidth: 160,
+    render: (row) => orgNameMap.value.get(row.orgId) || `#${row.orgId}`,
+    title: '所属部门',
+  },
   {
     key: 'status',
     render: (row) =>
@@ -171,7 +215,7 @@ async function load() {
   loading.value = true;
   try {
     const result = await getUserPage(query);
-    rows.value = result.records;
+    rows.value = result.records.map(normalizeUser);
     total.value = result.total;
   } finally {
     loading.value = false;
@@ -180,7 +224,11 @@ async function load() {
 
 async function loadRoles() {
   const result = await getRolePage({ pageNo: 1, pageSize: 1000 });
-  roles.value = result.records;
+  roles.value = result.records.map(normalizeRole);
+}
+
+async function loadOrgs() {
+  orgTree.value = normalizeTreeIds(await getOrgTree());
 }
 
 function search() {
@@ -191,9 +239,8 @@ function search() {
 function openCreate() {
   editingId.value = undefined;
   Object.assign(form, {
-    orgId: '',
+    orgId: null,
     password: '',
-    positionId: '',
     roleIdList: [],
     username: '',
   });
@@ -203,9 +250,8 @@ function openCreate() {
 async function openEdit(row: SysUser) {
   editingId.value = row.id;
   Object.assign(form, {
-    orgId: row.orgId,
+    orgId: toNumberId(row.orgId),
     password: '',
-    positionId: '',
     roleIdList: [],
     username: row.username,
   });
@@ -214,8 +260,8 @@ async function openEdit(row: SysUser) {
   try {
     const detail = await getUserDetail(row.id);
     Object.assign(form, {
-      orgId: detail.user.orgId,
-      roleIdList: detail.roles.map((role) => role.id),
+      orgId: toNumberId(detail.user.orgId),
+      roleIdList: toNumberIds(detail.roles.map((role) => role.id)),
       username: detail.user.username,
     });
   } finally {
@@ -225,16 +271,26 @@ async function openEdit(row: SysUser) {
 
 async function submit() {
   await formRef.value?.validate();
+  const orgId = toNumberId(form.orgId);
+  const roleIdList = toNumberIds(form.roleIdList);
+  if (orgId === null) {
+    return;
+  }
   saving.value = true;
   try {
     await (editingId.value
       ? updateUser({
           id: editingId.value,
-          orgId: form.orgId,
-          roleIdList: form.roleIdList,
+          orgId,
+          roleIdList,
           username: form.username,
         })
-      : createUser(form));
+      : createUser({
+          orgId,
+          password: form.password,
+          roleIdList,
+          username: form.username,
+        }));
     message.success(`用户${editingId.value ? '更新' : '创建'}成功`);
     showModal.value = false;
     await load();
@@ -244,12 +300,12 @@ async function submit() {
 }
 
 onMounted(async () => {
-  await Promise.all([load(), loadRoles()]);
+  await Promise.all([load(), loadRoles(), loadOrgs()]);
 });
 </script>
 
 <template>
-  <Page description="维护登录账号、状态及角色归属" title="用户管理">
+  <Page description="维护登录账号、所属部门、状态及角色归属" title="用户管理">
     <NCard :bordered="false" class="system-card">
       <div class="toolbar">
         <NSpace>
@@ -311,11 +367,17 @@ onMounted(async () => {
             type="password"
           />
         </NFormItem>
-        <NFormItem label="组织 ID" path="orgId">
-          <NInput v-model:value="form.orgId" placeholder="请输入组织 ID" />
-        </NFormItem>
-        <NFormItem v-if="!editingId" label="岗位 ID" path="positionId">
-          <NInput v-model:value="form.positionId" placeholder="选填" />
+        <NFormItem label="所属部门" path="orgId">
+          <NTreeSelect
+            v-model:value="form.orgId"
+            :options="orgTree"
+            children-field="children"
+            clearable
+            filterable
+            key-field="id"
+            label-field="orgName"
+            placeholder="请选择所属部门"
+          />
         </NFormItem>
         <NFormItem label="所属角色" path="roleIdList">
           <NSelect

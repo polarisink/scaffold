@@ -10,9 +10,11 @@ import { useAuthStore } from '#/store';
 defineOptions({ name: 'Login' });
 
 const authStore = useAuthStore();
+const sliderCaptchaEnabled =
+  import.meta.env.VITE_AUTH_SLIDER_CAPTCHA !== 'false';
 
 const formSchema = computed((): VbenFormSchema[] => {
-  return [
+  const schemas: VbenFormSchema[] = [
     {
       component: 'VbenInput',
       componentProps: {
@@ -31,14 +33,19 @@ const formSchema = computed((): VbenFormSchema[] => {
       label: $t('authentication.password'),
       rules: z.string().min(1, { message: $t('authentication.passwordTip') }),
     },
-    {
+  ];
+
+  if (sliderCaptchaEnabled) {
+    schemas.push({
       component: markRaw(SliderCaptcha),
       fieldName: 'captcha',
       rules: z.boolean().refine((value) => value, {
         message: $t('authentication.verifyRequiredTip'),
       }),
-    },
-  ];
+    });
+  }
+
+  return schemas;
 });
 </script>
 
@@ -46,6 +53,11 @@ const formSchema = computed((): VbenFormSchema[] => {
   <AuthenticationLogin
     :form-schema="formSchema"
     :loading="authStore.loginLoading"
+    :show-code-login="false"
+    :show-qrcode-login="false"
+    :show-third-party-login="false"
+    :show-register="false"
+    :show-forget-password="false"
     @submit="authStore.authLogin"
   />
 </template>

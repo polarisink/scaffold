@@ -1,12 +1,17 @@
-import type { FieldOptions, FormContext, GenericObject } from 'vee-validate';
+import type {
+  FieldOptions,
+  FormContext,
+  FormState,
+  GenericObject,
+  ResetFormOpts,
+  ValidationOptions,
+} from 'vee-validate';
 import type { ZodTypeAny } from 'zod';
 
-import type { Component, HtmlHTMLAttributes, Ref } from 'vue';
+import type { Component, ComponentPublicInstance, HtmlHTMLAttributes, Ref } from 'vue';
 
 import type { VbenButtonProps } from '@vben-core/shadcn-ui';
 import type { ClassType, MaybeComputedRef } from '@vben-core/typings';
-
-import type { FormApi } from './form-api';
 
 export type FormLayout = 'horizontal' | 'inline' | 'vertical';
 
@@ -539,10 +544,34 @@ export interface VbenFormProps<
   submitOnEnter?: boolean;
 }
 
-export type ExtendedFormApi = FormApi & {
+export type ExtendedFormApi = {
+  form: FormActions;
+  getFieldComponentRef: <T = ComponentPublicInstance>(
+    fieldName: string,
+  ) => T | undefined;
+  getValues: <T = Record<string, any>>() => Promise<T>;
+  resetForm: (
+    state?: Partial<FormState<GenericObject>>,
+    opts?: Partial<ResetFormOpts>,
+  ) => Promise<void>;
+  setState: (
+    stateOrFn:
+      | ((prev: VbenFormProps) => Partial<VbenFormProps>)
+      | Partial<VbenFormProps>,
+  ) => void;
+  setValues: (
+    fields: Record<string, any>,
+    filterFields?: boolean,
+    shouldValidate?: boolean,
+  ) => Promise<void>;
+  updateSchema: (schema: Partial<FormSchema>[]) => void;
+  [key: string]: any;
   useStore: <T = NoInfer<VbenFormProps>>(
     selector?: (state: NoInfer<VbenFormProps>) => T,
   ) => Readonly<Ref<T>>;
+  validate: (
+    opts?: Partial<ValidationOptions>,
+  ) => Promise<{ errors: Record<string, string>; valid: boolean }>;
 };
 
 export interface VbenFormAdapterOptions<

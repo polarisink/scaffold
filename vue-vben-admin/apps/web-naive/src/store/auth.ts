@@ -84,11 +84,16 @@ export const useAuthStore = defineStore('auth', () => {
     };
   }
 
-  async function logout(redirect: boolean = true) {
-    try {
-      await logoutApi();
-    } catch {
-      // 不做任何处理
+  async function logout(
+    redirect: boolean = true,
+    revokeRemoteToken: boolean = true,
+  ) {
+    if (revokeRemoteToken) {
+      try {
+        await logoutApi();
+      } catch {
+        // 远程注销失败不应阻止本地退出
+      }
     }
     resetAllStores();
     clearCachedUserContext();

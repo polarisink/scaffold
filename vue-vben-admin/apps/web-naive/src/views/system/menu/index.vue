@@ -24,6 +24,7 @@ import {
 
 import { dialog, message } from '#/adapter/naive';
 import { createMenu, deleteMenu, getMenuTree, updateMenu } from '#/api';
+import { normalizeTreeIds, toNumberId } from '#/utils/id';
 
 defineOptions({ name: 'SystemMenu' });
 
@@ -136,7 +137,7 @@ const columns: DataTableColumns<SysMenu> = [
 async function load() {
   loading.value = true;
   try {
-    rows.value = await getMenuTree();
+    rows.value = normalizeTreeIds(await getMenuTree());
   } finally {
     loading.value = false;
   }
@@ -149,7 +150,7 @@ function resetForm(parentId = 0) {
     menuName: '',
     menuType: 0,
     menuUrl: '',
-    parentId,
+    parentId: toNumberId(parentId) ?? 0,
     path: '',
     sortNo: 0,
   });
@@ -167,7 +168,7 @@ function openEdit(row: SysMenu) {
     menuName: row.menuName,
     menuType: row.menuType,
     menuUrl: row.menuUrl || '',
-    parentId: row.parentId,
+    parentId: toNumberId(row.parentId) ?? 0,
     path: row.path,
     sortNo: row.sortNo || 0,
   });
@@ -176,6 +177,7 @@ function openEdit(row: SysMenu) {
 
 async function submit() {
   await formRef.value?.validate();
+  const parentId = toNumberId(form.parentId) ?? 0;
   saving.value = true;
   try {
     // 后端更新 DTO 当前将 parentId 定义为字符串，序列化为字符串兼容该接口。
@@ -183,9 +185,9 @@ async function submit() {
       ? updateMenu({
           ...form,
           id: editingId.value,
-          parentId: String(form.parentId),
+          parentId: String(parentId),
         })
-      : createMenu(form));
+      : createMenu({ ...form, parentId }));
     message.success(`菜单${editingId.value ? '更新' : '创建'}成功`);
     showModal.value = false;
     await load();

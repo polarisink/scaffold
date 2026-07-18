@@ -31,14 +31,8 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     const accessStore = useAccessStore();
     const authStore = useAuthStore();
     accessStore.setAccessToken(null);
-    if (
-      preferences.app.loginExpiredMode === 'modal' &&
-      accessStore.isAccessChecked
-    ) {
-      accessStore.setLoginExpired(true);
-    } else {
-      await authStore.logout();
-    }
+    // Token 已失效时无需再次请求受保护的注销接口，避免再次触发 401。
+    await authStore.logout(true, false);
   }
 
   /**
@@ -71,8 +65,8 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
 
       const body = response.data as Record<string, unknown> | undefined;
       if (body && typeof body === 'object' && typeof body.code === 'number') {
-        if (body.code === 200) return body.data;
-        throw Object.assign(new Error(String(body.msg || '请求失败')), {
+        if (body.code === 0) return body.data;
+        throw Object.assign(new Error(String(body.message || '请求失败')), {
           response,
         });
       }
@@ -98,7 +92,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       // 当前mock接口返回的错误字段是 error 或者 message
       const responseData = error?.response?.data ?? {};
       const errorMessage =
-        responseData?.msg ?? responseData?.error ?? responseData?.message ?? '';
+        responseData?.message ?? responseData?.error ?? '';
       // 如果没有错误信息，则会根据状态码进行提示
       message.error(errorMessage || msg);
     }),

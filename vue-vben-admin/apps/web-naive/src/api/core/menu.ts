@@ -5,15 +5,21 @@ import type { RbacMenu } from './user';
 import { getCachedUserContext } from './user';
 
 /**
- * 后端路由只能从这份注册表中选择组件，不能直接加载后端传入的文件路径。
- * 新增页面时，需要在这里显式注册对应的业务路由。
+ * 已知核心页面使用显式注册；代码生成页面按规范映射到
+ * views/<route>/index.vue，实际组件仍受 Vite import.meta.glob 编译清单约束。
  */
 const PAGE_COMPONENT_REGISTRY: Record<string, string> = {
   '/dashboard/analytics': '/dashboard/analytics/index',
   '/dashboard/workspace': '/dashboard/workspace/index',
   '/system/menu': '/system/menu/index',
+  '/system/org': '/system/org/index',
+  '/system/config': '/system/config/index',
+  '/system/dict': '/system/dict/index',
+  '/system/log/login': '/system/log/login/index',
+  '/system/log/operation': '/system/log/operation/index',
   '/system/role': '/system/role/index',
   '/system/user': '/system/user/index',
+  '/tool/codegen': '/tool/codegen/index',
 };
 
 const FALLBACK_COMPONENT = '/_core/fallback/not-found';
@@ -45,7 +51,10 @@ function resolveComponent(
   depth: number,
 ) {
   if (isDirectory) return depth === 0 ? 'BasicLayout' : undefined;
-  return PAGE_COMPONENT_REGISTRY[fullPath] ?? FALLBACK_COMPONENT;
+  if (!/^\/[a-z0-9][a-z0-9/_-]*$/i.test(fullPath) || fullPath.startsWith('/_core')) {
+    return FALLBACK_COMPONENT;
+  }
+  return PAGE_COMPONENT_REGISTRY[fullPath] ?? `${fullPath}/index`;
 }
 
 function toRoute(
@@ -55,6 +64,7 @@ function toRoute(
 ): RouteRecordStringComponent {
   const fullPath = normalizeFullPath(menu.path, parentPath);
   const children = (menu.children || [])
+    .filter((child) => child.menuType !== 2)
     .toSorted((left, right) => (left.sortNo || 0) - (right.sortNo || 0))
     .map((child) => toRoute(child, fullPath, depth + 1));
   const isDirectory = menu.menuType === 0 || children.length > 0;
@@ -77,6 +87,7 @@ function toRoute(
 export async function getAllMenusApi() {
   const { menus } = await getCachedUserContext();
   return menus
+    .filter((menu) => menu.menuType !== 2)
     .toSorted((left, right) => (left.sortNo || 0) - (right.sortNo || 0))
     .map((menu) => toRoute(menu));
 }
