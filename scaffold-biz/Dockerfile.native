@@ -1,0 +1,27 @@
+FROM ghcr.io/graalvm/native-image-community:21 AS builder
+
+WORKDIR /workspace
+COPY .mvn .mvn
+COPY mvnw pom.xml ./
+COPY scaffold-dependencies scaffold-dependencies
+COPY scaffold-core scaffold-core
+COPY scaffold-starters scaffold-starters
+COPY scaffold-module scaffold-module
+COPY scaffold-biz scaffold-biz
+
+RUN --mount=type=cache,target=/root/.m2 \
+    ./mvnw -Pnative -pl scaffold-biz -am -Dmaven.test.skip=true package \
+    && cp scaffold-biz/target/scaffold-biz /workspace/scaffold-biz-bin
+
+FROM debian:12-slim
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y ca-certificates zlib1g \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY --from=builder --chown=65532:65532 /workspace/scaffold-biz-bin /app/scaffold-biz
+
+USER 65532:65532
+EXPOSE 8082
+ENTRYPOINT ["/app/scaffold-biz"]

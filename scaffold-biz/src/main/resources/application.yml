@@ -83,6 +83,8 @@ scaffold:
         - OPTIONS
       allowed-headers:
         - "*"
+    ignore-list:
+      - /basic/version
   # 默认业务项目显式启用本地存储，保持零外部依赖即可启动。
   file-storage:
     enabled: true

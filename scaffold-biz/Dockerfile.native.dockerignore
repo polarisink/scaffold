@@ -1,0 +1,8 @@
+.git
+.idea
+.playwright-cli
+vue-vben-admin
+scaffold-test
+scaffold-test-cloud
+**/target
+**/.flattened-pom.xml

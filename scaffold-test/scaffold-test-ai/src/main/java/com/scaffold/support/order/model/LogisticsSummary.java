@@ -1,0 +1,17 @@
+package com.scaffold.support.order.model;
+
+import java.time.LocalDateTime;
+
+/** Safe logistics projection exposed to the model. */
+public record LogisticsSummary(
+        String orderNo,
+        String carrier,
+        String trackingStatus,
+        String latestDescription,
+        LocalDateTime latestUpdateTime) {
+
+    public static LogisticsSummary from(DemoLogistics logistics) {
+        return new LogisticsSummary(logistics.getOrderNo(), logistics.getCarrier(), logistics.getStatus(),
+                logistics.getLatestDescription(), logistics.getLatestUpdateTime());
+    }
+}

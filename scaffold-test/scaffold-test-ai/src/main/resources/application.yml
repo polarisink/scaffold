@@ -1,6 +1,19 @@
 spring:
   application:
     name: scaffold-test-ai
+  datasource:
+    url: jdbc:h2:file:${user.home}/.scaffold/scaffold-ai-support;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  sql:
+    init:
+      mode: always
   ai:
     model:
       chat: deepseek
@@ -16,8 +29,39 @@ spring:
 server:
   port: 8101
 scaffold:
+  swagger:
+    enabled: true
+    title: Scaffold AI Support API
+    description: AI 智能售后工单学习系统接口
+    version: v1.0
+    group-name: ai-support
+    base-package: com.scaffold
+    base-path:
+      - /api/**
+    exclude-path:
+      - /error
   ai:
     system-prompt: 你是 Scaffold AI Starter 的演示助手。
+    memory-max-messages: 20
     advisor-logging-enabled: false
     security:
       enabled: false
+  security:
+    token:
+      jwt-secret: ${SCAFFOLD_JWT_SECRET:scaffold-ai-support-local-secret-32-bytes}
+      cache-ttl: 30m
+      cache-maximum-size: 10000
+    cors:
+      enabled: true
+      allowed-origin-patterns:
+        - "http://localhost:*"
+        - "http://127.0.0.1:*"
+      allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - PATCH
+        - OPTIONS
+      allowed-headers:
+        - "*"

@@ -50,3 +50,4 @@ bin/
 /**/.flattened-pom.xml
 /**/dependency-reduced-pom.xml
 /logs/
+/.playwright-cli/

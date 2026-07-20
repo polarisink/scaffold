@@ -366,7 +366,7 @@
             </dependency>
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
-                <artifactId>apache-client</artifactId>
+                <artifactId>url-connection-client</artifactId>
                 <version>${s3.version}</version>
             </dependency>
             <dependency>

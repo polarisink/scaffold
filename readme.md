@@ -46,6 +46,22 @@ scaffold/
 
 服务默认监听 `http://localhost:8082`。默认使用文件型 H2 数据库，首次运行不需要预先安装 MySQL 或 Redis。
 
+#### 原生镜像
+
+安装 GraalVM 21 和 `native-image` 后，可直接生成当前平台的原生可执行文件：
+
+```bash
+./mvnw -Pnative -pl scaffold-biz -am -DskipTests package
+./scaffold-biz/target/scaffold-biz
+```
+
+也可以只依赖 Docker，生成 Linux 原生 OCI 镜像：
+
+```bash
+docker build -f scaffold-biz/Dockerfile.native -t scaffold-biz:native .
+docker run --rm -p 8082:8082 scaffold-biz:native
+```
+
 ### 管理端
 
 环境要求：Node.js 22.18+（或 24.x）、pnpm 11+。

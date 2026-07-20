@@ -8,7 +8,7 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.http.apache.ApacheHttpClient;
+import software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Configuration;
@@ -39,7 +39,7 @@ public class S3FileService implements FileUploadService {
                             .pathStyleAccessEnabled(true)
                             .expectContinueEnabled(false)
                             .build())
-                    .httpClientBuilder(ApacheHttpClient.builder().expectContinueEnabled(false))
+                    .httpClientBuilder(UrlConnectionHttpClient.builder())
                     .build();
             try {
                 HeadBucketRequest headBucketRequest = HeadBucketRequest.builder()
