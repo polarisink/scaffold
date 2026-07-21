@@ -10,6 +10,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
@@ -22,6 +23,7 @@ import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.cache.interceptor.SimpleCacheErrorHandler;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
@@ -62,59 +64,75 @@ public class ScaffoldCacheAutoConfiguration {
         return manager;
     }
 
-    @Bean("redisObjectMapper")
-    @ConditionalOnMissingBean(name = "redisObjectMapper")
-    public ObjectMapper redisObjectMapper() {
-        return JsonUtil.createRedisObjectMapper();
-    }
+    @Configuration(proxyBeanMethods = false)
+    @ConditionalOnClass(RedisConnectionFactory.class)
+    static class RedisCacheProviderConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean(CacheErrorHandler.class)
-    public CacheErrorHandler cacheErrorHandler() {
-        return new SimpleCacheErrorHandler() {
-            @Override
-            public void handleCacheGetError(RuntimeException exception, Cache cache, Object key) {
-                if (isSerializationError(exception)) {
-                    log.warn("Cache value deserialize failed, evict stale entry. cache={}, key={}",
-                            cache.getName(), key);
-                    cache.evictIfPresent(key);
-                    return;
+        @Bean("redisObjectMapper")
+        @ConditionalOnMissingBean(name = "redisObjectMapper")
+        ObjectMapper redisObjectMapper() {
+            return JsonUtil.createRedisObjectMapper();
+        }
+
+        @Bean
+        @ConditionalOnMissingBean(CacheErrorHandler.class)
+        CacheErrorHandler cacheErrorHandler() {
+            return new SimpleCacheErrorHandler() {
+                @Override
+                public void handleCacheGetError(RuntimeException exception, Cache cache, Object key) {
+                    if (isSerializationError(exception)) {
+                        log.warn("Cache value deserialize failed, evict stale entry. cache={}, key={}",
+                                cache.getName(), key);
+                        cache.evictIfPresent(key);
+                        return;
+                    }
+                    super.handleCacheGetError(exception, cache, key);
                 }
-                super.handleCacheGetError(exception, cache, key);
+            };
+        }
+
+        @Bean("redisCacheManager")
+        @ConditionalOnBean(RedisConnectionFactory.class)
+        @ConditionalOnMissingBean(name = "redisCacheManager")
+        RedisCacheManager redisCacheManager(RedisConnectionFactory connectionFactory,
+                                            ScaffoldCacheProperties properties) {
+            ScaffoldCacheProperties.Redis redis = properties.redis();
+            RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
+            configuration = configuration
+                    .serializeKeysWith(RedisSerializationContext.SerializationPair
+                            .fromSerializer(new StringRedisSerializer()))
+                    .serializeValuesWith(RedisSerializationContext.SerializationPair
+                            .fromSerializer(new GenericJackson2JsonRedisSerializer()));
+            Duration ttl = redis.getTimeToLive();
+            if (ttl != null && !ttl.isNegative() && !ttl.isZero()) {
+                configuration = configuration.entryTtl(ttl);
             }
-        };
+            if (!redis.isCacheNullValues()) {
+                configuration = configuration.disableCachingNullValues();
+            }
+            if (redis.getKeyPrefix() != null) {
+                configuration = configuration.computePrefixWith(
+                        cacheName -> redis.getKeyPrefix() + cacheName + "::");
+            }
+            return RedisCacheManager.builder(connectionFactory)
+                    .cacheDefaults(configuration)
+                    .transactionAware()
+                    .build();
+        }
+
+        private boolean isSerializationError(Throwable exception) {
+            Throwable current = exception;
+            while (current != null) {
+                if (current instanceof SerializationException) {
+                    return true;
+                }
+                current = current.getCause();
+            }
+            return false;
+        }
     }
 
-    @Bean("redisCacheManager")
-    @ConditionalOnBean(RedisConnectionFactory.class)
-    @ConditionalOnMissingBean(name = "redisCacheManager")
-    public RedisCacheManager redisCacheManager(RedisConnectionFactory connectionFactory,
-                                               ScaffoldCacheProperties properties) {
-        ScaffoldCacheProperties.Redis redis = properties.redis();
-        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
-        configuration = configuration
-                .serializeKeysWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(new GenericJackson2JsonRedisSerializer()));
-        Duration ttl = redis.getTimeToLive();
-        if (ttl != null && !ttl.isNegative() && !ttl.isZero()) {
-            configuration = configuration.entryTtl(ttl);
-        }
-        if (!redis.isCacheNullValues()) {
-            configuration = configuration.disableCachingNullValues();
-        }
-        if (redis.getKeyPrefix() != null) {
-            configuration = configuration.computePrefixWith(
-                    cacheName -> redis.getKeyPrefix() + cacheName + "::");
-        }
-        return RedisCacheManager.builder(connectionFactory)
-                .cacheDefaults(configuration)
-                .transactionAware()
-                .build();
-    }
-
-    @Bean(name = "postgresqlCacheDataSource", destroyMethod = "close", defaultCandidate = false)
+    @Bean(name = "postgresqlCacheDataSource",  defaultCandidate = false)
     @ConditionalOnExpression(POSTGRESQL_SELECTED)
     @ConditionalOnProperty(prefix = "scaffold.cache.postgresql.datasource", name = "url")
     @ConditionalOnMissingBean(name = "postgresqlCacheDataSource")
@@ -218,14 +236,4 @@ public class ScaffoldCacheAutoConfiguration {
         return value;
     }
 
-    private boolean isSerializationError(Throwable exception) {
-        Throwable current = exception;
-        while (current != null) {
-            if (current instanceof SerializationException) {
-                return true;
-            }
-            current = current.getCause();
-        }
-        return false;
-    }
 }

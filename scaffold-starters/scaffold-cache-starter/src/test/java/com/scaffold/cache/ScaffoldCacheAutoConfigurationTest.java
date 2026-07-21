@@ -5,6 +5,7 @@ import com.scaffold.postgresql.PostgresqlCacheStore;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
+import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -34,6 +35,19 @@ class ScaffoldCacheAutoConfigurationTest {
             assertThat(context.getBean("cacheManager", CacheManager.class))
                     .isInstanceOf(CaffeineCacheManager.class);
         });
+    }
+
+    @Test
+    void defaultsToCaffeineWhenRedisIsNotOnTheClasspath() {
+        contextRunner
+                .withClassLoader(new FilteredClassLoader("org.springframework.data.redis"))
+                .run(context -> {
+                    assertThat(context).hasNotFailed();
+                    assertThat(context).doesNotHaveBean("redisObjectMapper");
+                    assertThat(context).doesNotHaveBean("redisCacheManager");
+                    assertThat(context.getBean("cacheManager", CacheManager.class))
+                            .isInstanceOf(CaffeineCacheManager.class);
+                });
     }
 
     @Test
