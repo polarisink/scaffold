@@ -49,11 +49,11 @@ function onKeydown(event: KeyboardEvent) {
       <a-textarea
         v-model:value="message"
         :auto-size="{ minRows: 2, maxRows: 5 }"
-        :disabled="chat.sending || !chat.workOrderId"
-        :placeholder="chat.workOrderId ? `继续咨询工单 #${chat.workOrderId}` : '请先创建或选择一个工单'"
+        :disabled="chat.sending || !chat.workOrderId || chat.closed"
+        :placeholder="chat.closed ? '工单已关闭' : chat.workOrderId ? `继续咨询工单 #${chat.workOrderId}` : '请先创建或选择一个工单'"
         @keydown="onKeydown"
       />
-      <a-button type="primary" :loading="chat.sending" @click="submit"><SendOutlined />发送</a-button>
+      <a-button type="primary" :loading="chat.sending" :disabled="chat.closed" @click="submit"><SendOutlined />发送</a-button>
     </div>
   </a-card>
 </template>

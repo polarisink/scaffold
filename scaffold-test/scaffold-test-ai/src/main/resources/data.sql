@@ -1,5 +1,3 @@
-ALTER TABLE ai_demo_order DROP COLUMN IF EXISTS tenant_id;
-
 MERGE INTO ai_demo_order (order_no, user_id, product_id, product_name, paid_amount, order_status, after_sale_status, receiver_phone)
 KEY (order_no) VALUES
 ('202607190001', 1, 'PHONE-X1', 'Scaffold Phone X1', 3999.00, 'DELIVERED', 'NONE', '13800000001'),

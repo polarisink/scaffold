@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -34,23 +38,27 @@ public class BaseAuditable {
     /**
      * 修改时间
      */
+    @LastModifiedDate
     @TableField(fill = FieldFill.INSERT_UPDATE)
     protected LocalDateTime gmtModified;
     /**
      * 创建时间
      */
+    @CreatedDate
     @TableField(fill = FieldFill.INSERT)
     protected LocalDateTime gmtCreated;
 
     /**
      * 创造者id
      */
+    @CreatedBy
     @TableField(fill = FieldFill.INSERT)
     protected Long createdBy;
 
     /**
      * 修改者id
      */
+    @LastModifiedBy
     @TableField(fill = FieldFill.INSERT_UPDATE)
     protected Long modifiedBy;
 

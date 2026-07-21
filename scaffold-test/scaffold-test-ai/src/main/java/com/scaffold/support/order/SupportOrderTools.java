@@ -3,7 +3,6 @@ package com.scaffold.support.order;
 import com.scaffold.support.order.model.LogisticsSummary;
 import com.scaffold.support.order.model.OrderSummary;
 import com.scaffold.support.order.model.ProductSummary;
-import com.scaffold.support.tool.SupportToolContext;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
@@ -11,6 +10,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 
+/**
+ * 暴露给 Spring AI 的只读订单工具；用户 ID 和请求 ID 必须来自可信 ToolContext。
+ */
 @Component
 public class SupportOrderTools {
 

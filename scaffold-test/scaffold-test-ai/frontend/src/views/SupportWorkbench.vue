@@ -5,6 +5,7 @@ import ChatPanel from '@/components/ChatPanel.vue';
 import IntentPanel from '@/components/IntentPanel.vue';
 import ToolPanel from '@/components/ToolPanel.vue';
 import WorkOrderList from '@/components/WorkOrderList.vue';
+import KnowledgePanel from '@/components/KnowledgePanel.vue';
 import type { WorkOrder } from '@/types/support';
 import { useChatStore } from '@/stores/chat';
 
@@ -38,6 +39,7 @@ function onSelect(workOrder: WorkOrder) {
     <a-row :gutter="[20, 20]">
       <a-col :xs="24" :xl="16"><ChatPanel /></a-col>
       <a-col :xs="24" :xl="8"><ToolPanel /></a-col>
+      <a-col :span="24"><KnowledgePanel /></a-col>
       <a-col :span="24"><IntentPanel ref="intentPanel" @created="onCreated" /></a-col>
       <a-col :span="24"><WorkOrderList ref="workOrderList" @select="onSelect" /></a-col>
     </a-row>

@@ -1,5 +1,5 @@
 import { jsonRequest, request } from './http';
-import type { AiTool, WorkOrder, WorkOrderIntent } from '@/types/support';
+import type { AiTool, KnowledgeAnswer, PersistedMessage, WorkOrder, WorkOrderIntent } from '@/types/support';
 
 export const supportApi = {
   analyzeIntent(conversationId: string, message: string) {
@@ -24,6 +24,15 @@ export const supportApi = {
     return request<{ content: string }>(
       '/api/examples/support/assistant/chat',
       jsonRequest('POST', { workOrderId, message }),
+    );
+  },
+  listMessages(workOrderId: number) {
+    return request<PersistedMessage[]>(`/api/examples/support/work-orders/${workOrderId}/messages`);
+  },
+  answerKnowledge(workOrderId: number, question: string) {
+    return request<KnowledgeAnswer>(
+      '/api/examples/support/knowledge/answer',
+      jsonRequest('POST', { workOrderId, question }),
     );
   },
   closeWorkOrder(id: number) {

@@ -2,10 +2,14 @@ spring:
   application:
     name: scaffold-test-ai
   datasource:
-    url: jdbc:h2:file:${user.home}/.scaffold/scaffold-ai-support;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: ${SCAFFOLD_DB_URL:jdbc:postgresql://localhost:5432/scaffold_ai}
+    username: aries
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      host: localhost
+      port: 6379
   jpa:
     defer-datasource-initialization: true
     hibernate:
@@ -13,11 +17,29 @@ spring:
     open-in-view: false
   sql:
     init:
-      mode: always
+      mode: never
   ai:
     model:
       chat: deepseek
-      embedding: none
+      embedding: transformers
+    embedding:
+      transformer:
+        onnx:
+          model-uri: https://huggingface.co/Xenova/bge-small-zh-v1.5/resolve/main/onnx/model_quantized.onnx
+        tokenizer:
+          uri: https://huggingface.co/Xenova/bge-small-zh-v1.5/resolve/main/tokenizer.json
+          options:
+            padding: true
+        cache:
+          directory: ${user.home}/.cache/scaffold-ai/onnx
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        schema-validation: true
+        table-name: ai_knowledge_vector
+        dimensions: 512
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
     deepseek:
       api-key: ${DEEPSEEK_API_KEY}
       base-url: https://api.deepseek.com

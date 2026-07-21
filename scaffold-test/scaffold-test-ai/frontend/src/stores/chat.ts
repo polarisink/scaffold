@@ -16,6 +16,7 @@ export const useChatStore = defineStore('chat', () => {
   const workOrderId = ref<number>();
   const messages = ref<ChatMessage[]>([welcome()]);
   const sending = ref(false);
+  const closed = ref(false);
 
   function reset() {
     messages.value = [{ ...welcome(), content: workOrderId.value
@@ -23,13 +24,24 @@ export const useChatStore = defineStore('chat', () => {
       : '请先创建或选择一个工单。' }];
   }
 
-  function selectWorkOrder(workOrder: WorkOrder) {
+  async function selectWorkOrder(workOrder: WorkOrder) {
     workOrderId.value = workOrder.id;
-    messages.value = [{ ...welcome(), content: `正在处理工单 #${workOrder.id}：${workOrder.summary}` }];
+    closed.value = workOrder.status === 'CLOSED';
+    try {
+      const history = await supportApi.listMessages(workOrder.id);
+      messages.value = history.length ? history.map((item) => ({
+        id: String(item.id),
+        role: item.role === 'USER' ? 'user' : 'assistant',
+        content: item.content,
+      })) : [{ ...welcome(), content: `正在处理工单 #${workOrder.id}：${workOrder.summary}` }];
+    } catch (error) {
+      messages.value = [{ id: crypto.randomUUID(), role: 'error', content: `历史加载失败：${errorMessage(error)}` }];
+    }
   }
 
   async function send(content: string) {
     if (!workOrderId.value) throw new Error('请先创建或选择一个工单');
+    if (closed.value) throw new Error('工单已关闭，不能继续对话');
     messages.value.push({ id: crypto.randomUUID(), role: 'user', content });
     const answer: ChatMessage = { id: crypto.randomUUID(), role: 'assistant', content: '' };
     messages.value.push(answer);
@@ -46,5 +58,5 @@ export const useChatStore = defineStore('chat', () => {
     }
   }
 
-  return { conversationId, workOrderId, messages, sending, reset, selectWorkOrder, send };
+  return { conversationId, workOrderId, messages, sending, closed, reset, selectWorkOrder, send };
 });

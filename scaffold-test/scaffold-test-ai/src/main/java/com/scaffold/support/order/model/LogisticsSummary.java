@@ -2,7 +2,7 @@ package com.scaffold.support.order.model;
 
 import java.time.LocalDateTime;
 
-/** Safe logistics projection exposed to the model. */
+/** 可安全暴露给大模型的物流摘要。 */
 public record LogisticsSummary(
         String orderNo,
         String carrier,

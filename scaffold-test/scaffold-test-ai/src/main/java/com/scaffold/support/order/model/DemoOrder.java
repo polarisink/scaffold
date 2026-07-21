@@ -11,7 +11,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-/** Internal demo data. Fields such as receiverPhone must never be returned by an AI tool. */
+/** 内部演示订单数据；收件手机号等敏感字段禁止通过 AI 工具返回。 */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -6,6 +6,27 @@ export interface ChatMessage {
   role: ChatRole;
 }
 
+export interface PersistedMessage {
+  id: number;
+  sequence: number;
+  role: 'USER' | 'ASSISTANT';
+  content: string;
+  createdAt: string;
+}
+
+export interface KnowledgeSource {
+  documentId: string;
+  title: string;
+  version: string;
+  updatedAt: string;
+}
+
+export interface KnowledgeAnswer {
+  answer: string;
+  sources: KnowledgeSource[];
+  grounded: boolean;
+}
+
 export interface AiTool {
   name: string;
   description?: string;
