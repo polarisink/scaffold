@@ -34,21 +34,21 @@ sa-token:
 scaffold:
   cache:
     mode: single
-    type: caffeine
+    type: postgresql
     caffeine:
       spec: maximumSize=10000,expireAfterWrite=30m
-#    postgresql:
-#      datasource:
-#        url: jdbc:postgresql://localhost:5432/aries
-#        username: aries
-#        password: 123456
-#        driver-class-name: org.postgresql.Driver
-#      table-name: scaffold_cache
-#      default-ttl: 3d
-#      initialize-schema: true
-#      cleanup-on-startup: true
-#      scheduled-cleanup: true
-#      cleanup-interval: 5m
+    postgresql:
+      datasource:
+        url: jdbc:postgresql://localhost:5432/aries
+        username: aries
+        password: 123456
+        driver-class-name: org.postgresql.Driver
+      table-name: scaffold_cache
+      default-ttl: 3d
+      initialize-schema: true
+      cleanup-on-startup: true
+      scheduled-cleanup: true
+      cleanup-interval: 5m
 
   # 文档默
   swagger:
@@ -84,7 +84,7 @@ scaffold:
       allowed-headers:
         - "*"
     ignore-list:
-      - /basic/version
+      - /basic/**
   # 默认业务项目显式启用本地存储，保持零外部依赖即可启动。
   file-storage:
     enabled: true

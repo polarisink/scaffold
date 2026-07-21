@@ -37,6 +37,10 @@
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-module-rbac-sa-token</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-sse-starter</artifactId>
+        </dependency>
         <!--需要 Caffeine、Redis、PostgreSQL 单级/二级缓存时引入 scaffold-cache-starter-->
         <!--需要代码生成器就引用这个模块-->
         <!--默认使用h2数据库，使用文件方式，这样方便演示-->
@@ -101,6 +105,16 @@
                             <imageName>scaffold-biz</imageName>
                             <mainClass>com.scaffold.BizApplication</mainClass>
                             <requiredVersion>22.3</requiredVersion>
+                            <buildArgs>
+                                <!--
+                                    MyBatis-Plus 3.5.17 的 Graal Feature 会对应用主包下的所有类执行完整反射注册，
+                                    从而解析 POI、Nimbus 等依赖的可选 API，并因这些可选类不在 classpath 而失败。
+                                    Spring AOT 自动配置仍由该依赖正常加载，这里只排除过度扫描的 native-image.properties。
+                                -->
+                                <buildArg>--exclude-config</buildArg>
+                                <buildArg>.*mybatis-plus-spring-boot-native-image-.*\.jar</buildArg>
+                                <buildArg>^/META-INF/native-image/com\.baomidou/mybatis-plus-spring-boot-native-image/native-image\.properties$</buildArg>
+                            </buildArgs>
                         </configuration>
                         <executions>
                             <execution>

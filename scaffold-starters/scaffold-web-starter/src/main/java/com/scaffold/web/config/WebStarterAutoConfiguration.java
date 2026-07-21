@@ -2,6 +2,7 @@ package com.scaffold.web.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaffold.base.util.JsonUtil;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -11,13 +12,20 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 
 @AutoConfiguration(before = JacksonAutoConfiguration.class)
 @Import({WebConfig.class, GlobalExceptionHandler.class})
+@ImportRuntimeHints(BizLogRuntimeHints.class)
 @EnableConfigurationProperties(WebProperties.class)
 public class WebStarterAutoConfiguration {
+
+    @Bean
+    public static BeanFactoryPostProcessor bizLogAotBeanFactoryPostProcessor() {
+        return new BizLogAotBeanFactoryPostProcessor();
+    }
 
     @Bean
     @Primary

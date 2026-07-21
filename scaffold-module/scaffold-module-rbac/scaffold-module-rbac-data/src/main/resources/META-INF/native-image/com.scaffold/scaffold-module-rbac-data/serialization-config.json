@@ -1,0 +1,16 @@
+{
+  "lambdaCapturingTypes": [
+    { "name": "com.scaffold.rbac.mapper.SysConfigMapper" },
+    { "name": "com.scaffold.rbac.mapper.SysDictDataMapper" },
+    { "name": "com.scaffold.rbac.mapper.SysDictTypeMapper" },
+    { "name": "com.scaffold.rbac.mapper.SysLoginLogMapper" },
+    { "name": "com.scaffold.rbac.mapper.SysMenuMapper" },
+    { "name": "com.scaffold.rbac.mapper.SysOperateLogMapper" },
+    { "name": "com.scaffold.rbac.mapper.SysOrgMapper" },
+    { "name": "com.scaffold.rbac.mapper.SysRoleMapper" },
+    { "name": "com.scaffold.rbac.mapper.SysRoleMenuMapper" },
+    { "name": "com.scaffold.rbac.mapper.SysUserMapper" },
+    { "name": "com.scaffold.rbac.mapper.SysUserRoleMapper" }
+  ],
+  "types": []
+}

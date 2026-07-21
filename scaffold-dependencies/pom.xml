@@ -29,7 +29,7 @@
         <spring-cloud-alibaba.version>2025.0.0.0</spring-cloud-alibaba.version>
         <dubbo.version>3.3.6</dubbo.version>
         <!--   数据库相关     -->
-        <mybatis-plus.version>3.5.12</mybatis-plus.version>
+        <mybatis-plus.version>3.5.17</mybatis-plus.version>
         <mysql.version>8.0.28</mysql.version>
         <mariadb.version>3.5.2</mariadb.version>
         <!--    工具    -->
@@ -73,13 +73,14 @@
         <spring-boot-admin.version>3.5.7</spring-boot-admin.version>
         <okhttp.version>5.3.2</okhttp.version>
         <sa-token.version>1.44.0</sa-token.version>
-        <bizlog.version>3.0.5</bizlog.version>
+        <bizlog.version>3.0.6</bizlog.version>
         <geotools.version>35.0</geotools.version>
         <yauaa.version>7.32.0</yauaa.version>
         <spatial.version>7.4.1.Final</spatial.version>
         <jetcache.version>2.7.8</jetcache.version>
         <flatten.version>1.7.3</flatten.version>
         <spring-ai.version>1.1.8</spring-ai.version>
+        <graal.version>23.1.2</graal.version>
     </properties>
 
     <dependencyManagement>
@@ -426,6 +427,11 @@
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.graalvm.sdk</groupId>
+                <artifactId>nativeimage</artifactId>
+                <version>${graal.version}</version>
             </dependency>
             <!--大依赖pom-->
             <dependency>

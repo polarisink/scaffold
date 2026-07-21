@@ -1,11 +1,12 @@
 # Scaffold - Spring Boot + Vue 管理系统脚手架
 
-面向小团队的前后端分离脚手架。后端采用 Spring Boot 多模块架构，管理端基于 Vue Vben Admin，目标是提供一套默认可运行、按需装配、可持续演进的项目基础盘。
+面向小团队的前后端分离脚手架。后端采用 Spring Boot 多模块架构，管理端基于 Vue Vben Admin，目标是提供一套默认可运行、按需装配、可持续演进的项目基础盘。示例应用 `scaffold-biz` 已支持 GraalVM Native Image，可生成 macOS、Linux、Windows 原生可执行文件和 Linux Docker 原生镜像。
 
 ## 技术栈
 
 - **后端**：Java 21、Spring Boot 3.5.15、Spring Cloud 2025.0.0、Spring Cloud Alibaba 2025.0.0.0
-- **数据访问**：MyBatis Plus 3.5.12、JPA、MySQL 8、H2
+- **数据访问**：MyBatis Plus 3.5.17、JPA、MySQL 8、H2
+- **原生部署**：GraalVM Native Image、Linux Docker 原生镜像、macOS/Linux/Windows 构建脚本
 - **缓存与消息**：Caffeine、Redisson、Redis Stream、Redis Pub/Sub
 - **AI 能力**：Spring AI、同步/流式聊天、会话记忆、Tool Calling
 - **认证与权限**：Spring Security、Sa-Token、可选 RBAC 模块
@@ -46,21 +47,50 @@ scaffold/
 
 服务默认监听 `http://localhost:8082`。默认使用文件型 H2 数据库，首次运行不需要预先安装 MySQL 或 Redis。
 
-#### 原生镜像
+#### GraalVM Native Image
 
-安装 GraalVM 21 和 `native-image` 后，可直接生成当前平台的原生可执行文件：
+示例应用 `scaffold-biz` 已内置 Native Image 配置与跨平台构建脚本，覆盖 Spring AOT、MyBatis Plus Lambda、BizLog、RBAC 初始化资源和本地/S3 文件存储等运行链路。
 
-```bash
-./mvnw -Pnative -pl scaffold-biz -am -DskipTests package
-./scaffold-biz/target/scaffold-biz
-```
-
-也可以只依赖 Docker，生成 Linux 原生 OCI 镜像：
+安装 GraalVM JDK 21 和 `native-image` 后，可生成当前操作系统的原生可执行文件：
 
 ```bash
-docker build -f scaffold-biz/Dockerfile.native -t scaffold-biz:native .
-docker run --rm -p 8082:8082 scaffold-biz:native
+./scaffold-biz/scripts/build-native.sh
 ```
+
+产物位于 `scaffold-biz/target/scaffold-biz`。macOS 生成 Mach-O，Linux 生成 ELF，两者不能跨操作系统运行。
+
+在 macOS 或 Linux 上构建 Linux ELF：
+
+```bash
+./scaffold-biz/scripts/build-native.sh linux
+```
+
+Linux 产物位于 `scaffold-biz/target/native-linux/scaffold-biz`，可用于 Linux 服务器或 Docker 镜像。
+
+构建 Linux Docker 原生镜像：
+
+```bash
+./scaffold-biz/scripts/build-native-docker.sh
+docker run --rm -p 8082:8082 \
+  -v scaffold-biz-storage:/app/storage \
+  scaffold-biz:native
+```
+
+如果 Linux ELF 尚未生成，`build-native-docker.sh` 会先自动执行 Linux Native 构建，再封装为默认镜像 `scaffold-biz:native`。也可以将镜像名作为第一个参数：
+
+```bash
+./scaffold-biz/scripts/build-native-docker.sh example/scaffold-biz:1.0
+```
+
+Windows 需要 GraalVM JDK 21、Visual Studio Build Tools、C++ 工具链和 Windows SDK：
+
+```bat
+scaffold-biz\scripts\build-native.bat
+```
+
+Windows 产物为 `scaffold-biz\target\scaffold-biz.exe`。Windows PE、macOS Mach-O 和 Linux ELF 不可混用；Linux Docker 镜像只能封装 Linux ELF。
+
+完整的前置条件、产物路径和平台关系见 [scaffold-biz Native 构建说明](scaffold-biz/scripts/README.md)。
 
 ### 管理端
 

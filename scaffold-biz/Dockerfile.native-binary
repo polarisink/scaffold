@@ -1,0 +1,17 @@
+FROM debian:12-slim
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y ca-certificates zlib1g \
+    && mkdir -p /app/storage \
+    && chown -R 65532:65532 /app \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY --chown=65532:65532 target/native-linux/scaffold-biz /app/scaffold-biz
+
+ENV HOME=/app \
+    SCAFFOLD_FILE_STORAGE_BASE_PATH=/app/storage
+
+USER 65532:65532
+EXPOSE 8082
+ENTRYPOINT ["/app/scaffold-biz"]

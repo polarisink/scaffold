@@ -9,6 +9,7 @@ scaffold/
 ├── scaffold-starters/      # 对外暴露的自动装配入口
 ├── scaffold-module/        # 可选业务模块
 └── scaffold-test/          # 示例与技术实验
+└── scaffold-test-cloud/    # 示例与技术实验（微服务）
 ```
 
 ## 设计边界

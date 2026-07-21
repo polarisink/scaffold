@@ -2,7 +2,6 @@ package com.scaffold.orm.starter;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.scaffold.orm.DefaultMetaObjectHandler;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -13,11 +12,6 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 @Import(MyBatisPlusAutoConfiguration.class)
 @ImportRuntimeHints(MyBatisRuntimeHints.class)
 public class OrmStarterAutoConfiguration {
-
-    @Bean
-    static BeanFactoryPostProcessor myBatisMapperBeanFactoryPostProcessor() {
-        return new MyBatisMapperBeanFactoryPostProcessor();
-    }
 
     @Bean
     @ConditionalOnMissingBean(MetaObjectHandler.class)
