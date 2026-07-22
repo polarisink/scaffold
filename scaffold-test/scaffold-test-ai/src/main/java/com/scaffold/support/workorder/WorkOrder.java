@@ -5,7 +5,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 import java.util.Objects;
 
-/** 由 Java 控制标识、所属用户、状态和时间字段的售后工单。 */
+/**
+ * 由 Java 控制标识、所属用户、状态和时间字段的售后工单。
+ */
 @Schema(description = "由 Java 控制并持久化的售后工单")
 public record WorkOrder(
         @Schema(description = "工单ID", example = "1") Long id,

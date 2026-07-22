@@ -24,10 +24,11 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/** 验证工单多轮对话、工具上下文和用户隔离行为。 */
 class SupportAssistantServiceTest {
 
     @Test
-    void suppliesTrustedIdentityAndOnlyReadOnlySupportTools() {
+    void suppliesTrustedIdentityAndOnlyExplicitlyAllowedSupportTools() {
         AiChatService chatService = mock(AiChatService.class);
         when(chatService.chat(anyString(), anyString(), anyString(), any(), any(String[].class)))
                 .thenReturn("订单已签收");
@@ -53,7 +54,7 @@ class SupportAssistantServiceTest {
                 .containsEntry(SupportToolContext.USER_ID, 1_001L)
                 .containsKey(SupportToolContext.REQUEST_ID);
         assertThat(toolsCaptor.getValue()).containsExactly(
-                "query_order", "query_logistics", "query_product");
+                "query_order", "query_logistics", "query_product", "prepare_refund");
         verify(conversations).append(42L, "USER", "查询订单202607190001的物流");
         verify(conversations).append(42L, "ASSISTANT", "订单已签收");
         verify(conversations).restoreMemory(42L, "server-conversation-1", memory);

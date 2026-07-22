@@ -9,8 +9,8 @@ import com.scaffold.support.workorder.WorkOrderEntity;
 import com.scaffold.support.workorder.WorkOrderRepository;
 import com.scaffold.support.workorder.WorkOrderStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.UUID;
@@ -22,14 +22,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SupportAssistantService {
 
-    static final String[] READ_ONLY_TOOLS = {"query_order", "query_logistics", "query_product"};
+    static final String[] ALLOWED_TOOLS = {"query_order", "query_logistics", "query_product", "prepare_refund"};
 
     private static final String SYSTEM_PROMPT = """
             你是 Scaffold 售后订单助手。
             只能根据工具返回的数据陈述订单、物流和商品事实。
             用户没有明确提供订单号时，应请用户提供，不得猜测、补全或生成订单号。
             工具未找到当前用户可访问的订单时，不得推断订单是否真实存在。
-            你只能提供查询结果和售后建议，不得执行或声称已经执行退款、取消订单、修改地址等操作。
+            你可以在用户明确要求退款并提供订单号和原因时调用 prepare_refund，但它只创建待确认操作。
+            你不得执行或声称已经执行退款；最终退款只能由用户通过普通业务接口二次确认。
+            不得执行取消订单、修改地址等其他写操作。
             """;
 
     private final AiChatService aiChatService;
@@ -55,7 +57,7 @@ public class SupportAssistantService {
                 SupportToolContext.REQUEST_ID, UUID.randomUUID().toString());
         conversationService.restoreMemory(workOrderId, workOrder.getConversationId(), chatMemory);
         conversationService.append(workOrderId, "USER", message);
-        String answer = aiChatService.chat(workOrder.getConversationId(), SYSTEM_PROMPT, message, context, READ_ONLY_TOOLS);
+        String answer = aiChatService.chat(workOrder.getConversationId(), SYSTEM_PROMPT, message, context, ALLOWED_TOOLS);
         conversationService.append(workOrderId, "ASSISTANT", answer);
         return answer;
     }

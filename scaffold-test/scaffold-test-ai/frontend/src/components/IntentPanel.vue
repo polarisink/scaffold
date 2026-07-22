@@ -1,3 +1,4 @@
+<!-- 阶段一意图分析面板：展示结构化工单分类、优先级和摘要。 -->
 <script setup lang="ts">
 import { RobotOutlined, SaveOutlined } from '@ant-design/icons-vue';
 import { computed, ref } from 'vue';

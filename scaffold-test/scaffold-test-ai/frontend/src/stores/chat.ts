@@ -1,3 +1,4 @@
+/** 管理当前工单、对话消息和跨组件共享的聊天界面状态。 */
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 

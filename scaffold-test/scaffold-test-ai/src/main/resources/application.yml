@@ -63,6 +63,8 @@ scaffold:
     system-prompt: 你是 Scaffold AI Starter 的演示助手。
     memory-max-messages: 20
     advisor-logging-enabled: false
+    refund:
+      confirmation-ttl: 10m
     security:
       enabled: false
   security:

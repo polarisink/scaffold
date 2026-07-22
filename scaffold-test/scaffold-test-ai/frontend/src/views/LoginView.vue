@@ -1,3 +1,4 @@
+<!-- 登录页：完成 RBAC 登录并把令牌保存到认证状态仓库。 -->
 <script setup lang="ts">
 import { LockOutlined, UserOutlined } from '@ant-design/icons-vue';
 import { reactive, ref } from 'vue';

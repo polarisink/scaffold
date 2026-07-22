@@ -2,7 +2,9 @@ package com.scaffold.support.order;
 
 import org.springframework.ai.chat.model.ToolContext;
 
-/** 服务端可信工具上下文的键定义及类型安全读取方法。 */
+/**
+ * 服务端可信工具上下文的键定义及类型安全读取方法。
+ */
 public final class SupportToolContext {
 
     public static final String USER_ID = "support.userId";

@@ -20,6 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+/** 验证知识库有依据回答、来源引用和无依据拒答。 */
 class KnowledgeServiceTest {
 
     @Test

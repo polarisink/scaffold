@@ -1,3 +1,4 @@
+<!-- 阶段五知识库面板：展示有依据回答、引用来源和无依据拒答。 -->
 <script setup lang="ts">
 import { ref } from 'vue';
 import { supportApi } from '@/api/support';

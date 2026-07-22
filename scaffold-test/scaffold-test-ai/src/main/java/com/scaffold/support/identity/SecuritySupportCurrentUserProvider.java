@@ -4,7 +4,9 @@ import com.scaffold.rbac.auth.RbacCurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-/** 从 Spring Security 认证上下文中解析可信的售后用户身份。 */
+/**
+ * 从 Spring Security 认证上下文中解析可信的售后用户身份。
+ */
 @Component
 @RequiredArgsConstructor
 public class SecuritySupportCurrentUserProvider implements SupportCurrentUserProvider {

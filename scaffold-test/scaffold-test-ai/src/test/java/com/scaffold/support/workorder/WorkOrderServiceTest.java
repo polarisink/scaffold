@@ -3,6 +3,7 @@ package com.scaffold.support.workorder;
 import com.scaffold.support.conversation.SupportConversationService;
 import com.scaffold.support.identity.SupportCurrentUserProvider;
 import com.scaffold.support.intent.SupportIntentService;
+import com.scaffold.support.intent.AnalyzeRequest;
 import com.scaffold.support.intent.WorkOrderIntent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,13 +21,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/** 验证工单创建幂等性、用户归属和状态流转。 */
 class WorkOrderServiceTest {
 
     private static final Instant NOW = Instant.parse("2026-07-19T03:00:00Z");
@@ -52,7 +53,7 @@ class WorkOrderServiceTest {
 
     @Test
     void createsWorkOrderWithServerControlledFields() {
-        when(intentService.analyze(anyString(), anyString())).thenReturn(new WorkOrderIntent(
+        when(intentService.analyze(any(AnalyzeRequest.class))).thenReturn(new WorkOrderIntent(
                 WorkOrderCategory.REFUND, "手机无法开机，用户申请退款", 4,
                 "202607190001", true));
         when(repository.findByUserIdAndRequestIdAndDeleted(1_001L, "request_0001", 0))
@@ -86,7 +87,7 @@ class WorkOrderServiceTest {
         WorkOrder repeated = service.create(new CreateWorkOrderRequest("request_0002", "重复提交时不会再次分析"));
 
         assertThat(repeated.id()).isEqualTo(1L);
-        verify(intentService, never()).analyze(anyString(), anyString());
+        verify(intentService, never()).analyze(any(AnalyzeRequest.class));
         verify(repository, never()).saveAndFlush(any());
     }
 

@@ -32,12 +32,12 @@ public class SysAuthService implements ISysAuthService {
                     UsernamePasswordAuthenticationToken.unauthenticated(vo.username(), vo.password());
             Authentication a = getAuthentication(authenticationToken);
             LoginUser loginUser = (LoginUser) a.getPrincipal();
+            Long userId = loginUser.getUserId();
+            LogRecordContext.putVariable("userId", userId);
             List<String> roleCodeList = a.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-            PayloadDTO dto = PayloadDTO.of(loginUser.getUserId(), loginUser.getUsername(), roleCodeList);
-            Long userId = dto.getUserId();
+            PayloadDTO dto = PayloadDTO.of(userId, loginUser.getUsername(), roleCodeList);
             String token = jwtUtil.generateToken(dto);
             tokenStore.set(userId.toString(), token);
-            LogRecordContext.putVariable("userId", userId);
             return token;
         } catch (RuntimeException exception) {
             throw exception;

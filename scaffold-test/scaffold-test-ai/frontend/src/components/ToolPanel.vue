@@ -1,3 +1,4 @@
+<!-- 阶段三工具面板：演示受权限控制的订单、物流和商品只读工具。 -->
 <script setup lang="ts">
 import { ApiOutlined, PlayCircleOutlined, ReloadOutlined } from '@ant-design/icons-vue';
 import { onMounted, reactive, ref } from 'vue';

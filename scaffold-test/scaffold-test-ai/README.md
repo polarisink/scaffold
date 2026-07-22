@@ -29,6 +29,9 @@ CORS。前端采用 Vue 3、TypeScript、Vite、Pinia、Vue Router 和 Ant Desig
 请求自动添加 `Authorization: Bearer <token>`；收到 401 时清理登录状态并返回登录页。生产环境必须修改
 默认密码，并通过 `SCAFFOLD_JWT_SECRET` 提供至少 32 字节的随机 JWT 密钥。
 
+页面右上角提供“退出”按钮，调用 `POST /auth/logout` 使服务端 Token 立即失效，并清除浏览器认证信息和
+当前用户的前端工单、对话缓存，然后返回登录页以便切换账号。
+
 如需改用 OpenAI，增加 `spring-ai-starter-model-openai` 依赖，将
 `spring.ai.model.chat` 改为 `openai`，并配置：
 
@@ -153,3 +156,31 @@ Content-Type: application/json
 应用启动时将文档切分并重建 `ai_knowledge_vector`，查询通过 pgvector 执行 Top-K 相似度检索和最低相关度
 过滤；重建会先清除旧向量，因此文档更新和删除不会留下过期片段。模型文件缓存在
 `${user.home}/.cache/scaffold-ai/onnx/bge-small-zh-v1.5`。
+
+## 综合处理建议
+
+阶段六将当前用户可访问的工单、只读订单摘要和 pgvector 检索到的知识片段汇总为结构化建议。建议及其
+推荐步骤、风险等级、知识来源和事实证据均持久化到 PostgreSQL；服务只读取业务事实，不会修改工单、
+订单或退款状态。高风险工单以及同时缺少订单和知识依据的场景由 Java 规则强制转人工审核。
+
+```http
+POST /api/examples/support/work-orders/{workOrderId}/suggestions
+GET /api/examples/support/work-orders/{workOrderId}/suggestions/latest
+```
+
+前端选择工单后可生成或恢复最近一次建议，并同时查看诊断、推荐操作、证据来源与风险提示。
+
+## 退款准备与二次确认
+
+阶段七只向模型暴露 `prepare_refund`：它根据当前用户可访问的订单生成十分钟有效的退款确认卡片，
+不会修改订单。确认标识使用安全随机数，并与用户、订单号、金额和退款原因一起持久化到 PostgreSQL。
+最终退款只能由前端在用户明确点击后调用普通业务接口：
+
+```http
+POST /api/examples/support/refunds/prepare
+POST /api/examples/support/refunds/confirm
+POST /api/examples/support/refunds/cancel
+```
+
+确认时服务端使用数据库锁重新检查订单归属、金额、订单状态和售后状态；重复确认返回首次执行结果，
+不会重复退款。准备、确认、执行、取消和过期事件全部写入 `ai_refund_audit`。

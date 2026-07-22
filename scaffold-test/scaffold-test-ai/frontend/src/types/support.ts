@@ -1,3 +1,4 @@
+/** 阶段一至七前后端交互使用的售后领域类型。 */
 export type ChatRole = 'assistant' | 'error' | 'user';
 
 export interface ChatMessage {
@@ -25,6 +26,49 @@ export interface KnowledgeAnswer {
   answer: string;
   sources: KnowledgeSource[];
   grounded: boolean;
+}
+
+export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+export type EvidenceType = 'WORK_ORDER' | 'ORDER' | 'KNOWLEDGE';
+
+export interface HandlingEvidence {
+  type: EvidenceType;
+  reference: string;
+  description: string;
+}
+
+export interface HandlingSuggestion {
+  id: number;
+  workOrderId: number;
+  diagnosis: string;
+  recommendedActions: string[];
+  sources: KnowledgeSource[];
+  evidence: HandlingEvidence[];
+  riskLevel: RiskLevel;
+  manualReviewRequired: boolean;
+  generatedAt: string;
+}
+
+export type PendingActionStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';
+
+export interface PendingAction {
+  confirmationId: string;
+  userId: number;
+  action: 'REFUND';
+  orderNo: string;
+  amount: number;
+  reason: string;
+  summary: string;
+  expiresAt: string;
+  status: PendingActionStatus;
+}
+
+export interface RefundResult {
+  confirmationId: string;
+  orderNo: string;
+  amount: number;
+  status: 'CONFIRMED';
+  executedAt: string;
 }
 
 export interface AiTool {

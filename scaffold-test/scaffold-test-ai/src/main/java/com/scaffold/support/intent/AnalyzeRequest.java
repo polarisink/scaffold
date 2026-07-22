@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+/**
+ * 阶段一自然语言工单意图分析请求。
+ */
 @Schema(description = "工单意图分析请求")
 public record AnalyzeRequest(
         @NotBlank(message = "会话标识不能为空")

@@ -1,7 +1,6 @@
 package com.scaffold.support.knowledge.api;
 
 import com.scaffold.support.knowledge.KnowledgeService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -12,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 阶段五基于 pgvector 检索结果生成有依据回答的接口。
+ */
 @RestController
 @Lazy
 @RequestMapping("/api/examples/support/knowledge")
@@ -22,6 +24,7 @@ public class SupportKnowledgeController {
 
     @PostMapping("/answer")
     @Operation(summary = "检索并回答售后知识问题")
+    /** 校验请求后执行知识检索和有依据回答。 */
     public KnowledgeAnswer answer(@RequestBody @Valid KnowledgeRequest request) {
         return service.answer(request);
     }

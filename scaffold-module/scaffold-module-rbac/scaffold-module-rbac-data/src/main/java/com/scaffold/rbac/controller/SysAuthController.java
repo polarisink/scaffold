@@ -22,7 +22,7 @@ public class SysAuthController {
     }
 
     @Operation(summary = "登出")
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public void logout() {
         authService.logout();
     }

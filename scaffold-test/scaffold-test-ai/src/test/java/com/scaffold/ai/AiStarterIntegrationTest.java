@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/** 验证 AI Starter 在完整 Spring Boot 环境中的装配和公开接口。 */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AiStarterIntegrationTest {
 

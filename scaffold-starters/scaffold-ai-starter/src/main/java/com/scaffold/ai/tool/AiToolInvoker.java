@@ -18,7 +18,9 @@ public class AiToolInvoker {
 
     public String invoke(String name, Map<String, Object> input) {
         ToolCallback callback = registry.get(name);
-        if (callback == null) throw new IllegalArgumentException("Unknown AI tool: " + name);
+        if (callback == null) {
+            throw new IllegalArgumentException("Unknown AI tool: " + name);
+        }
         try {
             return callback.call(objectMapper.writeValueAsString(input == null ? Map.of() : input));
         } catch (JsonProcessingException exception) {

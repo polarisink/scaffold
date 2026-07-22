@@ -2,14 +2,13 @@ package com.scaffold.support.knowledge.retrieval;
 
 import com.scaffold.support.knowledge.persistence.KnowledgeDocumentEntity;
 import com.scaffold.support.knowledge.persistence.KnowledgeDocumentRepository;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -30,7 +29,9 @@ public class KnowledgeVectorIndexService {
     private final VectorStore vectorStore;
     private final JdbcTemplate jdbcTemplate;
 
-    /** 全量重建知识向量表，保证删除和更新后的索引与文档事实一致。 */
+    /**
+     * 全量重建知识向量表，保证删除和更新后的索引与文档事实一致。
+     */
     @Transactional
     public void rebuild() {
         jdbcTemplate.execute("TRUNCATE TABLE ai_knowledge_vector");

@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+/**
+ * 创建售后工单的已校验请求，requestId 用于当前用户范围内的幂等控制。
+ */
 @Schema(description = "售后工单创建请求")
 public record CreateWorkOrderRequest(
         @Schema(description = "客户端生成的幂等请求标识；同一用户重复提交相同标识时返回已有工单",

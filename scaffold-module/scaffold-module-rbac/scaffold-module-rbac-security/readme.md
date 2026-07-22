@@ -50,7 +50,7 @@ Sa-Token Servlet 版本，依赖：
 Servlet 完整 RBAC 模块提供：
 
 - `POST /auth/login`
-- `GET /auth/logout`
+- `POST /auth/logout`
 - `/user/**`
 - `/role/**`
 - `/menu/**`

@@ -17,6 +17,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/** 验证知识文档切分、向量重建及过期片段清理。 */
 class KnowledgeVectorIndexServiceTest {
 
     @Test

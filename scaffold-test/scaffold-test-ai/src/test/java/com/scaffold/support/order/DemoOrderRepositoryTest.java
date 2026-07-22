@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/** 验证演示订单的 JPA 查询与数据库映射。 */
 @DataJpaTest(properties = "spring.jpa.hibernate.ddl-auto=create-drop")
 class DemoOrderRepositoryTest {
 

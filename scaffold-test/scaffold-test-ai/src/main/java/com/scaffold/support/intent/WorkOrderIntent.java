@@ -1,12 +1,13 @@
 package com.scaffold.support.intent;
 
 import com.scaffold.support.workorder.WorkOrderCategory;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Objects;
 
-/** 用户售后描述经过结构化解析和校验后形成的工单意图。 */
+/**
+ * 用户售后描述经过结构化解析和校验后形成的工单意图。
+ */
 @Schema(description = "大模型从售后描述中提取并经 Java 校验的工单意图")
 public record WorkOrderIntent(
         @Schema(description = "工单类别", example = "REFUND") WorkOrderCategory category,

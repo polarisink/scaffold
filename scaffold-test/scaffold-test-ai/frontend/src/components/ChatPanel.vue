@@ -1,3 +1,4 @@
+<!-- 阶段四工单多轮对话面板：恢复持久化历史并发送新消息。 -->
 <script setup lang="ts">
 import { DeleteOutlined, SendOutlined } from '@ant-design/icons-vue';
 import { nextTick, ref, useTemplateRef, watch } from 'vue';

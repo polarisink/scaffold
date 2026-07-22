@@ -16,6 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/** 验证 pgvector 相似度检索和最低相关度过滤。 */
 class PgVectorKnowledgeRetrieverTest {
 
     @Test

@@ -1,3 +1,4 @@
+/** 管理当前登录令牌、认证状态以及退出后的本地状态清理。 */
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
@@ -15,7 +16,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout() {
     try {
-      if (token.value) await request<void>('/auth/logout');
+      if (token.value) await request<void>('/auth/logout', { method: 'POST' });
     } finally {
       clear();
     }

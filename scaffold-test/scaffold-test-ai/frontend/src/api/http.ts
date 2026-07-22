@@ -1,3 +1,4 @@
+/** 封装携带登录令牌的 HTTP 请求、JSON 序列化和统一错误转换。 */
 import type { ApiEnvelope } from '@/types/support';
 
 export const AUTH_TOKEN_KEY = 'scaffold-ai-support-token';

@@ -4,12 +4,12 @@ import com.scaffold.support.identity.SupportCurrentUserProvider;
 import com.scaffold.support.workorder.OrderNotAccessibleException;
 import com.scaffold.support.workorder.WorkOrderRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -27,7 +27,9 @@ public class SupportConversationService {
     private final SupportMessageRepository messages;
     private final SupportCurrentUserProvider currentUser;
 
-    /** 查询当前用户可访问工单的最近消息。 */
+    /**
+     * 查询当前用户可访问工单的最近消息。
+     */
     @Transactional(readOnly = true)
     public List<SupportMessageRes> history(long workOrderId) {
         requireOwnedWorkOrder(workOrderId);
@@ -37,7 +39,9 @@ public class SupportConversationService {
         return latest.stream().map(this::toDomain).toList();
     }
 
-    /** 按工单内递增序号追加一条持久化消息。 */
+    /**
+     * 按工单内递增序号追加一条持久化消息。
+     */
     @Transactional
     public void append(long workOrderId, String role, String content) {
         SupportMessageEntity entity = new SupportMessageEntity();
@@ -48,7 +52,9 @@ public class SupportConversationService {
         messages.save(entity);
     }
 
-    /** 删除指定工单的持久化消息，通常在关闭工单时调用。 */
+    /**
+     * 删除指定工单的持久化消息，通常在关闭工单时调用。
+     */
     @Transactional
     public void clear(long workOrderId) {
         messages.deleteByWorkOrderId(workOrderId);

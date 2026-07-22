@@ -1,3 +1,4 @@
+/** 前端应用入口：注册路由、状态管理和 Ant Design Vue 后挂载工作台。 */
 import 'ant-design-vue/dist/reset.css';
 import './styles/main.css';
 

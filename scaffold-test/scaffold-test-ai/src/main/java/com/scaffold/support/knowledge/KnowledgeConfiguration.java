@@ -4,17 +4,17 @@ import com.scaffold.support.knowledge.persistence.KnowledgeDocumentEntity;
 import com.scaffold.support.knowledge.persistence.KnowledgeDocumentRepository;
 import com.scaffold.support.knowledge.retrieval.KnowledgeVectorIndexService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 
-import java.time.Instant;
-import java.util.List;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.util.List;
 
 /**
  * 初始化演示知识文档，并在后台启动向量索引重建，避免模型下载阻塞 Web 服务启动。
@@ -36,7 +36,7 @@ public class KnowledgeConfiguration {
 
     @Bean
     ApplicationRunner knowledgeDocumentInitializer(KnowledgeDocumentRepository repository,
-            ObjectProvider<KnowledgeVectorIndexService> indexService) {
+                                                   ObjectProvider<KnowledgeVectorIndexService> indexService) {
         return arguments -> {
             seedDocuments(repository);
             Thread.ofVirtual().name("knowledge-vector-index-initializer").start(() -> rebuildIndex(indexService));

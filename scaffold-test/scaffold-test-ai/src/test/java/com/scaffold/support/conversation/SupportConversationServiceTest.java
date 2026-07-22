@@ -16,6 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
+/** 验证对话消息持久化、顺序和记忆恢复行为。 */
 class SupportConversationServiceTest {
 
     @Test

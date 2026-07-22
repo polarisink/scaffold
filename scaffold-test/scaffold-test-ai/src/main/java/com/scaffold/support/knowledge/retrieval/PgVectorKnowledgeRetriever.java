@@ -1,13 +1,12 @@
 package com.scaffold.support.knowledge.retrieval;
 
 import com.scaffold.support.knowledge.KnowledgeDocument;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;

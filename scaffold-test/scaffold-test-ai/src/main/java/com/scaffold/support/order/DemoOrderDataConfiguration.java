@@ -9,9 +9,15 @@ import org.springframework.context.annotation.Configuration;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * 幂等初始化阶段三所需的演示订单和物流数据。
+ */
 @Configuration
 public class DemoOrderDataConfiguration {
 
+    /**
+     * 应用启动时补充缺失的演示业务数据，不覆盖已有数据。
+     */
     @Bean
     ApplicationRunner demoOrderInitializer(DemoOrderRepository orders, DemoLogisticsRepository logistics) {
         return arguments -> {
@@ -32,6 +38,9 @@ public class DemoOrderDataConfiguration {
         };
     }
 
+    /**
+     * 仅在订单号不存在时保存演示订单。
+     */
     private void saveIfMissing(DemoOrderRepository repository, DemoOrder order) {
         if (!repository.existsByOrderNo(order.getOrderNo())) {
             repository.save(order);

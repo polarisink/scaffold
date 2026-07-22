@@ -1,3 +1,4 @@
+/** 售后工作台路由配置，并在进入业务页面前校验本地登录状态。 */
 import { createRouter, createWebHistory } from 'vue-router';
 
 import { AUTH_TOKEN_KEY } from '@/api/http';

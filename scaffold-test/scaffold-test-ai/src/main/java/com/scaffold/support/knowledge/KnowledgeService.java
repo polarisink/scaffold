@@ -1,16 +1,16 @@
 package com.scaffold.support.knowledge;
 
 import com.scaffold.ai.chat.AiChatService;
+import com.scaffold.support.identity.SupportCurrentUserProvider;
 import com.scaffold.support.knowledge.api.KnowledgeAnswer;
 import com.scaffold.support.knowledge.api.KnowledgeRequest;
 import com.scaffold.support.knowledge.api.KnowledgeSource;
 import com.scaffold.support.knowledge.retrieval.KnowledgeRetriever;
-import com.scaffold.support.identity.SupportCurrentUserProvider;
 import com.scaffold.support.workorder.OrderNotAccessibleException;
 import com.scaffold.support.workorder.WorkOrderRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,9 @@ public class KnowledgeService {
     private final WorkOrderRepository workOrderRepository;
     private final SupportCurrentUserProvider currentUser;
 
-    /** 检索与问题相关的知识片段并生成带来源的回答。 */
+    /**
+     * 检索与问题相关的知识片段并生成带来源的回答。
+     */
     public KnowledgeAnswer answer(KnowledgeRequest request) {
         long userId = currentUser.requireUserId();
         if (workOrderRepository.findByIdAndUserIdAndDeleted(request.workOrderId(), userId, 0).isEmpty()) {

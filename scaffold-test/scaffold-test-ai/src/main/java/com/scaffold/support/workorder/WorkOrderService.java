@@ -6,8 +6,8 @@ import com.scaffold.support.intent.AnalyzeRequest;
 import com.scaffold.support.intent.SupportIntentService;
 import com.scaffold.support.intent.WorkOrderIntent;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,7 +44,9 @@ public class WorkOrderService {
                 .orElseGet(() -> createNew(userId, requestId, description));
     }
 
-    /** 查询当前登录用户的全部未删除工单。 */
+    /**
+     * 查询当前登录用户的全部未删除工单。
+     */
     @Transactional(readOnly = true)
     public List<WorkOrder> listCurrentUserWorkOrders() {
         return repository.findByUserIdAndDeletedOrderByGmtCreatedDescIdDesc(
@@ -53,7 +55,9 @@ public class WorkOrderService {
                 .toList();
     }
 
-    /** 查询当前用户可访问的单个工单。 */
+    /**
+     * 查询当前用户可访问的单个工单。
+     */
     @Transactional(readOnly = true)
     public WorkOrder getCurrentUserWorkOrder(long id) {
         if (id <= 0) {
@@ -65,7 +69,9 @@ public class WorkOrderService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "工单不存在"));
     }
 
-    /** 关闭当前用户工单，并同步清理内存记忆和持久化对话。 */
+    /**
+     * 关闭当前用户工单，并同步清理内存记忆和持久化对话。
+     */
     @Transactional
     public WorkOrder close(long id) {
         if (id <= 0) {
@@ -83,7 +89,7 @@ public class WorkOrderService {
 
     private WorkOrder createNew(long userId, String requestId, String description) {
         String conversationId = "work-order:" + UUID.randomUUID();
-        WorkOrderIntent intent = intentService.analyze(new AnalyzeRequest(conversationId,description));
+        WorkOrderIntent intent = intentService.analyze(new AnalyzeRequest(conversationId, description));
         WorkOrderStatus status = intent.manualReviewRequired()
                 ? WorkOrderStatus.MANUAL_REVIEW : WorkOrderStatus.OPEN;
         WorkOrderEntity entity = new WorkOrderEntity();

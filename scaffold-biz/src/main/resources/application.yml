@@ -11,21 +11,26 @@ spring:
     check-template-location: false
   datasource:
     # 演示模式使用h2数据库，
-    url: jdbc:h2:file:${user.home}/scaffold/db/scaffold-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
-    username: root
+#    url: jdbc:h2:file:${user.home}/scaffold/db/scaffold-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+#    username: root
+#    password: 123456
+#    driver-class-name: org.h2.Driver
+    # 演示模式使用h2数据库，
+    url: ${SCAFFOLD_DB_URL:jdbc:postgresql://localhost:5432/scaffold_ai}
+    username: aries
     password: 123456
-    driver-class-name: org.h2.Driver
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        transaction:
-          coordinator_class: jdbc
-          jta:
-            platform: ""
-    database-platform: org.hibernate.dialect.H2Dialect
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.H2Dialect
+#        transaction:
+#          coordinator_class: jdbc
+#          jta:
+#            platform: ""
+#    database-platform: org.hibernate.dialect.H2Dialect
 
 sa-token:
   token-name: Authorization

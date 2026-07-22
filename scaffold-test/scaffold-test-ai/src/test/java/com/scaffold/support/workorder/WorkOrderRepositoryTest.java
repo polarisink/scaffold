@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/** 验证工单幂等约束、用户隔离查询和排序。 */
 @DataJpaTest(properties = "spring.jpa.hibernate.ddl-auto=create-drop")
 class WorkOrderRepositoryTest {
 

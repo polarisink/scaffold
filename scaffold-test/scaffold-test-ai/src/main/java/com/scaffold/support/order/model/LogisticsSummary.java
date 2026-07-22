@@ -2,7 +2,9 @@ package com.scaffold.support.order.model;
 
 import java.time.LocalDateTime;
 
-/** 可安全暴露给大模型的物流摘要。 */
+/**
+ * 可安全暴露给大模型的物流摘要。
+ */
 public record LogisticsSummary(
         String orderNo,
         String carrier,

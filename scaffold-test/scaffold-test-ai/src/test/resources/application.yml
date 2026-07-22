@@ -16,6 +16,7 @@ spring:
       mode: always
   ai:
     model:
+      chat: deepseek
       embedding: none
     deepseek:
       api-key: test-key
