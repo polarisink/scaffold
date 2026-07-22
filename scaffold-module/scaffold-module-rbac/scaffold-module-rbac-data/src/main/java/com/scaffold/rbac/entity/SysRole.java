@@ -1,7 +1,7 @@
 package com.scaffold.rbac.entity;
 
 
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Data;
@@ -20,7 +20,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @jakarta.persistence.Table(name = "sys_role")
-public class SysRole extends BaseAuditable implements Serializable {
+public class SysRole extends BaseLongAuditable implements Serializable {
 
     /**
      * 角色名

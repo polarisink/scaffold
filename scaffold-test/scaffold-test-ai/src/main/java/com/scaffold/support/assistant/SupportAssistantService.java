@@ -55,8 +55,7 @@ public class SupportAssistantService {
                 SupportToolContext.REQUEST_ID, UUID.randomUUID().toString());
         conversationService.restoreMemory(workOrderId, workOrder.getConversationId(), chatMemory);
         conversationService.append(workOrderId, "USER", message);
-        String answer = aiChatService.chat(workOrder.getConversationId(), SYSTEM_PROMPT,
-                message, context, READ_ONLY_TOOLS);
+        String answer = aiChatService.chat(workOrder.getConversationId(), SYSTEM_PROMPT, message, context, READ_ONLY_TOOLS);
         conversationService.append(workOrderId, "ASSISTANT", answer);
         return answer;
     }

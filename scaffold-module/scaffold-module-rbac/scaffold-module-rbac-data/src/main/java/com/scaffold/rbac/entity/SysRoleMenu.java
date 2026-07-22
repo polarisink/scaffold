@@ -1,8 +1,7 @@
 package com.scaffold.rbac.entity;
 
 
-import com.scaffold.orm.BaseAuditable;
-import jakarta.persistence.Column;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @jakarta.persistence.Table(name = "sys_role_menu")
-public class SysRoleMenu extends BaseAuditable implements Serializable {
+public class SysRoleMenu extends BaseLongAuditable implements Serializable {
 
     /**
      * 角色id

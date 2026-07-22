@@ -9,11 +9,12 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 /**
- * 可审计基础类
+ * 可审计基础类，字符串主键
  *
  * @author aries
  * @since 2022/09/10
@@ -21,7 +22,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseAuditable {
+@EntityListeners(AuditingEntityListener.class)
+public class BaseStringAuditable {
 
     public static final String GMT_MODIFIED = "gmtModified";
     public static final String GMT_CREATED = "gmtCreated";
@@ -32,9 +34,9 @@ public class BaseAuditable {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @TableId(type = IdType.AUTO)
-    protected Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @TableId(type = IdType.ASSIGN_UUID)
+    protected String id;
     /**
      * 修改时间
      */

@@ -1,7 +1,7 @@
 package com.scaffold.rbac.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -16,7 +16,7 @@ import org.hibernate.annotations.Comment;
         @Index(name = "idx_operate_log_created", columnList = "gmt_created")
 })
 @TableName("sys_operate_log")
-public class SysOperateLog extends BaseAuditable {
+public class SysOperateLog extends BaseLongAuditable {
 
     @Column(length = 100)
     @Comment("模块标题")

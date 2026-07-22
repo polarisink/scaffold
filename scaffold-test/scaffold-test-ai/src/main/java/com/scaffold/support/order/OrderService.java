@@ -34,7 +34,7 @@ public class OrderService {
     /** 查询当前用户订单对应的物流摘要。 */
     public LogisticsSummary queryLogistics(String orderNo, long currentUserId) {
         requireAccessibleOrder(orderNo, currentUserId);
-        DemoLogistics logistics = logisticsRepository.findById(orderNo)
+        DemoLogistics logistics = logisticsRepository.findByOrderNo(orderNo)
                 .orElseThrow(OrderNotAccessibleException::new);
         return LogisticsSummary.from(logistics);
     }
@@ -45,7 +45,7 @@ public class OrderService {
     }
 
     private DemoOrder requireAccessibleOrder(String orderNo, long currentUserId) {
-        DemoOrder order = repository.findById(orderNo)
+        DemoOrder order = repository.findByOrderNo(orderNo)
                 .orElseThrow(OrderNotAccessibleException::new);
         authorizationService.checkCanView(currentUserId, order);
         return order;

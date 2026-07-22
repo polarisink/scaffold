@@ -1,7 +1,7 @@
 package com.scaffold.rbac.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -19,7 +19,7 @@ import org.hibernate.annotations.Comment;
         @Index(name = "idx_sys_dict_data_type_sort", columnList = "dict_type,dict_sort")
 })
 @TableName("sys_dict_data")
-public class SysDictData extends BaseAuditable {
+public class SysDictData extends BaseLongAuditable {
 
     @Column(nullable = false, length = 100)
     @Comment("字典类型")

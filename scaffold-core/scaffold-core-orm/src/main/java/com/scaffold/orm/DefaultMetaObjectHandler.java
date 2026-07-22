@@ -5,8 +5,8 @@ import org.apache.ibatis.reflection.MetaObject;
 
 import java.time.LocalDateTime;
 
-import static com.scaffold.orm.BaseAuditable.GMT_CREATED;
-import static com.scaffold.orm.BaseAuditable.GMT_MODIFIED;
+import static com.scaffold.orm.BaseLongAuditable.GMT_CREATED;
+import static com.scaffold.orm.BaseLongAuditable.GMT_MODIFIED;
 
 
 /**
@@ -22,6 +22,6 @@ public class DefaultMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, GMT_MODIFIED, LocalDateTime.class, LocalDateTime.now());
+        this.strictUpdateFill(metaObject, GMT_MODIFIED, LocalDateTime.class, LocalDateTime.now());
     }
 }

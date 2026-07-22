@@ -1,6 +1,6 @@
 package com.scaffold.support.conversation;
 
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -16,9 +16,9 @@ import lombok.Setter;
         uniqueConstraints = @UniqueConstraint(name = "uk_ai_support_message_sequence",
                 columnNames = {"work_order_id", "message_sequence"}),
         indexes = @Index(name = "idx_ai_support_message_work_order", columnList = "work_order_id"))
-public class SupportMessageEntity extends BaseAuditable {
+public class SupportMessageEntity extends BaseLongAuditable {
 
-    @Column(name = "work_order_id", nullable = false)
+    @Column(nullable = false)
     private Long workOrderId;
 
     @Column(name = "message_sequence", nullable = false)

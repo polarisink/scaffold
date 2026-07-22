@@ -31,7 +31,7 @@ class SupportConversationServiceTest {
                 message(2, "ASSISTANT", "请提供订单号"), message(1, "USER", "手机坏了")));
         SupportConversationService service = new SupportConversationService(workOrders, messages, currentUser);
 
-        assertThat(service.history(42L)).extracting(SupportMessage::content)
+        assertThat(service.history(42L)).extracting(SupportMessageRes::content)
                 .containsExactly("手机坏了", "请提供订单号");
         assertThatThrownBy(() -> service.history(43L)).isInstanceOf(RuntimeException.class);
     }

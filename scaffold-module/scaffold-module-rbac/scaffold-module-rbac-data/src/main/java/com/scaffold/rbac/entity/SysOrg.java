@@ -3,7 +3,7 @@ package com.scaffold.rbac.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.scaffold.base.util.ITree;
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -20,7 +20,7 @@ import java.util.List;
 @Table(name = "sys_org")
 @Entity
 @TableName("sys_org")
-public class SysOrg extends BaseAuditable implements ITree<SysOrg, Long> {
+public class SysOrg extends BaseLongAuditable implements ITree<SysOrg, Long> {
     @Column(nullable = false)
     @Comment("上级部门id")
     private Long parentId;

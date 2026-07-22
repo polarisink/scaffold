@@ -1,7 +1,7 @@
 package ${table.packageName}.${javaBusinessName};
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

@@ -1,8 +1,8 @@
 package com.scaffold.support.order.model;
 
+import com.scaffold.orm.BaseStringAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,23 +18,22 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "ai_demo_order")
-public class DemoOrder {
+public class DemoOrder extends BaseStringAuditable {
 
-    @Id
-    @Column(name = "order_no", length = 32)
+    @Column(nullable = false, unique = true, length = 32)
     private String orderNo;
-    @Column(name = "user_id", nullable = false)
+    @Column(nullable = false)
     private long userId;
-    @Column(name = "product_id", nullable = false, length = 64)
+    @Column(nullable = false, length = 64)
     private String productId;
-    @Column(name = "product_name", nullable = false, length = 200)
+    @Column(nullable = false, length = 200)
     private String productName;
-    @Column(name = "paid_amount", nullable = false, precision = 19, scale = 2)
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal paidAmount;
-    @Column(name = "order_status", nullable = false, length = 32)
+    @Column(nullable = false, length = 32)
     private String orderStatus;
-    @Column(name = "after_sale_status", nullable = false, length = 32)
+    @Column(nullable = false, length = 32)
     private String afterSaleStatus;
-    @Column(name = "receiver_phone", length = 32)
+    @Column(length = 32)
     private String receiverPhone;
 }

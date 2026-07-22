@@ -1,7 +1,7 @@
 package com.scaffold.rbac.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Data;
@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @jakarta.persistence.Table(name = "sys_user")
-public class SysUser extends BaseAuditable implements Serializable {
+public class SysUser extends BaseLongAuditable implements Serializable {
 
     @Column(length = 64)
     @Comment("用户名")

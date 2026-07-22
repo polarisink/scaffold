@@ -1,0 +1,12 @@
+spring:
+  ai:
+    model:
+      chat: ollama
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      chat:
+        options:
+          model: ${OLLAMA_CHAT_MODEL:qwen3:8b}
+          temperature: 0.3
+          num-ctx: 8192
+          think: false

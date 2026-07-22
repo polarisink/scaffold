@@ -1,7 +1,7 @@
 package com.scaffold.rbac.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -15,7 +15,7 @@ import org.hibernate.annotations.Comment;
 @Entity
 @Table(name = "sys_dict_type")
 @TableName("sys_dict_type")
-public class SysDictType extends BaseAuditable {
+public class SysDictType extends BaseLongAuditable {
 
     @Column(nullable = false, length = 100)
     @Comment("字典名称")

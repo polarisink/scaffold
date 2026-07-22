@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.scaffold.orm.BaseAuditable.*;
+import static com.scaffold.orm.BaseLongAuditable.*;
 
 
 /**
@@ -34,8 +34,8 @@ public class RbacMetaObjectHandler implements MetaObjectHandler, AuditorAware<Lo
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, GMT_MODIFIED, LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, MODIFIED_BY, Long.class, rbacCurrentUser.userId());
+        this.strictUpdateFill(metaObject, GMT_MODIFIED, LocalDateTime.class, LocalDateTime.now());
+        this.strictUpdateFill(metaObject, MODIFIED_BY, Long.class, rbacCurrentUser.userId());
     }
 
     @Override

@@ -1,1 +1,2 @@
 com.scaffold.orm.starter.OrmStarterAutoConfiguration
+com.scaffold.orm.starter.JpaAuditingAutoConfiguration

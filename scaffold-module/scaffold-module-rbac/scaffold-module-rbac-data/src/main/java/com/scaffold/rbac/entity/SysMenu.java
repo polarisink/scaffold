@@ -3,7 +3,7 @@ package com.scaffold.rbac.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.scaffold.base.util.ITree;
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
@@ -22,7 +22,7 @@ import java.util.List;
 @Data
 @Entity
 @jakarta.persistence.Table(name = "sys_menu")
-public class SysMenu extends BaseAuditable implements Serializable, ITree<SysMenu, Long> {
+public class SysMenu extends BaseLongAuditable implements Serializable, ITree<SysMenu, Long> {
 
     /**
      * 父菜单ID

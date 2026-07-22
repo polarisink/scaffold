@@ -61,12 +61,12 @@ public class KnowledgeVectorIndexService {
         for (String paragraph : content.split("\\R\\s*\\R")) {
             String normalized = paragraph.trim();
             if (normalized.isEmpty()) continue;
-            if (current.length() > 0 && current.length() + normalized.length() + 2 > MAX_CHUNK_CHARACTERS) {
+            if (!current.isEmpty() && current.length() + normalized.length() + 2 > MAX_CHUNK_CHARACTERS) {
                 chunks.add(current.toString());
                 current.setLength(0);
             }
             if (normalized.length() > MAX_CHUNK_CHARACTERS) {
-                if (current.length() > 0) {
+                if (!current.isEmpty()) {
                     chunks.add(current.toString());
                     current.setLength(0);
                 }
@@ -74,11 +74,11 @@ public class KnowledgeVectorIndexService {
                     chunks.add(normalized.substring(start, Math.min(normalized.length(), start + MAX_CHUNK_CHARACTERS)));
                 }
             } else {
-                if (current.length() > 0) current.append("\n\n");
+                if (!current.isEmpty()) current.append("\n\n");
                 current.append(normalized);
             }
         }
-        if (current.length() > 0) chunks.add(current.toString());
+        if (!current.isEmpty()) chunks.add(current.toString());
         return chunks;
     }
 }

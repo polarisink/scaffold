@@ -1,6 +1,6 @@
 package com.scaffold.codegen.entity;
 
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -12,7 +12,7 @@ import org.hibernate.annotations.Comment;
 @Setter
 @Entity
 @Table(name = "gen_column")
-public class GenColumnEntity extends BaseAuditable {
+public class GenColumnEntity extends BaseLongAuditable {
 
     @Column(nullable = false)
     @Comment("生成表 ID")

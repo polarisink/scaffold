@@ -19,3 +19,5 @@ spring:
       embedding: none
     deepseek:
       api-key: test-key
+  flyway:
+    enabled: false

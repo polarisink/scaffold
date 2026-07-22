@@ -1,7 +1,7 @@
 package com.scaffold.rbac.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -17,7 +17,7 @@ import org.hibernate.annotations.Comment;
 @TableName("sys_config")
 @Table(name = "sys_config")
 @Entity
-public class SysConfig extends BaseAuditable {
+public class SysConfig extends BaseLongAuditable {
 
     /**
      * 参数名称

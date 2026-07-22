@@ -11,7 +11,6 @@ import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class SupportConversationService {
 
     /** 查询当前用户可访问工单的最近消息。 */
     @Transactional(readOnly = true)
-    public List<SupportMessage> history(long workOrderId) {
+    public List<SupportMessageRes> history(long workOrderId) {
         requireOwnedWorkOrder(workOrderId);
         List<SupportMessageEntity> latest = new ArrayList<>(
                 messages.findTop20ByWorkOrderIdOrderBySequenceDesc(workOrderId));
@@ -79,8 +78,8 @@ public class SupportConversationService {
         }
     }
 
-    private SupportMessage toDomain(SupportMessageEntity entity) {
-        return new SupportMessage(entity.getId(), entity.getSequence(), entity.getRole(), entity.getContent(),
+    private SupportMessageRes toDomain(SupportMessageEntity entity) {
+        return new SupportMessageRes(entity.getId(), entity.getSequence(), entity.getRole(), entity.getContent(),
                 entity.getGmtCreated().toInstant(ZoneOffset.UTC));
     }
 }

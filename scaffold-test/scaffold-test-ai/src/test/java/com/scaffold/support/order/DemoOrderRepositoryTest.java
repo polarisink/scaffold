@@ -20,7 +20,7 @@ class DemoOrderRepositoryTest {
         repository.saveAndFlush(new DemoOrder("DB-ORDER-001", 10L, "PHONE-X1",
                 "Scaffold Phone X1", new BigDecimal("3999.00"), "DELIVERED", "NONE", "13800000001"));
 
-        assertThat(repository.findById("DB-ORDER-001"))
+        assertThat(repository.findByOrderNo("DB-ORDER-001"))
                 .get()
                 .extracting(DemoOrder::getUserId, DemoOrder::getPaidAmount)
                 .containsExactly(10L, new BigDecimal("3999.00"));

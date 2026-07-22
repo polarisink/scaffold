@@ -1,16 +1,11 @@
 package com.scaffold.entity;
 
+import com.scaffold.orm.BaseAuditable;
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "consumer_tx_record")
-public class ConsumerTransactionRecord {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ConsumerTransactionRecord extends BaseAuditable {
 
     @Column(name = "business_key", nullable = false, unique = true, length = 64)
     private String businessKey;
@@ -21,9 +16,6 @@ public class ConsumerTransactionRecord {
     @Column(nullable = false)
     private String description;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
     protected ConsumerTransactionRecord() {
     }
 
@@ -31,12 +23,5 @@ public class ConsumerTransactionRecord {
         this.businessKey = businessKey;
         this.xid = xid;
         this.description = description;
-    }
-
-    @PrePersist
-    void prePersist() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
     }
 }

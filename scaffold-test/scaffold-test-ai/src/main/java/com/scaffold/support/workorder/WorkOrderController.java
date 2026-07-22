@@ -1,10 +1,9 @@
 package com.scaffold.support.workorder;
 
 import com.scaffold.support.conversation.SupportConversationService;
-import com.scaffold.support.conversation.SupportMessage;
+import com.scaffold.support.conversation.SupportMessageRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +46,7 @@ public class WorkOrderController {
 
     @GetMapping("/{id}/messages")
     @Operation(summary = "查询工单对话历史", description = "返回当前用户工单最近 20 条持久化消息")
-    public List<SupportMessage> messages(@PathVariable long id) {
+    public List<SupportMessageRes> messages(@PathVariable long id) {
         return conversationService.history(id);
     }
 

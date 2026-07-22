@@ -1,6 +1,6 @@
 package com.scaffold.support.workorder;
 
-import com.scaffold.orm.BaseAuditable;
+import com.scaffold.orm.BaseLongAuditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,7 +15,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "ai_support_work_order", uniqueConstraints =
         @UniqueConstraint(name = "uk_ai_work_order_user_request", columnNames = {"user_id", "request_id"}))
-public class WorkOrderEntity extends BaseAuditable {
+public class WorkOrderEntity extends BaseLongAuditable {
 
     @Column(name = "user_id", nullable = false)
     private Long userId;

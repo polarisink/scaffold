@@ -67,7 +67,7 @@ public class KnowledgeConfiguration {
                 new KnowledgeDocument("phone-troubleshooting", "手机故障排查", "1.0", updatedAt,
                         read("knowledge/phone-troubleshooting.md")));
         for (KnowledgeDocument document : documents) {
-            KnowledgeDocumentEntity entity = repository.findById(document.documentId())
+            KnowledgeDocumentEntity entity = repository.findByDocumentId(document.documentId())
                     .orElseGet(KnowledgeDocumentEntity::new);
             entity.setDocumentId(document.documentId());
             entity.setTitle(document.title());

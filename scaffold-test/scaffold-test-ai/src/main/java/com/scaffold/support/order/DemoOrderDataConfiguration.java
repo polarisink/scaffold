@@ -21,11 +21,11 @@ public class DemoOrderDataConfiguration {
                     new BigDecimal("2699.00"), "SHIPPED", "NONE", "13800000002"));
             saveIfMissing(orders, new DemoOrder("202607190003", 1, "WATCH-S", "Scaffold Watch S",
                     new BigDecimal("899.00"), "PAID", "NONE", "13800000003"));
-            if (!logistics.existsById("202607190001")) {
+            if (!logistics.existsByOrderNo("202607190001")) {
                 logistics.save(new DemoLogistics("202607190001", "顺丰速运", "SF-DEMO-0001", "DELIVERED",
                         "快件已由本人签收", LocalDateTime.of(2026, 7, 19, 16, 30)));
             }
-            if (!logistics.existsById("202607190002")) {
+            if (!logistics.existsByOrderNo("202607190002")) {
                 logistics.save(new DemoLogistics("202607190002", "京东物流", "JD-DEMO-0002", "IN_TRANSIT",
                         "快件正在运往上海分拨中心", LocalDateTime.of(2026, 7, 20, 9, 15)));
             }
@@ -33,7 +33,7 @@ public class DemoOrderDataConfiguration {
     }
 
     private void saveIfMissing(DemoOrderRepository repository, DemoOrder order) {
-        if (!repository.existsById(order.getOrderNo())) {
+        if (!repository.existsByOrderNo(order.getOrderNo())) {
             repository.save(order);
         }
     }
