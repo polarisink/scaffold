@@ -1,0 +1,101 @@
+# 优雅停机，这能保证服务停止时，不再接收新请求，但会处理完当前正在进行的请求，避免用户操作中断。
+server:
+  shutdown: graceful
+  port: 8082
+spring:
+  application:
+    name: scaffold-test-native
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  freemarker:
+    check-template-location: false
+  datasource:
+    # 演示模式使用h2数据库，
+#    url: jdbc:h2:file:${user.home}/scaffold/db/scaffold-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+#    username: root
+#    password: 123456
+#    driver-class-name: org.h2.Driver
+    # 演示模式使用h2数据库，
+    url: ${SCAFFOLD_DB_URL:jdbc:postgresql://localhost:5432/scaffold_ai}
+    username: aries
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.H2Dialect
+#        transaction:
+#          coordinator_class: jdbc
+#          jta:
+#            platform: ""
+#    database-platform: org.hibernate.dialect.H2Dialect
+
+sa-token:
+  token-name: Authorization
+  token-prefix: Bearer
+
+scaffold:
+  cache:
+    mode: single
+    type: postgresql
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=30m
+    postgresql:
+      datasource:
+        url: jdbc:postgresql://localhost:5432/aries
+        username: aries
+        password: 123456
+        driver-class-name: org.postgresql.Driver
+      table-name: scaffold_cache
+      default-ttl: 3d
+      initialize-schema: true
+      cleanup-on-startup: true
+      scheduled-cleanup: true
+      cleanup-interval: 5m
+
+  # 文档默
+  swagger:
+    enabled: true
+    external-docs:
+      description: SpringBoot基础框架
+      url: ${SCAFFOLD_SWAGGER_EXTERNAL_DOCS_URL:}
+  # web配置
+  web:
+    response:
+      raw-body-path-patterns:
+        - /actuator
+        - /actuator/**
+        - /codegen/configs/*/download
+        - /codegen/tables/*/download
+  # 权限配置
+  security:
+    token:
+      cache-ttl: 30m
+      cache-maximum-size: 10000
+    cors:
+      enabled: true
+      allowed-origin-patterns:
+        - "http://localhost:*"
+        - "http://127.0.0.1:*"
+      allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - PATCH
+        - OPTIONS
+      allowed-headers:
+        - "*"
+    ignore-list:
+      - /basic/**
+      - /index.html
+      - /api/native-test/**
+  # 默认业务项目显式启用本地存储，保持零外部依赖即可启动。
+  file-storage:
+    enabled: true
+    type: local
+    local:
+      base-path: ${SCAFFOLD_FILE_STORAGE_BASE_PATH:${user.home}/scaffold/storage}
+      access-path: /files/**

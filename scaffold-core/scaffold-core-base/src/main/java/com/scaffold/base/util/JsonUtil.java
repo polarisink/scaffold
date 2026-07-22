@@ -45,7 +45,7 @@ public class JsonUtil {
      *
      * @return 模块
      */
-    private static JavaTimeModule getJavaTimeModule() {
+    public static JavaTimeModule getJavaTimeModule() {
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(GlobalConstant.DEFAULT_DATE_TIME_FORMAT)));
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(GlobalConstant.DEFAULT_DATE_FORMAT)));

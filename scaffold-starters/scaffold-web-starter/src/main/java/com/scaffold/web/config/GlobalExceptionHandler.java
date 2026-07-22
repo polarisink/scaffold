@@ -25,6 +25,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
@@ -177,6 +178,15 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
         HttpStatusCode status = e.getStatusCode();
         String message = CharSequenceUtil.isBlank(e.getReason()) ? status.toString() : e.getReason();
         return ResponseEntity.status(status).body(R.failed(status.value(), message));
+    }
+
+    /**
+     * 客户端主动关闭 SSE 等异步连接后，响应流已经不可再写入。
+     * 此时只结束异常处理，不能继续返回统一 JSON 响应体。
+     */
+    @ExceptionHandler(AsyncRequestNotUsableException.class)
+    public void handleDisconnectedAsyncRequest(AsyncRequestNotUsableException e) {
+        log.debug("Async client connection closed: {}", e.getMessage());
     }
 
     /**

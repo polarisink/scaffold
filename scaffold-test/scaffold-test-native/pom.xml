@@ -7,9 +7,16 @@
         <groupId>com.scaffold</groupId>
         <artifactId>scaffold</artifactId>
         <version>${rversion}</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>scaffold-biz</artifactId>
+    <artifactId>scaffold-test-native</artifactId>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <!--需要web服务就使用starter-file-->
@@ -21,6 +28,22 @@
         <dependency>
             <groupId>com.scaffold</groupId>
             <artifactId>scaffold-file-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-geo-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-redis-messaging-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-socketio-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.scaffold</groupId>
+            <artifactId>scaffold-sse-starter</artifactId>
         </dependency>
         <!--需要使用数据库就使用starter-orm-->
         <!--<dependency>
@@ -98,8 +121,8 @@
                         <version>0.10.6</version>
                         <configuration>
                             <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-                            <imageName>scaffold-biz</imageName>
-                            <mainClass>com.scaffold.BizApplication</mainClass>
+                            <imageName>scaffold-test-native</imageName>
+                            <mainClass>com.scaffold.NativeApplication</mainClass>
                             <requiredVersion>22.3</requiredVersion>
                             <buildArgs>
                                 <!--

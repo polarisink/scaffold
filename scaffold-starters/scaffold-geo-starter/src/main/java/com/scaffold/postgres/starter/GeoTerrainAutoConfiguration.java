@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
@@ -19,6 +20,7 @@ import java.io.IOException;
  * 地形组件自动配置。
  */
 @AutoConfiguration
+@ImportRuntimeHints(GeoRuntimeHints.class)
 @EnableConfigurationProperties(GeoTerrainProperties.class)
 @ConditionalOnProperty(prefix = GeoTerrainProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 public class GeoTerrainAutoConfiguration {

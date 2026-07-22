@@ -46,6 +46,7 @@
         <module>scaffold-biz</module>
         <module>scaffold-dependencies</module>
         <module>scaffold-module</module>
+        <module>scaffold-test/scaffold-test-native</module>
     </modules>
 
     <profiles>

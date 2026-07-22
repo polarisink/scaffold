@@ -2,6 +2,8 @@ package com.scaffold.socket.config;
 
 import com.corundumstudio.socketio.AuthorizationListener;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.corundumstudio.socketio.protocol.JacksonJsonSupport;
+import com.corundumstudio.socketio.protocol.JsonSupport;
 import com.scaffold.socket.util.WsManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -22,10 +24,14 @@ class WebSocketAutoConfigurationTest {
         contextRunner.run(context -> {
             assertThat(context).hasSingleBean(SocketIOServer.class);
             assertThat(context).hasSingleBean(AuthorizationListener.class);
+            assertThat(context).hasSingleBean(JsonSupport.class);
             assertThat(context).hasSingleBean(WsManager.class);
             assertThat(context).hasSingleBean(WebSocketProperties.class);
 
             SocketIOServer server = context.getBean(SocketIOServer.class);
+            assertThat(server.getConfiguration().getJsonSupport())
+                    .isSameAs(context.getBean(JsonSupport.class))
+                    .isInstanceOf(JacksonJsonSupport.class);
             assertThat(server.getConfiguration().getSocketConfig().isReuseAddress()).isTrue();
 
             WebSocketProperties properties = context.getBean(WebSocketProperties.class);

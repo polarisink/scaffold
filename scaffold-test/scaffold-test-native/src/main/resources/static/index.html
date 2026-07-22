@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Scaffold Native 通信测试</title>
+    <style>
+        :root { color-scheme: dark; --bg:#07111f; --panel:#101d30; --line:#29405e; --text:#e8f1fb; --muted:#91a7c0; --blue:#55a7ff; --green:#48d38a; --red:#ff7070; --amber:#ffc766; }
+        * { box-sizing:border-box; }
+        body { margin:0; min-height:100vh; background:radial-gradient(circle at 50% -20%,#214873 0,transparent 42%),var(--bg); color:var(--text); font:14px/1.5 system-ui,sans-serif; }
+        main { width:min(1200px,calc(100% - 28px)); margin:auto; padding:30px 0; }
+        header { display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-bottom:20px; }
+        h1 { margin:0; font-size:clamp(27px,4vw,43px); letter-spacing:-.04em; }
+        header p,.hint { color:var(--muted); }
+        .grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+        .card { background:#101d30e8; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:0 18px 48px #0005; }
+        .card h2 { margin:0 0 4px; }
+        .status { display:flex; align-items:center; gap:8px; color:var(--muted); margin:12px 0 16px; }
+        .dot { width:9px; height:9px; border-radius:50%; background:var(--red); box-shadow:0 0 0 4px #ff707020; }
+        .status.ok .dot { background:var(--green); box-shadow:0 0 0 4px #48d38a20; }
+        label { display:grid; gap:6px; color:var(--muted); font-size:12px; margin:11px 0; }
+        input,select,textarea,button { font:inherit; }
+        input,select,textarea { width:100%; padding:10px 11px; color:var(--text); background:#081424; border:1px solid var(--line); border-radius:9px; outline:none; }
+        textarea { min-height:74px; resize:vertical; }
+        .row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .actions { display:flex; gap:9px; flex-wrap:wrap; margin-top:13px; }
+        button { border:0; border-radius:9px; padding:10px 14px; background:var(--blue); color:#061321; font-weight:700; cursor:pointer; }
+        button.secondary { background:#293e59; color:var(--text); }
+        button:disabled { opacity:.45; cursor:not-allowed; }
+        .log { margin-top:14px; height:260px; overflow:auto; background:#06101d; border:1px solid var(--line); border-radius:10px; padding:10px; font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace; }
+        .entry { padding:5px 0; border-bottom:1px solid #22354c80; overflow-wrap:anywhere; }
+        .entry.ok { color:var(--green); }.entry.error { color:var(--red); }.entry.info { color:#b9c9db; }
+        .stats { color:var(--amber); font-family:ui-monospace,monospace; }
+        @media(max-width:850px){ .grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column} }
+    </style>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"
+            integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<main>
+    <header>
+        <div><h1>Native 通信测试台</h1><p>同时验证 scaffold-sse-starter 与 scaffold-socketio-starter 的原生运行能力</p></div>
+        <div class="hint">HTTP :8082 · Socket.IO :8081</div>
+    </header>
+    <section class="grid">
+        <article class="card">
+            <h2>SSE</h2>
+            <div id="sseStatus" class="status"><span class="dot"></span><span>未连接</span></div>
+            <div class="row">
+                <label>用户 ID<input id="sseUser" value="native-user"></label>
+                <label>房间 ID<input id="sseRoom" value="native-room"></label>
+            </div>
+            <div class="row">
+                <label>事件名<input id="sseEvent" value="native-message"></label>
+                <label>发送目标<select id="sseTarget"><option value="user">当前用户</option><option value="room">当前房间</option></select></label>
+            </div>
+            <label>消息 JSON<textarea id="sseData">{"message":"hello from native SSE"}</textarea></label>
+            <div class="actions">
+                <button id="sseConnect">连接</button><button id="sseDisconnect" class="secondary" disabled>断开</button><button id="sseSend">发送并验证</button>
+            </div>
+            <p id="sseStats" class="stats">在线用户 - · 连接 -</p>
+            <div id="sseLog" class="log"></div>
+        </article>
+
+        <article class="card">
+            <h2>Socket.IO</h2>
+            <div id="socketStatus" class="status"><span class="dot"></span><span>未连接</span></div>
+            <div class="row">
+                <label>Socket.IO 地址<input id="socketUrl"></label>
+                <label>客户端 ID<input id="socketClient" value="native-browser"></label>
+            </div>
+            <label>回显消息<textarea id="socketMessage">hello from native Socket.IO</textarea></label>
+            <div class="actions">
+                <button id="socketConnect">连接</button><button id="socketDisconnect" class="secondary" disabled>断开</button><button id="socketSend" disabled>发送并等待 ACK</button>
+            </div>
+            <p class="hint">收到 server-ready、native-echo 和 ACK，表示编程式监听注册及事件调用在 native 中均正常。</p>
+            <div id="socketLog" class="log"></div>
+        </article>
+    </section>
+</main>
+<script>
+    const $ = id => document.getElementById(id);
+    const state = { sse:null, socket:null };
+    const log = (target,type,message) => {
+        const row=document.createElement('div'); row.className=`entry ${type}`;
+        row.textContent=`[${new Date().toLocaleTimeString()}] ${message}`;
+        $(target).prepend(row);
+    };
+    const status = (id,ok,text) => { $(id).className=`status ${ok?'ok':''}`; $(id).lastElementChild.textContent=text; };
+
+    function connectSse(){
+        state.sse?.close();
+        const user=$('sseUser').value.trim(), room=$('sseRoom').value.trim();
+        const query=new URLSearchParams({userId:user}); if(room) query.append('roomId',room);
+        const source=new EventSource(`/api/native-test/sse/connect?${query}`); state.sse=source;
+        source.onopen=()=>{ status('sseStatus',true,'已连接'); $('sseConnect').disabled=true; $('sseDisconnect').disabled=false; log('sseLog','ok','SSE 连接成功'); };
+        source.onerror=()=>{ status('sseStatus',false,'连接中断/重连中'); log('sseLog','error','SSE 连接异常，浏览器将自动重连'); };
+        const eventName=$('sseEvent').value.trim();
+        ['connected',eventName].forEach(name=>source.addEventListener(name,event=>log('sseLog','ok',`${name}: ${event.data}`)));
+    }
+    function disconnectSse(){ state.sse?.close(); state.sse=null; status('sseStatus',false,'未连接'); $('sseConnect').disabled=false; $('sseDisconnect').disabled=true; log('sseLog','info','SSE 已断开'); }
+    async function sendSse(){
+        let data; try{ data=JSON.parse($('sseData').value); }catch(e){ return log('sseLog','error',`JSON 错误: ${e.message}`); }
+        const type=$('sseTarget').value, id=type==='user'?$('sseUser').value.trim():$('sseRoom').value.trim();
+        const response=await fetch(`/api/native-test/sse/${type}s/${encodeURIComponent(id)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:$('sseEvent').value.trim(),data})});
+        log('sseLog',response.ok?'ok':'error',`发送结果 ${response.status}: ${await response.text()}`);
+    }
+    async function refreshStats(){ try{const r=await fetch('/api/native-test/sse/stats');const body=await r.json();const v=body.data??body;$('sseStats').textContent=`在线用户 ${v.users} · 连接 ${v.connections}`;}catch{} }
+
+    function connectSocket(){
+        if(typeof io==='undefined') return log('socketLog','error','Socket.IO 客户端加载失败，请检查 CDN 网络');
+        state.socket?.disconnect();
+        const socket=io($('socketUrl').value.trim(),{path:'/socket.io/',transports:['websocket'],query:{clientId:$('socketClient').value.trim()}}); state.socket=socket;
+        socket.on('connect',()=>{
+            status('socketStatus',true,`已连接 ${socket.id}`);$('socketConnect').disabled=true;$('socketDisconnect').disabled=false;$('socketSend').disabled=false;log('socketLog','ok','Socket.IO 连接成功');
+            socket.emit('native-health',ack=>log('socketLog','ok',`健康检查 ACK: ${ack}`));
+        });
+        socket.on('server-ready',data=>log('socketLog','ok',`server-ready: ${data}`));
+        socket.on('native-echo',data=>log('socketLog','ok',`native-echo: ${data}`));
+        socket.on('connect_error',e=>log('socketLog','error',`连接失败: ${e.message}`));
+        socket.on('disconnect',reason=>{status('socketStatus',false,'未连接');$('socketConnect').disabled=false;$('socketDisconnect').disabled=true;$('socketSend').disabled=true;log('socketLog','info',`已断开: ${reason}`);});
+    }
+    function disconnectSocket(){state.socket?.disconnect();state.socket=null;}
+    function sendSocket(){state.socket?.emit('native-echo',$('socketMessage').value,ack=>log('socketLog','ok',`ACK: ${ack}`));}
+
+    const httpPort=Number(location.port || (location.protocol==='https:'?443:80));
+    $('socketUrl').value=`${location.protocol}//${location.hostname}:${httpPort-1}`;
+    $('sseConnect').onclick=connectSse; $('sseDisconnect').onclick=disconnectSse; $('sseSend').onclick=sendSse;
+    $('socketConnect').onclick=connectSocket; $('socketDisconnect').onclick=disconnectSocket; $('socketSend').onclick=sendSocket;
+    setInterval(refreshStats,3000); refreshStats();
+</script>
+</body>
+</html>

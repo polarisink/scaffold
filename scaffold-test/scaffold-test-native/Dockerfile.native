@@ -1,0 +1,35 @@
+FROM ghcr.io/graalvm/native-image-community:21 AS builder
+
+WORKDIR /workspace
+COPY .mvn .mvn
+COPY mvnw pom.xml ./
+COPY scaffold-dependencies scaffold-dependencies
+COPY scaffold-core scaffold-core
+COPY scaffold-starters scaffold-starters
+COPY scaffold-module scaffold-module
+COPY scaffold-test/scaffold-test-native scaffold-test/scaffold-test-native
+
+RUN --mount=type=cache,target=/root/.m2 \
+    ./mvnw -Pnative -pl scaffold-test/scaffold-test-native -am -Dmaven.test.skip=true package \
+    && cp scaffold-test/scaffold-test-native/target/scaffold-test-native /workspace/scaffold-test-native-bin
+
+FROM scratch AS native-export
+COPY --from=builder /workspace/scaffold-test-native-bin /scaffold-test-native
+
+FROM debian:12-slim
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y ca-certificates zlib1g \
+    && mkdir -p /app/storage \
+    && chown -R 65532:65532 /app \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY --from=builder --chown=65532:65532 /workspace/scaffold-test-native-bin /app/scaffold-test-native
+
+ENV HOME=/app \
+    SCAFFOLD_FILE_STORAGE_BASE_PATH=/app/storage
+
+USER 65532:65532
+EXPOSE 8082
+ENTRYPOINT ["/app/scaffold-test-native"]
