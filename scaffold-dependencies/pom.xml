@@ -60,7 +60,6 @@
         <netty-socketio.version>2.0.14</netty-socketio.version>
         <retrofit.version>2.11.0</retrofit.version>
         <concept-download.version>2.1.0</concept-download.version>
-        <poi.version>5.4.1</poi.version>
         <concept-coroutines.version>2.0.0</concept-coroutines.version>
         <javacv.version>1.5.12</javacv.version>
         <ffmpeg.version>7.1-1.5.11</ffmpeg.version>
@@ -81,6 +80,7 @@
         <flatten.version>1.7.3</flatten.version>
         <spring-ai.version>1.1.8</spring-ai.version>
         <graal.version>23.1.2</graal.version>
+        <fesod.version>2.0.2-incubating</fesod.version>
     </properties>
 
     <dependencyManagement>
@@ -326,16 +326,6 @@
                 <version>${concept-coroutines.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi</artifactId>
-                <version>${poi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml</artifactId>
-                <version>${poi.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>javacv-platform</artifactId>
                 <version>${javacv.version}</version>
@@ -422,6 +412,11 @@
                 <artifactId>hibernate-spatial</artifactId>
                 <version>${spatial.version}</version>
                 <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.fesod</groupId>
+                <artifactId>fesod-sheet</artifactId>
+                <version>${fesod.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
