@@ -21,7 +21,7 @@ class RcsMapperTest {
 
     @AfterEach
     void tearDown() {
-        mapper.closeDataSources();
+        //mapper.closeDataSources();
     }
 
     @Test

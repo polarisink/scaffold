@@ -11,6 +11,20 @@
 
     <artifactId>scaffold-starters</artifactId>
     <packaging>pom</packaging>
+
+    <dependencies>
+        <!--
+            Generate META-INF/spring-configuration-metadata.json for every
+            starter that declares @ConfigurationProperties. The dependency is
+            optional so it is not exposed to starter consumers at runtime.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
     <modules>
         <module>scaffold-ai-starter</module>
         <module>scaffold-cache-starter</module>

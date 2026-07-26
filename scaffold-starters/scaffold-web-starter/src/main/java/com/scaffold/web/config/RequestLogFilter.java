@@ -55,8 +55,14 @@ public class RequestLogFilter extends OncePerRequestFilter {
      */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return acceptsEventStream(request) || webProperties.getRequestLog().getExcludePathPatterns().stream()
-                .anyMatch(pattern -> pathMatcher.match(pattern, request.getRequestURI()));
+        if (acceptsEventStream(request)) {
+            return true;
+        }
+        String requestUri = request.getRequestURI();
+        return webProperties.getRequestLog()
+                .getExcludePathPatterns()
+                .stream()
+                .anyMatch(pattern -> pathMatcher.match(pattern, requestUri));
     }
 
     /**
@@ -71,16 +77,28 @@ public class RequestLogFilter extends OncePerRequestFilter {
      */
     private static boolean acceptsEventStream(HttpServletRequest request) {
         var acceptHeaders = request.getHeaders(HttpHeaders.ACCEPT);
+
         while (acceptHeaders.hasMoreElements()) {
+            String acceptHeader = acceptHeaders.nextElement();
+
             try {
-                if (MediaType.parseMediaTypes(acceptHeaders.nextElement()).stream()
-                        .anyMatch(MediaType.TEXT_EVENT_STREAM::isCompatibleWith)) {
+                boolean explicitlyAcceptsEventStream = MediaType
+                        .parseMediaTypes(acceptHeader)
+                        .stream()
+                        // 只接受明确、具体的 text/event-stream，
+                        // 不把 */* 或 text/* 当作 SSE 请求。
+                        .filter(MediaType::isConcrete)
+                        .anyMatch(MediaType.TEXT_EVENT_STREAM::isCompatibleWith);
+
+                if (explicitlyAcceptsEventStream) {
                     return true;
                 }
             } catch (IllegalArgumentException ignored) {
-                // Let Spring MVC report malformed Accept headers as usual.
+                // 非法 Accept 头交由后续 Spring MVC 正常处理，
+                // 不应因此跳过请求日志。
             }
         }
+
         return false;
     }
 
