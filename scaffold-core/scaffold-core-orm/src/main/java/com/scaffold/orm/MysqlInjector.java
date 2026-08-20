@@ -18,6 +18,7 @@ public class MysqlInjector extends DefaultSqlInjector {
     public List<AbstractMethod> getMethodList(Configuration configuration, Class<?> mapperClass, TableInfo tableInfo) {
         List<AbstractMethod> methodList = super.getMethodList(configuration, mapperClass, tableInfo);
         methodList.add(new InsertBatchSomeColumn());
+        //审计字段的下面几个不会被强制覆盖，只会被审计器管理
         methodList.add(new AlwaysUpdateSomeColumnById(
                 fieldInfo -> !AUDITABLE_FIELDS.contains(fieldInfo.getProperty())
         ));
