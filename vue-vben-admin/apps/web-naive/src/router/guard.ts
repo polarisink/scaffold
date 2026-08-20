@@ -1,4 +1,4 @@
-import type { Router } from 'vue-router';
+import type { Router, RouteRecordRaw } from 'vue-router';
 
 import { LOGIN_PATH } from '@vben/constants';
 import { preferences } from '@vben/preferences';
@@ -9,6 +9,28 @@ import { accessRoutes, coreRouteNames } from '#/router/routes';
 import { useAuthStore } from '#/store';
 
 import { generateAccess } from './access';
+
+const NO_PERMISSION_PATH = '/no-permission';
+
+/** 从已经成功注册的权限路由中查找第一个可访问叶子页面。 */
+function findFirstAccessibleLeaf(
+  routes: RouteRecordRaw[],
+  router: Router,
+): string | undefined {
+  for (const route of routes) {
+    if (route.children?.length) {
+      const childPath = findFirstAccessibleLeaf(route.children, router);
+      if (childPath) return childPath;
+    } else if (
+      route.component &&
+      !route.redirect &&
+      route.name &&
+      router.hasRoute(route.name)
+    ) {
+      return router.resolve({ name: route.name }).fullPath;
+    }
+  }
+}
 
 /**
  * 通用守卫配置
@@ -87,6 +109,9 @@ function setupAccessGuard(router: Router) {
 
     // 是否已经生成过动态路由
     if (accessStore.isAccessChecked) {
+      if (to.path === preferences.app.defaultHomePath) {
+        return userStore.userInfo?.homePath || LOGIN_PATH;
+      }
       return true;
     }
     // 生成路由表
@@ -106,9 +131,13 @@ function setupAccessGuard(router: Router) {
     accessStore.setAccessMenus(accessibleMenus);
     accessStore.setAccessRoutes(accessibleRoutes);
     accessStore.setIsAccessChecked(true);
+    const homePath =
+      findFirstAccessibleLeaf(accessibleRoutes, router) || NO_PERMISSION_PATH;
+    userInfo.homePath = homePath;
+    userStore.setUserInfo(userInfo);
     const redirectPath = (from.query.redirect ??
       (to.path === preferences.app.defaultHomePath
-        ? userInfo.homePath || preferences.app.defaultHomePath
+        ? homePath
         : to.fullPath)) as string;
 
     return {

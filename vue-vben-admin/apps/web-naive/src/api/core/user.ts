@@ -64,7 +64,7 @@ export async function getUserInfoApi() {
   return {
     avatar: '',
     desc: `组织：${org?.orgName || '未分配'}`,
-    homePath: '/dashboard/analytics',
+    homePath: '/home',
     realName: user.username,
     roles: roles.map((role) => role.roleCode),
     token: '',

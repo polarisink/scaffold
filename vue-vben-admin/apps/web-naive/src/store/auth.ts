@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 import { LOGIN_PATH } from '@vben/constants';
 import { preferences } from '@vben/preferences';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
+import { resetStaticRoutes } from '@vben/utils';
 
 import { defineStore } from 'pinia';
 
@@ -18,6 +19,7 @@ import {
   logoutApi,
 } from '#/api';
 import { $t } from '#/locales';
+import { routes } from '#/router/routes';
 
 export const useAuthStore = defineStore('auth', () => {
   const accessStore = useAccessStore();
@@ -96,6 +98,8 @@ export const useAuthStore = defineStore('auth', () => {
       }
     }
     resetAllStores();
+    // 注销时移除上一个账号注册的动态路由，避免再次登录复用旧路由导致 404。
+    resetStaticRoutes(router, routes);
     clearCachedUserContext();
     accessStore.setLoginExpired(false);
 

@@ -12,7 +12,8 @@ export const overridesPreferences = defineOverridesPreferences({
   // overrides
   app: {
     accessMode: 'backend',
-    defaultHomePath: '/dashboard/analytics',
+    // 权限路由加载前使用的入口占位地址，守卫会跳转到用户实际可访问的首页。
+    defaultHomePath: '/home',
     name: import.meta.env.VITE_APP_TITLE,
   },
   theme: {

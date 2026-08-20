@@ -44,6 +44,8 @@ public interface SysMenuMapper extends MyBaseMapper<SysMenu> {
             INNER JOIN sys_user_role ur ON ur.role_id = rm.role_id
             WHERE ur.user_id = #{userId}
               AND m.deleted = 0
+              AND rm.deleted = 0
+              AND ur.deleted = 0
             ORDER BY m.sort_no ASC, m.id ASC
             """)
     /*@Results(id = "sysMenuResultMap", value = {
@@ -82,6 +84,7 @@ public interface SysMenuMapper extends MyBaseMapper<SysMenu> {
             INNER JOIN sys_role_menu rm ON rm.menu_id = m.id
             WHERE rm.role_id = #{roleId}
               AND m.deleted = 0
+              AND rm.deleted = 0
             ORDER BY m.sort_no ASC, m.id ASC
             """)
     /*@Results(value = {

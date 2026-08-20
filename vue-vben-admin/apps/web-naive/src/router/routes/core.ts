@@ -39,6 +39,30 @@ const coreRoutes: RouteRecordRaw[] = [
     children: [],
   },
   {
+    component: BasicLayout,
+    meta: {
+      hideInBreadcrumb: true,
+      hideInMenu: true,
+      hideInTab: true,
+      title: '暂无权限',
+    },
+    name: 'NoPermission',
+    path: '/no-permission',
+    children: [
+      {
+        component: () => import('#/views/_core/fallback/no-permission.vue'),
+        meta: {
+          hideInBreadcrumb: true,
+          hideInMenu: true,
+          hideInTab: true,
+          title: '暂无权限',
+        },
+        name: 'NoPermissionPage',
+        path: '',
+      },
+    ],
+  },
+  {
     component: AuthPageLayout,
     meta: {
       hideInTab: true,
