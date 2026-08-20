@@ -1,6 +1,5 @@
 package com.scaffold.swagger.properties;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,6 +9,22 @@ import java.util.List;
 
 /**
  * 由 SwaggerStarterAutoConfiguration 统一注册，不能添加组件类注解，否则会产生重复 Bean。
+ *
+ * @param enabled           是否启用
+ * @param basePackage       基础包
+ * @param groupName         组名
+ * @param basePath          基础路径
+ * @param excludePath       排除路径
+ * @param title             标题
+ * @param description       描述
+ * @param version           版本
+ * @param license           license
+ * @param licenseUrl        license-url
+ * @param termsOfServiceUrl
+ * @param host              host
+ * @param contact
+ * @param externalDocs
+ * @param authorization
  */
 @ConfigurationProperties(prefix = SwaggerProperties.PREFIX)
 public record SwaggerProperties(Boolean enabled, String basePackage, String groupName,
@@ -37,15 +52,6 @@ public record SwaggerProperties(Boolean enabled, String basePackage, String grou
         externalDocs = externalDocs == null ? new ExternalDocs() : externalDocs;
         authorization = authorization == null ? new Authorization() : authorization;
     }
-
-    public Boolean getEnabled(){ return enabled; } public String getBasePackage(){ return basePackage; }
-    public String getGroupName(){ return groupName; } public List<String> getBasePath(){ return basePath; }
-    public List<String> getExcludePath(){ return excludePath; } public String getTitle(){ return title; }
-    public String getDescription(){ return description; } public String getVersion(){ return version; }
-    public String getLicense(){ return license; } public String getLicenseUrl(){ return licenseUrl; }
-    public String getTermsOfServiceUrl(){ return termsOfServiceUrl; } public String getHost(){ return host; }
-    public Contact getContact(){ return contact; } public ExternalDocs getExternalDocs(){ return externalDocs; }
-    public Authorization getAuthorization(){ return authorization; }
 
     @Setter
     @Getter

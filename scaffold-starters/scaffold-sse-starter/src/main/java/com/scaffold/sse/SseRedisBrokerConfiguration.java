@@ -21,7 +21,7 @@ public class SseRedisBrokerConfiguration {
     @Bean
     SseMessageBroker redisSseMessageBroker(StringRedisTemplate redisTemplate,
                                            ObjectMapper objectMapper,
-                                           SseProperties properties) {
+                                           ScaffoldSseProperties properties) {
         return new RedisSseMessageBroker(redisTemplate, objectMapper, properties.redis().channel());
     }
 
@@ -30,7 +30,7 @@ public class SseRedisBrokerConfiguration {
             RedisConnectionFactory connectionFactory,
             ObjectMapper objectMapper,
             SseLocalDispatcher dispatcher,
-            SseProperties properties) {
+            ScaffoldSseProperties properties) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.addMessageListener((message, pattern) -> {

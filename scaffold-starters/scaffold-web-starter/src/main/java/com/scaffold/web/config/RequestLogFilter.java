@@ -27,21 +27,21 @@ import java.util.Arrays;
  * <p>过滤器通过 {@link ContentCachingRequestWrapper} 和
  * {@link ContentCachingResponseWrapper} 缓存请求、响应内容，但只有 JSON 内容会写入日志；
  * 非 JSON 响应仅记录请求信息、耗时和状态码。载荷大小受
- * {@link WebProperties.RequestLog#getMaxPayloadLength()} 限制。</p>
+ * {@link ScaffoldWebProperties.RequestLog#getMaxPayloadLength()} 限制。</p>
  *
- * <p>请求耗时大于 {@link WebProperties.RequestLog#getSlowThresholdMillis()} 时使用 WARN
+ * <p>请求耗时大于 {@link ScaffoldWebProperties.RequestLog#getSlowThresholdMillis()} 时使用 WARN
  * 级别记录，否则使用 INFO 级别。配置的排除路径以及声明接受
  * {@code text/event-stream} 的 SSE 请求不会经过本过滤器。SSE 必须直接写入客户端，不能由
  * {@code ContentCachingResponseWrapper} 缓存，否则流会在过滤器返回时被提交并关闭。</p>
  *
- * @see WebProperties.RequestLog
+ * @see ScaffoldWebProperties.RequestLog
  */
 @Slf4j
 @RequiredArgsConstructor
 public class RequestLogFilter extends OncePerRequestFilter {
     private static final String TRUNCATED_SUFFIX = "... [truncated]";
 
-    private final WebProperties webProperties;
+    private final ScaffoldWebProperties scaffoldWebProperties;
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     /**
@@ -59,7 +59,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
             return true;
         }
         String requestUri = request.getRequestURI();
-        return webProperties.getRequestLog()
+        return scaffoldWebProperties.requestLog()
                 .getExcludePathPatterns()
                 .stream()
                 .anyMatch(pattern -> pathMatcher.match(pattern, requestUri));
@@ -117,7 +117,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        int maxPayloadLength = Math.max(0, webProperties.getRequestLog().getMaxPayloadLength());
+        int maxPayloadLength = Math.max(0, scaffoldWebProperties.requestLog().getMaxPayloadLength());
         var requestWrapper = new ContentCachingRequestWrapper(request, maxPayloadLength);
         var responseWrapper = new ContentCachingResponseWrapper(response);
         long start = System.currentTimeMillis();
@@ -151,7 +151,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
                 request.getCharacterEncoding(), maxPayloadLength);
         Object responseBody = payload(response.getContentAsByteArray(), response.getContentType(),
                 response.getCharacterEncoding(), maxPayloadLength);
-        long slowThreshold = webProperties.getRequestLog().getSlowThresholdMillis();
+        long slowThreshold = scaffoldWebProperties.requestLog().getSlowThresholdMillis();
 
         log.atLevel(consume <= slowThreshold ? Level.INFO : Level.WARN).log("""
                         \n************************************************************************

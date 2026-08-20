@@ -3,7 +3,7 @@ package com.scaffold.security.config;
 import com.scaffold.base.util.R;
 import com.scaffold.security.util.ResponseUtil;
 import com.scaffold.security.vo.AuthCodeEnum;
-import com.scaffold.security.vo.SecurityProperties;
+import com.scaffold.security.vo.ScaffoldSecurityProperties;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,15 +39,15 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     @Qualifier("tokenAuthenticationFilter")
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
-    private final SecurityProperties securityProperties;
+    private final ScaffoldSecurityProperties scaffoldSecurityProperties;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityProperties securityProperties, PasswordEncoder passwordEncoder) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, ScaffoldSecurityProperties scaffoldSecurityProperties, PasswordEncoder passwordEncoder) throws Exception {
         SecurityContextHolder.setStrategyName(MODE_INHERITABLETHREADLOCAL);
         return http
                 .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(c -> c
-                        .requestMatchers(securityProperties.getIgnoreList()).permitAll()
+                        .requestMatchers(scaffoldSecurityProperties.getIgnoreList()).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(authenticationEntryPoint())
@@ -99,7 +99,7 @@ public class SecurityConfig {
     }
 
     public CorsConfigurationSource corsConfigurationSource() {
-        SecurityProperties.Cors corsProperties = securityProperties.getCors();
+        ScaffoldSecurityProperties.Cors corsProperties = scaffoldSecurityProperties.getCors();
         CorsConfiguration cors = new CorsConfiguration();
         if (!corsProperties.isEnabled()) {
             cors.setAllowedOrigins(List.of());

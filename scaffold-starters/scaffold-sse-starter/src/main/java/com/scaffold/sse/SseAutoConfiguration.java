@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 /** SSE 核心自动配置。 */
 @AutoConfiguration
-@EnableConfigurationProperties(SseProperties.class)
+@EnableConfigurationProperties(ScaffoldSseProperties.class)
 public class SseAutoConfiguration {
 
     @Bean
@@ -18,7 +18,7 @@ public class SseAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    SseLocalDispatcher sseLocalDispatcher(SseConnectionRepository repository, SseProperties properties) {
+    SseLocalDispatcher sseLocalDispatcher(SseConnectionRepository repository, ScaffoldSseProperties properties) {
         return new SseLocalDispatcher(repository, properties.queueCapacity());
     }
 
@@ -27,7 +27,7 @@ public class SseAutoConfiguration {
     SseConnectionManager sseConnectionManager(SseConnectionRepository repository,
                                               SseLocalDispatcher dispatcher,
                                               SseMessageBroker broker,
-                                              SseProperties properties) {
+                                              ScaffoldSseProperties properties) {
         return new SseConnectionManager(
                 repository,
                 dispatcher,
@@ -38,7 +38,7 @@ public class SseAutoConfiguration {
 
     @Bean(destroyMethod = "close")
     @ConditionalOnMissingBean
-    SseHeartbeatManager sseHeartbeatManager(SseConnectionManager manager, SseProperties properties) {
+    SseHeartbeatManager sseHeartbeatManager(SseConnectionManager manager, ScaffoldSseProperties properties) {
         return new SseHeartbeatManager(manager, properties.heartbeatInterval());
     }
 }

@@ -7,6 +7,9 @@ import org.springframework.core.convert.converter.ConverterFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 字符串转枚举工厂
+ */
 public class StringCodeToEnumConverterFactory implements ConverterFactory<String, IResponseEnum> {
     private static final Map<Class, Converter> converterMap = new HashMap<>();
 

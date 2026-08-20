@@ -2,62 +2,66 @@ package com.scaffold.postgres.starter;
 
 import com.scaffold.postgres.region.GeoRegion;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Locale;
 
 /**
- * 地形组件配置。
+ * 地形组件配置
+ *
+ * @param enabled                  是否启用
+ * @param provinceBoundaryLocation
+ * @param demBaseLocation
+ * @param demFileNamePattern
+ * @param maximumCachedSources
+ * @param pointCacheEnabled
+ * @param maximumCachedPoints
+ * @param coordinateDecimalPlaces
+ * @param cacheMissingElevations
  */
 @ConfigurationProperties(prefix = GeoTerrainProperties.PREFIX)
 public record GeoTerrainProperties(
-        @DefaultValue("true") boolean enabled,
-        @DefaultValue("classpath:/scaffold/geo/province-boundaries.csv") String provinceBoundaryLocation,
-        @DefaultValue("file:./dem/") String demBaseLocation,
-        @DefaultValue("{id-lower}.tif") String demFileNamePattern,
-        @DefaultValue("5") int maximumCachedSources,
-        @DefaultValue("true") boolean pointCacheEnabled,
-        @DefaultValue("100000") int maximumCachedPoints,
-        @DefaultValue("6") int coordinateDecimalPlaces,
-        @DefaultValue("false") boolean cacheMissingElevations) {
+        Boolean enabled,
+        String provinceBoundaryLocation,
+        String demBaseLocation,
+        String demFileNamePattern,
+        int maximumCachedSources,
+        Boolean pointCacheEnabled,
+        int maximumCachedPoints,
+        int coordinateDecimalPlaces,
+        Boolean cacheMissingElevations) {
 
     public static final String PREFIX = "scaffold.geo";
 
-    /**
-     * 是否启用地形组件。
-     */
 
-    /**
-     * 省份边界 CSV 的 Spring 资源位置。
-     */
-
-    /**
-     * DEM 文件目录的 Spring 资源位置。
-     */
-
-    /**
-     * DEM 文件名模板，支持 {id}、{id-lower} 和 {name} 占位符。
-     */
-
-    /**
-     * GeoTIFF 数据源的最大缓存数量。
-     */
-
-    /**
-     * 是否启用点级高程缓存。
-     */
-
-    /**
-     * 点级高程缓存的最大坐标数量。
-     */
-
-    /**
-     * 点级缓存坐标保留的小数位数。
-     */
-
-    /**
-     * 是否缓存未查询到高程的坐标。
-     */
+    public GeoTerrainProperties {
+        if (enabled == null) {
+            enabled = true;
+        }
+        if (provinceBoundaryLocation == null) {
+            provinceBoundaryLocation = "classpath:/scaffold/geo/province-boundaries.csv";
+        }
+        if (demBaseLocation == null) {
+            demBaseLocation = "file:./dem/";
+        }
+        if (demFileNamePattern == null) {
+            demFileNamePattern = "{id-lower}.tif";
+        }
+        if (maximumCachedSources == 0) {
+            maximumCachedSources = 5;
+        }
+        if (pointCacheEnabled == null) {
+            pointCacheEnabled = true;
+        }
+        if (maximumCachedPoints <= 0) {
+            maximumCachedPoints = 100000;
+        }
+        if (coordinateDecimalPlaces <= 0) {
+            coordinateDecimalPlaces = 6;
+        }
+        if (cacheMissingElevations == null) {
+            cacheMissingElevations = false;
+        }
+    }
 
     /**
      * 根据区域信息解析 DEM 文件名。
@@ -68,49 +72,4 @@ public record GeoTerrainProperties(
                 .replace("{id}", region.id())
                 .replace("{name}", region.name());
     }
-
-    public int getMaximumCachedPoints() {
-        return maximumCachedPoints;
-    }
-
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-
-    public String getProvinceBoundaryLocation() {
-        return provinceBoundaryLocation;
-    }
-
-
-    public String getDemBaseLocation() {
-        return demBaseLocation;
-    }
-
-
-    public String getDemFileNamePattern() {
-        return demFileNamePattern;
-    }
-
-
-    public int getMaximumCachedSources() {
-        return maximumCachedSources;
-    }
-
-
-    public boolean isPointCacheEnabled() {
-        return pointCacheEnabled;
-    }
-
-
-    public int getCoordinateDecimalPlaces() {
-        return coordinateDecimalPlaces;
-    }
-
-
-    public boolean isCacheMissingElevations() {
-        return cacheMissingElevations;
-    }
-
 }

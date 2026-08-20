@@ -204,6 +204,7 @@ onMounted(load);
           v-model:page="query.pageNo"
           v-model:page-size="query.pageSize"
           :item-count="total"
+          :prefix="({ itemCount }) => `共 ${itemCount} 条`"
           :page-sizes="[10, 20, 50]"
           show-size-picker
           @update:page="load"

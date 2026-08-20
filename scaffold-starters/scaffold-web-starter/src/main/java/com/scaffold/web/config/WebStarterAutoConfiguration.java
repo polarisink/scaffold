@@ -19,7 +19,7 @@ import org.springframework.core.Ordered;
 @AutoConfiguration(before = JacksonAutoConfiguration.class)
 @Import({WebConfig.class, GlobalExceptionHandler.class})
 @ImportRuntimeHints(BizLogRuntimeHints.class)
-@EnableConfigurationProperties(WebProperties.class)
+@EnableConfigurationProperties(ScaffoldWebProperties.class)
 public class WebStarterAutoConfiguration {
 
     @Bean
@@ -37,8 +37,8 @@ public class WebStarterAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "scaffold.web.request-log", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public RequestLogFilter requestLogFilter(WebProperties webProperties) {
-        return new RequestLogFilter(webProperties);
+    public RequestLogFilter requestLogFilter(ScaffoldWebProperties scaffoldWebProperties) {
+        return new RequestLogFilter(scaffoldWebProperties);
     }
 
     @Bean

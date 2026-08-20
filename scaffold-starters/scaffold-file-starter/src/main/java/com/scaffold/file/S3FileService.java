@@ -28,7 +28,7 @@ public class S3FileService implements FileUploadService {
     private final S3Client s3Client;
 
     public S3FileService(FileStorageProperties properties) {
-        this.s3Config = properties.getS3();
+        this.s3Config = properties.s3();
         try {
             this.s3Client = S3Client.builder()
                     .endpointOverride(new URI(s3Config.getEndpoint()))
@@ -61,7 +61,7 @@ public class S3FileService implements FileUploadService {
     }
 
     S3FileService(FileStorageProperties properties, S3Client s3Client) {
-        this.s3Config = properties.getS3();
+        this.s3Config = properties.s3();
         this.s3Client = s3Client;
     }
 

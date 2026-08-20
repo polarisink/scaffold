@@ -29,7 +29,7 @@ public class GeoTerrainAutoConfiguration {
     @ConditionalOnMissingBean
     public GeoRegionIndex geoRegionIndex(ResourceLoader resourceLoader,
                                          GeoTerrainProperties properties) {
-        String location = properties.getProvinceBoundaryLocation();
+        String location = properties.provinceBoundaryLocation();
         Resource resource = resourceLoader.getResource(location);
         if (!resource.exists() || !resource.isReadable()) {
             throw new BeanCreationException("无法读取省份边界资源: " + location);
@@ -47,14 +47,14 @@ public class GeoTerrainAutoConfiguration {
                                                ResourceLoader resourceLoader,
                                                GeoTerrainProperties properties) {
         return new SpringResourceDemSourceResolver(
-                regions, resourceLoader, properties.getDemBaseLocation(), properties::resolveDemFileName);
+                regions, resourceLoader, properties.demBaseLocation(), properties::resolveDemFileName);
     }
 
     @Bean(destroyMethod = "close")
     @ConditionalOnMissingBean(ElevationProvider.class)
     public GeoTiffElevationProvider geoTiffElevationProvider(DemSourceResolver sourceResolver,
                                                              GeoTerrainProperties properties) {
-        return new GeoTiffElevationProvider(sourceResolver, properties.getMaximumCachedSources());
+        return new GeoTiffElevationProvider(sourceResolver, properties.maximumCachedSources());
     }
 
     @Bean
@@ -68,9 +68,9 @@ public class GeoTerrainAutoConfiguration {
             GeoTerrainProperties properties) {
         return new CachingElevationProvider(
                 geoTiffElevationProvider,
-                properties.getMaximumCachedPoints(),
-                properties.getCoordinateDecimalPlaces(),
-                properties.isCacheMissingElevations());
+                properties.maximumCachedPoints(),
+                properties.coordinateDecimalPlaces(),
+                properties.cacheMissingElevations());
     }
 
     @Bean

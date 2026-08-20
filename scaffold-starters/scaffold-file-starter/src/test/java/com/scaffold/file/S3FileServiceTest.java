@@ -46,7 +46,7 @@ class S3FileServiceTest {
     void shouldKeepOriginalFilenameAndRemoveClientPath() {
         S3Client s3Client = mock(S3Client.class);
         FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);
-        properties.getS3().setBucketName("test-bucket");
+        properties.s3().setBucketName("test-bucket");
         S3FileService service = new S3FileService(properties, s3Client);
         byte[] content = "content".getBytes(StandardCharsets.UTF_8);
 
@@ -78,7 +78,7 @@ class S3FileServiceTest {
 
         try {
             FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);
-            FileStorageProperties.S3 s3 = properties.getS3();
+            FileStorageProperties.S3 s3 = properties.s3();
             s3.setEndpoint("http://127.0.0.1:" + server.getAddress().getPort());
             s3.setAccessKey("access-key");
             s3.setSecretKey("secret-key");
@@ -104,7 +104,7 @@ class S3FileServiceTest {
 
         S3Client s3Client = mock(S3Client.class);
         FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);
-        properties.getS3().setBucketName("test-bucket");
+        properties.s3().setBucketName("test-bucket");
         S3FileService service = new S3FileService(properties, s3Client);
 
         FolderUploadRequest request = new FolderUploadRequest();
@@ -151,7 +151,7 @@ class S3FileServiceTest {
                 .build());
         when(s3Client.getObject(any(GetObjectRequest.class))).thenReturn(inputStream);
         FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);
-        properties.getS3().setBucketName("test-bucket");
+        properties.s3().setBucketName("test-bucket");
         S3FileService service = new S3FileService(properties, s3Client);
 
         FileDownload download = service.download("reports/annual.pdf").orElseThrow();
@@ -168,7 +168,7 @@ class S3FileServiceTest {
         when(s3Client.getObject(any(GetObjectRequest.class)))
                 .thenThrow(SdkClientException.create("connection failed"));
         FileStorageProperties properties = new FileStorageProperties(null, null, null, null, null);
-        properties.getS3().setBucketName("test-bucket");
+        properties.s3().setBucketName("test-bucket");
         S3FileService service = new S3FileService(properties, s3Client);
 
         assertThatThrownBy(() -> service.download("report.pdf"))

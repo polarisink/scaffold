@@ -30,14 +30,6 @@ public class SocketIoNativeTestHandler {
         log.info("Native test Socket.IO disconnected: sessionId={}", client.getSessionId());
     }
 
-    private void health(SocketIOClient client, AckRequest ackRequest) {
-        String response = "Socket.IO native handler ready";
-        client.sendEvent("server-ready", response);
-        if (ackRequest.isAckRequested()) {
-            ackRequest.sendAckData(response);
-        }
-    }
-
     private DataListener<String> echo() {
         return (SocketIOClient client, String message, AckRequest ackRequest) -> {
             String response = "native echo: " + message;

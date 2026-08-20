@@ -43,13 +43,13 @@ public class R<T> implements Serializable {
      */
     private R(T data, Integer code, String message) {
         if (null != data) {
-            setData(data);
+            this.data = data;
         }
         if (null != code) {
-            setCode(code);
+            this.code = code;
         }
         if (null != message) {
-            setMessage(message);
+            this.message = message;
         }
 
     }

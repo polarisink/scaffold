@@ -135,7 +135,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @SpringBootApplication
-    @EnableConfigurationProperties(WebProperties.class)
+    @EnableConfigurationProperties(ScaffoldWebProperties.class)
     @Import({GlobalExceptionHandler.class, WebConfig.class, TestController.class})
     static class TestApplication {
     }

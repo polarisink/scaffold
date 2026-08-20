@@ -5,9 +5,18 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.time.Duration;
 import java.util.UUID;
 
-/** scaffold SSE 配置。 */
+/**
+ * scaffold SSE 配置
+ *
+ * @param broker            服务器名
+ * @param connectionTimeout 连接超时
+ * @param heartbeatInterval 心跳时间
+ * @param queueCapacity     队列容量
+ * @param redis             redis配置
+ * @param kafka             kafka配置
+ */
 @ConfigurationProperties("scaffold.sse")
-public record SseProperties(
+public record ScaffoldSseProperties(
         Broker broker,
         Duration connectionTimeout,
         Duration heartbeatInterval,
@@ -15,7 +24,7 @@ public record SseProperties(
         Redis redis,
         Kafka kafka) {
 
-    public SseProperties {
+    public ScaffoldSseProperties {
         broker = broker == null ? Broker.LOCAL : broker;
         connectionTimeout = connectionTimeout == null ? Duration.ofMinutes(30) : connectionTimeout;
         heartbeatInterval = heartbeatInterval == null ? Duration.ofSeconds(25) : heartbeatInterval;
@@ -24,7 +33,7 @@ public record SseProperties(
         kafka = kafka == null ? new Kafka(null, null) : kafka;
     }
 
-    public enum Broker { LOCAL, REDIS, KAFKA }
+    public enum Broker {LOCAL, REDIS, KAFKA}
 
     public record Redis(String channel) {
         public Redis {

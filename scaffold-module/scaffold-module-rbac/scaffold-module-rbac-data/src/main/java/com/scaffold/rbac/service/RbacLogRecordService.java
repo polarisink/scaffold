@@ -7,7 +7,7 @@ import com.mzt.logapi.beans.Operator;
 import com.mzt.logapi.service.ILogRecordService;
 import com.mzt.logapi.service.IOperatorGetService;
 import com.scaffold.base.util.ServletUtils;
-import com.scaffold.rbac.components.RbacProperties;
+import com.scaffold.rbac.components.ScaffoldRbacProperties;
 import com.scaffold.rbac.contant.RbacLogConst;
 import com.scaffold.rbac.entity.SysLoginLog;
 import com.scaffold.rbac.entity.SysOperateLog;
@@ -32,7 +32,7 @@ public class RbacLogRecordService implements ILogRecordService {
     private final SysOperateLogMapper operateLogMapper;
     private final SysLoginLogMapper loginLogMapper;
     private final ObjectProvider<IOperatorGetService> operatorServiceProvider;
-    private final RbacProperties properties;
+    private final ScaffoldRbacProperties properties;
 
     private static String shortText(String value, int length) {
         return value == null ? null : StrUtil.sub(value, 0, length);

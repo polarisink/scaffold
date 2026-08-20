@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-class RbacPropertiesConfigurationTest {
+class ScaffoldRbacPropertiesConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(RbacPropertiesConfiguration.class))

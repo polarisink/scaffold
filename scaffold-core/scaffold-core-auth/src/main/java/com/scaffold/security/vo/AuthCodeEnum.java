@@ -5,6 +5,9 @@ import com.scaffold.base.exception.IResponseEnum;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 认证授权错误码
+ */
 @Getter
 @RequiredArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)

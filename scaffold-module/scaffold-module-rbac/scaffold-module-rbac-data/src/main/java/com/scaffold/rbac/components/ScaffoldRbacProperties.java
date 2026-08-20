@@ -26,24 +26,27 @@ enum ResetStrategy {
 
 /**
  * rbac配置
+ *
+ * @param reset             重置策略
+ * @param pattern           重置时间戳格式
+ * @param separator         分隔符
+ * @param usernameBehind    用户名在前面还是后面
+ * @param anonymousUsername 匿名用户的名字
+ * @param logEnabled        是否记录日志
  */
 @ConfigurationProperties(prefix = "scaffold.rbac")
-public record RbacProperties(
+public record ScaffoldRbacProperties(
         @DefaultValue("USERNAME") ResetStrategy reset,
         @DefaultValue(GlobalConstant.DEFAULT_DATE_FORMAT) String pattern,
         @DefaultValue("") String separator,
         @DefaultValue("true") Boolean usernameBehind,
         @DefaultValue("anonymous") String anonymousUsername,
         @DefaultValue("true") Boolean logEnabled) {
-    public RbacProperties {
+    public ScaffoldRbacProperties {
         // 如果不是用户名，就要校验时间戳
         if (reset != ResetStrategy.USERNAME) {
             String regex = "^[yMdHmsS\\-/:\\s]+$";
             Assert.state(pattern != null && pattern.matches(regex), "不合法的时间格式");
         }
     }
-    public ResetStrategy getReset(){ return reset; } public String getPattern(){ return pattern; }
-    public String getSeparator(){ return separator; } public Boolean getUsernameBehind(){ return usernameBehind; }
-    public String getAnonymousUsername(){ return anonymousUsername; }
-    public Boolean getLogEnabled(){ return logEnabled; }
 }

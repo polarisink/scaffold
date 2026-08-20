@@ -11,6 +11,11 @@
 
     <artifactId>scaffold-biz</artifactId>
 
+    <properties>
+        <!-- 可运行应用不是供其他模块依赖的制品，不安装到本地 Maven 仓库。 -->
+        <maven.install.skip>true</maven.install.skip>
+    </properties>
+
     <dependencies>
         <!--需要web服务就使用starter-file-->
         <dependency>

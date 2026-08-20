@@ -14,7 +14,7 @@ class RequestLogFilterTest {
 
     @Test
     void doesNotBufferOrCompleteEventStreamResponses() throws Exception {
-        RequestLogFilter filter = new RequestLogFilter(new WebProperties(null, null, null));
+        RequestLogFilter filter = new RequestLogFilter(new ScaffoldWebProperties(null, null, null));
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/sse/connect");
         request.addHeader(HttpHeaders.ACCEPT, MediaType.TEXT_EVENT_STREAM_VALUE);
         MockHttpServletResponse response = new MockHttpServletResponse();

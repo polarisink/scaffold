@@ -38,8 +38,8 @@ import static com.scaffold.base.constant.GlobalConstant.GLOBAL_ERROR_CODE;
 /**
  * 全局异常处理器
  *
- * @author miaol
- * @date 2020-04-11 10:14
+ * @author aries
+ * @date 2026-04-11 10:14
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -47,7 +47,7 @@ import static com.scaffold.base.constant.GlobalConstant.GLOBAL_ERROR_CODE;
 @ConditionalOnWebApplication
 public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
 
-    private final WebProperties webProperties;
+    private final ScaffoldWebProperties scaffoldWebProperties;
 
     private final PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -212,7 +212,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
             return false;
         }
         String declaringClassName = returnType.getDeclaringClass().getName();
-        return webProperties.getResponse().getIgnoredClassNamePrefixes().stream().noneMatch(declaringClassName::startsWith);
+        return scaffoldWebProperties.response().getIgnoredClassNamePrefixes().stream().noneMatch(declaringClassName::startsWith);
     }
 
     @Override
@@ -225,8 +225,8 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
         if (shouldWriteRawBody(request.getURI().getPath())) {
             return body;
         }
-        if (body == null) {
-            return R.success();
+        if (body instanceof ResponseEntity<?>) {
+            return body;
         }
         if (body instanceof String) {
             response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
@@ -234,6 +234,9 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
         }
         if (body instanceof R) {
             return body;
+        }
+        if (body == null) {
+            return R.success();
         }
         return R.success(body);
     }
@@ -245,10 +248,10 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
      * @return 是否包装
      */
     private boolean shouldWriteRawBody(String path) {
-        return webProperties.getResponse().getRawBodyPathPatterns().stream().anyMatch(pattern -> pathMatcher.match(pattern, path));
+        return scaffoldWebProperties.response().getRawBodyPathPatterns().stream().anyMatch(pattern -> pathMatcher.match(pattern, path));
     }
 
     private String serverErrorMessage() {
-        return webProperties.getResponse().getServerErrorMessage();
+        return scaffoldWebProperties.response().getServerErrorMessage();
     }
 }

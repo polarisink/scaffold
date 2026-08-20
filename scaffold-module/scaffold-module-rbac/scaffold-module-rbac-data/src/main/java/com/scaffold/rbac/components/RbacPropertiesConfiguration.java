@@ -15,7 +15,7 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.context.annotation.Primary;
 
 @AutoConfiguration
-@EnableConfigurationProperties(RbacProperties.class)
+@EnableConfigurationProperties(ScaffoldRbacProperties.class)
 @ImportRuntimeHints(RbacRuntimeHints.class)
 public class RbacPropertiesConfiguration {
 
@@ -26,7 +26,7 @@ public class RbacPropertiesConfiguration {
             SysOperateLogMapper operateLogMapper,
             SysLoginLogMapper loginLogMapper,
             ObjectProvider<IOperatorGetService> operatorServiceProvider,
-            RbacProperties properties) {
+            ScaffoldRbacProperties properties) {
         return new RbacLogRecordService(operateLogMapper, loginLogMapper, operatorServiceProvider, properties);
     }
 }

@@ -41,9 +41,9 @@ class SseMessageBrokerTest {
 
     @Test
     void appliesSafeDefaults() {
-        SseProperties properties = new SseProperties(null, null, null, 0, null, null);
+        ScaffoldSseProperties properties = new ScaffoldSseProperties(null, null, null, 0, null, null);
 
-        assertThat(properties.broker()).isEqualTo(SseProperties.Broker.LOCAL);
+        assertThat(properties.broker()).isEqualTo(ScaffoldSseProperties.Broker.LOCAL);
         assertThat(properties.queueCapacity()).isEqualTo(100);
         assertThat(properties.redis().channel()).isEqualTo("scaffold:sse:messages");
         assertThat(properties.kafka().topic()).isEqualTo("scaffold-sse-messages");

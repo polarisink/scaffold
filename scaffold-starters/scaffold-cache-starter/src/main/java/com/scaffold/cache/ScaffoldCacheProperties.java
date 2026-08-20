@@ -2,11 +2,21 @@ package com.scaffold.cache;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
 
+/**
+ * scaffold缓存属性类
+ *
+ * @param mode       缓存类型：一级缓存（默认）还是二级缓存
+ * @param type       一级缓存类型，默认caffeine
+ * @param secondary  二级缓存类型，默认redis
+ * @param caffeine   caffeine配置
+ * @param redis      redis配置
+ * @param postgresql postgresql配置
+ */
 @ConfigurationProperties("scaffold.cache")
 public record ScaffoldCacheProperties(Mode mode, Provider type, Provider secondary,
                                       Caffeine caffeine, Redis redis, Postgresql postgresql) {
@@ -21,9 +31,9 @@ public record ScaffoldCacheProperties(Mode mode, Provider type, Provider seconda
     }
 
 
-    public enum Mode { SINGLE, TWO_LEVEL }
+    public enum Mode {SINGLE, TWO_LEVEL}
 
-    public enum Provider { CAFFEINE, REDIS, POSTGRESQL }
+    public enum Provider {CAFFEINE, REDIS, POSTGRESQL}
 
     @Getter
     @Setter
@@ -39,7 +49,9 @@ public record ScaffoldCacheProperties(Mode mode, Provider type, Provider seconda
         private String keyPrefix = "scaffold:cache:";
     }
 
-    /** PostgreSQL cache and optional dedicated datasource settings. */
+    /**
+     * PostgreSQL cache and optional dedicated datasource settings.
+     */
     @Getter
     @Setter
     public static class Postgresql {

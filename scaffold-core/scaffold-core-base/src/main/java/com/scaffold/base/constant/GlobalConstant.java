@@ -1,8 +1,8 @@
 package com.scaffold.base.constant;
 
 /**
- * @author miaol
- * @date 2020-05-14 9:52
+ * @author aries
+ * @date 2026-05-14 9:52
  */
 public interface GlobalConstant {
 

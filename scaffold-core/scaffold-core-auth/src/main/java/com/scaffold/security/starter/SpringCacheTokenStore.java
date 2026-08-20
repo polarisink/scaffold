@@ -9,6 +9,9 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.Assert;
 
+/**
+ * 默认基于spring-cache的token管理器
+ */
 @RequiredArgsConstructor
 public class SpringCacheTokenStore implements TokenStore {
 

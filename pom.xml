@@ -24,6 +24,7 @@
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.wrapper.version>3.3.4</maven.wrapper.version>
         <flatten.version>1.7.3</flatten.version>
+        <rversion>1.0-SNAPSHOT</rversion>
     </properties>
 
     <dependencyManagement>

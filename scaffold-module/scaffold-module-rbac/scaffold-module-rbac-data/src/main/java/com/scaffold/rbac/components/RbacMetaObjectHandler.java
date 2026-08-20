@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.scaffold.orm.BaseLongAuditable.*;
+import static com.scaffold.orm.BaseAuditable.*;
 
 
 /**

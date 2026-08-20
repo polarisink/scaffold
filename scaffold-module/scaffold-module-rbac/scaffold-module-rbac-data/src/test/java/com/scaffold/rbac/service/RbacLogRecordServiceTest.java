@@ -2,7 +2,7 @@ package com.scaffold.rbac.service;
 
 import com.mzt.logapi.beans.LogRecord;
 import com.mzt.logapi.service.IOperatorGetService;
-import com.scaffold.rbac.components.RbacProperties;
+import com.scaffold.rbac.components.ScaffoldRbacProperties;
 import com.scaffold.rbac.contant.RbacLogConst;
 import com.scaffold.rbac.entity.SysLoginLog;
 import com.scaffold.rbac.entity.SysOperateLog;
@@ -23,7 +23,7 @@ class RbacLogRecordServiceTest {
     private final SysOperateLogMapper operateMapper = mock(SysOperateLogMapper.class);
     private final SysLoginLogMapper loginMapper = mock(SysLoginLogMapper.class);
     private final ObjectProvider<IOperatorGetService> operatorProvider = mock(ObjectProvider.class);
-    private final RbacProperties properties = mock(RbacProperties.class);
+    private final ScaffoldRbacProperties properties = mock(ScaffoldRbacProperties.class);
     private final RbacLogRecordService service =
             new RbacLogRecordService(operateMapper, loginMapper, operatorProvider, properties);
 

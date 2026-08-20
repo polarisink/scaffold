@@ -21,7 +21,7 @@ public class SseKafkaBrokerConfiguration {
     @Bean
     SseMessageBroker kafkaSseMessageBroker(KafkaTemplate<Object, Object> kafkaTemplate,
                                            ObjectMapper objectMapper,
-                                           SseProperties properties) {
+                                           ScaffoldSseProperties properties) {
         return new KafkaSseMessageBroker(kafkaTemplate, objectMapper, properties.kafka().topic());
     }
 
@@ -30,7 +30,7 @@ public class SseKafkaBrokerConfiguration {
             ConsumerFactory<Object, Object> consumerFactory,
             ObjectMapper objectMapper,
             SseLocalDispatcher dispatcher,
-            SseProperties properties) {
+            ScaffoldSseProperties properties) {
         ContainerProperties containerProperties = new ContainerProperties(properties.kafka().topic());
         containerProperties.setGroupId(properties.kafka().groupId());
         containerProperties.setMessageListener((MessageListener<Object, Object>) record ->

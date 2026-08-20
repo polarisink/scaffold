@@ -8,8 +8,15 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * scaffold权限配置
+ *
+ * @param ignoreList 白名单列表
+ * @param cors       cors配置
+ * @param token      token配置
+ */
 @ConfigurationProperties(prefix = "scaffold.security")
-public record SecurityProperties(String[] ignoreList, Cors cors, Token token) {
+public record ScaffoldSecurityProperties(String[] ignoreList, Cors cors, Token token) {
     /**
      * 默认跳过认证过滤的路径。
      */
@@ -23,7 +30,7 @@ public record SecurityProperties(String[] ignoreList, Cors cors, Token token) {
     /**
      * 追加的认证忽略路径。配置后会与默认忽略路径合并，而不是覆盖默认值。
      */
-    public SecurityProperties {
+    public ScaffoldSecurityProperties {
         cors = cors == null ? new Cors() : cors;
         token = token == null ? new Token() : token;
     }
@@ -39,8 +46,13 @@ public record SecurityProperties(String[] ignoreList, Cors cors, Token token) {
         return res;
     }
 
-    public Cors getCors() { return cors; }
-    public Token getToken() { return token; }
+    public Cors getCors() {
+        return cors;
+    }
+
+    public Token getToken() {
+        return token;
+    }
 
     @Getter
     @Setter

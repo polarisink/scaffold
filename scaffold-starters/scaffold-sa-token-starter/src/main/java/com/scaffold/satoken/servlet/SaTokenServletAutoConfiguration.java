@@ -3,7 +3,7 @@ package com.scaffold.satoken.servlet;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
-import com.scaffold.security.vo.SecurityProperties;
+import com.scaffold.security.vo.ScaffoldSecurityProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -20,9 +20,9 @@ import java.util.Arrays;
 @AutoConfiguration
 @RequiredArgsConstructor
 @Import(SaTokenExceptionHandler.class)
-@EnableConfigurationProperties(SecurityProperties.class)
+@EnableConfigurationProperties(ScaffoldSecurityProperties.class)
 public class SaTokenServletAutoConfiguration implements WebMvcConfigurer {
-    private final SecurityProperties securityProperties;
+    private final ScaffoldSecurityProperties scaffoldSecurityProperties;
 
     @Bean
     @ConditionalOnMissingBean(PasswordEncoder.class)
@@ -34,6 +34,6 @@ public class SaTokenServletAutoConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SaInterceptor(handle -> SaRouter.match("/**", StpUtil::checkLogin)))
                 .addPathPatterns("/**")
-                .excludePathPatterns(Arrays.asList(securityProperties.getIgnoreList()));
+                .excludePathPatterns(Arrays.asList(scaffoldSecurityProperties.getIgnoreList()));
     }
 }

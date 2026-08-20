@@ -23,16 +23,16 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI springShopOpenAPI() {
-        SwaggerProperties.Contact contact = properties.getContact();
+        SwaggerProperties.Contact contact = properties.contact();
         OpenAPI openAPI = new OpenAPI()
-                .info(new Info().title(properties.getTitle())
-                        .description(properties.getDescription())
-                        .version(properties.getVersion())
+                .info(new Info().title(properties.title())
+                        .description(properties.description())
+                        .version(properties.version())
                         .contact(new Contact().name(contact.getName()).email(contact.getEmail()).url(contact.getUrl())))
                 .addSecurityItem(new SecurityRequirement().addList(HttpHeaders.AUTHORIZATION))
                 .components(new Components().addSecuritySchemes(HttpHeaders.AUTHORIZATION, new SecurityScheme()
                         .name(HttpHeaders.AUTHORIZATION).type(SecurityScheme.Type.HTTP).scheme("bearer")));
-        SwaggerProperties.ExternalDocs externalDocs = properties.getExternalDocs();
+        SwaggerProperties.ExternalDocs externalDocs = properties.externalDocs();
         if (externalDocs.getUrl() != null && !externalDocs.getUrl().isBlank()) {
             openAPI.externalDocs(new ExternalDocumentation()
                     .description(externalDocs.getDescription())

@@ -23,7 +23,7 @@ public class LocalFileService implements FileUploadService {
     private final Path baseDirPath;
 
     public LocalFileService(FileStorageProperties properties) {
-        this.local = properties.getLocal();
+        this.local = properties.local();
         this.baseDirPath = Paths.get(local.getBasePath()).toAbsolutePath().normalize();
         try {
             if (!Files.exists(baseDirPath)) {

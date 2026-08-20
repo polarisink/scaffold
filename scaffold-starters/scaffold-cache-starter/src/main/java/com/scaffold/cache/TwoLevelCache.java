@@ -4,6 +4,9 @@ import org.springframework.cache.Cache;
 
 import java.util.concurrent.Callable;
 
+/**
+ * 二级缓存实现
+ */
 public final class TwoLevelCache implements Cache {
 
     private final Cache first;
@@ -23,9 +26,13 @@ public final class TwoLevelCache implements Cache {
     @Override
     public ValueWrapper get(Object key) {
         ValueWrapper value = first.get(key);
-        if (value != null) return value;
+        if (value != null) {
+            return value;
+        }
         value = second.get(key);
-        if (value != null) first.put(key, value.get());
+        if (value != null) {
+            first.put(key, value.get());
+        }
         return value;
     }
 
@@ -39,7 +46,9 @@ public final class TwoLevelCache implements Cache {
     @SuppressWarnings("unchecked")
     public <T> T get(Object key, Callable<T> valueLoader) {
         ValueWrapper value = get(key);
-        if (value != null) return (T) value.get();
+        if (value != null) {
+            return (T) value.get();
+        }
         T loaded = second.get(key, valueLoader);
         first.put(key, loaded);
         return loaded;
@@ -54,7 +63,9 @@ public final class TwoLevelCache implements Cache {
     @Override
     public ValueWrapper putIfAbsent(Object key, Object value) {
         ValueWrapper existing = get(key);
-        if (existing != null) return existing;
+        if (existing != null) {
+            return existing;
+        }
         put(key, value);
         return null;
     }

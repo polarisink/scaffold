@@ -34,7 +34,7 @@ public class AiChatController {
     }
 
     private String system(String value) {
-        return value == null || value.isBlank() ? properties.getSystemPrompt() : value;
+        return value == null || value.isBlank() ? properties.systemPrompt() : value;
     }
 
     public record ChatRequest(String conversationId, String system, String message) {}

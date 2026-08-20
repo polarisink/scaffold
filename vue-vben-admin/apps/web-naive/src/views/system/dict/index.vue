@@ -503,6 +503,7 @@ watch(
           v-model:page="typeQuery.pageNo"
           v-model:page-size="typeQuery.pageSize"
           :item-count="total"
+          :prefix="({ itemCount }) => `共 ${itemCount} 条`"
           :page-sizes="[10, 20, 50]"
           show-size-picker
           @update:page="loadTypes"
@@ -558,6 +559,7 @@ watch(
           v-model:page="dataQuery.pageNo"
           v-model:page-size="dataQuery.pageSize"
           :item-count="total"
+          :prefix="({ itemCount }) => `共 ${itemCount} 条`"
           :page-sizes="[10, 20, 50]"
           show-size-picker
           @update:page="loadData"

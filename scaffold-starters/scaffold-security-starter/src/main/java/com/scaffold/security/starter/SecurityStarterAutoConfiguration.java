@@ -5,7 +5,7 @@ import com.scaffold.security.config.SecurityConfig;
 import com.scaffold.security.config.TokenAuthenticationFilter;
 import com.scaffold.security.config.TokenStore;
 import com.scaffold.security.util.JwtUtil;
-import com.scaffold.security.vo.SecurityProperties;
+import com.scaffold.security.vo.ScaffoldSecurityProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer;
@@ -25,18 +25,18 @@ import org.springframework.util.PathMatcher;
 @EnableCaching
 @AutoConfiguration(before = CacheAutoConfiguration.class)
 @Import(SecurityConfig.class)
-@EnableConfigurationProperties(SecurityProperties.class)
+@EnableConfigurationProperties(ScaffoldSecurityProperties.class)
 public class SecurityStarterAutoConfiguration {
 
     @Bean
     @ConditionalOnClass(CaffeineCacheManager.class)
     public CacheManagerCustomizer<CaffeineCacheManager> securityTokenCaffeineCacheCustomizer(
-            SecurityProperties securityProperties) {
+            ScaffoldSecurityProperties scaffoldSecurityProperties) {
         return cacheManager -> cacheManager.registerCustomCache(
                 TokenStore.TOKEN_CACHE_NAME,
                 Caffeine.newBuilder()
-                        .expireAfterWrite(securityProperties.getToken().getCacheTtl())
-                        .maximumSize(securityProperties.getToken().getCacheMaximumSize())
+                        .expireAfterWrite(scaffoldSecurityProperties.getToken().getCacheTtl())
+                        .maximumSize(scaffoldSecurityProperties.getToken().getCacheMaximumSize())
                         .build());
     }
 
@@ -60,8 +60,8 @@ public class SecurityStarterAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public JwtUtil jwtUtil(SecurityProperties securityProperties) {
-        return new JwtUtil(securityProperties.getToken().getJwtSecret());
+    public JwtUtil jwtUtil(ScaffoldSecurityProperties scaffoldSecurityProperties) {
+        return new JwtUtil(scaffoldSecurityProperties.getToken().getJwtSecret());
     }
 
     @Bean("tokenAuthenticationFilter")
@@ -69,8 +69,8 @@ public class SecurityStarterAutoConfiguration {
     public TokenAuthenticationFilter tokenAuthenticationFilter(
             PathMatcher pathMatcher,
             TokenStore tokenStore,
-            SecurityProperties securityProperties,
+            ScaffoldSecurityProperties scaffoldSecurityProperties,
             JwtUtil jwtUtil) {
-        return new TokenAuthenticationFilter(pathMatcher, tokenStore, securityProperties, jwtUtil);
+        return new TokenAuthenticationFilter(pathMatcher, tokenStore, scaffoldSecurityProperties, jwtUtil);
     }
 }

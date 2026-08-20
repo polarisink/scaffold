@@ -6,6 +6,10 @@ import org.springframework.core.convert.converter.Converter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 字符串转枚举转换器
+ * @param <T>
+ */
 public class StringToEnumConverter<T extends IResponseEnum> implements Converter<String, T> {
     private final Map<String, T> enumMap = new HashMap<>();
 

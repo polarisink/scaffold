@@ -3,7 +3,7 @@ package com.scaffold.base.util;
 import java.util.Collection;
 
 /**
- * 分页查询返回对象
+ * 通用分页查询返回对象
  *
  * @param records 数据记录
  * @param pages   总页数

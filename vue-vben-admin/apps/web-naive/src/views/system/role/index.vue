@@ -223,6 +223,7 @@ onMounted(async () => {
           v-model:page="query.pageNo"
           v-model:page-size="query.pageSize"
           :item-count="total"
+          :prefix="({ itemCount }) => `共 ${itemCount} 条`"
           show-size-picker
           :page-sizes="[10, 20, 50]"
           @update:page="load"

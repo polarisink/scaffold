@@ -19,11 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final WebProperties webProperties;
+    private final ScaffoldWebProperties scaffoldWebProperties;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        WebProperties.Cors cors = webProperties.getCors();
+        ScaffoldWebProperties.Cors cors = scaffoldWebProperties.cors();
         if (!cors.isEnabled()) {
             log.info("web cors is disabled by default");
             return;

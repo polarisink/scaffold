@@ -58,6 +58,14 @@ class CodeArchiveGeneratorTest {
                 "vue-vben-admin/apps/web-naive/src/views/system/demo/index.vue");
         assertThat(entries.get("scaffold-biz/src/main/java/com/scaffold/system/demo/Demo.java"))
                 .contains("class Demo");
+        assertThat(entries.get("vue-vben-admin/apps/web-naive/src/api/system/demo.ts"))
+                .contains("pageDemo", "PageResponse<Demo>", "/page");
+        assertThat(entries.get("vue-vben-admin/apps/web-naive/src/views/system/demo/index.vue"))
+                .contains("<NPagination", ":item-count=\"total\"", "共 ${itemCount} 条");
+        assertThat(entries.get("vue-vben-admin/apps/web-naive/src/views/system/demo/index.ele.vue"))
+                .contains("<ElPagination", "layout=\"total, sizes, prev, pager, next, jumper\"");
+        assertThat(entries.get("vue-vben-admin/apps/web-naive/src/views/system/demo/index.antd.vue"))
+                .contains("<APagination", ":show-total=\"(count: number) => `共 ${count} 条`\"");
     }
 
     private Map<String, String> unzip(byte[] archive) throws Exception {

@@ -6,7 +6,7 @@ import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.util.ResponseUtil;
 import com.scaffold.security.vo.AuthCodeEnum;
 import com.scaffold.security.vo.PayloadDTO;
-import com.scaffold.security.vo.SecurityProperties;
+import com.scaffold.security.vo.ScaffoldSecurityProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,13 +30,13 @@ import static com.scaffold.security.util.JwtUtil.getRealToken;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final PathMatcher pathMatcher;
     private final TokenStore tokenStore;
-    private final SecurityProperties securityProperties;
+    private final ScaffoldSecurityProperties scaffoldSecurityProperties;
     private final JwtUtil jwtUtil;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String url = request.getRequestURI();
-        for (String path : securityProperties.getIgnoreList()) {
+        for (String path : scaffoldSecurityProperties.getIgnoreList()) {
             if (pathMatcher.match(path, url)) {
                 return true;
             }

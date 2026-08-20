@@ -32,8 +32,8 @@ public class ScaffoldAiAutoConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        if (properties.getSecurity().isEnabled()) {
-            registry.addInterceptor(new AiApiKeyInterceptor(properties.getSecurity())).addPathPatterns("/api/ai/**");
+        if (properties.security().isEnabled()) {
+            registry.addInterceptor(new AiApiKeyInterceptor(properties.security())).addPathPatterns("/api/ai/**");
         }
     }
 
@@ -51,7 +51,7 @@ public class ScaffoldAiAutoConfiguration implements WebMvcConfigurer {
     @ConditionalOnMissingBean
     public ChatMemory chatMemory(ScaffoldAiProperties properties) {
         return MessageWindowChatMemory.builder().chatMemoryRepository(new InMemoryChatMemoryRepository())
-                .maxMessages(properties.getMemoryMaxMessages()).build();
+                .maxMessages(properties.memoryMaxMessages()).build();
     }
 
     @Bean

@@ -22,7 +22,7 @@ class WebStarterAutoConfigurationTest {
         contextRunner.run(context -> {
             assertThat(context).hasSingleBean(WebConfig.class);
             assertThat(context).hasSingleBean(GlobalExceptionHandler.class);
-            assertThat(context).hasSingleBean(WebProperties.class);
+            assertThat(context).hasSingleBean(ScaffoldWebProperties.class);
             assertThat(context).hasSingleBean(RequestLogFilter.class);
             assertThat(context).hasSingleBean(FilterRegistrationBean.class);
             assertThat(context).hasSingleBean(ObjectMapper.class);
@@ -80,7 +80,7 @@ class WebStarterAutoConfigurationTest {
                         "scaffold.web.request-log.exclude-path-patterns[0]=/actuator/**"
                 )
                 .run(context -> {
-                    WebProperties.RequestLog requestLog = context.getBean(WebProperties.class).getRequestLog();
+                    ScaffoldWebProperties.RequestLog requestLog = context.getBean(ScaffoldWebProperties.class).requestLog();
                     assertThat(requestLog.getSlowThresholdMillis()).isEqualTo(500);
                     assertThat(requestLog.getMaxPayloadLength()).isEqualTo(2048);
                     assertThat(requestLog.getExcludePathPatterns()).containsExactly("/actuator/**");
@@ -96,10 +96,10 @@ class WebStarterAutoConfigurationTest {
                         "scaffold.web.cors.allowed-origin-patterns[0]=https://*.example.com"
                 )
                 .run(context -> {
-                    WebProperties properties = context.getBean(WebProperties.class);
-                    assertThat(properties.getCors().isEnabled()).isTrue();
-                    assertThat(properties.getCors().getPathPattern()).isEqualTo("/api/**");
-                    assertThat(properties.getCors().getAllowedOriginPatterns()).contains("https://*.example.com");
+                    ScaffoldWebProperties properties = context.getBean(ScaffoldWebProperties.class);
+                    assertThat(properties.cors().isEnabled()).isTrue();
+                    assertThat(properties.cors().getPathPattern()).isEqualTo("/api/**");
+                    assertThat(properties.cors().getAllowedOriginPatterns()).contains("https://*.example.com");
                 });
     }
 
@@ -112,7 +112,7 @@ class WebStarterAutoConfigurationTest {
                         "scaffold.web.response.raw-body-path-patterns[0]=/internal/**"
                 )
                 .run(context -> {
-                    WebProperties.Response response = context.getBean(WebProperties.class).getResponse();
+                    ScaffoldWebProperties.Response response = context.getBean(ScaffoldWebProperties.class).response();
                     assertThat(response.getServerErrorMessage()).isEqualTo("自定义错误消息");
                     assertThat(response.getIgnoredClassNamePrefixes()).containsExactly("com.example.raw");
                     assertThat(response.getRawBodyPathPatterns()).containsExactly("/internal/**");
@@ -122,7 +122,7 @@ class WebStarterAutoConfigurationTest {
     @Test
     void shouldKeepResponseDefaults() {
         contextRunner.run(context -> {
-            WebProperties.Response response = context.getBean(WebProperties.class).getResponse();
+            ScaffoldWebProperties.Response response = context.getBean(ScaffoldWebProperties.class).response();
             assertThat(response.getServerErrorMessage()).isEqualTo("服务器或网络开小差了，请联系管理员");
             assertThat(response.getIgnoredClassNamePrefixes())
                     .contains("org.springdoc.webmvc", "org.springframework.boot.actuate", "de.codecentric.boot.admin");

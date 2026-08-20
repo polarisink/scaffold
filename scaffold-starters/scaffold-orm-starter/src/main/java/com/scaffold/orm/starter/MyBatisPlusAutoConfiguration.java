@@ -7,23 +7,38 @@ import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.MybatisMapWrapperFactory;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.scaffold.orm.MysqlInjector;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
+@EnableConfigurationProperties(ScaffoldOrmProperties.class)
 public class MyBatisPlusAutoConfiguration {
 
     private final MetaObjectHandler metaObjectHandler;
+
+    private final ScaffoldOrmProperties ormProperties;
 
     @Bean
     @ConditionalOnMissingBean
     public MybatisPlusInterceptor paginationInterceptor() {
         JacksonTypeHandler.setObjectMapper(JacksonTypeHandler.getObjectMapper());
-        return new MybatisPlusInterceptor();
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        ScaffoldOrmProperties.Pagination properties = ormProperties.pagination();
+        if (properties.enabled()) {
+            PaginationInnerInterceptor pagination = properties.dbType() == null
+                    ? new PaginationInnerInterceptor()
+                    : new PaginationInnerInterceptor(properties.dbType());
+            pagination.setOverflow(properties.overflow());
+            pagination.setMaxLimit(properties.maxLimit());
+            interceptor.addInnerInterceptor(pagination);
+        }
+        return interceptor;
     }
 
     @Bean

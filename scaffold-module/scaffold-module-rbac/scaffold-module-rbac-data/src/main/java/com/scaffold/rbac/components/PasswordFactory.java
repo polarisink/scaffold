@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class PasswordFactory {
     private static final PasswordEncoder encoder = SpringUtil.getBean(PasswordEncoder.class);
-    private static final RbacProperties rbacProperties = SpringUtil.getBean(RbacProperties.class);
+    private static final ScaffoldRbacProperties rbacProperties = SpringUtil.getBean(ScaffoldRbacProperties.class);
 
     /**
      * 加密密码
@@ -32,14 +32,14 @@ public class PasswordFactory {
      * @return 重置后的密码
      */
     public static String reset(String username) {
-        String passwd = switch (rbacProperties.getReset()) {
+        String passwd = switch (rbacProperties.reset()) {
             case USERNAME -> username;
-            case TIMESTAMP -> DateTimeFormatter.ofPattern(rbacProperties.getPattern()).format(LocalDateTime.now());
+            case TIMESTAMP -> DateTimeFormatter.ofPattern(rbacProperties.pattern()).format(LocalDateTime.now());
             case USERNAME_AND_TIMESTAMP -> {
-                String timestamp = DateTimeFormatter.ofPattern(rbacProperties.getPattern()).format(LocalDateTime.now());
-                String separator = rbacProperties.getSeparator();
+                String timestamp = DateTimeFormatter.ofPattern(rbacProperties.pattern()).format(LocalDateTime.now());
+                String separator = rbacProperties.separator();
                 // 通过配置生成密码
-                yield rbacProperties.getUsernameBehind() ? timestamp + separator + username : username + separator + timestamp;
+                yield rbacProperties.usernameBehind() ? timestamp + separator + username : username + separator + timestamp;
             }
         };
         return encode(passwd);

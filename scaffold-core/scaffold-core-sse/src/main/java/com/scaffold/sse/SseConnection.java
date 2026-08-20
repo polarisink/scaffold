@@ -53,14 +53,18 @@ final class SseConnection {
     void shutdown() {
         if (active.compareAndSet(true, false)) {
             Thread currentWorker = worker;
-            if (currentWorker != null) currentWorker.interrupt();
+            if (currentWorker != null) {
+                currentWorker.interrupt();
+            }
         }
         queue.clear();
     }
 
     private void sendLoop() {
         try {
-            while (active.get()) dispatcher.accept(this, queue.take());
+            while (active.get()) {
+                dispatcher.accept(this, queue.take());
+            }
         } catch (InterruptedException ignored) {
             Thread.currentThread().interrupt();
         }

@@ -25,13 +25,13 @@ public class AiChatService {
         this.properties = properties;
         List<Advisor> advisors = new ArrayList<>();
         advisors.add(MessageChatMemoryAdvisor.builder(memory).build());
-        if (properties.isAdvisorLoggingEnabled()) {
+        if (properties.advisorLoggingEnabled()) {
             advisors.add(new SimpleLoggerAdvisor());
         }
-        if (!properties.getSafeGuardWords().isEmpty()) {
-            advisors.add(SafeGuardAdvisor.builder().sensitiveWords(properties.getSafeGuardWords()).build());
+        if (!properties.safeGuardWords().isEmpty()) {
+            advisors.add(SafeGuardAdvisor.builder().sensitiveWords(properties.safeGuardWords()).build());
         }
-        this.chatClient = builder.defaultSystem(properties.getSystemPrompt())
+        this.chatClient = builder.defaultSystem(properties.systemPrompt())
                 .defaultAdvisors(advisors.toArray(Advisor[]::new))
                 .defaultToolCallbacks(registry)
                 .build();
@@ -70,7 +70,7 @@ public class AiChatService {
 
     private ChatClient.ChatClientRequestSpec request(String conversationId, String systemPrompt) {
         String id = conversationId == null || conversationId.isBlank()
-                ? properties.getDefaultConversationId() : conversationId;
+                ? properties.defaultConversationId() : conversationId;
         ChatClient.ChatClientRequestSpec request = chatClient.prompt()
                 .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, id));
         return systemPrompt == null || systemPrompt.isBlank() ? request : request.system(systemPrompt);

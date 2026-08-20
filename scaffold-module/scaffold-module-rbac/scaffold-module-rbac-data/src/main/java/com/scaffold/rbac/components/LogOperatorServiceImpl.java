@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class LogOperatorServiceImpl implements IOperatorGetService {
-    private final RbacProperties rbacProperties;
+    private final ScaffoldRbacProperties rbacProperties;
     private final RbacCurrentUser rbacCurrentUser;
 
     @Override
     public Operator getUser() {
         Long userId = rbacCurrentUser.userId();
-        return userId == null ? new Operator(rbacProperties.getAnonymousUsername()) : new Operator(userId.toString());
+        return userId == null ? new Operator(rbacProperties.anonymousUsername()) : new Operator(userId.toString());
     }
 }

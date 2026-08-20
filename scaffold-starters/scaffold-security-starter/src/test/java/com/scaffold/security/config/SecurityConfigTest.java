@@ -3,7 +3,7 @@ package com.scaffold.security.config;
 import com.scaffold.security.util.JwtUtil;
 import com.scaffold.security.vo.LoginUser;
 import com.scaffold.security.vo.PayloadDTO;
-import com.scaffold.security.vo.SecurityProperties;
+import com.scaffold.security.vo.ScaffoldSecurityProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -37,7 +37,7 @@ class SecurityConfigTest {
 
     @Test
     void onlyLoginEndpointIsIgnoredByDefault() {
-        SecurityProperties properties = new SecurityProperties(null, null, null);
+        ScaffoldSecurityProperties properties = new ScaffoldSecurityProperties(null, null, null);
 
         assertThat(properties.getIgnoreList())
                 .contains("/auth/login")
@@ -49,7 +49,7 @@ class SecurityConfigTest {
         SecurityConfig securityConfig = new SecurityConfig(
                 mock(UserDetailsService.class),
                 mock(TokenAuthenticationFilter.class),
-                new SecurityProperties(null, null, null));
+                new ScaffoldSecurityProperties(null, null, null));
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         securityConfig.authenticationEntryPoint().commence(
@@ -71,7 +71,7 @@ class SecurityConfigTest {
         JwtUtil jwtUtil = new JwtUtil("0123456789abcdef0123456789abcdef");
         String token = jwtUtil.generateToken(PayloadDTO.of(1L, "tester", List.of("USER")));
         TokenAuthenticationFilter filter = new TokenAuthenticationFilter(
-                new AntPathMatcher(), tokenStore, new SecurityProperties(null, null, null), jwtUtil);
+                new AntPathMatcher(), tokenStore, new ScaffoldSecurityProperties(null, null, null), jwtUtil);
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/user/context");
         request.addHeader("Authorization", "Bearer " + token);
         MockHttpServletResponse response = new MockHttpServletResponse();
