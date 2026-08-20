@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,7 +25,12 @@ public class BaseAuditable implements Serializable {
     public static final String GMT_CREATED = "gmtCreated";
     public static final String CREATED_BY = "createdBy";
     public static final String MODIFIED_BY = "modifiedBy";
-
+    public static final Set<String> AUDITABLE_FIELDS = Set.of(
+            BaseAuditable.GMT_MODIFIED,
+            BaseAuditable.GMT_CREATED,
+            BaseAuditable.CREATED_BY,
+            BaseAuditable.MODIFIED_BY
+    );
     /**
      * 修改时间
      */

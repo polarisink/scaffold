@@ -2,6 +2,7 @@ package com.scaffold.orm;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
@@ -13,6 +14,14 @@ import java.util.List;
  * @param <T> 实体泛型
  */
 public interface MyBaseMapper<T> extends BaseMapper<T> {
+
+    /**
+     * 根据 ID 更新固定的那几个字段(但是不包含逻辑删除)
+     * @param entity 实体
+     * @return 更新结果
+     */
+    int alwaysUpdateSomeColumnById(@Param(Constants.ENTITY) T entity);
+
     /**
      * 批量插入
      *
