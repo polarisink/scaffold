@@ -1,65 +1,31 @@
 <script setup lang="ts">
-import type { BasicOption } from '@vben/types';
+import { computed } from 'vue';
 
-import type { VbenFormSchema } from '#/adapter/form';
+import { useUserStore } from '@vben/stores';
 
-import { computed, onMounted, ref } from 'vue';
-
-import { ProfileBaseSetting } from '@vben/common-ui';
-
-import { getUserInfoApi } from '#/api';
-
-const profileBaseSettingRef = ref();
-
-const MOCK_ROLES_OPTIONS: BasicOption[] = [
-  {
-    label: '管理员',
-    value: 'super',
-  },
-  {
-    label: '用户',
-    value: 'user',
-  },
-  {
-    label: '测试',
-    value: 'test',
-  },
-];
-
-const formSchema = computed((): VbenFormSchema[] => {
-  return [
-    {
-      fieldName: 'realName',
-      component: 'Input',
-      label: '姓名',
-    },
-    {
-      fieldName: 'username',
-      component: 'Input',
-      label: '用户名',
-    },
-    {
-      fieldName: 'roles',
-      component: 'Select',
-      componentProps: {
-        mode: 'tags',
-        options: MOCK_ROLES_OPTIONS,
-      },
-      label: '角色',
-    },
-    {
-      fieldName: 'introduction',
-      component: 'Textarea',
-      label: '个人简介',
-    },
-  ];
-});
-
-onMounted(async () => {
-  const data = await getUserInfoApi();
-  profileBaseSettingRef.value.getFormApi().setValues(data);
-});
+const userStore = useUserStore();
+const userInfo = computed(() => userStore.userInfo);
+const roleNames = computed(() => userInfo.value?.roles?.join('、') || '无');
 </script>
 <template>
-  <ProfileBaseSetting ref="profileBaseSettingRef" :form-schema="formSchema" />
+  <div class="max-w-3xl">
+    <h2 class="mb-6 text-lg font-semibold">账户信息</h2>
+    <dl class="divide-y rounded-lg border">
+      <div class="grid grid-cols-[8rem_1fr] gap-4 px-5 py-4">
+        <dt class="text-muted-foreground">用户名</dt>
+        <dd>{{ userInfo?.username || '-' }}</dd>
+      </div>
+      <div class="grid grid-cols-[8rem_1fr] gap-4 px-5 py-4">
+        <dt class="text-muted-foreground">所属组织</dt>
+        <dd>{{ userInfo?.desc || '未分配' }}</dd>
+      </div>
+      <div class="grid grid-cols-[8rem_1fr] gap-4 px-5 py-4">
+        <dt class="text-muted-foreground">当前角色</dt>
+        <dd>{{ roleNames }}</dd>
+      </div>
+    </dl>
+    <p class="mt-4 text-sm text-muted-foreground">
+      账户角色和权限由系统管理员统一配置，个人中心仅提供查看功能。
+    </p>
+  </div>
 </template>

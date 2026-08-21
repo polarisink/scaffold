@@ -42,12 +42,12 @@ const tabsValue = defineModel<string>('modelValue');
         </div>
         <Separator class="my-4" />
         <Tabs v-model="tabsValue" orientation="vertical" class="m-4">
-          <TabsList class="grid w-full grid-cols-1 bg-card">
+          <TabsList class="grid h-auto w-full grid-cols-1 gap-2 bg-card p-0">
             <TabsTrigger
               v-for="tab in tabs"
               :key="tab.value"
               :value="tab.value"
-              class="h-12 justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              class="h-12 w-full justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               {{ tab.label }}
             </TabsTrigger>

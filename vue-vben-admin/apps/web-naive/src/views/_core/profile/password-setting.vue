@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Recordable } from '@vben/types';
+
 import type { VbenFormSchema } from '#/adapter/form';
 
 import { computed } from 'vue';
@@ -6,6 +8,11 @@ import { computed } from 'vue';
 import { ProfilePasswordSetting, z } from '@vben/common-ui';
 
 import { message } from '#/adapter/naive';
+import { updatePasswordApi } from '#/api';
+import { useAuthStore } from '#/store';
+
+const authStore = useAuthStore();
+let submitting = false;
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
@@ -16,6 +23,7 @@ const formSchema = computed((): VbenFormSchema[] => {
       componentProps: {
         placeholder: '请输入旧密码',
       },
+      rules: z.string().min(1, { message: '请输入旧密码' }),
     },
     {
       fieldName: 'newPassword',
@@ -24,6 +32,18 @@ const formSchema = computed((): VbenFormSchema[] => {
       componentProps: {
         passwordStrength: true,
         placeholder: '请输入新密码',
+      },
+      dependencies: {
+        rules(values) {
+          const { oldPassword } = values;
+          return z
+            .string({ required_error: '请输入新密码' })
+            .min(1, { message: '请输入新密码' })
+            .refine((value) => value !== oldPassword, {
+              message: '新密码不能与旧密码相同',
+            });
+        },
+        triggerFields: ['oldPassword'],
       },
     },
     {
@@ -50,8 +70,21 @@ const formSchema = computed((): VbenFormSchema[] => {
   ];
 });
 
-function handleSubmit() {
-  message.success('密码修改成功');
+async function handleSubmit(values: Recordable<any>) {
+  if (submitting) {
+    return;
+  }
+  submitting = true;
+  try {
+    await updatePasswordApi({
+      oldPasswd: values.oldPassword,
+      newPasswd: values.newPassword,
+    });
+    message.success('密码修改成功，请重新登录');
+    await authStore.logout();
+  } finally {
+    submitting = false;
+  }
 }
 </script>
 <template>

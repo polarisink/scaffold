@@ -2,6 +2,11 @@ import type { UserInfo } from '@vben/types';
 
 import { requestClient } from '#/api/request';
 
+export interface UpdatePasswordParams {
+  newPasswd: string;
+  oldPasswd: string;
+}
+
 export interface RbacMenu {
   children?: RbacMenu[];
   id: number;
@@ -71,4 +76,9 @@ export async function getUserInfoApi() {
     userId: String(user.id),
     username: user.username,
   } satisfies UserInfo;
+}
+
+/** 修改当前登录用户的密码 */
+export async function updatePasswordApi(data: UpdatePasswordParams) {
+  return requestClient.post('/user/passwd/update', data);
 }

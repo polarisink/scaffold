@@ -10,7 +10,6 @@ import { getCachedUserContext } from './user';
  */
 const PAGE_COMPONENT_REGISTRY: Record<string, string> = {
   '/dashboard/analytics': '/dashboard/analytics/index',
-  '/dashboard/workspace': '/dashboard/workspace/index',
   '/system/menu': '/system/menu/index',
   '/system/org': '/system/org/index',
   '/system/config': '/system/config/index',
