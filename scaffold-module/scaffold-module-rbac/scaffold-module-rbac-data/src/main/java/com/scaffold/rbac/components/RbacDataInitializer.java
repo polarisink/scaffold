@@ -54,6 +54,7 @@ public class RbacDataInitializer implements ApplicationRunner {
         RbacSeedData seedData = loadSeedData();
         // 顺序不可随意调整：菜单依赖父菜单，用户依赖组织，授权关系依赖用户/角色/菜单。
         SysOrg headquarters = initHeadquarters(seedData.org());
+        removeObsoleteMenus(seedData.removedMenuPaths());
         initMenus(seedData.menus());
         SysRole adminRole = initAdminRole(seedData.adminRole());
         SysUser adminUser = initAdminUser(headquarters, seedData.adminUser());
@@ -88,7 +89,22 @@ public class RbacDataInitializer implements ApplicationRunner {
         Objects.requireNonNull(seedData.adminRole(), "RBAC init adminRole seed data is required");
         Objects.requireNonNull(seedData.adminUser(), "RBAC init adminUser seed data is required");
         Objects.requireNonNull(seedData.menus(), "RBAC init menus seed data is required");
+        Objects.requireNonNull(seedData.removedMenuPaths(), "RBAC removed menu paths are required");
         return seedData;
+    }
+
+    private void removeObsoleteMenus(List<String> removedMenuPaths) {
+        for (String path : removedMenuPaths) {
+            sysMenuMapper.findByPath(path).ifPresent(menu -> {
+                List<Long> roleIds = sysRoleMenuMapper.selectRoleIdCollByMenuId(menu.getId());
+                sysRoleMenuMapper.deleteByMenuId(menu.getId());
+                sysMenuMapper.deleteById(menu.getId());
+                roleIds.forEach(rbacCache::roleClear);
+                sysUserRoleMapper.selectUserIdByRoleIdIn(roleIds).forEach(rbacCache::userClear);
+                rbacCache.clearMenuCache();
+                log.info("removed obsolete RBAC menu: {}", path);
+            });
+        }
     }
 
     private SysOrg initHeadquarters(OrgSeed seed) {
@@ -177,6 +193,7 @@ public class RbacDataInitializer implements ApplicationRunner {
     private record RbacSeedData(OrgSeed org,
                                 RoleSeed adminRole,
                                 UserSeed adminUser,
+                                List<String> removedMenuPaths,
                                 List<MenuSeed> menus) {
     }
 

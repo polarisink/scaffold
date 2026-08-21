@@ -19,6 +19,11 @@ import java.util.stream.Collectors;
  */
 @Mapper
 public interface SysRoleMenuMapper extends MyBaseMapper<SysRoleMenu> {
+
+    default void deleteByMenuId(Long menuId) {
+        delete(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getMenuId, menuId));
+    }
+
     /**
      * 通过角色id和菜单id删除
      *

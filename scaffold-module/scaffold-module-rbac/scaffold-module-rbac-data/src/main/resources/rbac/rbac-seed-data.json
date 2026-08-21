@@ -14,6 +14,9 @@
     "username": "admin",
     "rawPassword": "admin"
   },
+  "removedMenuPaths": [
+    "/dashboard/workspace"
+  ],
   "menus": [
     {
       "menuName": "仪表盘",
@@ -37,15 +40,6 @@
       "menuUrl": "dashboard:analytics:view",
       "menuIconUrl": "lucide:area-chart",
       "sortNo": 0
-    },
-    {
-      "parentPath": "/dashboard",
-      "menuName": "工作台",
-      "path": "/dashboard/workspace",
-      "menuType": 1,
-      "menuUrl": "dashboard:workspace:view",
-      "menuIconUrl": "carbon:workspace",
-      "sortNo": 10
     },
     {
       "parentPath": "/system",
