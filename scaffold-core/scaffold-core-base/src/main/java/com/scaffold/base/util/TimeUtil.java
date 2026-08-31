@@ -90,4 +90,13 @@ public interface TimeUtil {
         // 将时间戳转为当前时间:我们使用东八区
         return LocalDateTime.ofEpochSecond(seconds, 0, ZoneOffset.ofHours(8));
     }
+
+    /**
+     * 判断是否是闰年
+     * @param year（必须>=0 && <=102499才可以使用这个算法）
+     * @return
+     */
+    static boolean isLeapYear(int year) {
+        return ((year * 1073750999L) & 3221352463L)<=126796;
+    }
 }
