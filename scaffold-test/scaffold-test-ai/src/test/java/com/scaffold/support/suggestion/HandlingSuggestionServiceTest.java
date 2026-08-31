@@ -1,6 +1,6 @@
 package com.scaffold.support.suggestion;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import com.scaffold.ai.chat.AiChatService;
 import com.scaffold.ai.prompt.AiPromptMetadata;
 import com.scaffold.ai.prompt.AiPromptTemplate;
@@ -55,7 +55,7 @@ class HandlingSuggestionServiceTest {
             return entity;
         });
         HandlingSuggestionService service = new HandlingSuggestionService(chat, prompt(), workOrders, orders,
-                retriever, repository, new ObjectMapper().findAndRegisterModules());
+                retriever, repository, JsonMapper.builder().findAndAddModules().build());
 
         HandlingSuggestion suggestion = service.generate(42L);
 
@@ -85,7 +85,7 @@ class HandlingSuggestionServiceTest {
             return entity;
         });
         HandlingSuggestionService service = new HandlingSuggestionService(chat, prompt(), workOrders, orders,
-                retriever, repository, new ObjectMapper().findAndRegisterModules());
+                retriever, repository, JsonMapper.builder().findAndAddModules().build());
 
         HandlingSuggestion suggestion = service.generate(42L);
 

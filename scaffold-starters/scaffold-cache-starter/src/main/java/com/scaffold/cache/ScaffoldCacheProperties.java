@@ -2,7 +2,7 @@ package com.scaffold.cache;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;

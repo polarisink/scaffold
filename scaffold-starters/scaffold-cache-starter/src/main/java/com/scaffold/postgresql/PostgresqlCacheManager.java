@@ -23,7 +23,7 @@ public class PostgresqlCacheManager implements CacheManager {
 
     public PostgresqlCacheManager(PostgresqlCacheStore cacheStore,
                                   ScaffoldCacheProperties.Postgresql properties) {
-        this(cacheStore, properties, new PostgresqlCacheSerializer(new com.fasterxml.jackson.databind.ObjectMapper()));
+        this(cacheStore, properties, new PostgresqlCacheSerializer(tools.jackson.databind.json.JsonMapper.builder().build()));
     }
 
     public PostgresqlCacheManager(PostgresqlCacheStore cacheStore,

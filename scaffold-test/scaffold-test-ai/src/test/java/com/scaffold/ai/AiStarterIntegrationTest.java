@@ -4,9 +4,9 @@ import com.scaffold.support.knowledge.retrieval.KnowledgeRetriever;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** 验证 AI Starter 在完整 Spring Boot 环境中的装配和公开接口。 */
@@ -16,7 +16,7 @@ class AiStarterIntegrationTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @MockBean
+    @MockitoBean
     private KnowledgeRetriever knowledgeRetriever;
 
     @Test

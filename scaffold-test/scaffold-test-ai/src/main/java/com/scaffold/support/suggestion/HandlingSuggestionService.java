@@ -1,8 +1,7 @@
 package com.scaffold.support.suggestion;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 import com.scaffold.ai.chat.AiChatService;
 import com.scaffold.ai.prompt.AiPromptTemplate;
 import com.scaffold.ai.prompt.RenderedAiPrompt;
@@ -38,20 +37,20 @@ public class HandlingSuggestionService {
     private final OrderService orderService;
     private final KnowledgeRetriever knowledgeRetriever;
     private final HandlingSuggestionRepository repository;
-    private final ObjectMapper objectMapper;
+    private final JsonMapper jsonMapper;
 
     public HandlingSuggestionService(AiChatService aiChatService,
                                      @Qualifier("handlingSuggestionPrompt") AiPromptTemplate promptTemplate,
                                      WorkOrderService workOrderService, OrderService orderService,
                                      KnowledgeRetriever knowledgeRetriever, HandlingSuggestionRepository repository,
-                                     ObjectMapper objectMapper) {
+                                     JsonMapper jsonMapper) {
         this.aiChatService = aiChatService;
         this.promptTemplate = promptTemplate;
         this.workOrderService = workOrderService;
         this.orderService = orderService;
         this.knowledgeRetriever = knowledgeRetriever;
         this.repository = repository;
-        this.objectMapper = objectMapper;
+        this.jsonMapper = jsonMapper;
     }
 
     /**
@@ -158,24 +157,16 @@ public class HandlingSuggestionService {
     }
 
     private String writeJson(Object value) {
-        try {
-            return objectMapper.writeValueAsString(value);
-        } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("无法序列化处理建议证据", exception);
-        }
+        return jsonMapper.writeValueAsString(value);
     }
 
     private HandlingSuggestion toDomain(HandlingSuggestionEntity entity) {
-        try {
-            List<KnowledgeSource> sources = objectMapper.readValue(entity.getSourcesJson(), new TypeReference<>() {
-            });
-            List<HandlingEvidence> evidence = objectMapper.readValue(entity.getEvidenceJson(), new TypeReference<>() {
-            });
-            return new HandlingSuggestion(entity.getId(), entity.getWorkOrderId(), entity.getDiagnosis(),
-                    List.copyOf(entity.getRecommendedActions()), sources, evidence, entity.getRiskLevel(),
-                    entity.getManualReviewRequired(), entity.getGmtCreated().toInstant(ZoneOffset.UTC));
-        } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("无法读取处理建议证据", exception);
-        }
+        List<KnowledgeSource> sources = jsonMapper.readValue(entity.getSourcesJson(), new TypeReference<>() {
+        });
+        List<HandlingEvidence> evidence = jsonMapper.readValue(entity.getEvidenceJson(), new TypeReference<>() {
+        });
+        return new HandlingSuggestion(entity.getId(), entity.getWorkOrderId(), entity.getDiagnosis(),
+                List.copyOf(entity.getRecommendedActions()), sources, evidence, entity.getRiskLevel(),
+                entity.getManualReviewRequired(), entity.getGmtCreated().toInstant(ZoneOffset.UTC));
     }
 }

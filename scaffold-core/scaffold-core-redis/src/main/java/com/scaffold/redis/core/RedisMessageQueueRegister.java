@@ -1,8 +1,8 @@
 package com.scaffold.redis.core;
 
 import cn.hutool.extra.spring.SpringUtil;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.type.TypeFactory;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.type.TypeFactory;
 import com.scaffold.base.util.JsonUtil;
 import com.scaffold.redis.domain.RedisListenerMethod;
 import com.scaffold.redis.domain.RedisMessage;

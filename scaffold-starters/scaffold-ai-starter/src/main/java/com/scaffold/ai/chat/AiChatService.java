@@ -18,11 +18,13 @@ import java.util.Map;
 public class AiChatService {
 
     private final ChatClient chatClient;
+    private final AiToolRegistry toolRegistry;
     private final ScaffoldAiProperties properties;
 
     public AiChatService(ChatClient.Builder builder, AiToolRegistry registry,
                          ChatMemory memory, ScaffoldAiProperties properties) {
         this.properties = properties;
+        this.toolRegistry = registry;
         List<Advisor> advisors = new ArrayList<>();
         advisors.add(MessageChatMemoryAdvisor.builder(memory).build());
         if (properties.advisorLoggingEnabled()) {
@@ -33,7 +35,7 @@ public class AiChatService {
         }
         this.chatClient = builder.defaultSystem(properties.systemPrompt())
                 .defaultAdvisors(advisors.toArray(Advisor[]::new))
-                .defaultToolCallbacks(registry)
+                .defaultToolCallbacks(registry.getToolCallbacks())
                 .build();
     }
 
@@ -51,7 +53,7 @@ public class AiChatService {
         ChatClient.ChatClientRequestSpec request = request(conversationId, systemPrompt)
                 .toolContext(toolContext == null ? Map.of() : Map.copyOf(toolContext));
         if (toolNames != null && toolNames.length > 0) {
-            request = request.toolNames(toolNames);
+            request = request.toolCallbacks(toolRegistry.select(toolNames));
         }
         return request.user(message).call().content();
     }

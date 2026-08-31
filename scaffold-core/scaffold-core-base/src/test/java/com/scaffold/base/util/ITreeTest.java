@@ -12,6 +12,30 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ITreeTest {
 
     @Test
+    void shouldFlattenTreeOnceInBreadthFirstOrder() {
+        TestNode root = new TestNode(1L, 0L);
+        TestNode firstChild = new TestNode(2L, 1L);
+        TestNode secondChild = new TestNode(3L, 1L);
+        TestNode grandchild = new TestNode(4L, 2L);
+        root.setChildren(List.of(firstChild, secondChild));
+        firstChild.setChildren(List.of(grandchild));
+
+        List<TestNode> flattened = ITree.flatten(List.of(root));
+
+        assertThat(flattened).containsExactly(root, firstChild, secondChild, grandchild);
+    }
+
+    @Test
+    void shouldIgnoreRepeatedNodesWhenFlatteningCyclicTree() {
+        TestNode root = new TestNode(1L, 0L);
+        TestNode child = new TestNode(2L, 1L);
+        root.setChildren(List.of(child));
+        child.setChildren(List.of(root));
+
+        assertThat(ITree.flatten(List.of(root))).containsExactly(root, child);
+    }
+
+    @Test
     void shouldBuildTreeWithoutComparator() {
         TestNode root = new TestNode(1L, 0L);
         TestNode child = new TestNode(2L, 1L);

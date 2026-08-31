@@ -33,6 +33,9 @@ catalogs:
     '@faker-js/faker':
       specifier: ^10.4.0
       version: 10.5.0
+    '@iconify-json/lucide':
+      specifier: ^1.2.76
+      version: 1.2.127
     '@iconify/json':
       specifier: ^2.2.487
       version: 2.2.488
@@ -1735,6 +1738,9 @@ importers:
 
   packages/icons:
     dependencies:
+      '@iconify-json/lucide':
+        specifier: 'catalog:'
+        version: 1.2.127
       '@vben-core/icons':
         specifier: workspace:*
         version: link:../@core/base/icons
@@ -3673,6 +3679,9 @@ packages:
 
   '@iconify-json/logos@1.2.11':
     resolution: {integrity: sha512-fOo4pGEatuyuCFNL+cwquYMa2Im0oJHRHV7lt/Qqs5Ode/lPImHCQcfTtPzZj7qYMPb/h8YHN3TG54uEowrjNQ==}
+
+  '@iconify-json/lucide@1.2.127':
+    resolution: {integrity: sha512-7KuCCpkly00kefna4wEnCr8l2HFRkbn4mD4zRib8wCSbrBmnR/l57ExpU6j5jv/Bo+qHpWuHpDtcqceQ0ptArw==}
 
   '@iconify-json/octicon@1.2.28':
     resolution: {integrity: sha512-M6Pj2CclE2kcen6mFd43t9f/BFvVMKYvIdPZj1SD4ocZevgplVf7t98nlVtT8bNk5tawFPT7wtqLl62zq6KJmw==}
@@ -13018,6 +13027,10 @@ snapshots:
   '@humanwhocodes/retry@0.4.3': {}
 
   '@iconify-json/logos@1.2.11':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/lucide@1.2.127':
     dependencies:
       '@iconify/types': 2.0.0
 

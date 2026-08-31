@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.MybatisMapWrapperFactory;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.scaffold.orm.MysqlInjector;
@@ -27,7 +26,6 @@ public class MyBatisPlusAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public MybatisPlusInterceptor paginationInterceptor() {
-        JacksonTypeHandler.setObjectMapper(JacksonTypeHandler.getObjectMapper());
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         ScaffoldOrmProperties.Pagination properties = ormProperties.pagination();
         if (properties.enabled()) {

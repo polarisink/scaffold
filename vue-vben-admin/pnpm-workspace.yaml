@@ -48,6 +48,7 @@ catalog:
   '@eslint-community/eslint-plugin-eslint-comments': ^4.7.2
   '@eslint/js': ^10.0.1
   '@faker-js/faker': ^10.4.0
+  '@iconify-json/lucide': ^1.2.76
   '@iconify/json': ^2.2.487
   '@iconify/tailwind4': ^1.2.3
   '@iconify/vue': ^5.0.1

@@ -2,7 +2,7 @@ package com.scaffold.bizlog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfiguration;
+import org.springframework.boot.webflux.autoconfigure.WebFluxAutoConfiguration;
 
 @SpringBootApplication(exclude = WebFluxAutoConfiguration.class)
 public class HttpInterfaceApplication {

@@ -23,11 +23,10 @@
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <rversion>1.0-SNAPSHOT</rversion>
         <!--   spring相关     -->
-        <spring-boot-maven-plugin.version>3.5.15</spring-boot-maven-plugin.version>
+        <spring-boot-maven-plugin.version>4.1.1</spring-boot-maven-plugin.version>
         <spring-boot-dependencies.version>4.1.1</spring-boot-dependencies.version>
         <spring-cloud.version>2025.1.2</spring-cloud.version>
         <spring-cloud-alibaba.version>2025.1.0.0</spring-cloud-alibaba.version>
-        <spring-boot-adin-dependencies.version>3.5.15</spring-boot-adin-dependencies.version>
         <dubbo.version>3.3.6</dubbo.version>
         <!--   数据库相关     -->
         <mybatis-plus.version>3.5.17</mybatis-plus.version>
@@ -36,27 +35,18 @@
         <!--    工具    -->
         <lombok.version>1.18.30</lombok.version>
         <hutool.version>5.8.40</hutool.version>
-        <jackson.version>2.18.6</jackson.version>
         <bouncycastle.version>1.84</bouncycastle.version>
         <mapStruct.version>1.4.2.Final</mapStruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <guava.version>33.0.0-jre</guava.version>
         <redisson-starter.version>3.52.0</redisson-starter.version>
         <knife4j-swagger.version>4.5.0</knife4j-swagger.version>
-        <springdoc-openapi.version>2.8.17</springdoc-openapi.version>
+        <springdoc-openapi.version>3.1.0</springdoc-openapi.version>
         <swagger-annotations.version>2.2.47</swagger-annotations.version>
         <easy-query.version>2.0.63</easy-query.version>
         <nimbus-jose-jwt.version>10.0.2</nimbus-jose-jwt.version>
-        <!--
-            Netty 版本兼容性警告：
-            netty-socketio 2.0.14 基于 Netty 4.1 构建，因此当前将 Netty 全局固定为
-            4.1.130.Final。该配置会覆盖 Spring Boot 为所有引入此 BOM 的应用所管理的
-            Netty 版本。升级或排查 Spring Cloud Gateway、WebFlux/Reactor Netty、Vert.x、
-            Dubbo、Redisson 及其他基于 Netty 的组件前，应优先检查该全局约束。
-            当 netty-socketio 可被隔离，或升级到兼容 Spring Boot 当前 Netty 主版本的版本后，
-            建议将该覆盖迁移到 Socket.IO 专用应用或专用 BOM 中。
-        -->
-        <netty.version>4.1.130.Final</netty.version>
+        <!-- 与 Spring Boot 4.1.1 的依赖基线保持一致，避免 Reactor Netty/Gateway 版本分裂。 -->
+        <netty.version>4.2.17.Final</netty.version>
         <netty-all.version>${netty.version}</netty-all.version>
         <netty-socketio.version>2.0.14</netty-socketio.version>
         <retrofit.version>2.11.0</retrofit.version>
@@ -70,16 +60,16 @@
         <playwright.version>1.56.0</playwright.version>
         <langchain4j.version>1.11.0-beta19</langchain4j.version>
         <vertx.version>5.0.5</vertx.version>
-        <spring-boot-admin.version>3.5.7</spring-boot-admin.version>
+        <spring-boot-admin.version>4.1.2</spring-boot-admin.version>
         <okhttp.version>5.3.2</okhttp.version>
-        <sa-token.version>1.44.0</sa-token.version>
+        <sa-token.version>1.46.0</sa-token.version>
         <bizlog.version>3.0.6</bizlog.version>
         <geotools.version>35.0</geotools.version>
         <yauaa.version>7.32.0</yauaa.version>
         <spatial.version>7.4.1.Final</spatial.version>
         <jetcache.version>2.7.8</jetcache.version>
         <flatten.version>1.7.3</flatten.version>
-        <spring-ai.version>1.1.8</spring-ai.version>
+        <spring-ai.version>2.0.1</spring-ai.version>
         <graal.version>23.1.2</graal.version>
         <fesod.version>2.0.2-incubating</fesod.version>
     </properties>
@@ -214,14 +204,7 @@
                 <artifactId>scaffold-cloud-common-dependencies</artifactId>
                 <version>${rversion}</version>
             </dependency>
-            <!--安全补丁版本覆盖，避免上游 BOM 将 Jackson/Bouncy Castle 管理到存在告警的补丁线。-->
-            <dependency>
-                <groupId>com.fasterxml.jackson</groupId>
-                <artifactId>jackson-bom</artifactId>
-                <version>${jackson.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+            <!-- Jackson 3 由 Spring Boot BOM 统一管理，避免回退到 Jackson 2。 -->
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk18on</artifactId>
@@ -256,7 +239,7 @@
             <!--orm-->
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+                <artifactId>mybatis-plus-spring-boot4-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
@@ -394,7 +377,7 @@
             <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
             <dependency>
                 <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-spring-boot3-starter</artifactId>
+                <artifactId>sa-token-spring-boot4-starter</artifactId>
                 <version>${sa-token.version}</version>
             </dependency>
             <!--<dependency>
@@ -455,9 +438,9 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring-cloud-alibaba.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -469,9 +452,9 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot-dependencies.version}</version>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

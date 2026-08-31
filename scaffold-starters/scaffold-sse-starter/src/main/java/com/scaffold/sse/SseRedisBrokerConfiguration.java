@@ -1,6 +1,6 @@
 package com.scaffold.sse;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -20,22 +20,22 @@ public class SseRedisBrokerConfiguration {
 
     @Bean
     SseMessageBroker redisSseMessageBroker(StringRedisTemplate redisTemplate,
-                                           ObjectMapper objectMapper,
+                                           JsonMapper jsonMapper,
                                            ScaffoldSseProperties properties) {
-        return new RedisSseMessageBroker(redisTemplate, objectMapper, properties.redis().channel());
+        return new RedisSseMessageBroker(redisTemplate, jsonMapper, properties.redis().channel());
     }
 
     @Bean
     RedisMessageListenerContainer sseRedisMessageListenerContainer(
             RedisConnectionFactory connectionFactory,
-            ObjectMapper objectMapper,
+            JsonMapper jsonMapper,
             SseLocalDispatcher dispatcher,
             ScaffoldSseProperties properties) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.addMessageListener((message, pattern) -> {
             try {
-                SseMessage sseMessage = objectMapper.readValue(
+                SseMessage sseMessage = jsonMapper.readValue(
                         new String(message.getBody(), StandardCharsets.UTF_8), SseMessage.class);
                 dispatcher.dispatch(sseMessage);
             } catch (Exception ex) {

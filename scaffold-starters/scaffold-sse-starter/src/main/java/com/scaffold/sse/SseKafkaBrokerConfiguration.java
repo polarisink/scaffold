@@ -1,6 +1,6 @@
 package com.scaffold.sse;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -20,29 +20,29 @@ public class SseKafkaBrokerConfiguration {
 
     @Bean
     SseMessageBroker kafkaSseMessageBroker(KafkaTemplate<Object, Object> kafkaTemplate,
-                                           ObjectMapper objectMapper,
+                                           JsonMapper jsonMapper,
                                            ScaffoldSseProperties properties) {
-        return new KafkaSseMessageBroker(kafkaTemplate, objectMapper, properties.kafka().topic());
+        return new KafkaSseMessageBroker(kafkaTemplate, jsonMapper, properties.kafka().topic());
     }
 
     @Bean
     KafkaMessageListenerContainer<Object, Object> sseKafkaMessageListenerContainer(
             ConsumerFactory<Object, Object> consumerFactory,
-            ObjectMapper objectMapper,
+            JsonMapper jsonMapper,
             SseLocalDispatcher dispatcher,
             ScaffoldSseProperties properties) {
         ContainerProperties containerProperties = new ContainerProperties(properties.kafka().topic());
         containerProperties.setGroupId(properties.kafka().groupId());
         containerProperties.setMessageListener((MessageListener<Object, Object>) record ->
-                consume(record, objectMapper, dispatcher));
+                consume(record, jsonMapper, dispatcher));
         return new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
     }
 
     private static void consume(ConsumerRecord<Object, Object> record,
-                                ObjectMapper objectMapper,
+                                JsonMapper jsonMapper,
                                 SseLocalDispatcher dispatcher) {
         try {
-            SseMessage message = objectMapper.readValue(String.valueOf(record.value()), SseMessage.class);
+            SseMessage message = jsonMapper.readValue(String.valueOf(record.value()), SseMessage.class);
             dispatcher.dispatch(message);
         } catch (Exception ex) {
             throw new IllegalStateException("Failed to consume Kafka SSE message", ex);

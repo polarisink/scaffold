@@ -3,24 +3,27 @@ package com.scaffold.base.util;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.DefaultTyping;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.ext.javatime.deser.LocalDateDeserializer;
+import tools.jackson.databind.ext.javatime.deser.LocalDateTimeDeserializer;
+import tools.jackson.databind.ext.javatime.deser.LocalTimeDeserializer;
+import tools.jackson.databind.ext.javatime.ser.LocalDateSerializer;
+import tools.jackson.databind.ext.javatime.ser.LocalDateTimeSerializer;
+import tools.jackson.databind.ext.javatime.ser.LocalTimeSerializer;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import tools.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.ser.std.ToStringSerializer;
 import com.scaffold.base.constant.GlobalConstant;
-import com.scaffold.base.exception.BaseException;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
@@ -33,65 +36,61 @@ import java.time.format.DateTimeFormatter;
  *
  * @author lqsgo
  */
-@Slf4j
 @Component
 public class JsonUtil {
     @Getter
-    private static final ObjectMapper mapper = objectMapper();
-    private static final ObjectMapper redisMapper = createRedisObjectMapper();
+    private static final JsonMapper mapper = jsonMapper();
+    private static final JsonMapper redisMapper = createRedisJsonMapper();
 
     /**
      * java8 时间模块
      *
      * @return 模块
      */
-    public static JavaTimeModule getJavaTimeModule() {
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
+    public static SimpleModule javaTimeModule() {
+        SimpleModule javaTimeModule = new SimpleModule("scaffold-java-time");
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(GlobalConstant.DEFAULT_DATE_TIME_FORMAT)));
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(GlobalConstant.DEFAULT_DATE_FORMAT)));
         javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(GlobalConstant.DEFAULT_TIME_FORMAT)));
         javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(GlobalConstant.DEFAULT_DATE_TIME_FORMAT)));
         javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(GlobalConstant.DEFAULT_DATE_FORMAT)));
         javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(GlobalConstant.DEFAULT_TIME_FORMAT)));
-        // javaTimeModule只能手动注册，参考https://github.com/FasterXML/jackson-modules-java8
         return javaTimeModule;
     }
 
     /**
      * 针对JDK 1.8的日期时间格式特殊处理
      *
-     * @return ObjectMapper
+     * @return JsonMapper
      */
-    public static ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        JavaTimeModule javaTimeModule = getJavaTimeModule();
-        objectMapper.registerModule(javaTimeModule);
+    public static JsonMapper jsonMapper() {
         SimpleModule simpleModule = new SimpleModule();
         // long序列化为字符串，避免前端js精度不对报错
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
-        objectMapper.registerModule(simpleModule);
-
-        // 忽略json字符串中不识别的属性
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        // 忽略无法转换的对象
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        return objectMapper;
+        return JsonMapper.builder()
+                .addModules(javaTimeModule(), simpleModule)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+                .build();
     }
 
     /**
-     * Creates the standard cache ObjectMapper without requiring this configuration
+     * Creates the standard cache JsonMapper without requiring this configuration
      * class to be registered in the application context.
      */
-    public static ObjectMapper createRedisObjectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(getJavaTimeModule());
-        // 缓存类型,上面配置不生效，使用下面的
-        mapper.setDefaultTyping(new StdTypeResolverBuilder().init(JsonTypeInfo.Id.CLASS, null).inclusion(JsonTypeInfo.As.PROPERTY));
-        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        return mapper;
+    public static JsonMapper createRedisJsonMapper() {
+        var typeValidator = BasicPolymorphicTypeValidator.builder()
+                .allowIfSubType(Object.class)
+                .build();
+        return JsonMapper.builder()
+                .addModule(javaTimeModule())
+                .activateDefaultTyping(typeValidator, DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY)
+                .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .changeDefaultVisibility(visibility -> visibility.withVisibility(PropertyAccessor.ALL,
+                        JsonAutoDetect.Visibility.ANY))
+                .build();
     }
 
     /**
@@ -101,11 +100,11 @@ public class JsonUtil {
      * @return json字符串
      */
     public static String toJson(Object obj) {
-        return execute(() -> mapper.writeValueAsString(obj), "toJson error");
+        return mapper.writeValueAsString(obj);
     }
 
     public static String toRedisJson(Object obj) {
-        return execute(() -> redisMapper.writeValueAsString(obj), "toJson error");
+        return redisMapper.writeValueAsString(obj);
     }
 
     /**
@@ -117,7 +116,7 @@ public class JsonUtil {
      * @return 对象
      */
     public static <T> T read(String json, JavaType javaType) {
-        return execute(() -> mapper.readValue(json, javaType), "readValue error");
+        return mapper.readValue(json, javaType);
     }
 
     /**
@@ -129,35 +128,47 @@ public class JsonUtil {
      * @return 对象
      */
     public static <T> T read(String json, Class<T> clazz) {
-        return execute(() -> mapper.readValue(json, clazz), "readValue error");
+        return mapper.readValue(json, clazz);
     }
 
     public static <T> T read(InputStream json, Class<T> clazz) {
-        return execute(() -> mapper.readValue(json, clazz), "readValue error");
+        return mapper.readValue(json, clazz);
     }
 
     public static <T> T read(URL url, Class<T> clazz) {
-        return execute(() -> mapper.readValue(url, clazz), "readValue error");
+        try (InputStream input = url.openStream()) {
+            return mapper.readValue(input, clazz);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static <T> T read(URL url, JavaType javaType) {
-        return execute(() -> mapper.readValue(url, javaType), "readValue error");
+        try (InputStream input = url.openStream()) {
+            return mapper.readValue(input, javaType);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static <T> T read(URL url, TypeReference<T> typeReference) {
-        return execute(() -> mapper.readValue(url, typeReference), "readValue error");
+        try (InputStream input = url.openStream()) {
+            return mapper.readValue(input, typeReference);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static <T> T read(byte[] json, Class<T> clazz) {
-        return execute(() -> mapper.readValue(json, clazz), "readValue error");
+        return mapper.readValue(json, clazz);
     }
 
     public static <T> T read(byte[] json, TypeReference<T> typeReference) {
-        return execute(() -> mapper.readValue(json, typeReference), "readValue error");
+        return mapper.readValue(json, typeReference);
     }
 
     public static <T> T redisRead(String json, Class<T> clazz) {
-        return execute(() -> redisMapper.readValue(json, clazz), "readValue error");
+        return redisMapper.readValue(json, clazz);
     }
 
     /**
@@ -169,7 +180,7 @@ public class JsonUtil {
      * @return 结果
      */
     public static <T> T convert(Object object, TypeReference<T> typeReference) {
-        return execute(() -> mapper.convertValue(object, typeReference), "convertValue error");
+        return mapper.convertValue(object, typeReference);
     }
 
     /**
@@ -181,7 +192,7 @@ public class JsonUtil {
      * @return 结果
      */
     public static <T> T convert(Object object, Class<T> aClass) {
-        return execute(() -> mapper.convertValue(object, aClass), "convertValue error");
+        return mapper.convertValue(object, aClass);
     }
 
     /**
@@ -191,19 +202,19 @@ public class JsonUtil {
      * @return byte数组
      */
     public static byte[] writeBytes(Object a) {
-        return execute(() -> mapper.writeValueAsBytes(a), "readValue error");
+        return mapper.writeValueAsBytes(a);
     }
 
     public static JsonNode readTree(String json) {
-        return execute(() -> mapper.readTree(json), "readTree error");
+        return mapper.readTree(json);
     }
 
     public static JsonNode readTree(byte[] bytes) {
-        return execute(() -> mapper.readTree(bytes), "readTree error");
+        return mapper.readTree(bytes);
     }
 
     public static JsonNode valueToTree(Object o) {
-        return execute(() -> mapper.valueToTree(o), "valueToTree error");
+        return mapper.valueToTree(o);
     }
 
     /**
@@ -215,40 +226,11 @@ public class JsonUtil {
      * @return 对象
      */
     public static <T> T read(String json, TypeReference<T> typeReference) {
-        return execute(() -> mapper.readValue(json, typeReference), "readValue error");
+        return mapper.readValue(json, typeReference);
     }
 
     public static <T> T redisRead(String json, TypeReference<T> typeReference) {
-        return execute(() -> redisMapper.readValue(json, typeReference), "readValue error");
-    }
-
-    private static ObjectMapper createDefaultMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        return objectMapper;
-    }
-
-    /**
-     * 执行器
-     *
-     * @param function 函数
-     * @param exMsg    错误信息
-     * @param <T>      泛型
-     * @return 结果
-     */
-    private static <T> T execute(ThrowsExFunction<T> function, String exMsg) {
-        try {
-            return function.apply();
-        } catch (Exception e) {
-            log.error(exMsg, e);
-            throw new BaseException(exMsg, e);
-        }
-    }
-
-    @FunctionalInterface
-    private interface ThrowsExFunction<R> {
-        R apply() throws Exception;
+        return redisMapper.readValue(json, typeReference);
     }
 
 

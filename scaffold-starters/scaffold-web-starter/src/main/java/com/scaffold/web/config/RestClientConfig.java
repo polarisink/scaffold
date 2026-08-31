@@ -1,9 +1,9 @@
 package com.scaffold.web.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
@@ -29,15 +29,12 @@ public class RestClientConfig {
         return factory.createClient(tClass);
     }
 
-    public RestClient.Builder builder(ObjectMapper objectMapper, ClientHttpRequestInterceptor interceptor) {
+    public RestClient.Builder builder(JsonMapper jsonMapper, ClientHttpRequestInterceptor interceptor) {
         return RestClient.builder()
                 // 消息转换器
-                .messageConverters(converters -> {
-                    converters.removeIf(c -> c.getClass().getName().equals(MappingJackson2HttpMessageConverter.class.getName()));
-                    MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-                    converter.setObjectMapper(objectMapper);
-                    converters.addFirst(converter);
-                })
+                .configureMessageConverters(converters -> converters
+                        .registerDefaults()
+                        .withJsonConverter(new JacksonJsonHttpMessageConverter(jsonMapper)))
                 // 拦截器
                 .requestInterceptors(interceptors -> interceptors.add(interceptor));
     }

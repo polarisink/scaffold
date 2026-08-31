@@ -1,8 +1,8 @@
 package com.scaffold.audio;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -74,8 +74,8 @@ public class AudioPreprocessingService {
                 new InputStreamReader(process.getInputStream())
         ).lines().collect(Collectors.joining("\n"));
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(result);
+        JsonMapper jsonMapper = JsonMapper.builder().build();
+        JsonNode rootNode = jsonMapper.readTree(result);
 
         // 解析音频信息
         JsonNode streams = rootNode.get("streams");

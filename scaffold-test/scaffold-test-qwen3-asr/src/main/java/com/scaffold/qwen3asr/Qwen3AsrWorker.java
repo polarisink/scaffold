@@ -1,7 +1,7 @@
 package com.scaffold.qwen3asr;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ import java.util.concurrent.*;
 public class Qwen3AsrWorker {
 
     private final Qwen3AsrProperties properties;
-    private final ObjectMapper objectMapper;
+    private final JsonMapper jsonMapper;
     private final ExecutorService ioExecutor = Executors.newVirtualThreadPerTaskExecutor();
     private final ByteArrayOutputStream errorOutput = new ByteArrayOutputStream();
 
@@ -32,9 +32,9 @@ public class Qwen3AsrWorker {
     private BufferedReader reader;
     private BufferedWriter writer;
 
-    public Qwen3AsrWorker(Qwen3AsrProperties properties, ObjectMapper objectMapper) {
+    public Qwen3AsrWorker(Qwen3AsrProperties properties, JsonMapper jsonMapper) {
         this.properties = properties;
-        this.objectMapper = objectMapper;
+        this.jsonMapper = jsonMapper;
     }
 
     /**
@@ -46,7 +46,7 @@ public class Qwen3AsrWorker {
     public synchronized Qwen3AsrResult transcribe(String audioPath, String language, boolean returnTimeStamps) {
         ensureStarted();
         try {
-            writer.write(objectMapper.writeValueAsString(Map.of(
+            writer.write(jsonMapper.writeValueAsString(Map.of(
                     "audio", audioPath,
                     "language", language == null ? "" : language,
                     "returnTimeStamps", returnTimeStamps
@@ -58,7 +58,7 @@ public class Qwen3AsrWorker {
             if (!response.path("ok").asBoolean()) {
                 throw new Qwen3AsrException("Qwen3-ASR 本地推理失败: " + response.path("error").asText("未知错误"));
             }
-            return objectMapper.treeToValue(response.path("result"), Qwen3AsrResult.class);
+            return jsonMapper.treeToValue(response.path("result"), Qwen3AsrResult.class);
         } catch (IOException e) {
             stop();
             throw new Qwen3AsrException("与 Qwen3-ASR 本地推理进程通信失败" + errorDetails(), e);
@@ -106,7 +106,7 @@ public class Qwen3AsrWorker {
                 stop();
                 throw new Qwen3AsrException("Qwen3-ASR 本地推理进程意外退出" + errorDetails());
             }
-            JsonNode message = objectMapper.readTree(line);
+            JsonNode message = jsonMapper.readTree(line);
             if (!expectedType.equals(message.path("type").asText())) {
                 stop();
                 throw new Qwen3AsrException("Qwen3-ASR 返回了无效响应: " + line);

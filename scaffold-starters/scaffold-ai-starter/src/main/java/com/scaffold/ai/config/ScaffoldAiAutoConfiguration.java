@@ -1,6 +1,6 @@
 package com.scaffold.ai.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import com.scaffold.ai.chat.AiChatService;
 import com.scaffold.ai.controller.AiChatController;
 import com.scaffold.ai.controller.AiToolController;
@@ -43,7 +43,7 @@ public class ScaffoldAiAutoConfiguration implements WebMvcConfigurer {
 
     @Bean
     @ConditionalOnMissingBean
-    public AiToolInvoker aiToolInvoker(AiToolRegistry registry, ObjectMapper mapper) {
+    public AiToolInvoker aiToolInvoker(AiToolRegistry registry, JsonMapper mapper) {
         return new AiToolInvoker(registry, mapper);
     }
 

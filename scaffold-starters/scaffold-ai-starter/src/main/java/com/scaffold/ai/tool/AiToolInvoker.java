@@ -1,7 +1,6 @@
 package com.scaffold.ai.tool;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.ai.tool.ToolCallback;
 
 import java.util.Map;
@@ -9,11 +8,11 @@ import java.util.Map;
 public class AiToolInvoker {
 
     private final AiToolRegistry registry;
-    private final ObjectMapper objectMapper;
+    private final JsonMapper jsonMapper;
 
-    public AiToolInvoker(AiToolRegistry registry, ObjectMapper objectMapper) {
+    public AiToolInvoker(AiToolRegistry registry, JsonMapper jsonMapper) {
         this.registry = registry;
-        this.objectMapper = objectMapper;
+        this.jsonMapper = jsonMapper;
     }
 
     public String invoke(String name, Map<String, Object> input) {
@@ -21,10 +20,6 @@ public class AiToolInvoker {
         if (callback == null) {
             throw new IllegalArgumentException("Unknown AI tool: " + name);
         }
-        try {
-            return callback.call(objectMapper.writeValueAsString(input == null ? Map.of() : input));
-        } catch (JsonProcessingException exception) {
-            throw new IllegalArgumentException("Cannot serialize input for AI tool: " + name, exception);
-        }
+        return callback.call(jsonMapper.writeValueAsString(input == null ? Map.of() : input));
     }
 }

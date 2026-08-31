@@ -1,6 +1,6 @@
 package com.scaffold.postgresql;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -9,7 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class PostgresqlCacheSerializerTest {
 
-    private final PostgresqlCacheSerializer serializer = new PostgresqlCacheSerializer(new ObjectMapper());
+    private final PostgresqlCacheSerializer serializer =
+            new PostgresqlCacheSerializer(JsonMapper.builder().build());
 
     @Test
     void roundTripsTypedValueWithJavaTime() {

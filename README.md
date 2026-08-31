@@ -4,7 +4,7 @@
 
 ## 技术栈
 
-- **后端**：Java 21、Spring Boot 3.5.15、Spring Cloud 2025.0.0、Spring Cloud Alibaba 2025.0.0.0
+- **后端**：Java 21、Spring Boot 4.1.1、Spring Cloud 2025.1.2、Spring Cloud Alibaba 2025.1.0.0
 - **数据访问**：MyBatis Plus 3.5.17、JPA、MySQL 8、H2
 - **原生部署**：GraalVM Native Image、Linux Docker 原生镜像、macOS/Linux/Windows 构建脚本
 - **缓存与消息**：Caffeine、Redisson、Redis Stream、Redis Pub/Sub
@@ -190,7 +190,7 @@ scaffold-module/scaffold-module-rbac/
 
 ## 已知兼容性限制
 
-`netty-socketio 2.0.14` 目前要求项目 BOM 将 Netty 全局固定为 `4.1.130.Final`。升级或引入 Gateway、WebFlux、Vert.x、Dubbo、Redisson 等 Netty 组件时必须验证依赖兼容性；长期应将该覆盖隔离到 Socket.IO 专用应用或 BOM。详见 [Socket.IO Starter](scaffold-starters/scaffold-socketio-starter/README.md)。
+项目 BOM 与 Spring Boot 4.1.1 对齐到 Netty `4.2.17.Final`。`netty-socketio 2.0.14` 仍内置 Jackson 2，Starter 将其 JSON 映射器隔离在组件内部；升级 Gateway、WebFlux、Vert.x、Dubbo、Redisson 或 Socket.IO 时仍需做联合回归。详见 [Socket.IO Starter](scaffold-starters/scaffold-socketio-starter/README.md)。
 
 ## 文档索引
 

@@ -20,7 +20,7 @@
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-client-chat</artifactId>
             <exclusions>
-                <!-- Spring Boot 3 uses jakarta.validation; do not expose the legacy API. -->
+                <!-- Spring Boot 4 uses Jakarta Validation; do not expose the legacy API. -->
                 <exclusion>
                     <groupId>javax.validation</groupId>
                     <artifactId>validation-api</artifactId>

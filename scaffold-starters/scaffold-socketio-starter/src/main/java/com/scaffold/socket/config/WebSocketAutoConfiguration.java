@@ -6,7 +6,6 @@ import com.corundumstudio.socketio.annotation.SpringAnnotationScanner;
 import com.corundumstudio.socketio.handler.SuccessAuthorizationListener;
 import com.corundumstudio.socketio.protocol.JacksonJsonSupport;
 import com.corundumstudio.socketio.protocol.JsonSupport;
-import com.scaffold.base.util.JsonUtil;
 import com.scaffold.socket.util.WsManager;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -33,7 +32,8 @@ public class WebSocketAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     JsonSupport socketJsonSupport() {
-        return new JacksonJsonSupport(JsonUtil.getJavaTimeModule());
+        // netty-socketio still owns an isolated Jackson 2 mapper internally.
+        return new JacksonJsonSupport();
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")

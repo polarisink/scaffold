@@ -43,7 +43,7 @@ class ScaffoldCacheAutoConfigurationTest {
                 .withClassLoader(new FilteredClassLoader("org.springframework.data.redis"))
                 .run(context -> {
                     assertThat(context).hasNotFailed();
-                    assertThat(context).doesNotHaveBean("redisObjectMapper");
+                    assertThat(context).doesNotHaveBean("redisJsonMapper");
                     assertThat(context).doesNotHaveBean("redisCacheManager");
                     assertThat(context.getBean("cacheManager", CacheManager.class))
                             .isInstanceOf(CaffeineCacheManager.class);

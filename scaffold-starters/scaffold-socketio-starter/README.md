@@ -191,8 +191,7 @@ http://localhost:8082/index.html
 ## Netty 版本兼容性
 
 `netty-socketio 2.0.14` 基于 Netty 4.1 构建。当前 `scaffold-dependencies` 将 Netty
-全局固定为 `4.1.130.Final`，这会同时覆盖 Spring Boot 为所有应用管理的 Netty
-版本。
+与 Spring Boot 4.1.1 的依赖基线统一为 `4.2.17.Final`，这会同时影响所有使用 Netty 的应用。
 
 后续升级或排查 Spring Cloud Gateway、WebFlux/Reactor Netty、Vert.x、Dubbo、
 Redisson 等组件时，需要优先检查该全局约束。长期建议是在 Socket.IO 服务端支持

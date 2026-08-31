@@ -1,6 +1,6 @@
 package com.scaffold.sse;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,12 +13,12 @@ import static org.mockito.Mockito.verify;
 
 class SseMessageBrokerTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+    private final JsonMapper jsonMapper = JsonMapper.builder().findAndAddModules().build();
 
     @Test
     void publishesSerializedMessageToRedisChannel() {
         StringRedisTemplate redisTemplate = mock(StringRedisTemplate.class);
-        RedisSseMessageBroker broker = new RedisSseMessageBroker(redisTemplate, objectMapper, "test-channel");
+        RedisSseMessageBroker broker = new RedisSseMessageBroker(redisTemplate, jsonMapper, "test-channel");
 
         SseSendResult result = broker.sendToUser("user-1", "notice", "hello");
 
@@ -31,7 +31,7 @@ class SseMessageBrokerTest {
     @SuppressWarnings("unchecked")
     void publishesSerializedMessageToKafkaTopic() {
         KafkaTemplate<Object, Object> kafkaTemplate = mock(KafkaTemplate.class);
-        KafkaSseMessageBroker broker = new KafkaSseMessageBroker(kafkaTemplate, objectMapper, "test-topic");
+        KafkaSseMessageBroker broker = new KafkaSseMessageBroker(kafkaTemplate, jsonMapper, "test-topic");
 
         SseSendResult result = broker.sendToRoom("room-1", "chat", "hello");
 

@@ -1,7 +1,7 @@
 # scaffold-ai-starter
 
 `scaffold-ai-starter` 是面向业务应用的 Spring AI Starter，从 MateCloud `mate-ai-starter` 提取并适配
-Spring Boot 3.5 / Spring AI 1.1。它提供同步聊天、SSE 流式聊天、按会话 ID 保存的窗口记忆、Advisor
+Spring Boot 4.1 / Spring AI 2.0。它提供同步聊天、SSE 流式聊天、按会话 ID 保存的窗口记忆、Advisor
 链、`@Tool` 自动发现、工具清单与直接调用 API。
 
 本文档除介绍 Starter 的接入方式外，也给出一条适合 Java 业务开发者的 AI 应用开发路线。目标是使用

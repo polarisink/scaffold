@@ -1,6 +1,6 @@
 package com.scaffold;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpHeaders;
@@ -90,7 +90,8 @@ class GatewayAuthenticationFilterTest {
                             .body(body)
                             .build());
                 });
-        return new GatewayAuthenticationFilter(new GatewayAuthProperties(null, null, null), builder, new ObjectMapper());
+        return new GatewayAuthenticationFilter(new GatewayAuthProperties(null, null, null), builder,
+                JsonMapper.builder().build());
     }
 
     private static GatewayFilterChain chain(GatewayFilterChain chain) {

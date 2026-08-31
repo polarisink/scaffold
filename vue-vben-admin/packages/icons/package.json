@@ -17,6 +17,7 @@
     }
   },
   "dependencies": {
+    "@iconify-json/lucide": "catalog:",
     "@vben-core/icons": "workspace:*"
   }
 }

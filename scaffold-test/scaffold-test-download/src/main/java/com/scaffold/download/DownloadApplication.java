@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -13,7 +12,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 @Slf4j
 @EnableScheduling
 @RequiredArgsConstructor
-@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+@SpringBootApplication(excludeName = "org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration")
 public class DownloadApplication {
 
     public static void main(String[] args) {

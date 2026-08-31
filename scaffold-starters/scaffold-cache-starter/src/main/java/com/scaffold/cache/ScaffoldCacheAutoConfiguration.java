@@ -1,6 +1,6 @@
 package com.scaffold.cache;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import com.scaffold.base.util.JsonUtil;
 import com.scaffold.postgresql.PostgresqlCacheCleaner;
 import com.scaffold.postgresql.PostgresqlCacheManager;
@@ -9,7 +9,7 @@ import com.scaffold.postgresql.PostgresqlCacheStore;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
+import org.springframework.boot.cache.autoconfigure.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
@@ -68,10 +68,10 @@ public class ScaffoldCacheAutoConfiguration {
     @ConditionalOnClass(RedisConnectionFactory.class)
     static class RedisCacheProviderConfiguration {
 
-        @Bean("redisObjectMapper")
-        @ConditionalOnMissingBean(name = "redisObjectMapper")
-        ObjectMapper redisObjectMapper() {
-            return JsonUtil.createRedisObjectMapper();
+        @Bean("redisJsonMapper")
+        @ConditionalOnMissingBean(name = "redisJsonMapper")
+        JsonMapper redisJsonMapper() {
+            return JsonUtil.createRedisJsonMapper();
         }
 
         @Bean
@@ -95,14 +95,15 @@ public class ScaffoldCacheAutoConfiguration {
         @ConditionalOnBean(RedisConnectionFactory.class)
         @ConditionalOnMissingBean(name = "redisCacheManager")
         RedisCacheManager redisCacheManager(RedisConnectionFactory connectionFactory,
-                                            ScaffoldCacheProperties properties) {
+                                            ScaffoldCacheProperties properties,
+                                            @Qualifier("redisJsonMapper") JsonMapper jsonMapper) {
             ScaffoldCacheProperties.Redis redis = properties.redis();
             RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
             configuration = configuration
                     .serializeKeysWith(RedisSerializationContext.SerializationPair
                             .fromSerializer(new StringRedisSerializer()))
                     .serializeValuesWith(RedisSerializationContext.SerializationPair
-                            .fromSerializer(new GenericJackson2JsonRedisSerializer()));
+                            .fromSerializer(new GenericJacksonJsonRedisSerializer(jsonMapper)));
             Duration ttl = redis.getTimeToLive();
             if (ttl != null && !ttl.isNegative() && !ttl.isZero()) {
                 configuration = configuration.entryTtl(ttl);
@@ -171,10 +172,10 @@ public class ScaffoldCacheAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public PostgresqlCacheSerializer postgresqlCacheSerializer(
-            @Qualifier("redisObjectMapper") ObjectProvider<ObjectMapper> redisObjectMapperProvider) {
-        ObjectMapper objectMapper = redisObjectMapperProvider.getIfAvailable(
-                JsonUtil::createRedisObjectMapper);
-        return new PostgresqlCacheSerializer(objectMapper);
+            @Qualifier("redisJsonMapper") ObjectProvider<JsonMapper> redisJsonMapperProvider) {
+        JsonMapper jsonMapper = redisJsonMapperProvider.getIfAvailable(
+                JsonUtil::createRedisJsonMapper);
+        return new PostgresqlCacheSerializer(jsonMapper);
     }
 
     @Bean("cacheManager")

@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AiToolRegistry implements BeanPostProcessor, ToolCallbackProvider {
@@ -51,6 +52,20 @@ public class AiToolRegistry implements BeanPostProcessor, ToolCallbackProvider {
     public ToolCallback[] getToolCallbacks() { return callbacks.values().toArray(ToolCallback[]::new); }
     public Collection<ToolCallback> listAll() { return Collections.unmodifiableCollection(callbacks.values()); }
     public ToolCallback get(String name) { return callbacks.get(name); }
+
+    public List<ToolCallback> select(String... names) {
+        if (names == null || names.length == 0) {
+            return List.of();
+        }
+        return Arrays.stream(names).map(name -> {
+            ToolCallback callback = callbacks.get(name);
+            if (callback == null) {
+                throw new IllegalArgumentException("Unknown AI tool: " + name);
+            }
+            return callback;
+        }).toList();
+    }
+
     public int size() { return callbacks.size(); }
 
     public List<Map<String, Object>> describeAll() {

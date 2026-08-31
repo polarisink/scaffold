@@ -1,10 +1,10 @@
 package com.scaffold.web.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
-import org.springframework.boot.autoconfigure.http.codec.CodecsAutoConfiguration;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.http.codec.autoconfigure.CodecsAutoConfiguration;
+import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -25,12 +25,12 @@ class WebStarterAutoConfigurationTest {
             assertThat(context).hasSingleBean(ScaffoldWebProperties.class);
             assertThat(context).hasSingleBean(RequestLogFilter.class);
             assertThat(context).hasSingleBean(FilterRegistrationBean.class);
-            assertThat(context).hasSingleBean(ObjectMapper.class);
+            assertThat(context).hasSingleBean(JsonMapper.class);
         });
     }
 
     @Test
-    void shouldExposeSingleObjectMapperWithBootJacksonAndReactiveCodecs() {
+    void shouldExposeSingleJsonMapperWithBootJacksonAndReactiveCodecs() {
         new WebApplicationContextRunner()
                 .withConfiguration(AutoConfigurations.of(
                         WebStarterAutoConfiguration.class,
@@ -38,29 +38,29 @@ class WebStarterAutoConfigurationTest {
                         CodecsAutoConfiguration.class))
                 .run(context -> {
                     assertThat(context).hasNotFailed();
-                    assertThat(context).hasSingleBean(ObjectMapper.class);
-                    assertThat(context).hasBean("objectMapper");
+                    assertThat(context).hasSingleBean(JsonMapper.class);
+                    assertThat(context).hasBean("jsonMapper");
                 });
     }
 
     @Test
-    void shouldStillCreatePrimaryWebObjectMapperWhenSpecializedMapperExists() {
+    void shouldStillCreatePrimaryWebJsonMapperWhenSpecializedMapperExists() {
         contextRunner.withUserConfiguration(SpecializedMapperConfiguration.class)
                 .run(context -> {
                     assertThat(context).hasNotFailed();
-                    assertThat(context).hasBean("objectMapper");
-                    assertThat(context).hasBean("redisObjectMapper");
-                    assertThat(context.getBean(ObjectMapper.class))
-                            .isSameAs(context.getBean("objectMapper", ObjectMapper.class));
+                    assertThat(context).hasBean("jsonMapper");
+                    assertThat(context).hasBean("redisJsonMapper");
+                    assertThat(context.getBean(JsonMapper.class))
+                            .isSameAs(context.getBean("jsonMapper", JsonMapper.class));
                 });
     }
 
     @Configuration(proxyBeanMethods = false)
     static class SpecializedMapperConfiguration {
 
-        @Bean("redisObjectMapper")
-        ObjectMapper redisObjectMapper() {
-            return new ObjectMapper();
+        @Bean("redisJsonMapper")
+        JsonMapper redisJsonMapper() {
+            return JsonMapper.builder().build();
         }
     }
 

@@ -1,7 +1,6 @@
 package com.scaffold;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import com.scaffold.base.util.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -30,7 +29,7 @@ public class GatewayAuthenticationFilter implements GlobalFilter, Ordered {
 
     private final GatewayAuthProperties properties;
     private final WebClient.Builder loadBalancedWebClientBuilder;
-    private final ObjectMapper objectMapper;
+    private final JsonMapper jsonMapper;
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
@@ -100,11 +99,7 @@ public class GatewayAuthenticationFilter implements GlobalFilter, Ordered {
     }
 
     private String toJson(R<Void> body) {
-        try {
-            return objectMapper.writeValueAsString(body);
-        } catch (JsonProcessingException exception) {
-            return "{\"code\":401,\"message\":\"未登录\"}";
-        }
+        return jsonMapper.writeValueAsString(body);
     }
 
     public record AuthCheckResult(int code, String message, Map<String, Object> data) {

@@ -1,6 +1,6 @@
 package com.scaffold.base.util;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,6 +12,37 @@ import java.util.stream.Collectors;
  * @param <K> 节点 id 类型
  */
 public interface ITree<T, K> {
+
+    /**
+     * 将树扁平化为list
+     *
+     * @param tree 树
+     * @param <K>  id
+     * @param <T>  实体
+     * @return 一维列表
+     */
+    static <K, T extends ITree<T, K>> List<T> flatten(List<T> tree) {
+        List<T> result = new ArrayList<>();
+        if (tree == null || tree.isEmpty()) {
+            return result;
+        }
+
+        Queue<T> queue = new ArrayDeque<>();
+        tree.stream().filter(Objects::nonNull).forEach(queue::offer);
+        Set<T> visited = Collections.newSetFromMap(new IdentityHashMap<>());
+        while (!queue.isEmpty()) {
+            T node = queue.poll();
+            if (!visited.add(node)) {
+                continue;
+            }
+            result.add(node);
+            List<T> children = node.getChildren();
+            if (children != null) {
+                children.stream().filter(Objects::nonNull).forEach(queue::offer);
+            }
+        }
+        return result;
+    }
 
     /**
      * 将实现 {@link ITree} 的节点集合原地组装为树。
