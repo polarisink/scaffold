@@ -67,7 +67,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.scaffold.NativeApplication</mainClass>
+                    <mainClass>com.scaffold.BizApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

@@ -430,17 +430,22 @@
                 <artifactId>dubbo-registry-nacos</artifactId>
                 <version>${dubbo.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.vertx</groupId>
-                <artifactId>vertx-stack-depchain</artifactId>
-                <version>${vertx.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+            <!--
+                Boot BOM 必须先于 Vert.x BOM 导入。Maven 对多个导入 BOM 中的重复依赖采用
+                先声明者优先；Vert.x 5.0.5 仍管理 Log4j 2.17.1 和 SLF4J 2.0.7，若排在
+                Boot 前会与 Boot 4.1.1 的 log4j-to-slf4j 2.25.5 形成不兼容的运行时组合。
+            -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-stack-depchain</artifactId>
+                <version>${vertx.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
