@@ -22,6 +22,7 @@ import java.util.List;
 @Data
 @Entity
 @jakarta.persistence.Table(name = "sys_menu")
+@Comment("系统菜单表")
 public class SysMenu extends BaseLongAuditable implements Serializable, ITree<SysMenu, Long> {
 
     /**
@@ -35,6 +36,10 @@ public class SysMenu extends BaseLongAuditable implements Serializable, ITree<Sy
     @Column(length = 64)
     @Comment("菜单名称")
     private String menuName;
+
+    @Column(length = 255)
+    @Comment("页面描述")
+    private String description;
 
     @Comment("路由路径")
     private String path;

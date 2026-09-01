@@ -84,3 +84,7 @@ scaffold:
 
 `postgresqlCacheDataSource` 和 `postgresqlJdbcTemplate` 均为非默认候选，不会参与 JPA、
 MyBatis 等业务组件的默认数据源选择。
+
+缓存值使用带 Java 类型信息的 Jackson JSON 保存。升级后遇到旧版本或损坏的缓存值时，
+缓存会删除当前不可反序列化的条目并按未命中处理，由业务方法重新加载并写入新格式，
+不会因单个坏缓存值中断请求。

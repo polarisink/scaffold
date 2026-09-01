@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import type { DataTableColumns, FormInst, FormRules } from 'naive-ui';
+import type {
+  DataTableColumns,
+  DataTableSortState,
+  FormInst,
+  FormRules,
+} from 'naive-ui';
+
 import type { SysOrg, SysRole, SysUser } from '#/api';
 
 import { computed, h, onMounted, reactive, ref } from 'vue';
-
-import { Page } from '@vben/common-ui';
 
 import {
   NButton,
@@ -25,14 +29,15 @@ import { dialog, message } from '#/adapter/naive';
 import {
   createUser,
   deleteUser,
-  getRolePage,
   getOrgTree,
+  getRolePage,
   getUserDetail,
   getUserPage,
   resetUserPassword,
   toggleUserStatus,
   updateUser,
 } from '#/api';
+import RoutePage from '#/components/route-page.vue';
 import { normalizeTreeIds, toNumberId, toNumberIds } from '#/utils/id';
 
 defineOptions({ name: 'SystemUser' });
@@ -45,7 +50,18 @@ const formRef = ref<FormInst | null>(null);
 const rows = ref<SysUser[]>([]);
 const roles = ref<SysRole[]>([]);
 const orgTree = ref<SysOrg[]>([]);
-const query = reactive({ pageNo: 1, pageSize: 10, username: '' });
+const query = reactive({
+  keyword: '',
+  pageNo: 1,
+  pageSize: 10,
+  sortBy: 'modifiedTime' as
+    | 'createdTime'
+    | 'modifiedTime'
+    | 'orgName'
+    | 'status'
+    | 'username',
+  sortOrder: 'desc' as 'asc' | 'desc',
+});
 const total = ref(0);
 const editingId = ref<number>();
 const form = reactive<{
@@ -108,6 +124,10 @@ function normalizeUser(user: SysUser): SysUser {
   };
 }
 
+function formatDateTime(value?: string) {
+  return value ? value.replace('T', ' ').replace(/\.\d+$/, '') : '-';
+}
+
 function confirmAction(options: {
   content: string;
   onPositiveClick: () => Promise<unknown>;
@@ -126,37 +146,112 @@ function confirmAction(options: {
   });
 }
 
-const columns: DataTableColumns<SysUser> = [
-  { key: 'username', minWidth: 140, title: '用户名' },
+const columns = computed<DataTableColumns<SysUser>>(() => [
   {
+    ellipsis: { tooltip: true },
+    key: 'username',
+    width: 100,
+    sorter: true,
+    sortOrder:
+      query.sortBy === 'username'
+        ? query.sortOrder === 'asc'
+          ? 'ascend'
+          : 'descend'
+        : false,
+    title: '用户名',
+  },
+  {
+    ellipsis: { tooltip: true },
     key: 'orgId',
-    minWidth: 160,
+    width: 110,
     render: (row) => orgNameMap.value.get(row.orgId) || `#${row.orgId}`,
+    sorter: true,
+    sortOrder:
+      query.sortBy === 'orgName'
+        ? query.sortOrder === 'asc'
+          ? 'ascend'
+          : 'descend'
+        : false,
     title: '所属部门',
+  },
+  {
+    key: 'roles',
+    render: (row) =>
+      row.roles.length
+        ? h(
+            NSpace,
+            { size: 4 },
+            () =>
+              row.roles.map((role) =>
+                h(
+                  NTag,
+                  { bordered: false, size: 'small', type: 'info' },
+                  { default: () => role.roleName },
+                ),
+              ),
+          )
+        : '暂无角色',
+    title: '所属角色',
+    width: 180,
   },
   {
     key: 'status',
     render: (row) =>
       h(
         NTag,
-        { bordered: false, type: row.status ? 'success' : 'error' },
+        {
+          bordered: false,
+          size: 'small',
+          type: row.status ? 'success' : 'error',
+        },
         { default: () => (row.status ? '正常' : '已禁用') },
       ),
     title: '状态',
-    width: 100,
+    width: 72,
+    sorter: true,
+    sortOrder:
+      query.sortBy === 'status'
+        ? query.sortOrder === 'asc'
+          ? 'ascend'
+          : 'descend'
+        : false,
   },
-  { key: 'gmtCreated', minWidth: 170, title: '创建时间' },
   {
-    fixed: 'right',
+    key: 'gmtModified',
+    render: (row) => formatDateTime(row.gmtModified),
+    width: 175,
+    sorter: true,
+    sortOrder:
+      query.sortBy === 'modifiedTime'
+        ? query.sortOrder === 'asc'
+          ? 'ascend'
+          : 'descend'
+        : false,
+    title: '修改时间',
+  },
+  {
+    key: 'gmtCreated',
+    render: (row) => formatDateTime(row.gmtCreated),
+    width: 175,
+    sorter: true,
+    sortOrder:
+      query.sortBy === 'createdTime'
+        ? query.sortOrder === 'asc'
+          ? 'ascend'
+          : 'descend'
+        : false,
+    title: '创建时间',
+  },
+  {
     key: 'actions',
     render: (row) =>
-      h(NSpace, { size: 2 }, () => [
+      h(NSpace, { size: 0, wrap: false }, () => [
         h(
           NButton,
           {
             onClick: () => openEdit(row),
             quaternary: true,
-            size: 'small',
+            size: 'tiny',
             type: 'primary',
           },
           { default: () => '编辑' },
@@ -171,7 +266,7 @@ const columns: DataTableColumns<SysUser> = [
                 title: `${row.status ? '禁用' : '启用'}用户`,
               }),
             quaternary: true,
-            size: 'small',
+            size: 'tiny',
             type: row.status ? 'warning' : 'success',
           },
           { default: () => (row.status ? '禁用' : '启用') },
@@ -186,7 +281,7 @@ const columns: DataTableColumns<SysUser> = [
                 title: '重置密码',
               }),
             quaternary: true,
-            size: 'small',
+            size: 'tiny',
           },
           { default: () => '重置密码' },
         ),
@@ -200,16 +295,16 @@ const columns: DataTableColumns<SysUser> = [
                 title: '删除用户',
               }),
             quaternary: true,
-            size: 'small',
+            size: 'tiny',
             type: 'error',
           },
           { default: () => '删除' },
         ),
       ]),
     title: '操作',
-    width: 290,
+    width: 220,
   },
-];
+]);
 
 async function load() {
   loading.value = true;
@@ -234,6 +329,29 @@ async function loadOrgs() {
 function search() {
   query.pageNo = 1;
   load();
+}
+
+function handleSorter(sorter: DataTableSortState | DataTableSortState[] | null) {
+  const activeSorter = Array.isArray(sorter) ? sorter[0] : sorter;
+  const sortByMap = {
+    gmtCreated: 'createdTime',
+    gmtModified: 'modifiedTime',
+    orgId: 'orgName',
+    status: 'status',
+    username: 'username',
+  } as const;
+  const sortBy = activeSorter
+    ? sortByMap[activeSorter.columnKey as keyof typeof sortByMap]
+    : undefined;
+
+  if (!sortBy || !activeSorter?.order) {
+    query.sortBy = 'modifiedTime';
+    query.sortOrder = 'desc';
+  } else {
+    query.sortBy = sortBy;
+    query.sortOrder = activeSorter.order === 'descend' ? 'desc' : 'asc';
+  }
+  search();
 }
 
 function openCreate() {
@@ -305,24 +423,25 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Page description="维护登录账号、所属部门、状态及角色归属" title="用户管理">
+  <RoutePage description="维护登录账号、所属部门、状态及角色归属" title="用户管理">
     <NCard :bordered="false" class="system-card">
       <div class="toolbar">
         <NSpace>
           <NInput
-            v-model:value="query.username"
+            v-model:value="query.keyword"
             clearable
-            placeholder="搜索用户名"
+            placeholder="搜索用户名、组织机构或角色"
             @keyup.enter="search"
           />
           <NButton type="primary" @click="search">查询</NButton>
           <NButton
             @click="
-              query.username = '';
+              query.keyword = '';
               search();
             "
-            >重置</NButton
-          >
+            >
+重置
+</NButton>
         </NSpace>
         <NButton type="primary" @click="openCreate">新增用户</NButton>
       </div>
@@ -331,7 +450,9 @@ onMounted(async () => {
         :data="rows"
         :loading="loading"
         :row-key="(row: SysUser) => row.id"
-        :scroll-x="1040"
+        remote
+        table-layout="fixed"
+        @update:sorter="handleSorter"
       />
       <div class="pagination">
         <NPagination
@@ -394,13 +515,13 @@ onMounted(async () => {
       <template #footer>
         <NSpace justify="end">
           <NButton @click="showModal = false">取消</NButton>
-          <NButton :loading="saving" type="primary" @click="submit"
-            >保存</NButton
-          >
+          <NButton :loading="saving" type="primary" @click="submit">
+保存
+</NButton>
         </NSpace>
       </template>
     </NModal>
-  </Page>
+  </RoutePage>
 </template>
 
 <style scoped>

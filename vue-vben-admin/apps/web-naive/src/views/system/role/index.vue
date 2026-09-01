@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { DataTableColumns, FormInst, FormRules } from 'naive-ui';
+
 import type { RoleParams, SysMenu, SysRole } from '#/api';
 
 import { h, onMounted, reactive, ref } from 'vue';
-
-import { Page } from '@vben/common-ui';
 
 import {
   NButton,
@@ -28,6 +27,7 @@ import {
   getRolePage,
   updateRole,
 } from '#/api';
+import RoutePage from '#/components/route-page.vue';
 import { normalizeTreeIds, toNumberId, toNumberIds } from '#/utils/id';
 
 defineOptions({ name: 'SystemRole' });
@@ -183,7 +183,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Page description="配置角色及其可访问的菜单与权限" title="角色管理">
+  <RoutePage description="配置角色及其可访问的菜单与权限" title="角色管理">
     <NCard :bordered="false" class="system-card">
       <div class="toolbar">
         <NSpace>
@@ -206,8 +206,9 @@ onMounted(async () => {
               query.roleCode = '';
               search();
             "
-            >重置</NButton
-          >
+            >
+重置
+</NButton>
         </NSpace>
         <NButton type="primary" @click="openCreate">新增角色</NButton>
       </div>
@@ -268,8 +269,8 @@ onMounted(async () => {
               cascade
               checkable
               :data="menuTree"
-              :key-field="'id'"
-              :label-field="'menuName'"
+              key-field="id"
+              label-field="menuName"
               :loading="detailLoading"
             />
           </div>
@@ -278,13 +279,13 @@ onMounted(async () => {
       <template #footer>
         <NSpace justify="end">
           <NButton @click="showModal = false">取消</NButton>
-          <NButton :loading="saving" type="primary" @click="submit"
-            >保存</NButton
-          >
+          <NButton :loading="saving" type="primary" @click="submit">
+保存
+</NButton>
         </NSpace>
       </template>
     </NModal>
-  </Page>
+  </RoutePage>
 </template>
 
 <style scoped>

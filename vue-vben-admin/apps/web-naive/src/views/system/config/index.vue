@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { DataTableColumns, FormInst, FormRules } from 'naive-ui';
+
 import type { ConfigParams, SysConfig } from '#/api';
 
 import { computed, h, onMounted, reactive, ref } from 'vue';
-
-import { Page } from '@vben/common-ui';
 
 import {
   NButton,
@@ -22,6 +21,8 @@ import {
 
 import { dialog, message } from '#/adapter/naive';
 import { createConfig, deleteConfig, getConfigPage, updateConfig } from '#/api';
+import RoutePage from '#/components/route-page.vue';
+import { loadBranding } from '#/config/branding';
 
 defineOptions({ name: 'SystemConfig' });
 
@@ -168,6 +169,9 @@ async function submit() {
       ? updateConfig({ ...form, id: editingId.value })
       : createConfig(form));
     message.success(`配置${editingId.value ? '更新' : '创建'}成功`);
+    if (form.configKey.startsWith('system.brand.')) {
+      await loadBranding();
+    }
     showModal.value = false;
     await load();
   } finally {
@@ -194,7 +198,7 @@ onMounted(load);
 </script>
 
 <template>
-  <Page
+  <RoutePage
     description="维护系统运行参数；系统内置配置不能删除或修改键名"
     title="系统配置"
   >
@@ -304,7 +308,7 @@ onMounted(load);
         </NSpace>
       </template>
     </NModal>
-  </Page>
+  </RoutePage>
 </template>
 
 <style scoped>

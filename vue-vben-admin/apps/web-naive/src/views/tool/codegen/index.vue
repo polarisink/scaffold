@@ -6,7 +6,6 @@ import type { CodegenConfig, DatabaseTable } from '#/api';
 import { computed, h, onMounted, reactive, ref } from 'vue';
 
 import { useAccess } from '@vben/access';
-import { Page } from '@vben/common-ui';
 
 import {
   NButton,
@@ -35,6 +34,7 @@ import {
   importDatabaseTable,
   updateCodegenConfig,
 } from '#/api';
+import RoutePage from '#/components/route-page.vue';
 
 defineOptions({ name: 'CodeGenerator' });
 
@@ -365,7 +365,7 @@ onMounted(load);
 </script>
 
 <template>
-  <Page title="代码生成器" description="轻量配置元数据，生成并下载 CRUD 代码">
+  <RoutePage title="代码生成器" description="轻量配置元数据，生成并下载 CRUD 代码">
     <NCard :bordered="false">
       <NTabs
         :value="activeSection"
@@ -575,7 +575,7 @@ onMounted(load);
         </NSpace>
       </template>
     </NModal>
-  </Page>
+  </RoutePage>
 </template>
 
 <style scoped>

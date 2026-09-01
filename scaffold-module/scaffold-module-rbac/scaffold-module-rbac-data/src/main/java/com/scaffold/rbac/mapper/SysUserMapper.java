@@ -2,6 +2,7 @@ package com.scaffold.rbac.mapper;
 
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scaffold.base.util.PageResponse;
@@ -75,7 +76,27 @@ public interface SysUserMapper extends MyBaseMapper<SysUser> {
     }
 
     default PageResponse<SysUser> page(SysUserPageVO vo) {
-        Page<SysUser> page = selectPage(new Page<>(vo.getPageNo(), vo.getPageSize()), Wrappers.<SysUser>lambdaQuery().like(StrUtil.isNotBlank(vo.getUsername()), SysUser::getUsername, vo.getUsername()).orderByDesc(SysUser::getGmtModified));
+        String keyword = StrUtil.trim(vo.getKeyword());
+        QueryWrapper<SysUser> query = Wrappers.<SysUser>query()
+                .and(StrUtil.isNotBlank(keyword), wrapper -> wrapper
+                        .like("username", keyword)
+                        .or().apply("EXISTS (SELECT 1 FROM sys_org o WHERE o.id = sys_user.org_id AND o.org_name LIKE CONCAT('%', {0}, '%'))", keyword)
+                        .or().apply("""
+                                EXISTS (SELECT 1 FROM sys_user_role ur JOIN sys_role r ON r.id = ur.role_id
+                                WHERE ur.user_id = sys_user.id AND r.role_name LIKE CONCAT('%', {0}, '%'))
+                                """, keyword));
+
+        boolean ascending = "asc".equalsIgnoreCase(vo.getSortOrder());
+        String sortColumn = switch (StrUtil.blankToDefault(vo.getSortBy(), "modifiedTime")) {
+            case "username" -> "username";
+            case "orgName" -> "(SELECT o.org_name FROM sys_org o WHERE o.id = sys_user.org_id)";
+            case "status" -> "status";
+            case "createdTime" -> "gmt_created";
+            default -> "gmt_modified";
+        };
+        query.orderBy(true, ascending, sortColumn).orderBy(true, ascending, "id");
+
+        Page<SysUser> page = selectPage(new Page<>(vo.getPageNo(), vo.getPageSize()), query);
         return PageUtils.of(page);
     }
 

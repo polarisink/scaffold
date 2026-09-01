@@ -26,6 +26,9 @@ public class SysMenuResultVO implements Serializable, ITree<SysMenuResultVO, Str
     @Schema(description = "菜单名称")
     private String menuName;
 
+    @Schema(description = "页面描述")
+    private String description;
+
     @Schema(description = "菜单类型 0目录 1菜单")
     private Integer menuType;
 
@@ -44,4 +47,3 @@ public class SysMenuResultVO implements Serializable, ITree<SysMenuResultVO, Str
     @Schema(description = "下级组织")
     private List<SysMenuResultVO> children = new ArrayList<>();
 }
-

@@ -14,12 +14,45 @@
     "username": "admin",
     "rawPassword": "admin"
   },
+  "configs": [
+    {
+      "configName": "平台名称",
+      "configKey": "system.brand.appName",
+      "configValue": "Scaffold 管理平台",
+      "remark": "登录页、侧栏及浏览器标题显示的平台名称"
+    },
+    {
+      "configName": "平台 Logo",
+      "configKey": "system.brand.logoUrl",
+      "configValue": "/scaffold-logo.webp",
+      "remark": "平台 Logo 图片地址，默认使用前端内置静态资源以支持离线访问"
+    },
+    {
+      "configName": "登录页插画",
+      "configKey": "system.brand.loginImageUrl",
+      "configValue": "",
+      "remark": "登录页左侧插画地址；留空使用前端内置插画"
+    },
+    {
+      "configName": "登录页主标语",
+      "configKey": "system.brand.loginTitle",
+      "configValue": "开箱即用的大型中后台管理系统",
+      "remark": "登录页左侧主标语"
+    },
+    {
+      "configName": "登录页副标语",
+      "configKey": "system.brand.loginDescription",
+      "configValue": "工程化、高性能、跨组件库的前端模版",
+      "remark": "登录页左侧副标语"
+    }
+  ],
   "removedMenuPaths": [
     "/dashboard/workspace"
   ],
   "menus": [
     {
       "menuName": "仪表盘",
+      "description": "系统运行数据与业务指标概览",
       "path": "/dashboard",
       "menuType": 0,
       "menuIconUrl": "lucide:layout-dashboard",
@@ -27,6 +60,7 @@
     },
     {
       "menuName": "系统管理",
+      "description": "维护用户、权限及系统基础数据",
       "path": "/system",
       "menuType": 0,
       "menuIconUrl": "lucide:settings-2",
@@ -35,6 +69,7 @@
     {
       "parentPath": "/dashboard",
       "menuName": "分析页",
+      "description": "查看系统核心指标与访问趋势",
       "path": "/dashboard/analytics",
       "menuType": 1,
       "menuUrl": "dashboard:analytics:view",
@@ -44,6 +79,7 @@
     {
       "parentPath": "/system",
       "menuName": "用户管理",
+      "description": "维护登录账号、所属部门、状态及角色归属",
       "path": "/system/user",
       "menuType": 1,
       "menuUrl": "system:user:view",
@@ -53,6 +89,7 @@
     {
       "parentPath": "/system",
       "menuName": "角色管理",
+      "description": "配置角色及其可访问的菜单与权限",
       "path": "/system/role",
       "menuType": 1,
       "menuUrl": "system:role:view",
@@ -62,6 +99,7 @@
     {
       "parentPath": "/system",
       "menuName": "组织管理",
+      "description": "维护部门层级及用户的组织归属",
       "path": "/system/org",
       "menuType": 1,
       "menuUrl": "system:org:view",
@@ -71,6 +109,7 @@
     {
       "parentPath": "/system",
       "menuName": "系统配置",
+      "description": "维护系统运行参数与内置配置",
       "path": "/system/config",
       "menuType": 1,
       "menuUrl": "system:config:view",
@@ -80,6 +119,7 @@
     {
       "parentPath": "/system",
       "menuName": "字典管理",
+      "description": "维护字典类型及可复用的数据选项",
       "path": "/system/dict",
       "menuType": 1,
       "menuUrl": "system:dict:view",
@@ -89,6 +129,7 @@
     {
       "parentPath": "/system",
       "menuName": "菜单管理",
+      "description": "维护系统菜单树、路由和权限标识",
       "path": "/system/menu",
       "menuType": 1,
       "menuUrl": "system:menu:view",
@@ -98,6 +139,7 @@
     {
       "parentPath": "/system",
       "menuName": "日志管理",
+      "description": "查询系统操作与登录审计记录",
       "path": "/system/log",
       "menuType": 0,
       "menuIconUrl": "lucide:scroll-text",
@@ -106,6 +148,7 @@
     {
       "parentPath": "/system/log",
       "menuName": "操作日志",
+      "description": "查询系统业务操作、请求参数和执行结果",
       "path": "/system/log/operation",
       "menuType": 1,
       "menuUrl": "system:log:operation:view",
@@ -115,6 +158,7 @@
     {
       "parentPath": "/system/log",
       "menuName": "登录日志",
+      "description": "查询登录成功、失败和退出记录",
       "path": "/system/log/login",
       "menuType": 1,
       "menuUrl": "system:log:login:view",
@@ -123,6 +167,7 @@
     },
     {
       "menuName": "开发工具",
+      "description": "提供开发期辅助工具",
       "path": "/tool",
       "menuType": 0,
       "menuIconUrl": "lucide:wrench",
@@ -131,6 +176,7 @@
     {
       "parentPath": "/tool",
       "menuName": "代码生成器",
+      "description": "轻量配置元数据，生成并下载 CRUD 代码",
       "path": "/tool/codegen",
       "menuType": 1,
       "menuUrl": "tool:codegen:view",

@@ -16,6 +16,7 @@ import org.hibernate.annotations.Comment;
         @Index(name = "idx_login_log_created", columnList = "gmt_created")
 })
 @TableName("sys_login_log")
+@Comment("系统登录日志表")
 public class SysLoginLog extends BaseLongAuditable {
 
     @Comment("用户ID")

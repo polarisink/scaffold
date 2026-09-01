@@ -22,6 +22,9 @@ public class SysMenuCreateVO implements Serializable {
     @Schema(description = "菜单名称")
     private String menuName;
 
+    @Schema(description = "页面描述")
+    private String description;
+
     @NotNull(message = "菜单类型不可为空!")
     @Schema(description = "菜单类型 0目录 1菜单")
     private Integer menuType;
@@ -44,4 +47,3 @@ public class SysMenuCreateVO implements Serializable {
     private Integer sortNo;
 
 }
-

@@ -9,6 +9,7 @@ export interface UpdatePasswordParams {
 
 export interface RbacMenu {
   children?: RbacMenu[];
+  description?: string;
   id: number;
   menuIconUrl?: string;
   menuName: string;

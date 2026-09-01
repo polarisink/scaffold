@@ -100,6 +100,13 @@ public class RbacCache {
     public void clearMenuCache() {
     }
 
+    /**
+     * 清除所有由菜单数据派生的缓存，供启动数据迁移后使用。
+     */
+    @CacheEvict(cacheNames = {MENU_TREE_CACHE, USER_TREE_CACHE, ROLE_TREE_CACHE}, allEntries = true)
+    public void clearAllMenuCaches() {
+    }
+
     @Cacheable(cacheNames = RbacCacheConst.ORG_TREE_CACHE, key = ROOT_PARENT_ID_STR)
     public List<SysOrg> orgTree() {
         List<SysOrg> orgList = sysOrgMapper.selectList(null);

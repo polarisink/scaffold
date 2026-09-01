@@ -73,6 +73,7 @@ function toRoute(
     children: children.length > 0 ? children : undefined,
     ...(component ? { component } : {}),
     meta: {
+      description: menu.description?.trim() || undefined,
       icon: menu.menuIconUrl?.trim() || undefined,
       order: menu.sortNo || 0,
       title: menu.menuName,

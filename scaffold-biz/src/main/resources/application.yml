@@ -16,7 +16,7 @@ spring:
 #    password: 123456
 #    driver-class-name: org.h2.Driver
     # 演示模式使用h2数据库，
-    url: ${SCAFFOLD_DB_URL:jdbc:postgresql://localhost:5432/scaffold_ai}
+    url: jdbc:postgresql://localhost:5432/scaffold_ai
     username: aries
     password: 123456
     driver-class-name: org.postgresql.Driver
@@ -44,7 +44,7 @@ scaffold:
       spec: maximumSize=10000,expireAfterWrite=30m
     postgresql:
       datasource:
-        url: jdbc:postgresql://localhost:5432/aries
+        url: jdbc:postgresql://localhost:5432/scaffold_ai
         username: aries
         password: 123456
         driver-class-name: org.postgresql.Driver
@@ -90,6 +90,7 @@ scaffold:
         - "*"
     ignore-list:
       - /basic/**
+      - /config/branding
   # 默认业务项目显式启用本地存储，保持零外部依赖即可启动。
   file-storage:
     enabled: true

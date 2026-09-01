@@ -10,6 +10,9 @@ import com.scaffold.rbac.entity.SysConfig;
 import com.scaffold.rbac.vo.config.SysConfigPageVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Collection;
+import java.util.List;
+
 @Mapper
 public interface SysConfigMapper extends MyBaseMapper<SysConfig> {
 
@@ -25,6 +28,11 @@ public interface SysConfigMapper extends MyBaseMapper<SysConfig> {
         return selectOne(Wrappers.<SysConfig>lambdaQuery()
                 .eq(SysConfig::getConfigKey, configKey)
                 .last("limit 1"));
+    }
+
+    default List<SysConfig> findByConfigKeys(Collection<String> configKeys) {
+        return selectList(Wrappers.<SysConfig>lambdaQuery()
+                .in(SysConfig::getConfigKey, configKeys));
     }
 
     default PageResponse<SysConfig> page(SysConfigPageVO vo) {

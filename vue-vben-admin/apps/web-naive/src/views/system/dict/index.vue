@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { DataTableColumns, FormInst, FormRules } from 'naive-ui';
+
 import type {
   DictDataParams,
   DictTagType,
@@ -6,12 +8,9 @@ import type {
   SysDictData,
   SysDictType,
 } from '#/api';
-import type { DataTableColumns, FormInst, FormRules } from 'naive-ui';
 
 import { computed, h, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-
-import { Page } from '@vben/common-ui';
 
 import {
   NButton,
@@ -40,6 +39,7 @@ import {
   updateDictData,
   updateDictType,
 } from '#/api';
+import RoutePage from '#/components/route-page.vue';
 
 defineOptions({ name: 'SystemDict' });
 
@@ -456,7 +456,7 @@ watch(
 </script>
 
 <template>
-  <Page
+  <RoutePage
     :description="
       dataView
         ? `维护“${currentTypeName}”的字典选项`
@@ -584,30 +584,30 @@ watch(
         label-placement="top"
       >
         <div class="form-grid">
-          <NFormItem label="字典名称" path="dictName"
-            ><NInput v-model:value="typeForm.dictName"
-          /></NFormItem>
-          <NFormItem label="字典类型" path="dictType"
-            ><NInput
+          <NFormItem label="字典名称" path="dictName">
+<NInput v-model:value="typeForm.dictName" />
+</NFormItem>
+          <NFormItem label="字典类型" path="dictType">
+<NInput
               v-model:value="typeForm.dictType"
               placeholder="例如：sys_user_status"
-          /></NFormItem>
+          />
+</NFormItem>
         </div>
-        <NFormItem label="启用状态"
-          ><NSwitch v-model:value="typeForm.status"
-        /></NFormItem>
-        <NFormItem label="备注"
-          ><NInput v-model:value="typeForm.remark" type="textarea"
-        /></NFormItem>
+        <NFormItem label="启用状态">
+<NSwitch v-model:value="typeForm.status" />
+</NFormItem>
+        <NFormItem label="备注">
+<NInput v-model:value="typeForm.remark" type="textarea" />
+</NFormItem>
       </NForm>
-      <template #footer
-        ><NSpace justify="end"
-          ><NButton @click="showTypeModal = false">取消</NButton
-          ><NButton :loading="saving" type="primary" @click="submitType"
-            >保存</NButton
-          ></NSpace
-        ></template
-      >
+      <template #footer>
+<NSpace justify="end">
+<NButton @click="showTypeModal = false">取消</NButton><NButton :loading="saving" type="primary" @click="submitType">
+保存
+</NButton>
+</NSpace>
+</template>
     </NModal>
 
     <NModal
@@ -623,44 +623,44 @@ watch(
         label-placement="top"
       >
         <div class="form-grid">
-          <NFormItem label="字典标签" path="dictLabel"
-            ><NInput v-model:value="dataForm.dictLabel"
-          /></NFormItem>
-          <NFormItem label="字典键值" path="dictValue"
-            ><NInput v-model:value="dataForm.dictValue"
-          /></NFormItem>
-          <NFormItem label="显示样式"
-            ><NSelect v-model:value="dataForm.tagType" :options="tagOptions"
-          /></NFormItem>
-          <NFormItem label="字典排序"
-            ><NInputNumber
+          <NFormItem label="字典标签" path="dictLabel">
+<NInput v-model:value="dataForm.dictLabel" />
+</NFormItem>
+          <NFormItem label="字典键值" path="dictValue">
+<NInput v-model:value="dataForm.dictValue" />
+</NFormItem>
+          <NFormItem label="显示样式">
+<NSelect v-model:value="dataForm.tagType" :options="tagOptions" />
+</NFormItem>
+          <NFormItem label="字典排序">
+<NInputNumber
               v-model:value="dataForm.dictSort"
               :min="0"
               style="width: 100%"
-          /></NFormItem>
+          />
+</NFormItem>
         </div>
         <div class="form-grid">
-          <NFormItem label="启用状态"
-            ><NSwitch v-model:value="dataForm.status"
-          /></NFormItem>
-          <NFormItem label="默认选项"
-            ><NSwitch v-model:value="dataForm.defaultFlag"
-          /></NFormItem>
+          <NFormItem label="启用状态">
+<NSwitch v-model:value="dataForm.status" />
+</NFormItem>
+          <NFormItem label="默认选项">
+<NSwitch v-model:value="dataForm.defaultFlag" />
+</NFormItem>
         </div>
-        <NFormItem label="备注"
-          ><NInput v-model:value="dataForm.remark" type="textarea"
-        /></NFormItem>
+        <NFormItem label="备注">
+<NInput v-model:value="dataForm.remark" type="textarea" />
+</NFormItem>
       </NForm>
-      <template #footer
-        ><NSpace justify="end"
-          ><NButton @click="showDataModal = false">取消</NButton
-          ><NButton :loading="saving" type="primary" @click="submitData"
-            >保存</NButton
-          ></NSpace
-        ></template
-      >
+      <template #footer>
+<NSpace justify="end">
+<NButton @click="showDataModal = false">取消</NButton><NButton :loading="saving" type="primary" @click="submitData">
+保存
+</NButton>
+</NSpace>
+</template>
     </NModal>
-  </Page>
+  </RoutePage>
 </template>
 
 <style scoped>

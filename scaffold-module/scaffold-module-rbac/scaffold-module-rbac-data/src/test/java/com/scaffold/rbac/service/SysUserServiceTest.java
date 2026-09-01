@@ -1,13 +1,16 @@
 package com.scaffold.rbac.service;
 
+import com.scaffold.base.util.PageResponse;
 import com.scaffold.rbac.auth.RbacAccountService;
 import com.scaffold.rbac.auth.RbacCurrentUser;
 import com.scaffold.rbac.auth.RbacSessionRevoker;
 import com.scaffold.rbac.components.RbacCache;
+import com.scaffold.rbac.entity.SysRole;
 import com.scaffold.rbac.entity.SysUser;
 import com.scaffold.rbac.mapper.SysOrgMapper;
 import com.scaffold.rbac.mapper.SysUserMapper;
 import com.scaffold.rbac.mapper.SysUserRoleMapper;
+import com.scaffold.rbac.vo.user.SysUserPageVO;
 import com.scaffold.rbac.vo.user.SysUserUpdateVO;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -15,6 +18,7 @@ import org.mockito.ArgumentCaptor;
 import java.util.Collection;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
@@ -29,6 +33,26 @@ class SysUserServiceTest {
     private final SysOrgMapper orgMapper = mock(SysOrgMapper.class);
     private final SysUserService userService =
             new SysUserService(userMapper, userRoleMapper, cache, accountService, currentUser, sessionRevoker, orgMapper);
+
+    @Test
+    void shouldIncludeRolesInUserPage() {
+        SysUser user = new SysUser();
+        user.setId(8L);
+        user.setUsername("alice");
+        SysRole role = new SysRole("管理员", "admin");
+        role.setId(2L);
+        SysUserPageVO request = new SysUserPageVO();
+        when(userMapper.page(request)).thenReturn(new PageResponse<>(List.of(user), 1, 1, 1, 10));
+        when(cache.roles(8L)).thenReturn(List.of(role));
+
+        var result = userService.page(request);
+
+        assertThat(result.records()).singleElement().satisfies(record -> {
+            assertThat(record.getId()).isEqualTo(8L);
+            assertThat(record.getUsername()).isEqualTo("alice");
+            assertThat(record.getRoles()).containsExactly(role);
+        });
+    }
 
     @Test
     void shouldRejectBanningCurrentUser() {

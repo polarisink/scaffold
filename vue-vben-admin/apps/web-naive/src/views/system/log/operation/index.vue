@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { DataTableColumns } from 'naive-ui';
+
 import type { SysOperateLog } from '#/api';
 
 import { h, onMounted, reactive, ref } from 'vue';
-
-import { Page } from '@vben/common-ui';
 
 import {
   NButton,
@@ -22,6 +21,7 @@ import {
 
 import { dialog, message } from '#/adapter/naive';
 import { cleanOperateLog, deleteOperateLog, getOperateLogPage } from '#/api';
+import RoutePage from '#/components/route-page.vue';
 
 defineOptions({ name: 'SystemOperateLog' });
 
@@ -160,7 +160,7 @@ onMounted(load);
 </script>
 
 <template>
-  <Page description="查询系统业务操作、请求参数和执行结果" title="操作日志">
+  <RoutePage description="查询系统业务操作、请求参数和执行结果" title="操作日志">
     <NCard :bordered="false" class="system-card">
       <div class="toolbar">
         <NSpace>
@@ -219,27 +219,41 @@ onMounted(load);
       title="操作日志详情"
     >
       <NDescriptions v-if="detail" bordered :column="2" label-placement="left">
-        <NDescriptionsItem label="模块">{{
+        <NDescriptionsItem label="模块">
+{{
           detail.title || '-'
-        }}</NDescriptionsItem>
-        <NDescriptionsItem label="操作类型">{{
+        }}
+</NDescriptionsItem>
+        <NDescriptionsItem label="操作类型">
+{{
           detail.businessType || '-'
-        }}</NDescriptionsItem>
-        <NDescriptionsItem label="操作人">{{
+        }}
+</NDescriptionsItem>
+        <NDescriptionsItem label="操作人">
+{{
           detail.operator || '-'
-        }}</NDescriptionsItem>
-        <NDescriptionsItem label="客户端IP">{{
+        }}
+</NDescriptionsItem>
+        <NDescriptionsItem label="客户端IP">
+{{
           detail.ip || '-'
-        }}</NDescriptionsItem>
-        <NDescriptionsItem label="请求地址" :span="2">{{
+        }}
+</NDescriptionsItem>
+        <NDescriptionsItem label="请求地址" :span="2">
+{{
           detail.url || '-'
-        }}</NDescriptionsItem>
-        <NDescriptionsItem label="调用方法" :span="2">{{
+        }}
+</NDescriptionsItem>
+        <NDescriptionsItem label="调用方法" :span="2">
+{{
           detail.method || '-'
-        }}</NDescriptionsItem>
-        <NDescriptionsItem label="操作内容" :span="2">{{
+        }}
+</NDescriptionsItem>
+        <NDescriptionsItem label="操作内容" :span="2">
+{{
           detail.action || '-'
-        }}</NDescriptionsItem>
+        }}
+</NDescriptionsItem>
         <NDescriptionsItem label="请求参数" :span="2">
           <pre>{{ detail.param || '-' }}</pre>
         </NDescriptionsItem>
@@ -251,7 +265,7 @@ onMounted(load);
         </NDescriptionsItem>
       </NDescriptions>
     </NModal>
-  </Page>
+  </RoutePage>
 </template>
 
 <style scoped>

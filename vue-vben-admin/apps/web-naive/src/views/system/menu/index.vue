@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { DataTableColumns, FormInst, FormRules } from 'naive-ui';
+
 import type { MenuParams, SysMenu } from '#/api';
 
 import { computed, h, onMounted, reactive, ref } from 'vue';
-
-import { Page } from '@vben/common-ui';
 
 import {
   NButton,
@@ -24,6 +23,7 @@ import {
 
 import { dialog, message } from '#/adapter/naive';
 import { createMenu, deleteMenu, getMenuTree, updateMenu } from '#/api';
+import RoutePage from '#/components/route-page.vue';
 import { normalizeTreeIds, toNumberId } from '#/utils/id';
 
 defineOptions({ name: 'SystemMenu' });
@@ -35,6 +35,7 @@ const formRef = ref<FormInst | null>(null);
 const rows = ref<SysMenu[]>([]);
 const editingId = ref<number>();
 const form = reactive<MenuParams>({
+  description: '',
   menuIconUrl: '',
   menuName: '',
   menuType: 0,
@@ -79,6 +80,12 @@ const parentOptions = computed(() => [
 
 const columns: DataTableColumns<SysMenu> = [
   { key: 'menuName', minWidth: 180, title: '菜单名称', tree: true },
+  {
+    ellipsis: { tooltip: true },
+    key: 'description',
+    minWidth: 220,
+    title: '页面描述',
+  },
   { key: 'path', minWidth: 160, title: '路由路径' },
   {
     key: 'menuType',
@@ -146,6 +153,7 @@ async function load() {
 function resetForm(parentId = 0) {
   editingId.value = undefined;
   Object.assign(form, {
+    description: '',
     menuIconUrl: '',
     menuName: '',
     menuType: 0,
@@ -164,6 +172,7 @@ function openCreate(parentId = 0) {
 function openEdit(row: SysMenu) {
   editingId.value = row.id;
   Object.assign(form, {
+    description: row.description || '',
     menuIconUrl: row.menuIconUrl || '',
     menuName: row.menuName,
     menuType: row.menuType,
@@ -214,7 +223,7 @@ onMounted(load);
 </script>
 
 <template>
-  <Page description="维护系统菜单树、路由和权限标识" title="菜单管理">
+  <RoutePage description="维护系统菜单树、路由和权限标识" title="菜单管理">
     <NCard :bordered="false" class="system-card">
       <div class="toolbar">
         <div class="hint">目录负责组织层级，菜单对应可访问页面或权限资源。</div>
@@ -249,6 +258,12 @@ onMounted(load);
               v-model:value="form.parentId"
               filterable
               :options="parentOptions"
+            />
+          </NFormItem>
+          <NFormItem class="form-grid-full" label="页面描述" path="description">
+            <NInput
+              v-model:value="form.description"
+              placeholder="显示在页面标题下方"
             />
           </NFormItem>
           <NFormItem label="菜单类型" path="menuType">
@@ -287,13 +302,13 @@ onMounted(load);
       <template #footer>
         <NSpace justify="end">
           <NButton @click="showModal = false">取消</NButton>
-          <NButton :loading="saving" type="primary" @click="submit"
-            >保存</NButton
-          >
+          <NButton :loading="saving" type="primary" @click="submit">
+保存
+</NButton>
         </NSpace>
       </template>
     </NModal>
-  </Page>
+  </RoutePage>
 </template>
 
 <style scoped>
@@ -315,6 +330,9 @@ onMounted(load);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 16px;
+}
+.form-grid-full {
+  grid-column: 1 / -1;
 }
 @media (max-width: 640px) {
   .form-grid {

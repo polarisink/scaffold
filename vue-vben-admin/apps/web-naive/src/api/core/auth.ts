@@ -1,5 +1,7 @@
 import { requestClient } from '#/api/request';
 
+import { getCachedUserContext } from './user';
+
 export namespace AuthApi {
   /** 登录接口参数 */
   export interface LoginParams {
@@ -28,7 +30,6 @@ export async function logoutApi() {
  * 获取用户权限码
  */
 export async function getAccessCodesApi() {
-  const { getCachedUserContext } = await import('./user');
   const context = await getCachedUserContext();
   const codes: string[] = [];
   const visit = (menus: typeof context.menus) => {

@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.scaffold.rbac.contant.RbacCacheConst.CONFIG_DATA_CACHE;
 import static com.scaffold.rbac.contant.RbacLogConst.CONFIG;
@@ -23,6 +25,14 @@ import static com.scaffold.rbac.contant.RbacLogConst.CONFIG;
 @Service
 @RequiredArgsConstructor
 public class SysConfigService {
+
+    private static final String APP_NAME = "system.brand.appName";
+    private static final String LOGO_URL = "system.brand.logoUrl";
+    private static final String LOGIN_IMAGE_URL = "system.brand.loginImageUrl";
+    private static final String LOGIN_TITLE = "system.brand.loginTitle";
+    private static final String LOGIN_DESCRIPTION = "system.brand.loginDescription";
+    private static final java.util.List<String> BRANDING_KEYS = java.util.List.of(
+            APP_NAME, LOGO_URL, LOGIN_IMAGE_URL, LOGIN_TITLE, LOGIN_DESCRIPTION);
 
     private final SysConfigMapper sysConfigMapper;
 
@@ -37,6 +47,29 @@ public class SysConfigService {
         SysConfig config = sysConfigMapper.findByConfigKey(configKey);
         RbacResultEnum.CONFIG_NOT_FOUND.notNull(config);
         return config;
+    }
+
+    @Transactional(readOnly = true)
+    public BrandingConfig branding() {
+        var configs = sysConfigMapper.findByConfigKeys(BRANDING_KEYS).stream()
+                .collect(Collectors.toMap(SysConfig::getConfigKey, Function.identity()));
+        return new BrandingConfig(
+                value(configs.get(APP_NAME)),
+                value(configs.get(LOGO_URL)),
+                value(configs.get(LOGIN_IMAGE_URL)),
+                value(configs.get(LOGIN_TITLE)),
+                value(configs.get(LOGIN_DESCRIPTION)));
+    }
+
+    private static String value(SysConfig config) {
+        return config == null ? null : config.getConfigValue();
+    }
+
+    public record BrandingConfig(String appName,
+                                 String logoUrl,
+                                 String loginImageUrl,
+                                 String loginTitle,
+                                 String loginDescription) {
     }
 
     // @formatter:off

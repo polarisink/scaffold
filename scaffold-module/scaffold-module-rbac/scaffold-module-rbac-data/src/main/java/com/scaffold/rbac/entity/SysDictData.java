@@ -18,6 +18,7 @@ import org.hibernate.annotations.Comment;
         @Index(name = "idx_sys_dict_data_type", columnList = "dict_type"),
         @Index(name = "idx_sys_dict_data_type_sort", columnList = "dict_type,dict_sort")
 })
+@Comment("字典数据表")
 @TableName("sys_dict_data")
 public class SysDictData extends BaseLongAuditable {
 

@@ -31,6 +31,8 @@ import java.util.Set;
 public class RbacDataInitializer implements ApplicationRunner {
 
     private static final String SEED_DATA_PATH = "rbac/rbac-seed-data.json";
+    private static final String LEGACY_REMOTE_LOGO_URL =
+            "https://unpkg.com/@vbenjs/static-source@0.1.7/source/logo-v1.webp";
 
     /**
      * 启动时从 resources 读取最小 RBAC 数据集。
@@ -45,6 +47,7 @@ public class RbacDataInitializer implements ApplicationRunner {
     private final SysUserMapper userMapper;
     private final SysUserRoleMapper sysUserRoleMapper;
     private final SysRoleMenuMapper sysRoleMenuMapper;
+    private final SysConfigMapper sysConfigMapper;
     private final PasswordEncoder passwordEncoder;
     private final RbacCache rbacCache;
 
@@ -60,6 +63,7 @@ public class RbacDataInitializer implements ApplicationRunner {
         SysUser adminUser = initAdminUser(headquarters, seedData.adminUser());
         initAdminUserRole(adminUser, adminRole);
         initAdminRoleMenus(adminRole);
+        initConfigs(seedData.configs());
         initCache();
     }
 
@@ -88,6 +92,7 @@ public class RbacDataInitializer implements ApplicationRunner {
         Objects.requireNonNull(seedData.org(), "RBAC init org seed data is required");
         Objects.requireNonNull(seedData.adminRole(), "RBAC init adminRole seed data is required");
         Objects.requireNonNull(seedData.adminUser(), "RBAC init adminUser seed data is required");
+        Objects.requireNonNull(seedData.configs(), "RBAC config seed data is required");
         Objects.requireNonNull(seedData.menus(), "RBAC init menus seed data is required");
         Objects.requireNonNull(seedData.removedMenuPaths(), "RBAC removed menu paths are required");
         return seedData;
@@ -129,19 +134,26 @@ public class RbacDataInitializer implements ApplicationRunner {
                         .orElseThrow(() -> new IllegalStateException("RBAC init menu parent not found: " + seed.parentPath()));
             }
             Long finalParentId = parentId;
-            sysMenuMapper.findByPath(seed.path()).orElseGet(() -> {
+            sysMenuMapper.findByPath(seed.path()).ifPresentOrElse(menu -> {
+                if (!StringUtils.hasText(menu.getDescription()) && StringUtils.hasText(seed.description())) {
+                    menu.setDescription(seed.description());
+                    sysMenuMapper.updateById(menu);
+                }
+            }, () -> {
                 SysMenu menu = new SysMenu();
                 menu.setParentId(finalParentId);
                 menu.setMenuName(seed.menuName());
+                menu.setDescription(seed.description());
                 menu.setPath(seed.path());
                 menu.setMenuType(seed.menuType());
                 menu.setMenuUrl(seed.menuUrl());
                 menu.setMenuIconUrl(seed.menuIconUrl());
                 menu.setSortNo(seed.sortNo());
                 sysMenuMapper.insert(menu);
-                return menu;
             });
         }
+        // 缓存后端可能跨进程持久化；启动数据补齐后必须失效所有菜单派生缓存。
+        rbacCache.clearAllMenuCaches();
     }
 
     private SysRole initAdminRole(RoleSeed seed) {
@@ -190,9 +202,37 @@ public class RbacDataInitializer implements ApplicationRunner {
                 .forEach(sysRoleMenuMapper::insert);
     }
 
+    private void initConfigs(List<ConfigSeed> seeds) {
+        for (ConfigSeed seed : seeds) {
+            SysConfig existing = sysConfigMapper.findByConfigKey(seed.configKey());
+            if (existing != null) {
+                migrateLegacyLogoUrl(existing, seed);
+                continue;
+            }
+            SysConfig config = new SysConfig();
+            config.setConfigName(seed.configName());
+            config.setConfigKey(seed.configKey());
+            config.setConfigValue(seed.configValue());
+            config.setRemark(seed.remark());
+            config.setSysFlag(true);
+            sysConfigMapper.insert(config);
+        }
+    }
+
+    private void migrateLegacyLogoUrl(SysConfig existing, ConfigSeed seed) {
+        if ("system.brand.logoUrl".equals(seed.configKey())
+                && LEGACY_REMOTE_LOGO_URL.equals(existing.getConfigValue())) {
+            existing.setConfigValue(seed.configValue());
+            existing.setRemark(seed.remark());
+            sysConfigMapper.updateById(existing);
+            log.info("migrated default platform logo to local static resource: {}", seed.configValue());
+        }
+    }
+
     private record RbacSeedData(OrgSeed org,
                                 RoleSeed adminRole,
                                 UserSeed adminUser,
+                                List<ConfigSeed> configs,
                                 List<String> removedMenuPaths,
                                 List<MenuSeed> menus) {
     }
@@ -212,11 +252,18 @@ public class RbacDataInitializer implements ApplicationRunner {
                             String rawPassword) {
     }
 
+    private record ConfigSeed(String configName,
+                              String configKey,
+                              String configValue,
+                              String remark) {
+    }
+
     /**
      * parentPath 使用路由路径表达父子关系，避免在种子数据文件中硬编码数据库自增 ID。
      */
     private record MenuSeed(String parentPath,
                             String menuName,
+                            String description,
                             String path,
                             Integer menuType,
                             String menuUrl,

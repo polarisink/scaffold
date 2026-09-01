@@ -20,6 +20,12 @@ public class SysConfigController {
 
     private final SysConfigService sysConfigService;
 
+    @GetMapping("/branding")
+    @Operation(summary = "查询公开品牌配置")
+    public SysConfigService.BrandingConfig branding() {
+        return sysConfigService.branding();
+    }
+
     @PostMapping("/page")
     @Operation(summary = "配置分页")
     public PageResponse<SysConfig> page(@RequestBody SysConfigPageVO pageVO) {

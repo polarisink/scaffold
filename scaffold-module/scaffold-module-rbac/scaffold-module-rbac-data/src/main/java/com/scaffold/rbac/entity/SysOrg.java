@@ -20,6 +20,7 @@ import java.util.List;
 @Table(name = "sys_org")
 @Entity
 @TableName("sys_org")
+@Comment("系统组织表")
 public class SysOrg extends BaseLongAuditable implements ITree<SysOrg, Long> {
     @Column(nullable = false)
     @Comment("上级部门id")

@@ -16,6 +16,13 @@ export const overridesPreferences = defineOverridesPreferences({
     defaultHomePath: '/home',
     name: import.meta.env.VITE_APP_TITLE,
   },
+  logo: {
+    source: '/scaffold-logo.webp',
+    sourceDark: '/scaffold-logo.webp',
+  },
+  tabbar: {
+    draggable: false,
+  },
   theme: {
     colorPrimary: 'hsl(158 64% 40%)',
     mode: 'light',

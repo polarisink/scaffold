@@ -133,6 +133,20 @@ scaffold-module/scaffold-module-rbac/
 
 两个认证实现复用唯一的数据管理逻辑，认证模块只适配当前用户和会话失效机制。管理接口包括 `/auth`、`/user`、`/role`、`/menu` 和 `/org`。
 
+`sys_menu.menu_name` 和 `sys_menu.description` 分别驱动管理端页面标题与说明。后端菜单树会将两者转换为动态路由元数据，管理端系统页面优先读取路由元数据，并在旧数据缺少描述时使用页面内置文案兜底。
+
+平台品牌信息由 `sys_config` 中的系统内置配置维护，启动时会按配置键幂等补齐：
+
+| 配置键 | 用途 |
+| --- | --- |
+| `system.brand.appName` | 登录页、侧栏和浏览器标题的平台名称 |
+| `system.brand.logoUrl` | 登录页和侧栏 Logo 地址 |
+| `system.brand.loginImageUrl` | 登录页插画地址，空值使用前端内置插画 |
+| `system.brand.loginTitle` | 登录页主标语 |
+| `system.brand.loginDescription` | 登录页副标语 |
+
+登录前可通过匿名只读接口 `GET /config/branding` 获取上述配置。管理端会先显示内置默认值，再异步替换远端配置；后端不可用、超时、缺少配置或返回空值时继续使用默认值。
+
 ### 代码生成
 
 `scaffold-module-codegen` 是可选的轻量代码生成器。它从当前数据源读取表、字段、主键和唯一索引，保存生成配置，并通过 FreeMarker 生成 ZIP：

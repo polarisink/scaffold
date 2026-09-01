@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { DataTableColumns } from 'naive-ui';
+
 import type { SysLoginLog } from '#/api';
 
 import { h, onMounted, reactive, ref } from 'vue';
 
-import { Page } from '@vben/common-ui';
 import {
   NButton,
   NCard,
@@ -18,6 +18,7 @@ import {
 
 import { dialog, message } from '#/adapter/naive';
 import { cleanLoginLog, deleteLoginLog, getLoginLogPage } from '#/api';
+import RoutePage from '#/components/route-page.vue';
 
 defineOptions({ name: 'SystemLoginLog' });
 
@@ -157,7 +158,7 @@ onMounted(load);
 </script>
 
 <template>
-  <Page description="查询登录成功、失败和退出记录" title="登录日志">
+  <RoutePage description="查询登录成功、失败和退出记录" title="登录日志">
     <NCard :bordered="false" class="system-card">
       <div class="toolbar">
         <NSpace>
@@ -215,7 +216,7 @@ onMounted(load);
         />
       </div>
     </NCard>
-  </Page>
+  </RoutePage>
 </template>
 
 <style scoped>

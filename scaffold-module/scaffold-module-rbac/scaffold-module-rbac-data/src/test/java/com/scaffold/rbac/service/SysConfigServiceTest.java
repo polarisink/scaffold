@@ -7,6 +7,8 @@ import com.scaffold.rbac.vo.config.SysConfigCreateVO;
 import com.scaffold.rbac.vo.config.SysConfigUpdateVO;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -16,6 +18,21 @@ class SysConfigServiceTest {
 
     private final SysConfigMapper configMapper = mock(SysConfigMapper.class);
     private final SysConfigService service = new SysConfigService(configMapper);
+
+    @Test
+    void returnsAvailableBrandingValuesWithoutFailingOnMissingKeys() {
+        SysConfig appName = config(1L, "system.brand.appName", true);
+        appName.setConfigValue("测试平台");
+        when(configMapper.findByConfigKeys(any())).thenReturn(List.of(appName));
+
+        SysConfigService.BrandingConfig branding = service.branding();
+
+        assertThat(branding.appName()).isEqualTo("测试平台");
+        assertThat(branding.logoUrl()).isNull();
+        assertThat(branding.loginImageUrl()).isNull();
+        assertThat(branding.loginTitle()).isNull();
+        assertThat(branding.loginDescription()).isNull();
+    }
 
     @Test
     void createsOrdinaryConfigByDefault() {

@@ -17,6 +17,7 @@ import java.io.Serializable;
  */
 @Data
 @Entity
+@Comment("系统用户表")
 @jakarta.persistence.Table(name = "sys_user")
 public class SysUser extends BaseLongAuditable implements Serializable {
 

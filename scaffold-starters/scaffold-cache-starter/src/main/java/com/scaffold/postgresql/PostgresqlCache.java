@@ -55,7 +55,13 @@ public class PostgresqlCache extends AbstractValueAdaptingCache {
             evictIfExpired(cacheKey);
             return null;
         }
-        return deserialize(values.getFirst());
+        try {
+            return deserialize(values.getFirst());
+        } catch (IllegalStateException ex) {
+            log.warn("Evicting unreadable PostgreSQL cache entry from cache {}: {}", name, ex.getMessage());
+            cacheStore.evict(tableName, name, cacheKey);
+            return null;
+        }
     }
 
     @Override

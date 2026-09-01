@@ -1,7 +1,6 @@
 package com.scaffold.rbac.controller;
 
 import com.scaffold.base.util.PageResponse;
-import com.scaffold.rbac.entity.SysUser;
 import com.scaffold.rbac.service.SysUserService;
 import com.scaffold.rbac.vo.user.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +32,7 @@ public class SysUserController {
      */
     @PostMapping("/page")
     @Operation(summary = "分页", description = "传入分页请求")
-    public PageResponse<SysUser> page(@RequestBody SysUserPageVO req) {
+    public PageResponse<SysUserPageResultVO> page(@RequestBody SysUserPageVO req) {
         return sysUserService.page(req);
     }
 

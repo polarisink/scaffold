@@ -26,6 +26,9 @@ public class SysMenuUpdateVO implements Serializable {
     @Schema(description = "菜单名称")
     private String menuName;
 
+    @Schema(description = "页面描述")
+    private String description;
+
     @NotBlank(message = "路径不可为空！")
     @Schema(description = "路径")
     private String path;
@@ -46,4 +49,3 @@ public class SysMenuUpdateVO implements Serializable {
     @Schema(description = "排序号")
     private Integer sortNo;
 }
-

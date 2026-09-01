@@ -20,6 +20,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @jakarta.persistence.Table(name = "sys_role")
+@Comment("系统角色表")
 public class SysRole extends BaseLongAuditable implements Serializable {
 
     /**

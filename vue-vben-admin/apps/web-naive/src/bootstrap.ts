@@ -14,9 +14,12 @@ import { $t, setupI18n } from '#/locales';
 import { initComponentAdapter } from './adapter/component';
 import { initSetupVbenForm } from './adapter/form';
 import App from './app.vue';
+import { loadBranding } from './config/branding';
 import { router } from './router';
 
 async function bootstrap(namespace: string) {
+  void loadBranding();
+
   // 初始化组件适配器
   await initComponentAdapter();
 

@@ -21,6 +21,7 @@ import com.scaffold.rbac.vo.user.PasswdUpdateVO;
 import com.scaffold.rbac.vo.user.SysUserCreateVO;
 import com.scaffold.rbac.vo.user.SysUserInfo;
 import com.scaffold.rbac.vo.user.SysUserPageVO;
+import com.scaffold.rbac.vo.user.SysUserPageResultVO;
 import com.scaffold.rbac.vo.user.SysUserUpdateVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -45,8 +46,15 @@ public class SysUserService  {
     private final SysOrgMapper sysOrgMapper;
 
     @Transactional(readOnly = true)
-    public PageResponse<SysUser> page(SysUserPageVO vo) {
-        return sysUserMapper.page(vo);
+    public PageResponse<SysUserPageResultVO> page(SysUserPageVO vo) {
+        PageResponse<SysUser> page = sysUserMapper.page(vo);
+        List<SysUserPageResultVO> records = page.records().stream().map(user -> {
+            SysUserPageResultVO result = new SysUserPageResultVO();
+            BeanUtils.copyProperties(user, result);
+            result.setRoles(rbacCache.roles(user.getId()));
+            return result;
+        }).toList();
+        return new PageResponse<>(records, page.pages(), page.current(), page.total(), page.size());
     }
 
     @Transactional(rollbackFor = Exception.class)

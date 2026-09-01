@@ -15,6 +15,7 @@ import org.hibernate.annotations.Comment;
 @Entity
 @Table(name = "sys_dict_type")
 @TableName("sys_dict_type")
+@Comment("字典表")
 public class SysDictType extends BaseLongAuditable {
 
     @Column(nullable = false, length = 100)

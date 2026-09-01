@@ -1,6 +1,6 @@
-import { requestClient } from '#/api/request';
-
 import type { RbacUserContext } from './core/user';
+
+import { requestClient } from '#/api/request';
 
 export interface PageResult<T> {
   current: number;
@@ -20,6 +20,7 @@ export interface AuditFields {
 
 export interface SysUser extends AuditFields {
   orgId: number;
+  roles: SysRole[];
   status: boolean;
   username: string;
 }
@@ -96,6 +97,7 @@ export interface SysRole extends AuditFields {
 
 export interface SysMenu extends AuditFields {
   children?: SysMenu[];
+  description?: string;
   menuIconUrl?: string;
   menuName: string;
   menuType: number;
@@ -165,6 +167,7 @@ export interface RoleParams {
 }
 
 export interface MenuParams {
+  description?: string;
   id?: number;
   menuIconUrl?: string;
   menuName: string;
@@ -176,9 +179,16 @@ export interface MenuParams {
 }
 
 export function getUserPage(params: {
+  keyword?: string;
   pageNo: number;
   pageSize: number;
-  username?: string;
+  sortBy?:
+    | 'createdTime'
+    | 'modifiedTime'
+    | 'orgName'
+    | 'status'
+    | 'username';
+  sortOrder?: 'asc' | 'desc';
 }) {
   return requestClient.post<PageResult<SysUser>>('/user/page', params);
 }

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { DataTableColumns, FormInst, FormRules } from 'naive-ui';
+
 import type { OrgParams, SysOrg } from '#/api';
 
 import { computed, h, onMounted, reactive, ref } from 'vue';
-
-import { Page } from '@vben/common-ui';
 
 import {
   NButton,
@@ -21,6 +20,7 @@ import {
 
 import { dialog, message } from '#/adapter/naive';
 import { createOrg, deleteOrg, getOrgTree, updateOrg } from '#/api';
+import RoutePage from '#/components/route-page.vue';
 import { normalizeTreeIds, toNumberId } from '#/utils/id';
 
 defineOptions({ name: 'SystemOrg' });
@@ -201,7 +201,7 @@ onMounted(load);
 </script>
 
 <template>
-  <Page description="维护部门层级及用户的组织归属" title="组织管理">
+  <RoutePage description="维护部门层级及用户的组织归属" title="组织管理">
     <NCard :bordered="false" class="system-card">
       <div class="toolbar">
         <div class="hint">组织采用树形结构；存在下级组织或用户时不能删除。</div>
@@ -256,7 +256,7 @@ onMounted(load);
         </NSpace>
       </template>
     </NModal>
-  </Page>
+  </RoutePage>
 </template>
 
 <style scoped>

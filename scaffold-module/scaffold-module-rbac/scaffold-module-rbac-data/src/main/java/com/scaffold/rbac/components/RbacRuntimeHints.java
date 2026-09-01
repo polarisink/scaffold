@@ -14,7 +14,7 @@ public class RbacRuntimeHints implements RuntimeHintsRegistrar {
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
         hints.resources().registerPattern("rbac/rbac-seed-data.json");
-        for (String nestedType : new String[]{"RbacSeedData", "OrgSeed", "RoleSeed", "UserSeed", "MenuSeed"}) {
+        for (String nestedType : new String[]{"RbacSeedData", "OrgSeed", "RoleSeed", "UserSeed", "ConfigSeed", "MenuSeed"}) {
             hints.reflection().registerType(
                     TypeReference.of(RbacDataInitializer.class.getName() + "$" + nestedType),
                     INVOKE_DECLARED_CONSTRUCTORS,

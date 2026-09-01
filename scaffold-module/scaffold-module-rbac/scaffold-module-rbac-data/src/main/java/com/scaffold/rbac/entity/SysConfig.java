@@ -17,6 +17,7 @@ import org.hibernate.annotations.Comment;
 @TableName("sys_config")
 @Table(name = "sys_config")
 @Entity
+@Comment("系统配置表")
 public class SysConfig extends BaseLongAuditable {
 
     /**

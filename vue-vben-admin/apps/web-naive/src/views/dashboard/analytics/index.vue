@@ -13,6 +13,8 @@ import {
   SvgDownloadIcon,
 } from '@vben/icons';
 
+import RoutePage from '#/components/route-page.vue';
+
 import AnalyticsTrends from './analytics-trends.vue';
 import AnalyticsVisits from './analytics-visits.vue';
 
@@ -60,15 +62,17 @@ const chartTabs: TabOption[] = [
 </script>
 
 <template>
-  <div class="p-5">
-    <AnalysisOverview :items="overviewItems" />
-    <AnalysisChartsTabs :tabs="chartTabs" class="mt-5">
-      <template #trends>
-        <AnalyticsTrends />
-      </template>
-      <template #visits>
-        <AnalyticsVisits />
-      </template>
-    </AnalysisChartsTabs>
-  </div>
+  <RoutePage description="查看系统核心指标与访问趋势" title="分析页">
+    <div>
+      <AnalysisOverview :items="overviewItems" />
+      <AnalysisChartsTabs :tabs="chartTabs" class="mt-5">
+        <template #trends>
+          <AnalyticsTrends />
+        </template>
+        <template #visits>
+          <AnalyticsVisits />
+        </template>
+      </AnalysisChartsTabs>
+    </div>
+  </RoutePage>
 </template>
