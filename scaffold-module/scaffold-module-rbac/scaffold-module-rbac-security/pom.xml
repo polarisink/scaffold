@@ -14,8 +14,6 @@
     <description>基于 Spring Security Servlet 的完整 RBAC 业务模块</description>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

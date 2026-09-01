@@ -16,10 +16,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <!-- Java 21 是最低 API 与字节码基线，高版本 JDK 构建时仍按 Java 21 API 编译。 -->
         <java.version>21</java.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <rversion>1.0-SNAPSHOT</rversion>
         <!--   spring相关     -->
@@ -34,7 +34,8 @@
         <mysql.version>8.0.28</mysql.version>
         <mariadb.version>3.5.2</mariadb.version>
         <!--    工具    -->
-        <lombok.version>1.18.30</lombok.version>
+        <!-- 1.18.40 起支持 JDK 25；使用当前稳定版同时覆盖后续 JDK 修复。 -->
+        <lombok.version>1.18.46</lombok.version>
         <hutool.version>5.8.40</hutool.version>
         <jackson.version>2.18.6</jackson.version>
         <bouncycastle.version>1.84</bouncycastle.version>
@@ -226,6 +227,12 @@
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk18on</artifactId>
                 <version>${bouncycastle.version}</version>
+            </dependency>
+            <!-- Spring Boot 3.5 BOM 默认版本不支持 JDK 25 编译，显式覆盖。 -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
             </dependency>
             <!--工具类版本-->
             <dependency>
@@ -559,9 +566,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <!--        提供覆盖默认 Java 编译器版本的选项            -->
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <!-- 同时约束语言级别、字节码版本和可用 JDK API。 -->
+                    <release>${maven.compiler.release}</release>
                     <encoding>UTF-8</encoding>
                     <parameters>true</parameters>
                     <annotationProcessorPaths>

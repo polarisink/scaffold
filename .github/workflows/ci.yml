@@ -21,8 +21,12 @@ permissions:
 
 jobs:
   build:
-    name: Verify Default Build
+    name: Verify Default Build (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ["21", "25"]
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -31,7 +35,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: ${{ matrix.java }}
           cache: maven
 
       - name: Verify default build

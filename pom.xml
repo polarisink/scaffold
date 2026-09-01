@@ -17,9 +17,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <!--
+            Java 21 是项目最低 API 与字节码基线。使用 release 而不是 source/target，
+            防止在 JDK 25 或后续版本上构建时误用高版本 JDK API。
+        -->
         <java.version>21</java.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <!-- 保留方法参数名，供 Spring MVC/Jackson 等框架通过反射读取。 -->
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.wrapper.version>3.3.4</maven.wrapper.version>
@@ -77,6 +80,10 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.13.0</version>
+                    <configuration>
+                        <!-- JDK 23+ 不再默认执行 classpath 上的注解处理器。 -->
+                        <proc>full</proc>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

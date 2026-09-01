@@ -4,7 +4,7 @@
 
 ## 技术栈
 
-- **后端**：Java 21、Spring Boot 3.5.15、Spring Cloud 2025.0.0、Spring Cloud Alibaba 2025.0.0.0
+- **后端**：Java 21+（最低基线 21，兼容 JDK 25 等后续版本）、Spring Boot 3.5.15、Spring Cloud 2025.0.0、Spring Cloud Alibaba 2025.0.0.0
 - **数据访问**：MyBatis Plus 3.5.17、JPA、MySQL 8、H2
 - **原生部署**：GraalVM Native Image、Linux Docker 原生镜像、macOS/Linux/Windows 构建脚本
 - **缓存与消息**：Caffeine、Redisson、Redis Stream、Redis Pub/Sub
@@ -39,7 +39,13 @@ scaffold/
 
 ### 后端
 
-环境要求：Java 21、Maven 3.9+。仓库已提供 Maven Wrapper。
+环境要求：JDK 21 或更高版本、Maven 3.9+。仓库已提供 Maven Wrapper。
+
+Java 21 是项目统一的最低 API 和字节码基线。项目使用 Maven Compiler Plugin 的
+`release=21` 编译，因此可以在 JDK 21、JDK 25 及后续兼容版本上构建和运行；即使使用
+更高版本 JDK 构建，产物也不会误引用高于 Java 21 的 JDK API。CI 同时验证最低基线 JDK 21
+和较新 LTS JDK 25。运行在后续 JDK 版本前，仍应通过项目测试确认框架、Agent、JNI 和第三方
+依赖的实际兼容性。
 
 ```bash
 ./mvnw -pl scaffold-biz -am spring-boot:run

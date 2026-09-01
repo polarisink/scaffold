@@ -15,8 +15,6 @@
 
     <properties>
         <flink.version>2.2.1</flink.version>
-        <!-- Flink 官方镜像默认并推荐 Java 17，作业字节码与集群运行时保持一致。 -->
-        <maven.compiler.release>17</maven.compiler.release>
     </properties>
 
     <dependencies>
